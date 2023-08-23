@@ -6,7 +6,7 @@ class AppRoutes {
   static getInitialRoute(
       // {String? serverToken}
       ) {
-    return const JoinPage().routeName;
+    return const PreSignInPage().routeName;
   }
 
   // get all app routes
@@ -17,9 +17,8 @@ class AppRoutes {
       // }
       ) {
     return {
-      const JoinPage().routeName: (BuildContext context) => const JoinPage(
-          // notifierThemeMode: notifierThemeMode,
-          ),
+      const PreSignInPage().routeName: (BuildContext context) =>
+          const PreSignInPage(),
     };
   }
 }
