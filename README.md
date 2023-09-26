@@ -8,13 +8,12 @@ To run use `yarn start` or `npm start`
 
 ## To-do:
 
-- [ ] Install font
-- [ ] Folder structure
+- [x] Install font
+- [x] Folder structure
 - [ ] Theme styles
   - [ ] Typography component
-  - [ ] Global styles
-  - [ ] Colors component
-  - [ ] Theme Switcher
+  - [x] Global styles
+  - [x] Colors component
   - [ ] useThemeHook
   - [ ] Icons
 - [ ] Header
@@ -27,6 +26,8 @@ To run use `yarn start` or `npm start`
 - [ ] Axios API
 
 ## Folder structure
+
+Related to this [Article](https://learn.habilelabs.io/best-folder-structure-for-react-native-project-a46405bdba7)
 
 ### components/
 
@@ -78,3 +79,11 @@ If you have custom hooks defined in your project you can put it over here that c
 
 ### styles/
 You can add universal styles here like flexDirection: row, centerAll, itemsEnd and container-like equally spacing from all directions and many more. Here we place the explore feature’s components related styles.
+
+### theme/
+
+- fonts- It contains global fonts like font size, font type, and font-weight. Whenever you come across situations where you need to use the same size of fonts and the same font family, you have to create a theme/font.
+
+- metrices- This will hold your device dimensions so you can export and use them for responsive layouts. It will manage all the fonts, margins, and images according to device size.
+
+- colors- All the colors your application using goes here. All the repeating colors, for example, your application has theme colors which are black & red so you can add primary & secondary colors like black & red.
