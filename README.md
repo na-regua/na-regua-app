@@ -2,9 +2,11 @@
 
 The most useful barber app.
 
-React Native App
+## React Native App
 
-To-do:
+To run use `yarn start` or `npm start`
+
+## To-do:
 
 - [ ] Install font
 - [ ] Folder structure
