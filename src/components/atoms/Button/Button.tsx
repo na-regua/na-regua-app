@@ -39,8 +39,8 @@ const Button: React.FC<IButtonProps> = ({
   return (
     <TouchableOpacity
       style={buttonThemeStyles}
-      {...buttonProps}
-      activeOpacity={0.8}>
+      activeOpacity={0.8}
+      {...buttonProps}>
       <Typography
         customStyles={disabled ? styles.disabled : styles.text}
         variant="button">
@@ -52,10 +52,9 @@ const Button: React.FC<IButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    maxHeight: 40,
+    height: 44,
     borderRadius: 8,
     shadowOpacity: 0.2,
     shadowOffset: {

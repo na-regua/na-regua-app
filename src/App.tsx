@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import './i18n/i18n';
 import {AppNavigator} from './navigation';
 
 function App(): JSX.Element {

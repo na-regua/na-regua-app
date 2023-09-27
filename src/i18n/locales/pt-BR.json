@@ -1,0 +1,25 @@
+{
+  "barber": {
+    "signIn": {
+      "title": "Cadastro",
+      "subtitle": "Preencha as informações da barbearia.",
+      "fields": {
+        "name": "Nome",
+        "email": "E-mail",
+        "password": "Senha",
+        "postalCode": "CEP",
+        "street": "Rua",
+        "number": "N°",
+        "city": "Cidade",
+        "state": "UF",
+        "neighborhood": "Bairro"
+      },
+      "steps": {
+        "1": "Dados da barbearia",
+        "2": "Endereço da barbearia",
+        "3": "Fotos do local",
+        "4": "Avatar"
+      }
+    }
+  }
+}
