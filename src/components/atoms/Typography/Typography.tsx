@@ -1,8 +1,7 @@
-import {ColorsType} from '@theme/colors';
-import Fonts from '@theme/fonts';
+import {Colors, Fonts} from '@/theme';
+import {TColorsType} from '@/theme/colors';
 import React, {PropsWithChildren, useMemo} from 'react';
-import {StyleSheet, Text} from 'react-native';
-import {Colors} from 'src/theme';
+import {StyleSheet, Text, TextStyle} from 'react-native';
 
 type ITypographyVariants =
   | 'h1'
@@ -19,26 +18,33 @@ type ITypographyVariants =
 
 interface ITypographyProps extends PropsWithChildren {
   variant: ITypographyVariants;
-  color?: ColorsType;
+  color?: TColorsType;
+  customStyles?: TextStyle;
 }
 
 const Typography: React.FC<ITypographyProps> = ({
   children,
   variant,
-  color = 'black3',
+  color,
+  customStyles,
 }) => {
-  const textColor = useMemo(() => Colors[color], [color]);
+  const textColor = useMemo(() => color && Colors[color], [color]);
 
   const stylesByVariant = useMemo(
     () => styles[variant as keyof typeof styles],
     [variant],
   );
 
-  return <Text style={{...stylesByVariant, color: textColor}}>{children}</Text>;
+  return (
+    <Text style={{...stylesByVariant, color: textColor, ...customStyles}}>
+      {children}
+    </Text>
+  );
 };
 
 const styles = StyleSheet.create({
   h1: {
+    width: 'auto',
     fontWeight: Fonts.weights.bold,
     fontFamily: Fonts.types.bold,
     fontSize: Fonts.sizes.h1,

@@ -1,8 +1,12 @@
-import Colors from '@theme/colors';
 import React from 'react';
+
+import {Header} from '@/components/molecules';
+import {SignInContent} from '@/components/pages';
+import Colors from '@/theme/colors';
+import Metrics from '@/theme/metrics';
+
 import {StatusBar, StyleSheet, View, useColorScheme} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Typography} from 'src/components/atoms';
 
 const SignIn: React.FC = () => {
   const insets = useSafeAreaInsets();
@@ -16,22 +20,33 @@ const SignIn: React.FC = () => {
   };
 
   return (
-    <View style={[styles.container, insetsStyles]}>
+    <View style={[styles.signInContainer, insetsStyles]}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={Colors.main}
       />
-      <Typography variant="body1">teste</Typography>
+      <View style={styles.signInContent}>
+        <Header />
+        <SignInContent />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  signInContainer: {
     flex: 1,
+    width: Metrics.screenWidth,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     backgroundColor: Colors.bgLight,
+  },
+  signInContent: {
+    flex: 1,
+    width: Metrics.screenWidth,
+    flexDirection: 'column',
+    padding: Metrics.basePadding,
+    gap: 18,
   },
 });
 

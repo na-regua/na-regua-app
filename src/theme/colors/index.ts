@@ -26,6 +26,6 @@ const colors = {
   bgLight: '#FFFFFF',
 };
 
-export type ColorsType = keyof typeof colors;
+export type TColorsType = keyof typeof colors;
 
 export default colors;

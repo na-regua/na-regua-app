@@ -10,20 +10,30 @@ To run use `yarn start` or `npm start`
 
 - [x] Install font
 - [x] Folder structure
-- [ ] Theme styles
-  - [ ] Typography component
+- [x] Theme styles
+  - [x] Typography component
   - [x] Global styles
   - [x] Colors component
-  - [ ] useThemeHook
-  - [ ] Icons
-- [ ] Header
+  - [ ] ??? useThemeHook
+  - [x] Icons
+- [x] Header
 - [ ] Navigation
 - [ ] Sign-in Screen
-  - [ ] Input component
+  - [x] Input component
+    - [x] Styles
+    - [ ] Mask
+    - [ ] Password type
+  - [ ] Forms
+    - [ ] useFormHook
+    - [ ] yup validation
+  - [ ] Avatar component
   - [ ] Select component
-  - [ ] Button component
+  - [x] Button component
 - [ ] Store config
 - [ ] Axios API
+  - [ ] cep api
+  - [ ] sign in service
+
 
 ## Folder structure
 
@@ -42,20 +52,25 @@ You can divide components based on categories: atoms, organisms, molecules & tem
 - page- The page will look like the referenced screenshot below.
 
 ### containers/
+
 Just as the name implies, you can put all screen-based components inside containers, such as Splash Screen, Home Screen, bottom Tabs, Sidebar, common header, and the container-based files, etc.
 
 The use case for this folder is included and represents a screen being exported.
 
 ### screens/
+
 If you have multiple screens like auth screens: login, register and profile screens, product screens it can be saved here.
 
 ### i18n/
+
 This holds translation files for different languages in which you’re using your application.
 
 ### navigation/
+
 Your project base navigation goes here. You can create a stack navigator in it and export it to your application.
 
 ### stores/
+
 We are using Redux and Redux-Sagas in our project and handle business logic using them. If you are using Redux, then there must be action, reducers, saga, and services files that can be put here.
 
 In stores, you can create an actions folder and you can store different types of actions in this folder. You can do the same as reducer, saga, and for services.
@@ -75,9 +90,11 @@ In stores, you can create an actions folder and you can store different types of
 All the utils/helpers files go here that storing reusable methods and logic like validations, progress bar, date pickers, and according to your app requirements.
 
 ### hooks/
+
 If you have custom hooks defined in your project you can put it over here that can be shared across your entire project.
 
 ### styles/
+
 You can add universal styles here like flexDirection: row, centerAll, itemsEnd and container-like equally spacing from all directions and many more. Here we place the explore feature’s components related styles.
 
 ### theme/
