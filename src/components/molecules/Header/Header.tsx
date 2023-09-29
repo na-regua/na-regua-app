@@ -4,10 +4,18 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 
 interface IHeaderProps {
-  showWelcome?: boolean;
+  authenticated?: boolean;
+  showTitle?: boolean;
+  title?: string;
+  subtitle?: string;
 }
 
-const Header: React.FC<IHeaderProps> = ({showWelcome = false}) => {
+const Header: React.FC<IHeaderProps> = ({
+  authenticated = false,
+  showTitle = true,
+  title = 'Title',
+  subtitle = 'Subtitle',
+}) => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.headerContainerInfo}>
@@ -18,10 +26,10 @@ const Header: React.FC<IHeaderProps> = ({showWelcome = false}) => {
           </Typography>
         </View>
         <TouchableOpacity>
-          <Icons.Bell width={24} height={24} color="main" />
+          <Icons.BellIcon width={24} height={24} color="main" />
         </TouchableOpacity>
       </View>
-      {showWelcome && (
+      {authenticated && (
         <View>
           <Typography variant="h2" color="black3">
             <Typography
@@ -31,6 +39,14 @@ const Header: React.FC<IHeaderProps> = ({showWelcome = false}) => {
               Olá,
             </Typography>{' '}
             Alex
+          </Typography>
+        </View>
+      )}
+      {!authenticated && showTitle && (
+        <View style={styles.headerTitle}>
+          <Typography variant="h2">{title}</Typography>
+          <Typography variant="body2" color="black1">
+            {subtitle}
           </Typography>
         </View>
       )}
@@ -60,6 +76,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.main,
   },
   headerContainerMessage: {},
+  headerTitle: {
+    flexDirection: 'column',
+    gap: 4,
+  },
 });
 
 export default Header;

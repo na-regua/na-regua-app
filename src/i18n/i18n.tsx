@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 
-import ptBR from './locales/pt-BR.json';
+import ptBR from './locales/pt-BR';
 
 import {initReactI18next} from 'react-i18next';
 // import {getLocales} from 'react-native-localize';

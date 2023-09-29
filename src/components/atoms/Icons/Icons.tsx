@@ -1,13 +1,20 @@
 import {TColorsType} from '@/theme/colors';
-import Bell from './Bell/Bell';
+import BellIcon from './BellIcon/BellIcon';
+import CameraIcon from './CameraIcon/CameraIcon';
+import EyeIcon from './EyeIcon/EyeIcon';
+import UserIcon from './UserIcon/UserIcon';
 
 export interface IIconProps {
   width?: number;
   height?: number;
   color?: TColorsType;
   customColor?: string;
+  strokeWidth?: number;
 }
 
 export default {
-  Bell,
+  BellIcon,
+  CameraIcon,
+  EyeIcon,
+  UserIcon,
 };

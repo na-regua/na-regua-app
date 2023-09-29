@@ -1,1 +1,1 @@
-export {default as SignInContent} from './SignInContent/SignInContent';
+export {default as SignUpForm} from './SignUpForm/SignUpForm';
