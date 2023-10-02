@@ -1,11 +1,11 @@
 import api, {errToAxiosError} from '@/core/api/api';
-import endpoints from '../../endpoints';
 import {IBarber, ICreateBarber} from '@/core/models';
 import {AxiosResponse} from 'axios';
+import {default as ENDPOINTS} from '../../endpoints';
 
 const getBarbers = async (): Promise<AxiosResponse> => {
   try {
-    const data = await api.get(endpoints.getBarbers);
+    const data = await api.get(ENDPOINTS.BARBERS_LIST);
 
     return data;
   } catch (error: any) {
@@ -13,7 +13,7 @@ const getBarbers = async (): Promise<AxiosResponse> => {
   }
 };
 
-const preSignInBarber = async (
+const signUpBarber = async (
   barber: ICreateBarber,
 ): Promise<AxiosResponse<IBarber>> => {
   const formData = new FormData();
@@ -31,7 +31,7 @@ const preSignInBarber = async (
   }
 
   try {
-    const data = await api.post(endpoints.barbersPreSignIn, formData);
+    const data = await api.post(ENDPOINTS.BARBERS_SIGN_UP, formData);
 
     return data;
   } catch (err: any) {
@@ -39,4 +39,4 @@ const preSignInBarber = async (
   }
 };
 
-export default {getBarbers, preSignInBarber};
+export default {getBarbers, signUpBarber};

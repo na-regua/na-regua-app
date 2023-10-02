@@ -13,9 +13,9 @@ interface IProfileStepProps {
 
 const ProfileStep: React.FC<IProfileStepProps> = ({form, completed}) => {
   const {t} = useTranslation();
-  const [showPassword, setShowPassword] = useState(false);
-
   const {register, control} = form;
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleShowPassword = () => {
     setShowPassword(curr => !curr);
@@ -64,6 +64,7 @@ const ProfileStep: React.FC<IProfileStepProps> = ({form, completed}) => {
           />
         )}
       />
+
       <Controller
         name="email"
         control={control}

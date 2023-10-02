@@ -8,6 +8,7 @@ interface IHeaderProps {
   showTitle?: boolean;
   title?: string;
   subtitle?: string;
+  onIconPress?: () => void;
 }
 
 const Header: React.FC<IHeaderProps> = ({
@@ -15,16 +16,20 @@ const Header: React.FC<IHeaderProps> = ({
   showTitle = true,
   title = 'Title',
   subtitle = 'Subtitle',
+  onIconPress,
 }) => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.headerContainerInfo}>
-        <View style={styles.headerContainerInfoGroup}>
+        <TouchableOpacity
+          style={styles.headerContainerInfoGroup}
+          onPress={onIconPress}
+          activeOpacity={0.8}>
           <View style={styles.headerContainerInfoIcon} />
           <Typography variant="body2" color="black1">
             Na Régua
           </Typography>
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity>
           <Icons.BellIcon width={24} height={24} color="main" />
         </TouchableOpacity>

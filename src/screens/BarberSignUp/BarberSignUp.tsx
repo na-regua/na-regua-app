@@ -5,6 +5,8 @@ import {SignUpForm} from '@/components/pages';
 import Colors from '@/theme/colors';
 import Metrics from '@/theme/metrics';
 
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {StatusBar, StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -12,12 +14,17 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 const BarberSignUp: React.FC = () => {
   const {t} = useTranslation();
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const insetsStyles = {
     paddingTop: insets.top,
     paddingBottom: insets.bottom,
     paddingLeft: insets.left,
     paddingRight: insets.right,
+  };
+
+  const handleNavigateToLogin = () => {
+    navigation.navigate('GenericLogin');
   };
 
   return (
@@ -28,6 +35,7 @@ const BarberSignUp: React.FC = () => {
           showTitle
           title={t('barber.signUp.title')}
           subtitle={t('barber.signUp.subtitle')}
+          onIconPress={handleNavigateToLogin}
         />
         <SignUpForm />
       </View>

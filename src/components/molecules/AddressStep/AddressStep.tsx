@@ -1,5 +1,5 @@
 import {Input, Step} from '@/components/atoms';
-import {endpoints} from '@/core/api';
+import ENDPOINTS from '@/core/api/endpoints';
 import {ICepApiData} from '@/core/models';
 import {maskCep} from '@/utils';
 import axios from 'axios';
@@ -44,7 +44,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({form, completed}) => {
     if (removeMasktext.length >= 8) {
       try {
         const {data} = await axios.get<ICepApiData>(
-          endpoints.viaCep(removeMasktext),
+          ENDPOINTS.VIA_CEP(removeMasktext),
         );
 
         const sameKeys: string[] = [

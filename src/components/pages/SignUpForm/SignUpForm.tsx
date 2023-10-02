@@ -82,7 +82,7 @@ const SignUpForm: React.FC = () => {
       };
 
       try {
-        const {data} = await BarbersService.preSignInBarber(createBarber);
+        const {data} = await BarbersService.signUpBarber(createBarber);
 
         if (data) {
           dispatch(setBarber(data));

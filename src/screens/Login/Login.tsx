@@ -1,15 +1,27 @@
-import {Button, Typography} from '@/components/atoms';
+import {Icons, Typography} from '@/components/atoms';
+import {LoginEmail, LoginWelcome} from '@/components/pages';
+import LoginWhatsapp from '@/components/pages/LoginWhatsapp/LoginWhatsapp';
+import {TLoginSteps} from '@/core/models';
 import {Colors, Metrics} from '@/theme';
-import React from 'react';
+import React, {useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StatusBar, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {styles} from './styles';
 
 const Login: React.FC = () => {
   const {t} = useTranslation();
   const insets = useSafeAreaInsets();
 
-  const [loginMethod, setLoginMethod] = React.useState<'email' | 'whatsapp'>();
+  const [loginMethod, setLoginMethod] = useState<TLoginSteps>('welcome');
+
+  const getSplashHeight = useMemo(
+    () =>
+      loginMethod === 'welcome'
+        ? Metrics.screenHeight * 0.44
+        : Metrics.screenHeight * 0.38,
+    [loginMethod],
+  );
 
   const insetsStyles = {
     paddingTop: insets.top,
@@ -18,78 +30,42 @@ const Login: React.FC = () => {
     paddingRight: insets.right,
   };
 
+  const handleOnLoginMethod = (method: TLoginSteps) => {
+    setLoginMethod(method);
+  };
+
   return (
     <View style={[styles.container, insetsStyles]}>
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.bgLight} />
-      <View style={styles.splash} />
-      <View style={styles.content}>
-        <View>
-          <Typography variant="h4" color="white3">
-            Na Régua
-          </Typography>
-        </View>
-        <View style={styles.loginCard}>
-          <View style={styles.loginCardHeader}>
-            <Typography variant="h4" color="black2">
-              {t('generic.login.title')}
-            </Typography>
-            <Typography variant="body2" color="black1">
-              {t('generic.login.subtitle')}
+      <View style={[styles.splash, {height: getSplashHeight}]} />
+      {loginMethod === 'welcome' && (
+        <LoginWelcome onLoginMethod={handleOnLoginMethod} />
+      )}
+      {loginMethod !== 'welcome' && (
+        <View style={styles.content}>
+          <View style={styles.logoHeaderWrapper}>
+            <View style={styles.logoHeader} />
+            <Typography variant="body2" color="white3">
+              Na Régua
             </Typography>
           </View>
-          <Button title={t('generic.login.buttons.email')} />
-          <Button title={t('generic.login.buttons.whatsapp')} theme="success" />
+          <TouchableOpacity
+            style={styles.backLink}
+            activeOpacity={0.8}
+            onPress={() => handleOnLoginMethod('welcome')}>
+            <Icons.ArrowLeftIcon width={18} color="white3" />
+            <Typography variant="button" color="white3">
+              {t('generic.login.backLink')}
+            </Typography>
+          </TouchableOpacity>
+          {loginMethod === 'e-mail' && (
+            <LoginEmail onLoginMethod={handleOnLoginMethod} />
+          )}
+          {loginMethod === 'whatsapp' && <LoginWhatsapp />}
         </View>
-        <TouchableOpacity>
-          <Typography variant="button" color="primary">
-            {t('generic.login.signUp')}
-          </Typography>
-        </TouchableOpacity>
-      </View>
+      )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  splash: {
-    width: Metrics.screenWidth,
-    height: Metrics.screenHeight * 0.5,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    borderBottomEndRadius: 24,
-    borderBottomStartRadius: 24,
-    backgroundColor: Colors.main,
-  },
-  container: {
-    flex: 1,
-    width: Metrics.screenWidth,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    backgroundColor: Colors.border,
-    position: 'relative',
-  },
-  content: {
-    flex: 1,
-    width: Metrics.screenWidth,
-    flexDirection: 'column',
-    padding: Metrics.mdPadding,
-    gap: Metrics.mdPadding,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loginCard: {
-    flexDirection: 'column',
-    backgroundColor: Colors.bgLight,
-    width: Metrics.screenWidth - 2 * Metrics.mdPadding,
-    padding: Metrics.smPadding,
-    gap: Metrics.smPadding,
-    borderRadius: 18,
-  },
-  loginCardHeader: {
-    flexDirection: 'column',
-    gap: 8,
-  },
-});
 
 export default Login;

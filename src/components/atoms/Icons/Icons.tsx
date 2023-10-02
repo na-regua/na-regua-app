@@ -3,6 +3,7 @@ import BellIcon from './BellIcon/BellIcon';
 import CameraIcon from './CameraIcon/CameraIcon';
 import EyeIcon from './EyeIcon/EyeIcon';
 import UserIcon from './UserIcon/UserIcon';
+import ArrowLeftIcon from './ArrowLeft/ArrowLeft';
 
 export interface IIconProps {
   width?: number;
@@ -17,4 +18,5 @@ export default {
   CameraIcon,
   EyeIcon,
   UserIcon,
+  ArrowLeftIcon,
 };

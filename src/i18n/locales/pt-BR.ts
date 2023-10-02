@@ -50,13 +50,14 @@ const ptBr = {
       },
     },
     login: {
-      title: 'Bem vindo',
-      subtitle: 'Selecione o meio de fazer login.',
+      title: 'Olá, Seja bem vindo',
+      subtitle: 'Para fazer o login selecione o método abaixo.',
       buttons: {
         email: 'E-mail',
         whatsapp: 'Whatsapp',
       },
-      signUp: 'Quero me cadastrar.',
+      signUp: 'Desejo me cadastrar!',
+      backLink: 'Voltar',
     },
     loginEmail: {
       title: 'Login',
