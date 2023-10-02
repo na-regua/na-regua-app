@@ -6,27 +6,64 @@ The most useful barber app.
 
 To run use `yarn start` or `npm start`
 
-## To-do:
+### Native dependencies
 
-- [ ] Install font
-- [ ] Folder structure
-- [ ] Theme styles
-  - [ ] Typography component
-  - [ ] Global styles
-  - [ ] Colors component
-  - [ ] Theme Switcher
-  - [ ] useThemeHook
-  - [ ] Icons
-- [ ] Header
-- [ ] Navigation
-- [ ] Sign-in Screen
-  - [ ] Input component
-  - [ ] Select component
-  - [ ] Button component
-- [ ] Store config
-- [ ] Axios API
+#### Camera
+
+```
+npm install react-native-camera --save
+```
+
+- **android/app/src/main/AndroidManifest.xml**
+
+```
+/* Required */‍
+‍<uses-permission android:name="android.permission.CAMERA"></uses-permission>
+/* Include this only if you are planning to use the microphone for video recording */
+‍
+‍<uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
+/* Include this only if you are planning to use the camera roll */
+‍
+‍<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+```
+
+- **android/app/build.gradle**
+
+```
+android {
+ ...
+ defaultConfig {
+  ...
+  missingDimensionStrategy 'react-native-camera', 'general' /* insert this line */
+ }
+}
+```
+
+- **ios/NaRegua/Info.plist**
+
+```
+‍<key>NSCameraUsageDescription</key><string>Your message to user when the camera is accessed for the first time</string>
+‍<key>NSPhotoLibraryAddUsageDescription</key><string>Your message to user when the photo library is accessed for the first time</string>
+‍<key>NSPhotoLibraryUsageDescription</key><string>Your message to user when the photo library is accessed for the first time</string>
+‍<key>NSMicrophoneUsageDescription</key><string>Your message to user when the microphone is accessed for the first time</string>
+```
+
+#### Deprecated PropTypes Error
+
+run npm i deprecated-react-native-prop-types
+
+go to /node-modules/react-native-camera/src/RNCamera.js
+
+delete the imported ViewPropTypes from 'react-native'
+
+add import {ViewPropTypes} from 'deprecated-react-native-prop-types'
+
+This should get it working temporarily.
 
 ## Folder structure
+
+Related to this [Article](https://learn.habilelabs.io/best-folder-structure-for-react-native-project-a46405bdba7)
 
 ### components/
 
@@ -41,20 +78,25 @@ You can divide components based on categories: atoms, organisms, molecules & tem
 - page- The page will look like the referenced screenshot below.
 
 ### containers/
+
 Just as the name implies, you can put all screen-based components inside containers, such as Splash Screen, Home Screen, bottom Tabs, Sidebar, common header, and the container-based files, etc.
 
 The use case for this folder is included and represents a screen being exported.
 
 ### screens/
+
 If you have multiple screens like auth screens: login, register and profile screens, product screens it can be saved here.
 
 ### i18n/
+
 This holds translation files for different languages in which you’re using your application.
 
 ### navigation/
+
 Your project base navigation goes here. You can create a stack navigator in it and export it to your application.
 
 ### stores/
+
 We are using Redux and Redux-Sagas in our project and handle business logic using them. If you are using Redux, then there must be action, reducers, saga, and services files that can be put here.
 
 In stores, you can create an actions folder and you can store different types of actions in this folder. You can do the same as reducer, saga, and for services.
@@ -74,7 +116,17 @@ In stores, you can create an actions folder and you can store different types of
 All the utils/helpers files go here that storing reusable methods and logic like validations, progress bar, date pickers, and according to your app requirements.
 
 ### hooks/
+
 If you have custom hooks defined in your project you can put it over here that can be shared across your entire project.
 
 ### styles/
+
 You can add universal styles here like flexDirection: row, centerAll, itemsEnd and container-like equally spacing from all directions and many more. Here we place the explore feature’s components related styles.
+
+### theme/
+
+- fonts- It contains global fonts like font size, font type, and font-weight. Whenever you come across situations where you need to use the same size of fonts and the same font family, you have to create a theme/font.
+
+- metrices- This will hold your device dimensions so you can export and use them for responsive layouts. It will manage all the fonts, margins, and images according to device size.
+
+- colors- All the colors your application using goes here. All the repeating colors, for example, your application has theme colors which are black & red so you can add primary & secondary colors like black & red.
