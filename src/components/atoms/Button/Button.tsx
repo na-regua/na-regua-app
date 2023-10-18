@@ -1,10 +1,12 @@
-import React, {useMemo} from 'react';
-import {TouchableOpacity, TouchableOpacityProps} from 'react-native';
-import Typography from '../Typography/Typography';
+import React from 'react';
+import {TouchableOpacityProps} from 'react-native';
 
-import {styles, buttonThemeStylesObj} from './styles';
+import {Colors} from '@/theme';
+import Loader from '../Loader/Loader';
+import {TypographyStyles} from '../Typography/Typography';
+import {ButtonStyle, ButtonThemeColor, LabelStyle} from './styles';
 
-export type TButtonThemes =
+export type TButtonColorScheme =
   | 'main'
   | 'primary'
   | 'secondary'
@@ -13,37 +15,48 @@ export type TButtonThemes =
   | 'default'
   | 'warning';
 
+export type TButtonVariants = 'filled' | 'outlined';
+
 interface IButtonProps extends TouchableOpacityProps {
-  theme?: TButtonThemes;
+  colorScheme?: TButtonColorScheme;
   title?: string;
   disabled?: boolean;
+  loading?: boolean;
+  variant?: TButtonVariants;
 }
 
 const Button: React.FC<IButtonProps> = ({
-  theme = 'main',
+  colorScheme = 'main',
   title,
   disabled,
+  loading = false,
+  variant = 'filled',
   ...buttonProps
 }) => {
-  const buttonThemeStyles = useMemo(() => {
-    if (disabled) {
-      return [styles.button, styles.disabled];
-    }
-    return [styles.button, buttonThemeStylesObj[theme]];
-  }, [theme, disabled]);
-
   return (
-    <TouchableOpacity
-      style={buttonThemeStyles}
+    <ButtonStyle
+      variant={variant}
+      colorScheme={colorScheme}
       activeOpacity={0.8}
       disabled={disabled}
+      loading={loading}
       {...buttonProps}>
-      <Typography
-        customStyles={disabled ? styles.textDisabled : styles.text}
-        variant="button">
-        {title}
-      </Typography>
-    </TouchableOpacity>
+      {!loading ? (
+        <LabelStyle
+          disabled={disabled}
+          colorScheme={colorScheme}
+          variant={variant}
+          style={TypographyStyles.button}>
+          {title}
+        </LabelStyle>
+      ) : (
+        <Loader
+          color={
+            variant === 'filled' ? Colors.white3 : ButtonThemeColor[colorScheme]
+          }
+        />
+      )}
+    </ButtonStyle>
   );
 };
 

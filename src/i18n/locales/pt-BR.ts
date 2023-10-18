@@ -6,7 +6,7 @@ const ptBr = {
       fields: {
         name: 'Nome',
         email: 'E-mail',
-        phone: 'Telefone',
+        phone: 'Whatsapp',
         password: 'Senha',
         postalCode: 'CEP',
         street: 'Rua',
@@ -37,6 +37,33 @@ const ptBr = {
       buttons: {
         send: 'Enviar',
         next: 'Próximo',
+      },
+    },
+    preSignUp: {
+      title: 'Pré-cadastro',
+      subtitle:
+        'Faltam alguns passos para completar seu perfil, deseja realizar isso agora ?',
+      buttons: {
+        later: 'Fazer isso depois...',
+        now: 'Vamos lá!',
+      },
+    },
+    workers: {
+      title: 'Funcionários',
+      subtitle: 'Gerenciar funcionários ativos.',
+      goBack: 'Voltar',
+      buttons: {
+        add: '+ Funcionário',
+        save: 'Salvar',
+      },
+    },
+    services: {
+      title: 'Serviços',
+      subtitle: 'Gerenciar serviços prestados.',
+      goBack: 'Voltar',
+      buttons: {
+        add: '+ Funcionário',
+        save: 'Salvar',
       },
     },
   },
@@ -86,6 +113,20 @@ const ptBr = {
       sendAgain: 'Enviar novamente',
       buttons: {
         login: 'Entrar',
+      },
+    },
+  },
+  modals: {
+    addWorker: {
+      title: 'Adicionar funcionário',
+      subtitle: 'Preencha os campos abaixo para continuar.',
+      fields: {
+        name: 'Nome',
+        email: 'E-mail',
+        phone: 'Whatsapp',
+      },
+      buttons: {
+        add: 'Adicionar',
       },
     },
   },

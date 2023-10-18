@@ -1,4 +1,4 @@
-import {ICreateUser} from '@/core/models';
+import {ICreateUser} from '@/app/models';
 import {Icons, Input, Step} from '@/components/atoms';
 import {phoneMask} from '@/utils';
 import React, {useEffect, useState} from 'react';
@@ -9,6 +9,7 @@ import {TouchableOpacity} from 'react-native';
 interface IProfileStepProps {
   form: UseFormReturn<ICreateUser>;
   completed?: boolean;
+  canNext?: boolean;
 }
 
 const ProfileStep: React.FC<IProfileStepProps> = ({form, completed}) => {

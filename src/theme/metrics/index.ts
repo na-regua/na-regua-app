@@ -7,8 +7,10 @@ const metrics = {
   mdPadding: 24,
   screenWidth: width < height ? width : height,
   screenHeight: width < height ? height : width,
-  appUsableWidth: width < height ? width - 36 : height - 36,
-  appUsableHeight: width < height ? height - 36 : width - 36,
+  smWidth: width < height ? width - 36 : height - 36,
+  smHeight: width < height ? height - 36 : width - 36,
+  mdHeight: width < height ? height - 48 : width - 48,
+  mdWidth: width < height ? width - 48 : height - 48,
 };
 
 export default metrics;

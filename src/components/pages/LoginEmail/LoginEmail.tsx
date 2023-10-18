@@ -1,11 +1,16 @@
 import {Button, Icons, Input, Typography} from '@/components/atoms';
-import {AuthService} from '@/core/api';
-import {ILoginEmail, TLoginSteps} from '@/core/models';
+import {AuthService} from '@/app/api';
+import {ILoginEmail, TLoginSteps} from '@/app/models';
+import {APP_ROUTES, useAppNavigation} from '@/navigation';
+import {AppDispatch} from '@/store/Store';
+import {ACCESS_TOKEN_KEY, setPersistedToken} from '@/store/slicers';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AxiosError} from 'axios';
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {TouchableOpacity, View} from 'react-native';
+import {useDispatch} from 'react-redux';
 import {styles} from './styles';
 
 interface ILoginEmailProps {
@@ -14,12 +19,14 @@ interface ILoginEmailProps {
 
 const LoginEmail: React.FC<ILoginEmailProps> = ({}) => {
   const {t} = useTranslation();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigator = useAppNavigation();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const {control, handleSubmit, formState} = useForm<ILoginEmail>({
     mode: 'all',
   });
-
-  const [showPassword, setShowPassword] = useState(false);
 
   const handleShowPassword = () => {
     setShowPassword(curr => !curr);
@@ -32,7 +39,11 @@ const LoginEmail: React.FC<ILoginEmailProps> = ({}) => {
       const {data} = await AuthService.loginWithEmail({email, password});
 
       if (data) {
-        console.log(data.accessToken);
+        await AsyncStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken);
+
+        dispatch(setPersistedToken(data.accessToken));
+
+        navigator.navigate(APP_ROUTES.BARBER_QUEUE);
       }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -51,7 +62,7 @@ const LoginEmail: React.FC<ILoginEmailProps> = ({}) => {
         <Typography
           variant="body1"
           color="white3"
-          customStyles={styles.headerSubtitle}>
+          style={styles.headerSubtitle}>
           {t('generic.loginEmail.subtitle')}
         </Typography>
       </View>

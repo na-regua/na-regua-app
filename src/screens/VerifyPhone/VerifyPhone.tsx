@@ -1,19 +1,24 @@
+import {AuthService} from '@/app/api';
 import {Button, CodeInput, Typography} from '@/components/atoms';
 import {Header} from '@/components/molecules';
-import {AuthService} from '@/core/api';
-import {RootState} from '@/store/Store';
-import {Colors, Metrics} from '@/theme';
+import {useAppNavigation} from '@/navigation';
+import {AppDispatch, RootState} from '@/store/Store';
+import {setPersistedToken} from '@/store/slicers';
+import {Colors} from '@/theme';
 import {AxiosError} from 'axios';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StatusBar, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {styles} from './styles';
 
 const VerifyPhone: React.FC = () => {
-  const barber = useSelector((state: RootState) => state.barber.barber);
+  const barber = useSelector((state: RootState) => state.auth.barber);
   const {t} = useTranslation();
   const insets = useSafeAreaInsets();
+  const navigation = useAppNavigation();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [code, setCode] = useState('');
   const [expired, setExpired] = useState(false);
@@ -57,8 +62,6 @@ const VerifyPhone: React.FC = () => {
       if (data) {
         setTimer(60);
         setExpired(false);
-
-        console.log(data);
       }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -75,10 +78,14 @@ const VerifyPhone: React.FC = () => {
     const {phone} = barber.user;
 
     try {
-      const data = await AuthService.verifyWhatsapp(code, phone);
+      const {data} = await AuthService.verifyWhatsapp(code, phone);
 
-      if (data) {
-        console.log(data);
+      if (data.accessToken) {
+        dispatch(setPersistedToken(data.accessToken));
+
+        if (data.barber) {
+        }
+        navigation.navigate('BarberPreSignUp');
       }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -89,13 +96,13 @@ const VerifyPhone: React.FC = () => {
 
   return (
     <View style={[styles.container, insetsStyles]}>
-      <StatusBar barStyle={'light-content'} backgroundColor={Colors.bgLight} />
+      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.bgLight} />
+      <Header
+        showTitle
+        title={t('generic.verifyPhone.title')}
+        subtitle={t('generic.verifyPhone.subtitle')}
+      />
       <View style={styles.content}>
-        <Header
-          showTitle
-          title={t('generic.verifyPhone.title')}
-          subtitle={t('generic.verifyPhone.subtitle')}
-        />
         <View style={styles.validationContainer}>
           <CodeInput
             digits={digits}
@@ -110,9 +117,6 @@ const VerifyPhone: React.FC = () => {
               </Typography>
             </View>
           )}
-          <Typography variant="body1">
-            {(barber && barber.user.phone) || 'no phone'}
-          </Typography>
           {expired && (
             <TouchableOpacity
               style={styles.sendAgainWrapper}
@@ -133,31 +137,5 @@ const VerifyPhone: React.FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: Metrics.screenWidth,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    backgroundColor: Colors.bgLight,
-  },
-  content: {
-    flex: 1,
-    width: Metrics.screenWidth,
-    padding: Metrics.smPadding,
-    flexDirection: 'column',
-    gap: 18,
-  },
-  sendAgainWrapper: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-  },
-  validationContainer: {
-    flex: 1,
-    gap: 18,
-  },
-});
 
 export default VerifyPhone;

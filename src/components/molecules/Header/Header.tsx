@@ -1,32 +1,39 @@
 import {Icons, Typography} from '@/components/atoms';
-import {Colors, Fonts} from '@/theme';
+import {RootState} from '@/store/Store';
+import {Fonts} from '@/theme';
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
+import {useSelector} from 'react-redux';
+import {styles} from './styles';
 
 interface IHeaderProps {
-  authenticated?: boolean;
   showTitle?: boolean;
+  showBorder?: boolean;
+  showWelcome?: boolean;
   title?: string;
   subtitle?: string;
   onIconPress?: () => void;
 }
 
 const Header: React.FC<IHeaderProps> = ({
-  authenticated = false,
   showTitle = true,
+  showWelcome = false,
+  showBorder = false,
   title = 'Title',
   subtitle = 'Subtitle',
   onIconPress,
 }) => {
+  const {user, isAuthenticated} = useSelector((state: RootState) => state.auth);
+
   return (
-    <View style={styles.headerContainer}>
-      <View style={styles.headerContainerInfo}>
+    <View style={styles.container}>
+      <View style={styles.containerInfo}>
         <TouchableOpacity
-          style={styles.headerContainerInfoGroup}
+          style={styles.containerInfoGroup}
           onPress={onIconPress}
           activeOpacity={0.8}>
-          <View style={styles.headerContainerInfoIcon} />
-          <Typography variant="body2" color="black1">
+          <View style={styles.containerInfoIcon} />
+          <Typography variant="body2" color="black3">
             Na Régua
           </Typography>
         </TouchableOpacity>
@@ -34,57 +41,32 @@ const Header: React.FC<IHeaderProps> = ({
           <Icons.BellIcon width={24} height={24} color="main" />
         </TouchableOpacity>
       </View>
-      {authenticated && (
-        <View>
+      {showTitle && (
+        <View style={styles.title}>
           <Typography variant="h2" color="black3">
-            <Typography
-              variant="h2"
-              color="black3"
-              customStyles={{fontWeight: Fonts.weights.regular}}>
-              Olá,
-            </Typography>{' '}
-            Alex
+            {title}
           </Typography>
-        </View>
-      )}
-      {!authenticated && showTitle && (
-        <View style={styles.headerTitle}>
-          <Typography variant="h2">{title}</Typography>
-          <Typography variant="body2" color="black1">
+          <Typography variant="body1" color="black1">
             {subtitle}
           </Typography>
         </View>
       )}
+      {showWelcome && isAuthenticated && user && (
+        <View style={styles.title}>
+          <Typography variant="h2" color="black3">
+            <Typography
+              variant="h2"
+              color="black3"
+              style={{fontWeight: Fonts.weights.regular}}>
+              Olá,
+            </Typography>{' '}
+            {user.name}
+          </Typography>
+        </View>
+      )}
+      {showBorder && <View style={styles.border} />}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: 'column',
-    gap: 12,
-  },
-  headerContainerInfo: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  headerContainerInfoGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  headerContainerInfoIcon: {
-    borderRadius: 8,
-    width: 32,
-    height: 32,
-    backgroundColor: Colors.main,
-  },
-  headerContainerMessage: {},
-  headerTitle: {
-    flexDirection: 'column',
-    gap: 4,
-  },
-});
 
 export default Header;

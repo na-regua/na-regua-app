@@ -1,3 +1,4 @@
+export {default as AddWorkerModal} from './AddWorkerModal/AddWorkerModal';
 export {default as AddressStep} from './AddressStep/AddressStep';
 export {default as AvatarStep} from './AvatarStep/AvatarStep';
 export {default as Header} from './Header/Header';

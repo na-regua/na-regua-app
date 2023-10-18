@@ -1,9 +1,9 @@
 import {Input, Step} from '@/components/atoms';
-import ENDPOINTS from '@/core/api/endpoints';
-import {ICepApiData} from '@/core/models';
+import ENDPOINTS from '@/app/api/endpoints';
+import {ICepApiData} from '@/app/models';
 import {maskCep} from '@/utils';
 import axios from 'axios';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Controller, UseFormReturn} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
@@ -21,22 +21,17 @@ export interface IAdressFormData {
 interface IAdressStepProps {
   form: UseFormReturn<IAdressFormData>;
   completed?: boolean;
+  canJumpTo?: boolean;
 }
 
-const AddressStep: React.FC<IAdressStepProps> = ({form, completed}) => {
+const AddressStep: React.FC<IAdressStepProps> = ({
+  form,
+  completed,
+  canJumpTo,
+}) => {
   const {t} = useTranslation();
 
-  const {register, control} = form;
-
-  useEffect(() => {
-    register('cep', {required: true});
-    register('logradouro', {required: true});
-    register('complemento');
-    register('numero', {required: true});
-    register('localidade', {required: true});
-    register('uf', {required: true});
-    register('bairro', {required: true});
-  }, [register]);
+  const {control, trigger} = form;
 
   const handlePostalCodeChange = async (text: string) => {
     const removeMasktext = text.replace(/\D/g, '');
@@ -63,6 +58,8 @@ const AddressStep: React.FC<IAdressStepProps> = ({form, completed}) => {
             );
           }
         });
+
+        trigger();
       } catch (error) {
         console.log(error);
       }
@@ -74,10 +71,12 @@ const AddressStep: React.FC<IAdressStepProps> = ({form, completed}) => {
       title={t('barber.signUp.steps.2.title')}
       description={t('barber.signUp.steps.2.description')}
       number={2}
+      disabled={!canJumpTo}
       completed={completed}>
       <Controller
         name="cep"
         control={control}
+        rules={{required: true}}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
             label={t('barber.signUp.fields.postalCode')}
@@ -95,6 +94,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({form, completed}) => {
       <Controller
         name="logradouro"
         control={control}
+        rules={{required: true}}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
             label={t('barber.signUp.fields.street')}
@@ -125,6 +125,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({form, completed}) => {
         <Controller
           name="numero"
           control={control}
+          rules={{required: true}}
           render={({field: {onChange, onBlur, value}}) => (
             <Input
               label={t('barber.signUp.fields.number')}
@@ -145,6 +146,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({form, completed}) => {
         <Controller
           name="localidade"
           control={control}
+          rules={{required: true}}
           render={({field: {onChange, onBlur, value}}) => (
             <Input
               label={t('barber.signUp.fields.city')}
@@ -162,6 +164,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({form, completed}) => {
         <Controller
           name="uf"
           control={control}
+          rules={{required: true}}
           render={({field: {onChange, onBlur, value}}) => (
             <Input
               label={t('barber.signUp.fields.uf')}
@@ -180,6 +183,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({form, completed}) => {
       <Controller
         name="bairro"
         control={control}
+        rules={{required: true}}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
             label={t('barber.signUp.fields.neighborhood')}

@@ -1,7 +1,6 @@
 import {Button, Typography} from '@/components/atoms';
-import {TLoginSteps} from '@/core/models';
-import {ParamListBase, useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {TLoginSteps} from '@/app/models';
+import {useAppNavigation} from '@/navigation';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {TouchableOpacity, View} from 'react-native';
@@ -13,10 +12,10 @@ interface ILoginWelcomeProps {
 
 const LoginWelcome: React.FC<ILoginWelcomeProps> = ({onLoginMethod}) => {
   const {t} = useTranslation();
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const navigation = useAppNavigation();
 
   const handleNavigateToSignUp = () => {
-    navigation.navigate('BarberSignUp');
+    navigation.navigate('/barber/sign-up');
   };
 
   return (
@@ -42,7 +41,7 @@ const LoginWelcome: React.FC<ILoginWelcomeProps> = ({onLoginMethod}) => {
         <Button
           onPress={() => onLoginMethod('whatsapp')}
           title={t('generic.login.buttons.whatsapp')}
-          theme="success"
+          colorScheme="success"
         />
       </View>
       <TouchableOpacity onPress={handleNavigateToSignUp}>

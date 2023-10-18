@@ -2,25 +2,18 @@ import React = require('react');
 import {oneDigitMask} from '@/utils';
 import {createRef, useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {TextInput, View} from 'react-native';
-import {styles} from './styles';
+import {TextInput} from 'react-native';
+import {CodeInputStyle, CodeWrapperStyle} from './styles';
 
 interface ICodeInputProps {
   onCodeChange: (code: string) => void;
   digits: number;
 }
 
-interface ICodeInputSelection {
-  start: number;
-  end: number;
-}
-
 interface ICodeInputsArr {
   ref: React.RefObject<TextInput>;
   isFocused: boolean;
   setIsFocused: (isFocused: boolean) => void;
-  selection: ICodeInputSelection;
-  setSelection: (selection: ICodeInputSelection) => void;
 }
 
 const CodeInput: React.FC<ICodeInputProps> = ({digits, onCodeChange}) => {
@@ -32,11 +25,6 @@ const CodeInput: React.FC<ICodeInputProps> = ({digits, onCodeChange}) => {
   for (let i = 0; i < digits; i++) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [isFocused, setIsFocused] = useState(false);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [selection, setSelection] = useState({
-      start: 0,
-      end: 0,
-    });
 
     const ref = createRef<TextInput>();
 
@@ -46,8 +34,6 @@ const CodeInput: React.FC<ICodeInputProps> = ({digits, onCodeChange}) => {
       isFocused,
       setIsFocused,
       ref,
-      selection,
-      setSelection,
     });
   }
 
@@ -100,14 +86,15 @@ const CodeInput: React.FC<ICodeInputProps> = ({digits, onCodeChange}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <CodeWrapperStyle>
       {inputValuesArray.map(({isFocused, setIsFocused, ref}, index) => (
         <Controller
           key={index}
           name={`code-${index}`}
           control={control}
           render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
+            <CodeInputStyle
+              as={TextInput}
               ref={ref}
               value={value}
               onFocus={() => {
@@ -121,11 +108,7 @@ const CodeInput: React.FC<ICodeInputProps> = ({digits, onCodeChange}) => {
               onChangeText={text => {
                 handleCodeOnChange(text, index, onChange);
               }}
-              style={
-                isFocused
-                  ? [styles.codeInput, styles.codeInputFocused]
-                  : [styles.codeInput]
-              }
+              isFocused={isFocused}
               key={index}
               onKeyPress={e => {
                 if (e.nativeEvent.key === 'Backspace') {
@@ -139,7 +122,7 @@ const CodeInput: React.FC<ICodeInputProps> = ({digits, onCodeChange}) => {
           )}
         />
       ))}
-    </View>
+    </CodeWrapperStyle>
   );
 };
 

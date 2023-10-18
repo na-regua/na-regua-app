@@ -1,6 +1,6 @@
 import {Button, CodeInput, Input, Typography} from '@/components/atoms';
-import {AuthService} from '@/core/api';
-import {ILoginWhatsapp} from '@/core/models';
+import {AuthService} from '@/app/api';
+import {ILoginWhatsapp} from '@/app/models';
 import {phoneMask} from '@/utils';
 import {AxiosError} from 'axios';
 import React, {useEffect, useState} from 'react';
@@ -106,7 +106,7 @@ const LoginWhatsapp: React.FC<ILoginWhatsappProps> = ({}) => {
         <Typography
           variant="body1"
           color="white3"
-          customStyles={styles.headerSubtitle}>
+          style={styles.headerSubtitle}>
           {t(`${tKey}.subtitle`)}
         </Typography>
       </View>

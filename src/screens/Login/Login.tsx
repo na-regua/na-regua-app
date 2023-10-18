@@ -1,7 +1,7 @@
 import {Icons, Typography} from '@/components/atoms';
 import {LoginEmail, LoginWelcome} from '@/components/pages';
 import LoginWhatsapp from '@/components/pages/LoginWhatsapp/LoginWhatsapp';
-import {TLoginSteps} from '@/core/models';
+import {TLoginSteps} from '@/app/models';
 import {Colors, Metrics} from '@/theme';
 import React, {useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -36,7 +36,7 @@ const Login: React.FC = () => {
 
   return (
     <View style={[styles.container, insetsStyles]}>
-      <StatusBar barStyle={'light-content'} backgroundColor={Colors.bgLight} />
+      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.bgLight} />
       <View style={[styles.splash, {height: getSplashHeight}]} />
       {loginMethod === 'welcome' && (
         <LoginWelcome onLoginMethod={handleOnLoginMethod} />

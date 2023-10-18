@@ -1,2 +1,2 @@
-export * from './BarberSlicer/BarberSlicer';
-export * from './SignInSlicer/SignInSlicer';
+export * from './AuthSlicer/AuthSlicer';
+export * from './ConfigSlicer/ConfigSlicer';

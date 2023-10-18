@@ -1,34 +1,30 @@
 import {Colors, Fonts} from '@/theme';
-import {StyleSheet} from 'react-native';
+import styled from 'styled-components/native';
 
-export const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 12,
-  },
-  input: {},
-  codeInput: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: Colors.border,
-    borderStyle: 'solid',
-    textAlign: 'center',
-    color: Colors.black3,
-    fontSize: 14,
-    fontWeight: Fonts.weights.semiBold,
-    fontFamily: Fonts.types.semiBold,
-  },
-  codeInputFocused: {
-    color: Colors.primary,
-    borderColor: Colors.primary,
-  },
-});
+export const CodeWrapperStyle = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 12;
+`;
 
-export const codeInputStyle = {
-  default: styles.codeInput,
-  focused: [styles.codeInput, styles.codeInputFocused],
-};
+export const CodeInputStyle = styled.TextInput<{isFocused?: boolean}>`
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border-width: 2px;
+  border-color: ${Colors.border};
+  border-style: solid;
+  text-align: center;
+  color: ${Colors.black3};
+  font-size: 14;
+  font-weight: ${Fonts.weights.semiBold};
+  font-family: ${Fonts.types.semiBold};
+
+  ${({isFocused}) =>
+    isFocused &&
+    `
+    color: ${Colors.primary};
+    border-color: ${Colors.primary};
+  `}
+`;

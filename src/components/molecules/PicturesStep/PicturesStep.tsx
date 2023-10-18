@@ -8,12 +8,14 @@ interface IPicturesStepProps {
   onFileUpload?: (files: Asset[]) => void;
   completed?: boolean;
   thumbs: Asset[];
+  canJumpTo?: boolean;
 }
 
 const PicturesStep: React.FC<IPicturesStepProps> = ({
   onFileUpload,
   completed,
   thumbs,
+  canJumpTo,
 }) => {
   const {t} = useTranslation();
 
@@ -22,6 +24,7 @@ const PicturesStep: React.FC<IPicturesStepProps> = ({
       title={t('barber.signUp.steps.3.title')}
       description={t('barber.signUp.steps.3.description')}
       number={3}
+      disabled={!canJumpTo}
       completed={completed}>
       <View style={styles.fileUploadRow}>
         <FileUpload assets={thumbs} onFileUpload={onFileUpload} limit={3} />

@@ -22,16 +22,18 @@ interface IStepProps extends PropsWithChildren {
   number: number;
   completed?: boolean;
   showSpacer?: boolean;
+  disabled?: boolean;
 }
 
 const Step: React.FC<IStepProps> = ({
+  children,
+  description,
+  disabled,
   title,
   number,
   onPress,
   completed,
   showSpacer = true,
-  children,
-  description,
 }) => {
   const {currentStep, setCurrentStep} = useContext(StepperContext);
 
@@ -65,17 +67,16 @@ const Step: React.FC<IStepProps> = ({
       <TouchableOpacity
         onPress={handleOnPress}
         style={defaultStyles.step}
+        disabled={disabled}
         activeOpacity={0.6}>
         <View style={stepNumberStyle[status]}>
           <View>
-            <Typography
-              customStyles={stepNumberTextStyle[status]}
-              variant="button">
+            <Typography style={stepNumberTextStyle[status]} variant="button">
               {number}
             </Typography>
           </View>
         </View>
-        <Typography variant="body1" customStyles={stepTitleStyle[status]}>
+        <Typography variant="body1" style={stepTitleStyle[status]}>
           {title}
         </Typography>
       </TouchableOpacity>
@@ -89,7 +90,7 @@ const Step: React.FC<IStepProps> = ({
             <View style={defaultStyles.stepDescriptionWrapper}>
               <Typography
                 variant="caption"
-                customStyles={stepDescriptionStyle[status]}>
+                style={stepDescriptionStyle[status]}>
                 {description}
               </Typography>
             </View>

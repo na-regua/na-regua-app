@@ -7,16 +7,10 @@
 
 import React from 'react';
 import './i18n/i18n';
-import {AppNavigator} from './navigation';
-import {Provider} from 'react-redux';
-import {store} from './store/Store';
+import {CombinedProviders} from './providers';
 
 function App(): JSX.Element {
-  return (
-    <Provider store={store}>
-      <AppNavigator />
-    </Provider>
-  );
+  return <CombinedProviders />;
 }
 
 export default App;

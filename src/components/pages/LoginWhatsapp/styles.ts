@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
   card: {
     flexDirection: 'column',
     backgroundColor: Colors.bgLight,
-    width: Metrics.screenWidth - 2 * Metrics.mdPadding,
+    width: Metrics.mdWidth,
     padding: Metrics.smPadding,
     gap: Metrics.smPadding,
     borderRadius: 18,

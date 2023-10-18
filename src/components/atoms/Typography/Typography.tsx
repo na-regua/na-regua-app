@@ -16,33 +16,33 @@ type ITypographyVariants =
   | 'button'
   | 'tip';
 
-interface ITypographyProps extends PropsWithChildren {
+export interface ITypographyProps extends PropsWithChildren {
   variant: ITypographyVariants;
   color?: TColorsType;
-  customStyles?: TextStyle;
+  style?: TextStyle;
 }
 
 const Typography: React.FC<ITypographyProps> = ({
   children,
   variant,
   color,
-  customStyles,
+  style,
 }) => {
   const textColor = useMemo(() => color && Colors[color], [color]);
 
   const stylesByVariant = useMemo(
-    () => styles[variant as keyof typeof styles],
+    () => TypographyStyles[variant as keyof typeof TypographyStyles],
     [variant],
   );
 
   return (
-    <Text style={{...stylesByVariant, color: textColor, ...customStyles}}>
+    <Text style={{...stylesByVariant, color: textColor, ...style}}>
       {children}
     </Text>
   );
 };
 
-const styles = StyleSheet.create({
+export const TypographyStyles = StyleSheet.create({
   h1: {
     width: 'auto',
     fontWeight: Fonts.weights.bold,

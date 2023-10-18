@@ -1,61 +1,75 @@
 import {Colors} from '@/theme';
-import {StyleSheet, ViewStyle} from 'react-native';
-import {TButtonThemes} from './Button';
+import styled, {css} from 'styled-components/native';
+import {RuleSet} from 'styled-components/native/dist/types';
+import {TButtonColorScheme, TButtonVariants} from './Button';
 
-const styles = StyleSheet.create({
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 44,
-    borderRadius: 8,
-    shadowOpacity: 0.2,
-    shadowOffset: {
-      height: 2,
-      width: 0,
-    },
-    shadowColor: Colors.black3,
-  },
-  main: {
-    backgroundColor: Colors.main,
-  },
-  primary: {
-    backgroundColor: Colors.primary,
-  },
-  secondary: {
-    backgroundColor: Colors.secondary,
-  },
-  danger: {
-    backgroundColor: Colors.danger,
-  },
-  success: {
-    backgroundColor: Colors.success,
-  },
-  default: {
-    backgroundColor: Colors.default,
-  },
-  disabled: {
-    backgroundColor: Colors.disabled,
-    shadowOpacity: 0.1,
-  },
-  warning: {
-    backgroundColor: Colors.warning,
-  },
-  text: {
-    color: Colors.white3,
-  },
-  textDisabled: {
-    color: Colors.black1,
-  },
-});
+const FilledButton = css`
+  box-shadow: 0 2px 2px ${Colors.black3}55;
+`;
 
-const buttonThemeStylesObj: Record<TButtonThemes, ViewStyle> = {
-  main: styles.main,
-  primary: styles.primary,
-  secondary: styles.secondary,
-  danger: styles.danger,
-  success: styles.success,
-  default: styles.default,
-  warning: styles.warning,
+const OutlinedButton = css`
+  border-width: 1px;
+  background-color: transparent;
+  box-shadow: none;
+`;
+
+const VariantsButton: Record<TButtonVariants, RuleSet> = {
+  filled: FilledButton,
+  outlined: OutlinedButton,
 };
 
-export {buttonThemeStylesObj, styles};
+export const ButtonThemeColor: Record<TButtonColorScheme, string> = {
+  main: Colors.main,
+  primary: Colors.primary,
+  secondary: Colors.secondary,
+  danger: Colors.danger,
+  success: Colors.success,
+  default: Colors.default,
+  warning: Colors.warning,
+};
+
+export const ButtonStyle = styled.TouchableOpacity<{
+  variant: TButtonVariants;
+  colorScheme: TButtonColorScheme;
+  disabled?: boolean;
+  loading?: boolean;
+}>`
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  border-radius: 8px;
+
+  ${({colorScheme}) => `
+    background-color: ${ButtonThemeColor[colorScheme]};
+    border-color: ${ButtonThemeColor[colorScheme]};
+  `}
+
+  ${({variant}) => VariantsButton[variant]}
+
+  ${({disabled, loading}) =>
+    disabled &&
+    !loading &&
+    `
+    background-color: ${Colors.disabled};
+    border-color: ${Colors.disabled};
+    box-shadow: none;
+  `}
+
+  ${({loading}) =>
+    loading &&
+    `
+    opacity: 0.9;
+  `}
+`;
+
+export const LabelStyle = styled.Text<{
+  variant: TButtonVariants;
+  colorScheme: TButtonColorScheme;
+  disabled?: boolean;
+}>`
+  ${({variant, colorScheme}) =>
+    `color: ${
+      variant === 'filled' ? Colors.white3 : ButtonThemeColor[colorScheme]
+    };`}
+  ${({disabled}) => disabled && `color: ${Colors.black3};`}
+`;

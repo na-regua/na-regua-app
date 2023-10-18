@@ -1,27 +1,22 @@
+import {BarbersService} from '@/app/api/services';
+import {ICreateBarber, ICreateUser} from '@/app/models';
 import {Button, Stepper} from '@/components/atoms';
 import {AvatarStep, PicturesStep, ProfileStep} from '@/components/molecules';
 import AddressStep, {
   IAdressFormData,
 } from '@/components/molecules/AddressStep/AddressStep';
-import {BarbersService} from '@/core/api/services';
-import {ICreateBarber, ICreateUser} from '@/core/models';
-import {AppDispatch} from '@/store/Store';
-import {setBarber} from '@/store/slicers';
+import {useAppNavigation} from '@/navigation';
 import {assetToBuffer} from '@/utils';
-import {ParamListBase, useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {AxiosError} from 'axios';
 import React, {useMemo, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Asset} from 'react-native-image-picker';
-import {useDispatch} from 'react-redux';
 
 const SignUpForm: React.FC = () => {
   const {t} = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const navigation = useAppNavigation();
 
   const stepOneForm = useForm<ICreateUser>({
     mode: 'all',
@@ -47,6 +42,26 @@ const SignUpForm: React.FC = () => {
       stepTwoForm.formState.isValid,
       avatar,
       thumbs,
+    ],
+  );
+
+  const canNextObj: Record<number, boolean> = {
+    0: true,
+    1: stepOneForm.formState.isValid,
+    2: stepTwoForm.formState.isValid,
+    3: !!thumbs && thumbs.length > 0,
+    4: !!avatar && !!avatar.uri,
+  };
+
+  const canNext = useMemo(
+    () => canNextObj[currentStep],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      currentStep,
+      stepOneForm.formState.isValid,
+      stepTwoForm.formState.isValid,
+      thumbs,
+      avatar,
     ],
   );
 
@@ -85,8 +100,7 @@ const SignUpForm: React.FC = () => {
         const {data} = await BarbersService.signUpBarber(createBarber);
 
         if (data) {
-          dispatch(setBarber(data));
-          navigation.navigate('GenericVerifyPhone');
+          navigation.navigate('/generic/verify-phone');
         }
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -110,21 +124,25 @@ const SignUpForm: React.FC = () => {
             <AddressStep
               form={stepTwoForm}
               completed={stepTwoForm.formState.isValid}
+              canJumpTo={canNextObj[1]}
             />
             <PicturesStep
               thumbs={thumbs}
               onFileUpload={handleOnFileUpload}
               completed={thumbs && thumbs.length > 0}
+              canJumpTo={canNextObj[2]}
             />
             <AvatarStep
               onAvatarChange={handleOnAvatarChange}
               completed={!!avatar && !!avatar.uri}
+              canJumpTo={canNextObj[3]}
             />
           </Stepper>
         </View>
       </ScrollView>
       {!allCompleted && currentStep !== 4 && (
         <Button
+          disabled={!canNext}
           onPress={handleNextStep}
           title={t('barber.signUp.buttons.next')}
         />

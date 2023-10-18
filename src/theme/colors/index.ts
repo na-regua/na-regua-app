@@ -14,7 +14,7 @@ const colors = {
   defaultHover: '#B3B9C6',
   border: '#EAEDF3',
   borderHover: '#D8DCE8',
-  disabled: '#CDCDCD',
+  disabled: '#bDbDbE',
   white1: '#D9D9D9',
   white2: '#F3F3F3',
   white3: '#ffffff',

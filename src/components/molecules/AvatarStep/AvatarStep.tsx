@@ -8,11 +8,13 @@ import {styles} from './styles';
 interface IAvatarStepProps {
   completed?: boolean;
   onAvatarChange: (file: Asset) => void;
+  canJumpTo?: boolean;
 }
 
 const AvatarStep: React.FC<IAvatarStepProps> = ({
   completed,
   onAvatarChange,
+  canJumpTo,
 }) => {
   const {t} = useTranslation();
 
@@ -21,7 +23,8 @@ const AvatarStep: React.FC<IAvatarStepProps> = ({
       title={t('barber.signUp.steps.4.title')}
       number={4}
       description={t('barber.signUp.steps.4.description')}
-      completed={completed}>
+      completed={completed}
+      disabled={!canJumpTo}>
       <View style={styles.avatarContainer}>
         <Avatar size={82} iconSize={32} onAvatarChange={onAvatarChange} />
       </View>

@@ -5,8 +5,7 @@ import {SignUpForm} from '@/components/pages';
 import Colors from '@/theme/colors';
 import Metrics from '@/theme/metrics';
 
-import {ParamListBase, useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {APP_ROUTES, useAppNavigation} from '@/navigation';
 import {useTranslation} from 'react-i18next';
 import {StatusBar, StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -14,7 +13,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 const BarberSignUp: React.FC = () => {
   const {t} = useTranslation();
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const navigation = useAppNavigation();
 
   const insetsStyles = {
     paddingTop: insets.top,
@@ -24,19 +23,19 @@ const BarberSignUp: React.FC = () => {
   };
 
   const handleNavigateToLogin = () => {
-    navigation.navigate('GenericLogin');
+    navigation.navigate(APP_ROUTES.GENERIC_LOGIN);
   };
 
   return (
     <View style={[styles.signInContainer, insetsStyles]}>
-      <StatusBar barStyle={'light-content'} backgroundColor={Colors.bgLight} />
+      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.bgLight} />
+      <Header
+        showTitle
+        title={t('barber.signUp.title')}
+        subtitle={t('barber.signUp.subtitle')}
+        onIconPress={handleNavigateToLogin}
+      />
       <View style={styles.signInContent}>
-        <Header
-          showTitle
-          title={t('barber.signUp.title')}
-          subtitle={t('barber.signUp.subtitle')}
-          onIconPress={handleNavigateToLogin}
-        />
         <SignUpForm />
       </View>
     </View>
