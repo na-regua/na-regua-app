@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
   stepperContainer: {
     flex: 1,
     flexDirection: 'column',
-    gap: 4,
   },
 });
 

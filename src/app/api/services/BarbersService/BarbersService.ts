@@ -1,8 +1,7 @@
 import api, {errToAxiosError} from '@/app/api/api';
-import {IBarber, ICreateBarber, IGetWorkerParams, IWorker} from '@/app/models';
+import {IBarber, ICreateBarber} from '@/app/models';
 import {AxiosResponse} from 'axios';
 import {default as ENDPOINTS} from '../../endpoints';
-import {queryBuilder} from '@/utils/queryBuilder';
 
 const getBarbers = async (): Promise<AxiosResponse> => {
   try {
@@ -40,13 +39,13 @@ const signUpBarber = async (
   }
 };
 
-const getWorkers = async (
-  params: IGetWorkerParams,
-): Promise<AxiosResponse<IWorker[]>> => {
+const completeProfile = async (): Promise<AxiosResponse<IBarber>> => {
   try {
-    const url = queryBuilder(ENDPOINTS.WORKERS_LIST, params);
-
-    const data = await api.get(url, {withCredentials: true});
+    const data = await api.post(
+      ENDPOINTS.BARBERS_COMPLETE_PROFILE,
+      {},
+      {withCredentials: true},
+    );
 
     return data;
   } catch (error) {
@@ -54,4 +53,8 @@ const getWorkers = async (
   }
 };
 
-export default {getBarbers, signUpBarber, getWorkers};
+export default {
+  completeProfile,
+  getBarbers,
+  signUpBarber,
+};

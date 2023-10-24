@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
     width: Metrics.screenWidth,
     flexDirection: 'column',
     gap: 18,
+    alignItems: 'center',
   },
   sendAgainWrapper: {
     justifyContent: 'center',
@@ -23,5 +24,8 @@ export const styles = StyleSheet.create({
   validationContainer: {
     flex: 1,
     gap: 18,
+  },
+  button: {
+    width: Metrics.smWidth,
   },
 });

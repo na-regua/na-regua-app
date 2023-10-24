@@ -1,10 +1,10 @@
 import {Icons, Typography} from '@/components/atoms';
 import {RootState} from '@/store/Store';
 import {Fonts} from '@/theme';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {useSelector} from 'react-redux';
-import {styles} from './styles';
+import {ContainerInfoStyle, ContainerStyle, styles} from './styles';
 
 interface IHeaderProps {
   showTitle?: boolean;
@@ -12,51 +12,68 @@ interface IHeaderProps {
   showWelcome?: boolean;
   title?: string;
   subtitle?: string;
+  clickable?: boolean;
   onIconPress?: () => void;
+  lightContent?: boolean;
 }
 
 const Header: React.FC<IHeaderProps> = ({
   showTitle = true,
   showWelcome = false,
   showBorder = false,
+  clickable = false,
   title = 'Title',
   subtitle = 'Subtitle',
+  lightContent,
   onIconPress,
 }) => {
   const {user, isAuthenticated} = useSelector((state: RootState) => state.auth);
 
+  const color = useMemo(
+    () => (lightContent ? 'white' : 'black'),
+    [lightContent],
+  );
+
+  const mainColor = useMemo(
+    () => (lightContent ? 'white3' : 'main'),
+    [lightContent],
+  );
+
   return (
-    <View style={styles.container}>
+    <ContainerStyle>
       <View style={styles.containerInfo}>
         <TouchableOpacity
           style={styles.containerInfoGroup}
           onPress={onIconPress}
-          activeOpacity={0.8}>
-          <View style={styles.containerInfoIcon} />
-          <Typography variant="body2" color="black3">
+          activeOpacity={0.8}
+          disabled={!clickable}>
+          <ContainerInfoStyle lightContent={lightContent}>
+            <Typography variant="body1">I</Typography>
+          </ContainerInfoStyle>
+          <Typography variant="body2" color={`${color}3` as any}>
             Na Régua
           </Typography>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Icons.BellIcon width={24} height={24} color="main" />
+          <Icons.BellIcon width={24} color={`${mainColor}` as any} />
         </TouchableOpacity>
       </View>
       {showTitle && (
         <View style={styles.title}>
-          <Typography variant="h2" color="black3">
+          <Typography variant="h2" color={`${color}3` as any}>
             {title}
           </Typography>
-          <Typography variant="body1" color="black1">
+          <Typography variant="body1" color={`${color}1` as any}>
             {subtitle}
           </Typography>
         </View>
       )}
       {showWelcome && isAuthenticated && user && (
         <View style={styles.title}>
-          <Typography variant="h2" color="black3">
+          <Typography variant="h2" color={`${color}3` as any}>
             <Typography
               variant="h2"
-              color="black3"
+              color={`${color}3` as any}
               style={{fontWeight: Fonts.weights.regular}}>
               Olá,
             </Typography>{' '}
@@ -65,7 +82,7 @@ const Header: React.FC<IHeaderProps> = ({
         </View>
       )}
       {showBorder && <View style={styles.border} />}
-    </View>
+    </ContainerStyle>
   );
 };
 

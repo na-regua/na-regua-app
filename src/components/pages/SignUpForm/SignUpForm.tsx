@@ -5,18 +5,24 @@ import {AvatarStep, PicturesStep, ProfileStep} from '@/components/molecules';
 import AddressStep, {
   IAdressFormData,
 } from '@/components/molecules/AddressStep/AddressStep';
-import {useAppNavigation} from '@/navigation';
+import {useKeyboardVisible} from '@/hooks';
+import {APP_ROUTES, useAppNavigation} from '@/navigation';
+import {AppDispatch} from '@/store/Store';
+import {createNotification} from '@/store/slicers';
 import {assetToBuffer} from '@/utils';
 import {AxiosError} from 'axios';
 import React, {useMemo, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {ScrollView, StyleSheet, View} from 'react-native';
 import {Asset} from 'react-native-image-picker';
+import {useDispatch} from 'react-redux';
+import {ContainerStyle, ScrollContent} from './styles';
 
 const SignUpForm: React.FC = () => {
   const {t} = useTranslation();
   const navigation = useAppNavigation();
+  const isKeyboardVisible = useKeyboardVisible();
+  const dispatch = useDispatch<AppDispatch>();
 
   const stepOneForm = useForm<ICreateUser>({
     mode: 'all',
@@ -27,7 +33,7 @@ const SignUpForm: React.FC = () => {
   });
 
   const [avatar, setAvatar] = useState<Asset | undefined>();
-
+  const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [thumbs, setThumbs] = useState<Asset[]>([]);
 
@@ -77,8 +83,10 @@ const SignUpForm: React.FC = () => {
     setThumbs(files);
   };
 
-  const handleOnSubmit = async () => {
-    if (avatar && avatar.base64) {
+  const signUp = async () => {
+    if (avatar) {
+      setLoading(true);
+
       const mappedThumbs = assetToBuffer([avatar, ...thumbs]);
 
       const {bairro, cep, complemento, localidade, logradouro, numero, uf} =
@@ -100,77 +108,75 @@ const SignUpForm: React.FC = () => {
         const {data} = await BarbersService.signUpBarber(createBarber);
 
         if (data) {
-          navigation.navigate('/generic/verify-phone');
+          setLoading(false);
+
+          navigation.navigate(APP_ROUTES.GENERIC_VERIFY_PHONE);
         }
       } catch (error) {
+        setLoading(false);
+
         if (error instanceof AxiosError) {
-          console.log(error.response?.data);
+          const {message} = error.response?.data;
+
+          if (message) {
+            dispatch(
+              createNotification({
+                id: 'sign-up-barber',
+                type: 'error',
+                message,
+              }),
+            );
+          }
         }
       }
     }
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.scrollWrapper}
-        showsVerticalScrollIndicator={false}>
-        <View style={styles.scrollContent}>
-          <Stepper currentStep={currentStep} setCurrentStep={setCurrentStep}>
-            <ProfileStep
-              form={stepOneForm}
-              completed={stepOneForm.formState.isValid}
-            />
-            <AddressStep
-              form={stepTwoForm}
-              completed={stepTwoForm.formState.isValid}
-              canJumpTo={canNextObj[1]}
-            />
-            <PicturesStep
-              thumbs={thumbs}
-              onFileUpload={handleOnFileUpload}
-              completed={thumbs && thumbs.length > 0}
-              canJumpTo={canNextObj[2]}
-            />
-            <AvatarStep
-              onAvatarChange={handleOnAvatarChange}
-              completed={!!avatar && !!avatar.uri}
-              canJumpTo={canNextObj[3]}
-            />
-          </Stepper>
-        </View>
-      </ScrollView>
-      {!allCompleted && currentStep !== 4 && (
+    <ContainerStyle>
+      <ScrollContent>
+        <Stepper currentStep={currentStep} setCurrentStep={setCurrentStep}>
+          <ProfileStep
+            goNext={handleNextStep}
+            form={stepOneForm}
+            completed={stepOneForm.formState.isValid}
+          />
+          <AddressStep
+            form={stepTwoForm}
+            completed={stepTwoForm.formState.isValid}
+            canJumpTo={canNextObj[1]}
+            goNext={handleNextStep}
+          />
+          <PicturesStep
+            thumbs={thumbs}
+            onFileUpload={handleOnFileUpload}
+            completed={thumbs && thumbs.length > 0}
+            canJumpTo={canNextObj[2]}
+          />
+          <AvatarStep
+            onAvatarChange={handleOnAvatarChange}
+            completed={!!avatar && !!avatar.uri}
+            canJumpTo={canNextObj[3]}
+          />
+        </Stepper>
+      </ScrollContent>
+      {!allCompleted && currentStep !== 4 && !isKeyboardVisible && (
         <Button
           disabled={!canNext}
           onPress={handleNextStep}
           title={t('barber.signUp.buttons.next')}
         />
       )}
-      {(allCompleted || currentStep === 4) && (
+      {(allCompleted || currentStep === 4) && !isKeyboardVisible && (
         <Button
-          onPress={handleOnSubmit}
+          onPress={signUp}
           disabled={!allCompleted}
+          loading={loading}
           title={t('barber.signUp.buttons.send')}
         />
       )}
-    </View>
+    </ContainerStyle>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    gap: 18,
-  },
-  scrollWrapper: {
-    flex: 1,
-  },
-  scrollContent: {
-    flex: 1,
-    flexDirection: 'column',
-    gap: 18,
-  },
-});
 
 export default SignUpForm;

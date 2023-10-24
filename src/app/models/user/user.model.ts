@@ -1,4 +1,4 @@
-export type TUserRoles = 'admin' | 'barber' | 'customer';
+export type TUserRoles = 'admin' | 'worker' | 'custommer';
 
 export interface IUser {
   _id: string;
@@ -9,6 +9,8 @@ export interface IUser {
   role: TUserRoles;
   avatar: string;
   phoneConfirmed: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ICreateUser {

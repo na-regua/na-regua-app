@@ -47,3 +47,29 @@ export function oneDigitMask(value: string): string {
 
   return value;
 }
+
+export function numberMask(value: string): string {
+  if (!value) {
+    return '';
+  }
+
+  value = value.replace(/\D/g, '');
+
+  return value;
+}
+
+export function ufMask(value: string): string {
+  if (!value) {
+    return '';
+  }
+
+  value = value.replace(/\D/g, '');
+
+  value = value.toUpperCase();
+
+  if (value.length > 2) {
+    value = value.substring(0, 2);
+  }
+
+  return value;
+}

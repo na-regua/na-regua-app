@@ -4,9 +4,9 @@ import {StyleSheet, View} from 'react-native';
 import {G, Path, Svg} from 'react-native-svg';
 import {IIconProps} from '../Icons';
 
-interface IRemoveIconProps extends IIconProps {}
+interface IDeleteIconProps extends IIconProps {}
 
-const RemoveIcon: React.FC<IRemoveIconProps> = ({
+const DeleteIcon: React.FC<IDeleteIconProps> = ({
   width = 20,
   height = 20,
   strokeWidth = 1.5,
@@ -61,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RemoveIcon;
+export default DeleteIcon;

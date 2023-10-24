@@ -5,7 +5,7 @@ export const CodeWrapperStyle = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 12;
+  gap: 12px;
 `;
 
 export const CodeInputStyle = styled.TextInput<{isFocused?: boolean}>`
@@ -17,7 +17,7 @@ export const CodeInputStyle = styled.TextInput<{isFocused?: boolean}>`
   border-style: solid;
   text-align: center;
   color: ${Colors.black3};
-  font-size: 14;
+  font-size: 14px;
   font-weight: ${Fonts.weights.semiBold};
   font-family: ${Fonts.types.semiBold};
 

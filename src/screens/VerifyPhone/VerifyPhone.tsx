@@ -1,23 +1,35 @@
 import {AuthService} from '@/app/api';
 import {Button, CodeInput, Typography} from '@/components/atoms';
 import {Header} from '@/components/molecules';
-import {useAppNavigation} from '@/navigation';
+import {APP_ROUTES, useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {setPersistedToken} from '@/store/slicers';
+import {
+  createNotification,
+  setBarber,
+  setPersistedToken,
+  setUser,
+} from '@/store/slicers';
 import {Colors} from '@/theme';
 import {AxiosError} from 'axios';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StatusBar, TouchableOpacity, View} from 'react-native';
+import {
+  Keyboard,
+  StatusBar,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {styles} from './styles';
 
 const VerifyPhone: React.FC = () => {
-  const barber = useSelector((state: RootState) => state.auth.barber);
+  const {barber, user} = useSelector((state: RootState) => state.auth);
+  const skipPreSignUp = useSelector((state: RootState) => state.config.skipPre);
   const {t} = useTranslation();
   const insets = useSafeAreaInsets();
-  const navigation = useAppNavigation();
+  const navigator = useAppNavigation();
   const dispatch = useDispatch<AppDispatch>();
 
   const [code, setCode] = useState('');
@@ -50,11 +62,11 @@ const VerifyPhone: React.FC = () => {
   const digits = 6;
 
   const handleSendAgain = async () => {
-    if (!barber) {
+    if (!barber || !user) {
       return;
     }
 
-    const {phone} = barber.user;
+    const {phone} = user;
 
     try {
       const data = await AuthService.sendWhatsappCode(phone);
@@ -65,33 +77,68 @@ const VerifyPhone: React.FC = () => {
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log(error.response?.data);
+        const {message} = error.response?.data;
+
+        if (message) {
+          dispatch(
+            createNotification({
+              id: 'send-whatsapp',
+              type: 'error',
+              message,
+            }),
+          );
+        }
       }
     }
   };
 
   const handleVerifyPhone = async () => {
-    if (!barber) {
+    if (!barber || !user) {
       return;
     }
 
-    const {phone} = barber.user;
+    const {phone} = user;
 
     try {
       const {data} = await AuthService.verifyWhatsapp(code, phone);
 
-      if (data.accessToken) {
+      if (data) {
         dispatch(setPersistedToken(data.accessToken));
 
-        if (data.barber) {
+        if (data) {
+          await dispatch(setPersistedToken(data.accessToken));
+
+          if (data.barber) {
+            dispatch(setUser(data.user));
+            dispatch(setBarber(data.barber));
+
+            if (data.barber.profileStatus === 'pre' && !skipPreSignUp) {
+              navigator.navigate(APP_ROUTES.BARBER_PRE_SIGN_UP);
+            } else {
+              navigator.navigate(APP_ROUTES.BARBER_QUEUE);
+            }
+          }
         }
-        navigation.navigate('BarberPreSignUp');
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log(error.response?.data);
+        const {message} = error.response?.data;
+
+        if (message) {
+          dispatch(
+            createNotification({
+              id: 'verify-whatsapp',
+              type: 'error',
+              message,
+            }),
+          );
+        }
       }
     }
+  };
+
+  const handleNavigateToLogin = () => {
+    navigator.navigate(APP_ROUTES.GENERIC_LOGIN);
   };
 
   return (
@@ -101,39 +148,45 @@ const VerifyPhone: React.FC = () => {
         showTitle
         title={t('generic.verifyPhone.title')}
         subtitle={t('generic.verifyPhone.subtitle')}
+        onIconPress={handleNavigateToLogin}
+        clickable
       />
-      <View style={styles.content}>
-        <View style={styles.validationContainer}>
-          <CodeInput
-            digits={digits}
-            onCodeChange={text => {
-              setCode(text);
-            }}
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.content}>
+          <View style={styles.validationContainer}>
+            <CodeInput
+              digits={digits}
+              onCodeChange={text => {
+                setCode(text);
+              }}
+              onDone={() => code.length === digits && handleVerifyPhone()}
+            />
+            {!expired && (
+              <View style={styles.sendAgainWrapper}>
+                <Typography variant="button" color="placeholder">
+                  0:{timer + 1 > 10 ? timer : `0${timer}`}
+                </Typography>
+              </View>
+            )}
+            {expired && (
+              <TouchableOpacity
+                style={styles.sendAgainWrapper}
+                onPress={handleSendAgain}
+                activeOpacity={0.6}>
+                <Typography variant="button" color="primary">
+                  {t('generic.verifyPhone.sendAgain')}
+                </Typography>
+              </TouchableOpacity>
+            )}
+          </View>
+          <Button
+            onPress={handleVerifyPhone}
+            disabled={code.length !== digits}
+            title={t('generic.verifyPhone.buttons.send')}
+            style={styles.button}
           />
-          {!expired && (
-            <View style={styles.sendAgainWrapper}>
-              <Typography variant="button" color="placeholder">
-                0:{timer + 1 > 10 ? timer : `0${timer}`}
-              </Typography>
-            </View>
-          )}
-          {expired && (
-            <TouchableOpacity
-              style={styles.sendAgainWrapper}
-              onPress={handleSendAgain}
-              activeOpacity={0.6}>
-              <Typography variant="button" color="primary">
-                {t('generic.verifyPhone.sendAgain')}
-              </Typography>
-            </TouchableOpacity>
-          )}
         </View>
-        <Button
-          onPress={handleVerifyPhone}
-          disabled={code.length !== digits}
-          title={t('generic.verifyPhone.buttons.send')}
-        />
-      </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 };

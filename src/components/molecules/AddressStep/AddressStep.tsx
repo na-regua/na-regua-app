@@ -1,12 +1,13 @@
-import {Input, Step} from '@/components/atoms';
 import ENDPOINTS from '@/app/api/endpoints';
 import {ICepApiData} from '@/app/models';
-import {maskCep} from '@/utils';
+import {Input, Step} from '@/components/atoms';
+import {maskCep, ufMask} from '@/utils';
 import axios from 'axios';
-import React from 'react';
+import React, {useRef} from 'react';
 import {Controller, UseFormReturn} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
+import {TextInput} from 'react-native-gesture-handler';
 
 export interface IAdressFormData {
   cep: string;
@@ -22,16 +23,30 @@ interface IAdressStepProps {
   form: UseFormReturn<IAdressFormData>;
   completed?: boolean;
   canJumpTo?: boolean;
+  goNext?: () => void;
 }
 
 const AddressStep: React.FC<IAdressStepProps> = ({
   form,
   completed,
   canJumpTo,
+  goNext,
 }) => {
   const {t} = useTranslation();
 
-  const {control, trigger} = form;
+  const {
+    control,
+    trigger,
+    formState: {isValid},
+  } = form;
+
+  const cepRef = useRef<TextInput>(null);
+  const logradouroRef = useRef<TextInput>(null);
+  const complementoRef = useRef<TextInput>(null);
+  const numeroRef = useRef<TextInput>(null);
+  const localidadeRef = useRef<TextInput>(null);
+  const ufRef = useRef<TextInput>(null);
+  const bairroRef = useRef<TextInput>(null);
 
   const handlePostalCodeChange = async (text: string) => {
     const removeMasktext = text.replace(/\D/g, '');
@@ -61,7 +76,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({
 
         trigger();
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   };
@@ -72,13 +87,15 @@ const AddressStep: React.FC<IAdressStepProps> = ({
       description={t('barber.signUp.steps.2.description')}
       number={2}
       disabled={!canJumpTo}
-      completed={completed}>
+      completed={completed}
+      focusField={cepRef}>
       <Controller
         name="cep"
         control={control}
         rules={{required: true}}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
+            inputRef={cepRef}
             label={t('barber.signUp.fields.postalCode')}
             keyboardType="numeric"
             onChangeText={text => {
@@ -88,6 +105,10 @@ const AddressStep: React.FC<IAdressStepProps> = ({
             }}
             onBlur={onBlur}
             value={value}
+            returnKeyType="done"
+            onSubmitEditing={() => logradouroRef.current?.focus()}
+            blurOnSubmit={false}
+            textContentType="postalCode"
           />
         )}
       />
@@ -98,13 +119,14 @@ const AddressStep: React.FC<IAdressStepProps> = ({
         render={({field: {onChange, onBlur, value}}) => (
           <Input
             label={t('barber.signUp.fields.street')}
-            onChangeText={text => {
-              const maskedText = maskCep(text);
-              handlePostalCodeChange(maskedText);
-              onChange(maskedText);
-            }}
+            onChangeText={onChange}
             onBlur={onBlur}
             value={value}
+            inputRef={logradouroRef}
+            returnKeyType="next"
+            onSubmitEditing={() => complementoRef.current?.focus()}
+            blurOnSubmit={false}
+            textContentType="fullStreetAddress"
           />
         )}
       />
@@ -119,6 +141,11 @@ const AddressStep: React.FC<IAdressStepProps> = ({
               onChangeText={onChange}
               onBlur={onBlur}
               value={value}
+              inputRef={complementoRef}
+              returnKeyType="next"
+              onSubmitEditing={() => numeroRef.current?.focus()}
+              blurOnSubmit={false}
+              textContentType="streetAddressLine2"
             />
           )}
         />
@@ -138,6 +165,11 @@ const AddressStep: React.FC<IAdressStepProps> = ({
               }}
               onBlur={onBlur}
               value={value}
+              inputRef={numeroRef}
+              returnKeyType="done"
+              onSubmitEditing={() => localidadeRef.current?.focus()}
+              blurOnSubmit={false}
+              textContentType="streetAddressLine2"
             />
           )}
         />
@@ -151,13 +183,14 @@ const AddressStep: React.FC<IAdressStepProps> = ({
             <Input
               label={t('barber.signUp.fields.city')}
               wrapperStyle={styles.formRowField}
-              onChangeText={text => {
-                const maskedText = maskCep(text);
-                handlePostalCodeChange(maskedText);
-                onChange(maskedText);
-              }}
+              onChangeText={onChange}
               onBlur={onBlur}
               value={value}
+              inputRef={localidadeRef}
+              returnKeyType="next"
+              onSubmitEditing={() => ufRef.current?.focus()}
+              blurOnSubmit={false}
+              textContentType="addressCity"
             />
           )}
         />
@@ -170,12 +203,16 @@ const AddressStep: React.FC<IAdressStepProps> = ({
               label={t('barber.signUp.fields.uf')}
               wrapperStyle={styles.formRowFieldHalf}
               onChangeText={text => {
-                const maskedText = maskCep(text);
-                handlePostalCodeChange(maskedText);
+                const maskedText = ufMask(text);
                 onChange(maskedText);
               }}
               onBlur={onBlur}
               value={value}
+              inputRef={ufRef}
+              returnKeyType="next"
+              onSubmitEditing={() => bairroRef.current?.focus()}
+              blurOnSubmit={false}
+              textContentType="addressState"
             />
           )}
         />
@@ -188,13 +225,17 @@ const AddressStep: React.FC<IAdressStepProps> = ({
           <Input
             label={t('barber.signUp.fields.neighborhood')}
             wrapperStyle={styles.formRowFieldHalf}
-            onChangeText={text => {
-              const maskedText = maskCep(text);
-              handlePostalCodeChange(maskedText);
-              onChange(maskedText);
-            }}
+            onChangeText={onChange}
             onBlur={onBlur}
             value={value}
+            inputRef={bairroRef}
+            returnKeyType="done"
+            onSubmitEditing={() => {
+              if (isValid && goNext) {
+                goNext();
+              }
+            }}
+            textContentType="sublocality"
           />
         )}
       />

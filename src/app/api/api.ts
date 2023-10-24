@@ -9,7 +9,7 @@ export function errToAxiosError(err: any): AxiosError {
 }
 
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'http://192.168.0.3:8080/api',
 });
 
 api.interceptors.request.use(async config => {

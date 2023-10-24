@@ -1,20 +1,28 @@
 import {ICreateUser} from '@/app/models';
 import {Icons, Input, Step} from '@/components/atoms';
 import {phoneMask} from '@/utils';
-import React, {useEffect, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {Controller, UseFormReturn} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {TouchableOpacity} from 'react-native';
+import {TextInput} from 'react-native-gesture-handler';
 
 interface IProfileStepProps {
   form: UseFormReturn<ICreateUser>;
   completed?: boolean;
-  canNext?: boolean;
+  goNext?: () => void;
 }
 
-const ProfileStep: React.FC<IProfileStepProps> = ({form, completed}) => {
+const ProfileStep: React.FC<IProfileStepProps> = ({
+  form,
+  completed,
+  goNext,
+}) => {
   const {t} = useTranslation();
-  const {register, control} = form;
+  const {
+    control,
+    formState: {isValid},
+  } = form;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -22,12 +30,12 @@ const ProfileStep: React.FC<IProfileStepProps> = ({form, completed}) => {
     setShowPassword(curr => !curr);
   };
 
-  useEffect(() => {
-    register('name', {required: true});
-    register('email', {required: true});
-    register('phone', {required: true});
-    register('password', {required: true});
-  }, [register]);
+  const fieldsRef = {
+    name: useRef<TextInput>(null),
+    email: useRef<TextInput>(null),
+    phone: useRef<TextInput>(null),
+    password: useRef<TextInput>(null),
+  };
 
   return (
     <Step
@@ -38,36 +46,25 @@ const ProfileStep: React.FC<IProfileStepProps> = ({form, completed}) => {
       <Controller
         name="name"
         control={control}
+        rules={{required: true}}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
             label={t('barber.signUp.fields.name')}
             onChangeText={onChange}
             onBlur={onBlur}
             value={value}
-          />
-        )}
-      />
-
-      <Controller
-        name="phone"
-        control={control}
-        render={({field: {onChange, onBlur, value}}) => (
-          <Input
-            label={t('barber.signUp.fields.phone')}
-            autoCapitalize="none"
-            keyboardType="phone-pad"
-            onChangeText={text => {
-              const maskedValue = phoneMask(text);
-              onChange(maskedValue);
-            }}
-            onBlur={onBlur}
-            value={value}
+            returnKeyType="next"
+            inputRef={fieldsRef.name}
+            onSubmitEditing={() => fieldsRef.email.current?.focus()}
+            blurOnSubmit={false}
+            textContentType="name"
           />
         )}
       />
 
       <Controller
         name="email"
+        rules={{required: true}}
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
@@ -79,12 +76,18 @@ const ProfileStep: React.FC<IProfileStepProps> = ({form, completed}) => {
             }}
             onBlur={onBlur}
             value={value}
+            inputRef={fieldsRef.email}
+            returnKeyType="next"
+            onSubmitEditing={() => fieldsRef.password.current?.focus()}
+            blurOnSubmit={false}
+            textContentType="emailAddress"
           />
         )}
       />
 
       <Controller
         name="password"
+        rules={{required: true, minLength: 5}}
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
@@ -106,6 +109,38 @@ const ProfileStep: React.FC<IProfileStepProps> = ({form, completed}) => {
                 />
               </TouchableOpacity>
             }
+            inputRef={fieldsRef.password}
+            returnKeyType="next"
+            onSubmitEditing={() => fieldsRef.phone.current?.focus()}
+            blurOnSubmit={false}
+            textContentType="password"
+          />
+        )}
+      />
+
+      <Controller
+        name="phone"
+        rules={{required: true}}
+        control={control}
+        render={({field: {onChange, onBlur, value}}) => (
+          <Input
+            label={t('barber.signUp.fields.phone')}
+            autoCapitalize="none"
+            keyboardType="number-pad"
+            onChangeText={text => {
+              const maskedValue = phoneMask(text);
+              onChange(maskedValue);
+            }}
+            onBlur={onBlur}
+            value={value}
+            inputRef={fieldsRef.phone}
+            returnKeyType={isValid ? 'done' : 'none'}
+            onSubmitEditing={() => {
+              if (isValid && goNext) {
+                goNext();
+              }
+            }}
+            textContentType="telephoneNumber"
           />
         )}
       />

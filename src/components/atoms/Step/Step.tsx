@@ -1,5 +1,6 @@
-import React, {PropsWithChildren, useContext, useMemo} from 'react';
+import React, {PropsWithChildren, useContext, useEffect, useMemo} from 'react';
 import {TouchableOpacity, View} from 'react-native';
+import {TextInput} from 'react-native-gesture-handler';
 import {StepperContext} from '../Stepper/Stepper';
 import Typography from '../Typography/Typography';
 import {
@@ -23,6 +24,7 @@ interface IStepProps extends PropsWithChildren {
   completed?: boolean;
   showSpacer?: boolean;
   disabled?: boolean;
+  focusField?: React.RefObject<TextInput>;
 }
 
 const Step: React.FC<IStepProps> = ({
@@ -34,6 +36,7 @@ const Step: React.FC<IStepProps> = ({
   onPress,
   completed,
   showSpacer = true,
+  focusField,
 }) => {
   const {currentStep, setCurrentStep} = useContext(StepperContext);
 
@@ -61,6 +64,18 @@ const Step: React.FC<IStepProps> = ({
     }
     return 'default';
   }, [isActive, isCompleted]);
+
+  useEffect(() => {
+    if (
+      isActive &&
+      focusField &&
+      focusField.current &&
+      !focusField.current.isFocused()
+    ) {
+      focusField.current.focus();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isActive]);
 
   return (
     <View style={defaultStyles.stepWrapper}>

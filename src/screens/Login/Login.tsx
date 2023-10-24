@@ -1,5 +1,5 @@
 import {Icons, Typography} from '@/components/atoms';
-import {LoginEmail, LoginWelcome} from '@/components/pages';
+import {LoginEmail, LoginVerifyCode, LoginWelcome} from '@/components/pages';
 import LoginWhatsapp from '@/components/pages/LoginWhatsapp/LoginWhatsapp';
 import {TLoginSteps} from '@/app/models';
 import {Colors, Metrics} from '@/theme';
@@ -14,6 +14,7 @@ const Login: React.FC = () => {
   const insets = useSafeAreaInsets();
 
   const [loginMethod, setLoginMethod] = useState<TLoginSteps>('welcome');
+  const [phone, setPhone] = useState('');
 
   const getSplashHeight = useMemo(
     () =>
@@ -34,9 +35,14 @@ const Login: React.FC = () => {
     setLoginMethod(method);
   };
 
+  const handleOnSendCode = (value: string) => {
+    setLoginMethod('verify-code');
+    setPhone(value);
+  };
+
   return (
     <View style={[styles.container, insetsStyles]}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.bgLight} />
+      <StatusBar barStyle={'light-content'} backgroundColor={Colors.bgLight} />
       <View style={[styles.splash, {height: getSplashHeight}]} />
       {loginMethod === 'welcome' && (
         <LoginWelcome onLoginMethod={handleOnLoginMethod} />
@@ -61,7 +67,10 @@ const Login: React.FC = () => {
           {loginMethod === 'e-mail' && (
             <LoginEmail onLoginMethod={handleOnLoginMethod} />
           )}
-          {loginMethod === 'whatsapp' && <LoginWhatsapp />}
+          {loginMethod === 'whatsapp' && (
+            <LoginWhatsapp onSendCode={handleOnSendCode} />
+          )}
+          {loginMethod === 'verify-code' && <LoginVerifyCode phone={phone} />}
         </View>
       )}
     </View>

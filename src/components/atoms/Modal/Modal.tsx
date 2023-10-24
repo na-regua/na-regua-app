@@ -3,11 +3,11 @@ import React, {PropsWithChildren, forwardRef} from 'react';
 
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {View} from 'react-native';
-import {modalStyles} from './styles';
 import Typography from '../Typography/Typography';
+import {modalStyles} from './styles';
 
 interface IModalProps extends PropsWithChildren {
-  snapPoints?: string[];
+  snapPoints?: (string | number)[];
   title?: string;
   autoSize?: boolean;
 }

@@ -1,5 +1,5 @@
-import {IBarber} from '../barber/barber';
-import {IUser} from '../user/user';
+import {IBarber} from '../barber/barber.model';
+import {IUser} from '../user/user.model';
 
 export interface ILoginEmail {
   email: string;
@@ -16,9 +16,9 @@ export interface IVerifyWhatsappCode {
 }
 
 export interface ILoginResponse {
+  accessToken: string;
   barber?: IBarber;
   user: IUser;
-  accessToken: string;
 }
 
 export interface IGetUserResponse {

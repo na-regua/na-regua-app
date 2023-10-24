@@ -5,10 +5,10 @@ import {SKIP_PRE_SIGN_UP_KEY} from '@/store/slicers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {StatusBar, View} from 'react-native';
+import {StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {styles} from './styles';
+import {ActionsStyle, ContainerStyle, ContentStyle} from './styles';
 
 const BarberPreSignUp: React.FC = () => {
   const {t} = useTranslation();
@@ -31,18 +31,18 @@ const BarberPreSignUp: React.FC = () => {
   };
 
   const navigateToWorkers = () => {
-    navigation.navigate(APP_ROUTES.BARBER_PRE_WORKERS);
+    navigation.navigate(APP_ROUTES.BARBER_WORKERS);
   };
 
   return (
-    <View style={[insetsStyles, styles.container]}>
+    <ContainerStyle style={insetsStyles}>
       <StatusBar barStyle={'dark-content'} backgroundColor={Colors.bgLight} />
       <Header
         title={t('barber.preSignUp.title')}
         subtitle={t('barber.preSignUp.subtitle')}
       />
-      <View style={styles.content}>
-        <View style={styles.actions}>
+      <ContentStyle>
+        <ActionsStyle>
           <Button
             variant="outlined"
             title={t('barber.preSignUp.buttons.later')}
@@ -52,9 +52,9 @@ const BarberPreSignUp: React.FC = () => {
             onPress={navigateToWorkers}
             title={t('barber.preSignUp.buttons.now')}
           />
-        </View>
-      </View>
-    </View>
+        </ActionsStyle>
+      </ContentStyle>
+    </ContainerStyle>
   );
 };
 

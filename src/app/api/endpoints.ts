@@ -9,10 +9,21 @@ const ENDPOINTS = {
   BARBERS_SIGN_UP: '/barbers/sign-up',
   BARBERS_LIST: '/barbers',
   BARBERS_BY_TOKEN: '/barbers/token',
+  BARBERS_COMPLETE_PROFILE: '/barbers/complete-profile',
   /**
    * Workers
    * */
   WORKERS_LIST: '/workers',
+  WORKERS_CREATE: '/workers',
+  WORKERS_DELETE: '/workers/:id',
+  WORKERS_UPDATE: '/workers/:id',
+  /**
+   * Services
+   * */
+  SERVICES_LIST: '/services',
+  SERVICES_CREATE: '/services',
+  SERVICES_UPDATE: '/services/:id',
+  SERVICES_DELETE: '/services/:id',
   /**
    * Auth
    * */

@@ -54,7 +54,7 @@ const ptBr = {
       goBack: 'Voltar',
       buttons: {
         add: '+ Funcionário',
-        save: 'Salvar',
+        ok: 'Continuar',
       },
     },
     services: {
@@ -62,8 +62,8 @@ const ptBr = {
       subtitle: 'Gerenciar serviços prestados.',
       goBack: 'Voltar',
       buttons: {
-        add: '+ Funcionário',
-        save: 'Salvar',
+        add: '+ Serviço',
+        ok: 'Salvar',
       },
     },
   },
@@ -117,18 +117,52 @@ const ptBr = {
     },
   },
   modals: {
-    addWorker: {
-      title: 'Adicionar funcionário',
-      subtitle: 'Preencha os campos abaixo para continuar.',
+    worker: {
+      titles: {add: 'Adicionar funcionário', edit: 'Editar funcionário'},
       fields: {
         name: 'Nome',
         email: 'E-mail',
         phone: 'Whatsapp',
+        admin: 'Administrador ?!',
       },
       buttons: {
         add: 'Adicionar',
+        save: 'Salvar',
       },
     },
+    barberService: {
+      titles: {add: 'Adicionar serviço', edit: 'Editar serviço'},
+      fields: {
+        name: 'Nome',
+        price: 'Preço',
+        durationInMinutes: 'Tempo médio',
+        selectIcon: 'Selecione um ícone',
+      },
+      buttons: {
+        add: 'Adicionar',
+        save: 'Salvar',
+      },
+    },
+    deleteWorker: {
+      title: 'Remover funcionário',
+      subtitle: 'Deseja realmente remover o funcionário - {{name}} ?',
+      buttons: {
+        no: 'Não',
+        yes: 'Sim',
+      },
+    },
+    deleteService: {
+      title: 'Remover serviço',
+      subtitle: 'Deseja realmente remover o serviço - {{name}} ?',
+      buttons: {
+        no: 'Não',
+        yes: 'Sim',
+      },
+    },
+  },
+  units: {
+    minutes: 'minutos',
+    money: 'R$',
   },
 };
 

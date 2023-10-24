@@ -1,5 +1,5 @@
-import {IAdress} from '../cep/cep';
-import {ICreateUser, IUser} from '../user/user';
+import {IAdress} from '../cep/cep.model';
+import {ICreateUser, IUser} from '../user/user.model';
 
 export interface IBuffer {
   name: string;
@@ -14,7 +14,6 @@ export interface ICreateBarber extends IAdress {
 
 export interface IBarber extends IAdress {
   _id: string;
-  user: IUser;
   code: string;
   thumbs: string[];
   avatar: string;
@@ -22,14 +21,6 @@ export interface IBarber extends IAdress {
   approvedCustommers: any[];
   workers: any[];
   services: any[];
-}
-
-export interface IWorker {
-  user: IUser;
-  barber: string;
-  _id: string;
-}
-
-export interface IGetWorkerParams {
-  barberId: string;
+  createdAt: string;
+  updatedAt: string;
 }

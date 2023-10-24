@@ -1,19 +1,24 @@
 import React, {useMemo} from 'react';
 
 import {
+  BarberBillingScreen,
+  BarberCompletedQrScreen,
   BarberPreSignUpScreen,
   BarberQueueScreen,
+  BarberScheduleScreen,
+  BarberServicesScreen,
+  BarberSettingsScreen,
   BarberSignUpScreen,
   LoginScreen,
   SplashScreen,
   VerifyPhoneScreen,
 } from '@/screens';
+import BarberWorkers from '@/screens/BarberWorkers/BarberWorkers';
 import {RootState} from '@/store/Store';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useSelector} from 'react-redux';
 import {APP_ROUTES} from '../appRoutes';
-import BarberWorkers from '@/screens/BarberWorkers/BarberWorkers';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,19 +35,32 @@ const AppNavigator: React.FC = () => {
     }
 
     if (user) {
-      if (barber && (user.role === 'admin' || user.role === 'barber')) {
-        if (!skipPreSignUp) {
+      if (barber && (user.role === 'admin' || user.role === 'worker')) {
+        if (barber.profileStatus !== 'completed' && !skipPreSignUp) {
           return APP_ROUTES.BARBER_PRE_SIGN_UP;
         }
 
         return APP_ROUTES.BARBER_QUEUE;
-      } else if (user.role === 'customer') {
+      } else if (user.role === 'custommer') {
         return APP_ROUTES.GENERIC_LOGIN;
       }
     }
 
     return APP_ROUTES.GENERIC_LOGIN;
   }, [isAuthenticated, user, barber, skipPreSignUp]);
+
+  const WorkerAuth = useMemo(
+    () =>
+      user &&
+      isAuthenticated &&
+      (user.role === 'worker' || user.role === 'admin'),
+    [isAuthenticated, user],
+  );
+
+  const AdminAuth = useMemo(
+    () => user && isAuthenticated && user.role === 'admin',
+    [isAuthenticated, user],
+  );
 
   if (isLoading) {
     return <SplashScreen />;
@@ -70,15 +88,40 @@ const AppNavigator: React.FC = () => {
           component={VerifyPhoneScreen}
         />
 
-        {isAuthenticated && (
+        {WorkerAuth && (
           <>
             <Stack.Screen
               name={APP_ROUTES.BARBER_QUEUE}
               component={BarberQueueScreen}
             />
             <Stack.Screen
-              name={APP_ROUTES.BARBER_PRE_WORKERS}
+              name={APP_ROUTES.BARBER_SCHEDULE}
+              component={BarberScheduleScreen}
+            />
+          </>
+        )}
+
+        {AdminAuth && (
+          <>
+            <Stack.Screen
+              name={APP_ROUTES.BARBER_WORKERS}
               component={BarberWorkers}
+            />
+            <Stack.Screen
+              name={APP_ROUTES.BARBER_SERVICES}
+              component={BarberServicesScreen}
+            />
+            <Stack.Screen
+              name={APP_ROUTES.BARBER_BILLING}
+              component={BarberBillingScreen}
+            />
+            <Stack.Screen
+              name={APP_ROUTES.BARBER_SETTINGS}
+              component={BarberSettingsScreen}
+            />
+            <Stack.Screen
+              name={APP_ROUTES.BARBER_COMPLETE_QR}
+              component={BarberCompletedQrScreen}
             />
           </>
         )}

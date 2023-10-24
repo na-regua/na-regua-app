@@ -68,7 +68,6 @@ const AuthSlicer = createSlice<
   reducers: {
     setBarber: (state, action: GenericAction<IBarber>) => {
       state.barber = action.payload;
-      state.user = action.payload.user;
     },
     setUser: (state, action: GenericAction<IUser>) => {
       state.user = action.payload;
@@ -90,7 +89,6 @@ const AuthSlicer = createSlice<
 
     builder.addCase(getPersistedUser.rejected, (state, action) => {
       if (action.payload instanceof AxiosError) {
-        console.log('Error: ', action.payload.response?.data);
         state.isLoading = false;
         state.isAuthenticated = false;
         state.token = '';
@@ -101,6 +99,8 @@ const AuthSlicer = createSlice<
       state.isLoading = false;
       state.isAuthenticated = true;
       state.token = action.payload;
+
+      console.log('Token: ', action.payload);
     });
   },
 });
@@ -110,7 +110,7 @@ const {reducer} = AuthSlicer;
 const setBarber: ActionCreatorWithPayload<IBarber, string> = AuthSlicer.actions
   .setBarber as any;
 
-const setUser: ActionCreatorWithPayload<IBarber, string> = AuthSlicer.actions
+const setUser: ActionCreatorWithPayload<IUser, string> = AuthSlicer.actions
   .setUser as any;
 
 export {

@@ -9,6 +9,7 @@ export const menuItemActionStyles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     paddingHorizontal: 16,
+    minWidth: 42,
     maxWidth: 42,
     minHeight: 40,
     borderRadius: 8,

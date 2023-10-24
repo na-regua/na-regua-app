@@ -15,6 +15,7 @@ interface IAvatarProps {
   iconSize?: number;
   onAvatarChange?: (file: Asset) => void;
   borderOffset?: number;
+  initialAvatar?: string;
 }
 
 const Avatar: React.FC<IAvatarProps> = ({
@@ -22,8 +23,9 @@ const Avatar: React.FC<IAvatarProps> = ({
   iconSize = 32,
   borderOffset = 12,
   onAvatarChange,
+  initialAvatar = undefined,
 }) => {
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | undefined>(initialAvatar);
 
   const getFile = async () => {
     const result = await ImagePicker.launchImageLibrary({
@@ -58,6 +60,7 @@ const Avatar: React.FC<IAvatarProps> = ({
         )}
         {preview && (
           <AvatarPreviewStyle
+            size={size}
             source={{uri: `data:image/jpeg;base64,${preview}`}}
           />
         )}

@@ -1,11 +1,11 @@
-import {Colors} from '@/theme';
-import React, {useMemo, useState} from 'react';
-import {Image, TouchableOpacity, View, ViewStyle} from 'react-native';
+import React, {useState} from 'react';
+import {Image, View, ViewStyle} from 'react-native';
 import Typography from '../Typography/Typography';
-import {menuItemStyles} from './styles';
+import {ContainerStyle, IconWrapperStyle, menuItemStyles} from './styles';
 
 interface IMenuItemProps {
   avatar?: string;
+  icon?: React.ReactNode;
   title?: string;
   description?: string;
   clickable?: boolean;
@@ -22,6 +22,7 @@ const MenuItem: React.FC<IMenuItemProps> = ({
   onPress,
   onLongPress,
   style,
+  icon,
 }) => {
   const [pressed, setPressed] = useState(false);
 
@@ -33,17 +34,10 @@ const MenuItem: React.FC<IMenuItemProps> = ({
     setPressed(false);
   };
 
-  const pressedStyle: ViewStyle = useMemo(
-    () =>
-      pressed
-        ? {backgroundColor: Colors.borderHover}
-        : {backgroundColor: Colors.border},
-    [pressed],
-  );
-
   return (
-    <TouchableOpacity
-      style={[menuItemStyles.container, pressedStyle, style]}
+    <ContainerStyle
+      style={style}
+      pressed={pressed}
       activeOpacity={1}
       disabled={!clickable}
       onLongPress={onLongPress}
@@ -56,6 +50,12 @@ const MenuItem: React.FC<IMenuItemProps> = ({
           style={menuItemStyles.avatar}
         />
       )}
+      {icon && (
+        <IconWrapperStyle style={menuItemStyles.avatar}>
+          {icon}
+        </IconWrapperStyle>
+      )}
+
       {(title || description) && (
         <View>
           {title && (
@@ -70,7 +70,7 @@ const MenuItem: React.FC<IMenuItemProps> = ({
           )}
         </View>
       )}
-    </TouchableOpacity>
+    </ContainerStyle>
   );
 };
 

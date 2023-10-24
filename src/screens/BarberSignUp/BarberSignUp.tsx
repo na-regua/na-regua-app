@@ -3,12 +3,17 @@ import React from 'react';
 import {Header} from '@/components/molecules';
 import {SignUpForm} from '@/components/pages';
 import Colors from '@/theme/colors';
-import Metrics from '@/theme/metrics';
 
 import {APP_ROUTES, useAppNavigation} from '@/navigation';
 import {useTranslation} from 'react-i18next';
-import {StatusBar, StyleSheet, View} from 'react-native';
+import {KeyboardAvoidingView, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {
+  ContainerStyle,
+  ContentStyle,
+  ScrollContentStyle,
+  styles,
+} from './styles';
 
 const BarberSignUp: React.FC = () => {
   const {t} = useTranslation();
@@ -27,36 +32,28 @@ const BarberSignUp: React.FC = () => {
   };
 
   return (
-    <View style={[styles.signInContainer, insetsStyles]}>
+    <ContainerStyle style={[insetsStyles]}>
       <StatusBar barStyle={'dark-content'} backgroundColor={Colors.bgLight} />
-      <Header
-        showTitle
-        title={t('barber.signUp.title')}
-        subtitle={t('barber.signUp.subtitle')}
-        onIconPress={handleNavigateToLogin}
-      />
-      <View style={styles.signInContent}>
-        <SignUpForm />
-      </View>
-    </View>
+      <KeyboardAvoidingView
+        enabled
+        behavior="padding"
+        keyboardVerticalOffset={18}
+        style={styles.keyboardAvoid}>
+        <ScrollContentStyle contentContainerStyle={styles.scrollContainer}>
+          <Header
+            showTitle
+            title={t('barber.signUp.title')}
+            subtitle={t('barber.signUp.subtitle')}
+            onIconPress={handleNavigateToLogin}
+            clickable
+          />
+          <ContentStyle>
+            <SignUpForm />
+          </ContentStyle>
+        </ScrollContentStyle>
+      </KeyboardAvoidingView>
+    </ContainerStyle>
   );
 };
-
-const styles = StyleSheet.create({
-  signInContainer: {
-    flex: 1,
-    width: Metrics.screenWidth,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    backgroundColor: Colors.bgLight,
-  },
-  signInContent: {
-    flex: 1,
-    width: Metrics.screenWidth,
-    flexDirection: 'column',
-    padding: Metrics.smPadding,
-    gap: 18,
-  },
-});
 
 export default BarberSignUp;

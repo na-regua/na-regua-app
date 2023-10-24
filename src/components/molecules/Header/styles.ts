@@ -1,13 +1,8 @@
 import {Colors, Metrics} from '@/theme';
 import {StyleSheet} from 'react-native';
+import styled from 'styled-components/native';
 
 export const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    padding: Metrics.smPadding,
-    width: Metrics.screenWidth,
-    position: 'relative',
-  },
   containerInfo: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -37,3 +32,20 @@ export const styles = StyleSheet.create({
     height: 1,
   },
 });
+
+export const ContainerStyle = styled.View`
+  flex-direction: column;
+  padding: ${Metrics.smPadding}px;
+  width: ${Metrics.screenWidth}px;
+  position: relative;
+`;
+
+export const ContainerInfoStyle = styled.View<{lightContent?: boolean}>`
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  background-color: ${({lightContent}) =>
+    lightContent ? Colors.white3 : Colors.main};
+  justify-content: center;
+  align-items: center;
+`;

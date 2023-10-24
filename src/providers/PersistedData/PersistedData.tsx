@@ -1,5 +1,5 @@
 import {AppDispatch} from '@/store/Store';
-import {getPersistedUser} from '@/store/slicers';
+import {getPersistedUser, getSkipPre} from '@/store/slicers';
 import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
@@ -8,8 +8,11 @@ const PersistedData: React.FC = () => {
 
   useEffect(() => {
     dispatch(getPersistedUser());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getSkipPre());
+  }, [dispatch]);
 
   return <></>;
 };

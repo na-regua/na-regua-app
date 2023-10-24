@@ -8,7 +8,6 @@ export const defaultStyles = StyleSheet.create({
     gap: 2,
   },
   step: {
-    flex: 1,
     flexDirection: 'row',
     gap: 8,
     paddingVertical: 4,

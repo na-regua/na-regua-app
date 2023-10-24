@@ -11,6 +11,7 @@ export const modalStyles = StyleSheet.create({
     shadowOpacity: 0.1,
     borderRadius: 32,
     backgroundColor: Colors.white3,
+    flex: 1,
   },
   backdrop: {
     backgroundColor: Colors.black3,

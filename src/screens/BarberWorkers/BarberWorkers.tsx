@@ -1,4 +1,4 @@
-import {BarbersService} from '@/app/api';
+import {WorkersService} from '@/app/api';
 import {IWorker} from '@/app/models';
 import {
   Button,
@@ -9,17 +9,28 @@ import {
   Modal,
   Typography,
 } from '@/components/atoms';
-import {AddWorkerModal, Header} from '@/components/molecules';
+import {DeleteWorkerModal, Header, WorkerModal} from '@/components/molecules';
+import {useKeyboardVisible} from '@/hooks';
 import {APP_ROUTES, useAppNavigation} from '@/navigation';
 import {RootState} from '@/store/Store';
 import {Colors} from '@/theme';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {ScrollView, StatusBar, TouchableOpacity, View} from 'react-native';
+import {StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
-import {styles} from './styles';
+import {
+  ContainerStyle,
+  ContentActionsStyle,
+  ContentBackLinkStyle,
+  ContentHeaderStyle,
+  ContentScrollContentStyle,
+  ContentStyle,
+  MenuItemRowStyle,
+  MenuItemsWrapperStyle,
+  styles,
+} from './styles';
 
 const BarberWorkers: React.FC = () => {
   const {t} = useTranslation();
@@ -28,8 +39,18 @@ const BarberWorkers: React.FC = () => {
   const barber = useSelector((state: RootState) => state.auth.barber);
 
   const addWorkerModalRef = useRef<BottomSheetModal>(null);
+  const editWorkerModalRef = useRef<BottomSheetModal>(null);
+  const deleteWorkerModalRef = useRef<BottomSheetModal>(null);
+
+  const isKeyboardVisible = useKeyboardVisible();
 
   const [workers, setWorkers] = useState<IWorker[]>([]);
+  const [selectedToDelete, setSelectedToDelete] = useState<IWorker | undefined>(
+    undefined,
+  );
+  const [selectedToEdit, setSelectedToEdit] = useState<IWorker | undefined>(
+    undefined,
+  );
   const [loadingWorkers, setLoadingWorkers] = useState<boolean>(true);
 
   const [showSet, setShowSet] = useState<string[]>([]);
@@ -42,7 +63,7 @@ const BarberWorkers: React.FC = () => {
   };
 
   const goNext = () => {
-    navigation.navigate(APP_ROUTES.BARBER_PRE_SERVICES);
+    navigation.navigate(APP_ROUTES.BARBER_SERVICES);
   };
 
   const goBack = () => {
@@ -57,12 +78,36 @@ const BarberWorkers: React.FC = () => {
     }
   };
 
+  const handleShowSet = (id: string) => {
+    if (showSet.includes(id)) {
+      setShowSet(curr => curr.filter(currId => currId !== id));
+    } else {
+      setShowSet(curr => [...curr, id]);
+    }
+  };
+
+  const handleDeleteWorker = (worker: IWorker) => {
+    setSelectedToDelete(worker);
+
+    if (deleteWorkerModalRef.current) {
+      deleteWorkerModalRef.current.present();
+    }
+  };
+
+  const handleEditWorker = (worker: IWorker) => {
+    setSelectedToEdit(worker);
+
+    if (editWorkerModalRef.current) {
+      editWorkerModalRef.current.present();
+    }
+  };
+
   const getWorkers = useCallback(async () => {
     setLoadingWorkers(true);
 
     if (barber) {
       try {
-        const {data} = await BarbersService.getWorkers({barberId: barber._id});
+        const {data} = await WorkersService.getWorkers({barberId: barber._id});
 
         if (data) {
           setWorkers(data);
@@ -80,77 +125,127 @@ const BarberWorkers: React.FC = () => {
   }, [getWorkers]);
 
   return (
-    <View style={[insetsStyles, styles.container]}>
+    <ContainerStyle style={insetsStyles}>
       <StatusBar barStyle={'dark-content'} backgroundColor={Colors.bgLight} />
       <Header showTitle={false} showBorder />
-      <View style={styles.content}>
-        <TouchableOpacity style={styles.backlink} onPress={goBack}>
+      <ContentStyle>
+        <ContentBackLinkStyle onPress={goBack}>
           <Icons.ArrowLeftIcon width={18} color="black1" />
           <Typography variant="button" color="black1">
             {t('barber.workers.goBack')}
           </Typography>
-        </TouchableOpacity>
-        <View style={styles.titleWrapper}>
+        </ContentBackLinkStyle>
+        <ContentHeaderStyle>
           <Typography variant="h5" color="black3">
             {t('barber.workers.title')}
           </Typography>
           <Typography variant="body1" color="black1">
             {t('barber.workers.subtitle')}
           </Typography>
-        </View>
-        <ScrollView style={styles.scrollContent}>
-          {!loadingWorkers ? (
-            workers.map(worker => (
-              <View style={styles.menuItemWrapper} key={worker._id}>
-                <MenuItem
-                  title={worker.user.name}
-                  description={worker.user.role}
-                  avatar={worker.user.avatar}
-                  clickable
-                  onPress={() => {
-                    setShowSet(curr => curr.filter(id => id !== worker._id));
-                  }}
-                  onLongPress={() => {
-                    setShowSet(curr => [...curr, worker._id]);
-                  }}
-                  style={styles.menuItem}
-                />
-                {showSet.includes(worker._id) && (
-                  <>
-                    <MenuItemAction theme="primary">
-                      <Icons.EditIcon color="white3" />
-                    </MenuItemAction>
-                    <MenuItemAction theme="danger">
-                      <Icons.RemoveIcon color="white3" />
-                    </MenuItemAction>
-                  </>
-                )}
-              </View>
-            ))
-          ) : (
-            <Loader
-              color={Colors.primary}
-              wrapperStyle={styles.loaderWrapper}
-            />
-          )}
-        </ScrollView>
-        <View style={styles.actions}>
+        </ContentHeaderStyle>
+        <ContentScrollContentStyle>
+          <MenuItemsWrapperStyle>
+            {!loadingWorkers ? (
+              workers.map(worker => (
+                <MenuItemRowStyle key={worker._id}>
+                  <MenuItem
+                    title={worker.user.name}
+                    description={worker.user.role}
+                    avatar={worker.user.avatar}
+                    clickable
+                    onPress={() => handleShowSet(worker._id)}
+                    style={styles.menuItem}
+                  />
+                  {showSet.includes(worker._id) && (
+                    <>
+                      <MenuItemAction
+                        theme="primary"
+                        onPress={() => handleEditWorker(worker)}>
+                        <Icons.EditIcon color="white3" />
+                      </MenuItemAction>
+                      <MenuItemAction
+                        theme="danger"
+                        onPress={() => handleDeleteWorker(worker)}>
+                        <Icons.DeleteIcon color="white3" />
+                      </MenuItemAction>
+                    </>
+                  )}
+                </MenuItemRowStyle>
+              ))
+            ) : (
+              <Loader
+                color={Colors.primary}
+                wrapperStyle={styles.loaderWrapper}
+              />
+            )}
+          </MenuItemsWrapperStyle>
+        </ContentScrollContentStyle>
+        <ContentActionsStyle>
           <Button
             variant="outlined"
             colorScheme="primary"
             title={t('barber.workers.buttons.add')}
             onPress={openAddWorkerModal}
           />
-          <Button title={t('barber.workers.buttons.save')} onPress={goNext} />
-        </View>
+          <Button
+            title={t('barber.workers.buttons.ok')}
+            onPress={goNext}
+            disabled={workers.length === 0 || loadingWorkers}
+          />
+        </ContentActionsStyle>
         <Modal
           ref={addWorkerModalRef}
-          title={t('modals.addWorker.title')}
-          snapPoints={['55%', '80%', '100%']}>
-          <AddWorkerModal />
+          title={t('modals.worker.titles.add')}
+          snapPoints={isKeyboardVisible ? ['88%'] : [548]}>
+          <WorkerModal
+            mode="add"
+            modalRef={addWorkerModalRef}
+            onClose={getWorkers}
+          />
         </Modal>
-      </View>
-    </View>
+        <Modal
+          ref={editWorkerModalRef}
+          autoSize
+          title={t('modals.worker.titles.edit')}
+          snapPoints={isKeyboardVisible ? ['88%'] : [493]}>
+          {selectedToEdit && (
+            <WorkerModal
+              mode="edit"
+              modalRef={editWorkerModalRef}
+              onClose={() => {
+                handleShowSet(selectedToEdit._id);
+                setSelectedToEdit(undefined);
+                getWorkers();
+              }}
+              initialValues={{
+                name: selectedToEdit.user.name,
+                email: selectedToEdit.user.email,
+                phone: selectedToEdit.user.phone,
+                admin: selectedToEdit.user.role === 'admin',
+              }}
+              avatar={selectedToEdit.user.avatar}
+              workerID={selectedToEdit._id}
+            />
+          )}
+        </Modal>
+        <Modal
+          ref={deleteWorkerModalRef}
+          title={t('modals.deleteWorker.title')}
+          snapPoints={[230]}>
+          {selectedToDelete && (
+            <DeleteWorkerModal
+              onClose={() => {
+                handleShowSet(selectedToDelete._id);
+                setSelectedToDelete(undefined);
+                getWorkers();
+              }}
+              worker={selectedToDelete}
+              modalRef={deleteWorkerModalRef}
+            />
+          )}
+        </Modal>
+      </ContentStyle>
+    </ContainerStyle>
   );
 };
 

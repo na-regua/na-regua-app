@@ -10,17 +10,25 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {combinedProvidersStyles} from './styles';
 
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import {ThemeProvider} from 'styled-components/native';
+import {Colors} from '@/theme';
+import NotifyProvider from '../NotifyProvider/NotifyProvider';
 
 const CombinedProviders: React.FC = () => {
   return (
     <GestureHandlerRootView style={combinedProvidersStyles.gestureHandler}>
       <SafeAreaProvider>
-        <BottomSheetModalProvider>
-          <StoreProvider store={store}>
-            <PersistedData />
-            <AppNavigator />
-          </StoreProvider>
-        </BottomSheetModalProvider>
+        <ThemeProvider theme={{colors: Colors}}>
+          <BottomSheetModalProvider>
+            <StoreProvider store={store}>
+              <PersistedData />
+
+              <AppNavigator />
+
+              <NotifyProvider />
+            </StoreProvider>
+          </BottomSheetModalProvider>
+        </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
