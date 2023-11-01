@@ -67,6 +67,10 @@ const LoginVerifyCode: React.FC<ILoginVerifyProps> = ({phone}) => {
 
   const handleVerifyCode = async () => {
     try {
+      if (verifyingCode) {
+        return;
+      }
+
       setVerifyingCode(true);
 
       const {data} = await AuthService.verifyWhatsapp(code, phone);
@@ -141,6 +145,7 @@ const LoginVerifyCode: React.FC<ILoginVerifyProps> = ({phone}) => {
             digits={digits}
             onCodeChange={setCode}
             onDone={() => code.length === digits && handleVerifyCode()}
+            disabled={verifyingCode}
           />
 
           {!expired && (

@@ -64,7 +64,6 @@ export const activeStyles = StyleSheet.create({
   stepContentWrapper: {
     flexDirection: 'row',
     gap: 8,
-    width: '100%',
     marginVertical: 4,
   },
   stepSpacer: {

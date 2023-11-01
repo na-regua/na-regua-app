@@ -1,4 +1,4 @@
-import {WorkersService} from '@/app/api';
+import {API_ORIGIN, WorkersService} from '@/app/api';
 import {IWorker} from '@/app/models';
 import {
   Button,
@@ -11,13 +11,14 @@ import {
 } from '@/components/atoms';
 import {DeleteWorkerModal, Header, WorkerModal} from '@/components/molecules';
 import {useKeyboardVisible} from '@/hooks';
-import {APP_ROUTES, useAppNavigation} from '@/navigation';
+import {TRootStackParamList} from '@/navigation';
 import {RootState} from '@/store/Store';
 import {Colors} from '@/theme';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StatusBar} from 'react-native';
+import {RefreshControl, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {
@@ -32,17 +33,19 @@ import {
   styles,
 } from './styles';
 
-const BarberWorkers: React.FC = () => {
+const BarberWorkers: React.FC<
+  NativeStackScreenProps<TRootStackParamList, '/barber/settings/workers'>
+> = ({route, navigation}) => {
+  const {showContinue} = route.params;
+
   const {t} = useTranslation();
   const insets = useSafeAreaInsets();
-  const navigation = useAppNavigation();
   const barber = useSelector((state: RootState) => state.auth.barber);
+  const isKeyboardVisible = useKeyboardVisible();
 
   const addWorkerModalRef = useRef<BottomSheetModal>(null);
   const editWorkerModalRef = useRef<BottomSheetModal>(null);
   const deleteWorkerModalRef = useRef<BottomSheetModal>(null);
-
-  const isKeyboardVisible = useKeyboardVisible();
 
   const [workers, setWorkers] = useState<IWorker[]>([]);
   const [selectedToDelete, setSelectedToDelete] = useState<IWorker | undefined>(
@@ -51,8 +54,7 @@ const BarberWorkers: React.FC = () => {
   const [selectedToEdit, setSelectedToEdit] = useState<IWorker | undefined>(
     undefined,
   );
-  const [loadingWorkers, setLoadingWorkers] = useState<boolean>(true);
-
+  const [loadingWorkers, setLoadingWorkers] = useState(true);
   const [showSet, setShowSet] = useState<string[]>([]);
 
   const insetsStyles = {
@@ -63,7 +65,7 @@ const BarberWorkers: React.FC = () => {
   };
 
   const goNext = () => {
-    navigation.navigate(APP_ROUTES.BARBER_SERVICES);
+    navigation.navigate('/barber/settings/services', {showContinue: true});
   };
 
   const goBack = () => {
@@ -143,40 +145,51 @@ const BarberWorkers: React.FC = () => {
             {t('barber.workers.subtitle')}
           </Typography>
         </ContentHeaderStyle>
-        <ContentScrollContentStyle>
+        <ContentScrollContentStyle
+          refreshControl={
+            <RefreshControl
+              refreshing={loadingWorkers}
+              size={14}
+              onRefresh={() => {
+                getWorkers();
+              }}
+              tintColor="transparent"
+              colors={['transparent']}
+              style={styles.refreshControl}
+              progressBackgroundColor="transparent"
+            />
+          }>
           <MenuItemsWrapperStyle>
             {!loadingWorkers ? (
               workers.map(worker => (
                 <MenuItemRowStyle key={worker._id}>
                   <MenuItem
                     title={worker.user.name}
-                    description={worker.user.role}
-                    avatar={worker.user.avatar}
-                    clickable
+                    description={t(`roles.${worker.user.role}`)}
+                    avatar={API_ORIGIN + worker.user.avatar.url}
+                    clickable={worker.user.role === 'worker'}
                     onPress={() => handleShowSet(worker._id)}
                     style={styles.menuItem}
                   />
-                  {showSet.includes(worker._id) && (
-                    <>
-                      <MenuItemAction
-                        theme="primary"
-                        onPress={() => handleEditWorker(worker)}>
-                        <Icons.EditIcon color="white3" />
-                      </MenuItemAction>
-                      <MenuItemAction
-                        theme="danger"
-                        onPress={() => handleDeleteWorker(worker)}>
-                        <Icons.DeleteIcon color="white3" />
-                      </MenuItemAction>
-                    </>
-                  )}
+                  {showSet.includes(worker._id) &&
+                    worker.user.role === 'worker' && (
+                      <>
+                        <MenuItemAction
+                          theme="primary"
+                          onPress={() => handleEditWorker(worker)}>
+                          <Icons.EditIcon color="white3" />
+                        </MenuItemAction>
+                        <MenuItemAction
+                          theme="danger"
+                          onPress={() => handleDeleteWorker(worker)}>
+                          <Icons.DeleteIcon color="white3" />
+                        </MenuItemAction>
+                      </>
+                    )}
                 </MenuItemRowStyle>
               ))
             ) : (
-              <Loader
-                color={Colors.primary}
-                wrapperStyle={styles.loaderWrapper}
-              />
+              <Loader color={Colors.primary} />
             )}
           </MenuItemsWrapperStyle>
         </ContentScrollContentStyle>
@@ -187,16 +200,18 @@ const BarberWorkers: React.FC = () => {
             title={t('barber.workers.buttons.add')}
             onPress={openAddWorkerModal}
           />
-          <Button
-            title={t('barber.workers.buttons.ok')}
-            onPress={goNext}
-            disabled={workers.length === 0 || loadingWorkers}
-          />
+          {showContinue && (
+            <Button
+              title={t('barber.workers.buttons.ok')}
+              onPress={goNext}
+              disabled={workers.length === 0 || loadingWorkers}
+            />
+          )}
         </ContentActionsStyle>
         <Modal
           ref={addWorkerModalRef}
           title={t('modals.worker.titles.add')}
-          snapPoints={isKeyboardVisible ? ['88%'] : [548]}>
+          snapPoints={isKeyboardVisible ? ['100%'] : [548]}>
           <WorkerModal
             mode="add"
             modalRef={addWorkerModalRef}
@@ -207,7 +222,7 @@ const BarberWorkers: React.FC = () => {
           ref={editWorkerModalRef}
           autoSize
           title={t('modals.worker.titles.edit')}
-          snapPoints={isKeyboardVisible ? ['88%'] : [493]}>
+          snapPoints={isKeyboardVisible ? ['100%'] : [493]}>
           {selectedToEdit && (
             <WorkerModal
               mode="edit"
@@ -221,9 +236,8 @@ const BarberWorkers: React.FC = () => {
                 name: selectedToEdit.user.name,
                 email: selectedToEdit.user.email,
                 phone: selectedToEdit.user.phone,
-                admin: selectedToEdit.user.role === 'admin',
               }}
-              avatar={selectedToEdit.user.avatar}
+              initialAvatar={API_ORIGIN + selectedToEdit.user.avatar.url}
               workerID={selectedToEdit._id}
             />
           )}

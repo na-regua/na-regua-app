@@ -6,6 +6,7 @@ import {
   BarberPreSignUpScreen,
   BarberQueueScreen,
   BarberScheduleScreen,
+  BarberServicesConfigScreen,
   BarberServicesScreen,
   BarberSettingsScreen,
   BarberSignUpScreen,
@@ -18,9 +19,9 @@ import {RootState} from '@/store/Store';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useSelector} from 'react-redux';
-import {APP_ROUTES} from '../appRoutes';
+import {TRootStackParamList} from '../appRoutes';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<TRootStackParamList>();
 
 const AppNavigator: React.FC = () => {
   const {isLoading, isAuthenticated, user, barber} = useSelector(
@@ -31,22 +32,22 @@ const AppNavigator: React.FC = () => {
 
   const initialRouteName = useMemo(() => {
     if (!isAuthenticated) {
-      return APP_ROUTES.GENERIC_LOGIN;
+      return '/generic/login';
     }
 
     if (user) {
       if (barber && (user.role === 'admin' || user.role === 'worker')) {
         if (barber.profileStatus !== 'completed' && !skipPreSignUp) {
-          return APP_ROUTES.BARBER_PRE_SIGN_UP;
+          return '/barber/pre-sign-up';
         }
 
-        return APP_ROUTES.BARBER_QUEUE;
+        return '/barber/queue';
       } else if (user.role === 'custommer') {
-        return APP_ROUTES.GENERIC_LOGIN;
+        return '';
       }
     }
 
-    return APP_ROUTES.GENERIC_LOGIN;
+    return '/generic/login';
   }, [isAuthenticated, user, barber, skipPreSignUp]);
 
   const WorkerAuth = useMemo(
@@ -69,34 +70,37 @@ const AppNavigator: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={initialRouteName}
+        initialRouteName={initialRouteName as any}
         screenOptions={{
           headerShown: false,
         }}>
+        <Stack.Screen name={'/barber/sign-up'} component={BarberSignUpScreen} />
         <Stack.Screen
-          name={APP_ROUTES.BARBER_SIGN_UP}
-          component={BarberSignUpScreen}
-        />
-        <Stack.Screen
-          name={APP_ROUTES.BARBER_PRE_SIGN_UP}
+          name={'/barber/pre-sign-up'}
           component={BarberPreSignUpScreen}
         />
 
-        <Stack.Screen name={APP_ROUTES.GENERIC_LOGIN} component={LoginScreen} />
         <Stack.Screen
-          name={APP_ROUTES.GENERIC_VERIFY_PHONE}
+          name={'/generic/login'}
+          component={LoginScreen}
+          options={{animation: 'none'}}
+        />
+        <Stack.Screen
+          name={'/generic/verify-phone'}
           component={VerifyPhoneScreen}
         />
 
         {WorkerAuth && (
           <>
             <Stack.Screen
-              name={APP_ROUTES.BARBER_QUEUE}
+              name={'/barber/queue'}
               component={BarberQueueScreen}
+              options={{animation: 'none'}}
             />
             <Stack.Screen
-              name={APP_ROUTES.BARBER_SCHEDULE}
+              name={'/barber/schedule'}
               component={BarberScheduleScreen}
+              options={{animation: 'none'}}
             />
           </>
         )}
@@ -104,24 +108,32 @@ const AppNavigator: React.FC = () => {
         {AdminAuth && (
           <>
             <Stack.Screen
-              name={APP_ROUTES.BARBER_WORKERS}
+              name={'/barber/settings/workers'}
               component={BarberWorkers}
+              initialParams={{showContinue: true}}
             />
             <Stack.Screen
-              name={APP_ROUTES.BARBER_SERVICES}
+              name={'/barber/settings/services'}
               component={BarberServicesScreen}
+              initialParams={{showContinue: true}}
             />
             <Stack.Screen
-              name={APP_ROUTES.BARBER_BILLING}
+              name={'/barber/billing'}
               component={BarberBillingScreen}
+              options={{animation: 'none'}}
             />
             <Stack.Screen
-              name={APP_ROUTES.BARBER_SETTINGS}
+              name={'/barber/settings'}
               component={BarberSettingsScreen}
+              options={{animation: 'none'}}
             />
             <Stack.Screen
-              name={APP_ROUTES.BARBER_COMPLETE_QR}
+              name={'/barber/complete-qr'}
               component={BarberCompletedQrScreen}
+            />
+            <Stack.Screen
+              name={'/barber/settings/services/config'}
+              component={BarberServicesConfigScreen}
             />
           </>
         )}

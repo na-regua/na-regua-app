@@ -20,14 +20,16 @@ export const InputWrapperStyle = styled.View`
   position: relative;
 `;
 
-export const InputLabelStyle = styled.Text`
+export const InputLabelStyle = styled.Text<{
+  focused?: boolean;
+}>`
   position: absolute;
   background-color: ${Colors.bgLight};
   z-index: 2;
   top: -8px;
   left: 12px;
   padding: 0 2px;
-  color: ${Colors.main};
+  color: ${({focused}) => (focused ? Colors.main : Colors.placeholder)};
   font-size: 12px;
   font-family: ${Fonts.types.medium};
   font-weight: ${Fonts.weights.medium};
@@ -35,6 +37,7 @@ export const InputLabelStyle = styled.Text`
 
 export const InputStyle = styled.TextInput<{
   active?: boolean;
+  focused?: boolean;
   suffixWidth?: number;
 }>`
   height: 40px;
@@ -52,6 +55,11 @@ export const InputStyle = styled.TextInput<{
     `
    font-family: ${Fonts.types.semiBold};
    font-weight: ${Fonts.weights.semiBold};
-   border-color: ${Colors.main};
+  `}
+
+  ${({focused}) =>
+    focused &&
+    `
+    border-color: ${Colors.main};
   `}
 `;

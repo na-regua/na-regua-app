@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 18,
     alignItems: 'center',
+    padding: 18,
   },
   sendAgainWrapper: {
     justifyContent: 'center',

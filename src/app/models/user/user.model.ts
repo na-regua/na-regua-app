@@ -1,3 +1,5 @@
+import {IFile} from '../file/file.model';
+
 export type TUserRoles = 'admin' | 'worker' | 'custommer';
 
 export interface IUser {
@@ -7,7 +9,7 @@ export interface IUser {
   phone: string;
   password: string;
   role: TUserRoles;
-  avatar: string;
+  avatar: IFile;
   phoneConfirmed: boolean;
   createdAt: string;
   updatedAt: string;

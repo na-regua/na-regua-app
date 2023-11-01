@@ -1,5 +1,6 @@
 import {IAdress} from '../cep/cep.model';
-import {ICreateUser, IUser} from '../user/user.model';
+import {IFile} from '../file/file.model';
+import {ICreateUser} from '../user/user.model';
 
 export interface IBuffer {
   name: string;
@@ -7,16 +8,19 @@ export interface IBuffer {
   uri: string;
 }
 
-export interface ICreateBarber extends IAdress {
-  user: ICreateUser;
+export interface ICreateBarber extends IAdress, ICreateUser {
   files: IBuffer[];
 }
 
-export interface IBarber extends IAdress {
+export interface IBarber extends IAdress, IBarberServiceConfig {
   _id: string;
+  name: string;
+  phone: string;
+  email: string;
+  phoneConfirmed: boolean;
   code: string;
-  thumbs: string[];
-  avatar: string;
+  thumbs: IFile[];
+  avatar: IFile;
   profileStatus: 'pre' | 'completed';
   approvedCustommers: any[];
   workers: any[];
@@ -24,3 +28,27 @@ export interface IBarber extends IAdress {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IBarberServiceConfig {
+  workDays: string[];
+  businessDaysConfig: IBarberServiceDayConfig;
+  holidaysConfig: IBarberServiceDayConfig;
+  scheduleLimitDays: number;
+}
+
+export interface IBarberServiceDayConfig {
+  workTime: TWorkTime;
+  schedulesByDay: number;
+  schedules: IBarberCreateSchedule[];
+}
+
+export interface IBarberCreateSchedule {
+  time: string;
+  recommended?: boolean;
+  active?: boolean;
+}
+
+export type TWorkTime = {
+  start: string;
+  end: string;
+};

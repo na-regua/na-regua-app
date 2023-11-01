@@ -1,5 +1,10 @@
 import api, {errToAxiosError} from '@/app/api/api';
-import {IBarber, ICreateBarber} from '@/app/models';
+import {
+  IBarber,
+  IBarberServiceConfig,
+  ICreateBarber,
+  IUser,
+} from '@/app/models';
 import {AxiosResponse} from 'axios';
 import {default as ENDPOINTS} from '../../endpoints';
 
@@ -13,9 +18,23 @@ const getBarbers = async (): Promise<AxiosResponse> => {
   }
 };
 
+const updateServiceConfig = async (
+  config: Partial<IBarberServiceConfig>,
+): Promise<AxiosResponse<null>> => {
+  try {
+    const data = await api.put(ENDPOINTS.BARBERS_UPDATE, config, {
+      withCredentials: true,
+    });
+
+    return data;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
 const signUpBarber = async (
   barber: ICreateBarber,
-): Promise<AxiosResponse<IBarber>> => {
+): Promise<AxiosResponse<{barber: IBarber; user: IUser}>> => {
   const formData = new FormData();
 
   for (const key in barber) {
@@ -24,7 +43,10 @@ const signUpBarber = async (
         formData.append('files', file);
       });
     } else if (key === 'user') {
-      formData.append('user', JSON.stringify(barber[key]));
+      formData.append(
+        'user',
+        JSON.stringify(barber[key as keyof ICreateBarber] as string),
+      );
     } else {
       formData.append(key, barber[key as keyof ICreateBarber]);
     }
@@ -57,4 +79,5 @@ export default {
   completeProfile,
   getBarbers,
   signUpBarber,
+  updateServiceConfig,
 };

@@ -1,8 +1,11 @@
 import {WorkersService} from '@/app/api';
 import {IBuffer} from '@/app/models';
-import {Avatar, Button, Checkbox, Icons, Input} from '@/components/atoms';
+import {Avatar, Button, Icons, Input} from '@/components/atoms';
+import {AppDispatch} from '@/store/Store';
+import {createNotification} from '@/store/slicers';
 import {assetToBuffer, phoneMask} from '@/utils';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {AxiosError} from 'axios';
 import React, {useMemo, useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
@@ -14,18 +17,14 @@ import {
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {Asset} from 'react-native-image-picker';
-import {AvatarWrapperStyle, ScrollViewStyle, styles} from './styles';
-import {AxiosError} from 'axios';
-import {createNotification} from '@/store/slicers';
 import {useDispatch} from 'react-redux';
-import {AppDispatch} from '@/store/Store';
+import {AvatarWrapperStyle, ScrollViewStyle, styles} from './styles';
 
 export interface IWorkerForm {
   name: string;
   email: string;
   phone: string;
   password: string;
-  admin: boolean;
 }
 
 interface IWorkerModalProps {
@@ -33,12 +32,12 @@ interface IWorkerModalProps {
   onClose?: () => void;
   mode: 'add' | 'edit';
   initialValues?: Partial<IWorkerForm>;
-  avatar?: string;
+  initialAvatar?: string;
   workerID?: string;
 }
 
 const WorkerModal: React.FC<IWorkerModalProps> = ({
-  avatar,
+  initialAvatar,
   initialValues,
   modalRef,
   mode,
@@ -52,7 +51,8 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
     mode: 'all',
     defaultValues,
   });
-  const [avatarFile, setAvatarFile] = useState<Asset | undefined>(undefined);
+  const [avatarFile, setAvatarFile] = useState<Asset | undefined>();
+  const [avatar, setAvatar] = useState<string | undefined>(initialAvatar);
   const [changedAvatar, setChangedAvatar] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -69,6 +69,7 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
 
   const handleOnAvatarChange = (file: Asset) => {
     setAvatarFile(file);
+    setAvatar(`data:image/jpeg;base64,${file.base64}`);
 
     setChangedAvatar(true);
   };
@@ -171,7 +172,6 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
       formValues.name !== initialValues?.name ||
       formValues.email !== initialValues?.email ||
       formValues.phone !== initialValues?.phone ||
-      formValues.admin !== initialValues?.admin ||
       changedAvatar,
     [formValues, initialValues, changedAvatar],
   );
@@ -192,15 +192,12 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
         style={styles.flex1}
         enabled
         behavior="padding"
-        keyboardVerticalOffset={48}>
+        keyboardVerticalOffset={18}>
         <ScrollViewStyle
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContainer}>
           <AvatarWrapperStyle>
-            <Avatar
-              initialAvatar={avatar}
-              onAvatarChange={handleOnAvatarChange}
-            />
+            <Avatar preview={avatar} onAvatarChange={handleOnAvatarChange} />
           </AvatarWrapperStyle>
           <Controller
             name="name"
@@ -307,7 +304,7 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
             )}
           />
 
-          <Controller
+          {/* <Controller
             name="admin"
             control={control}
             render={({field: {onChange, value}}) => (
@@ -317,7 +314,7 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
                 value={value}
               />
             )}
-          />
+          /> */}
 
           {mode === 'add' && (
             <Button

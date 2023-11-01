@@ -53,7 +53,7 @@ const Input: React.FC<IInputProps> = ({
 
   return (
     <InputWrapperStyle style={wrapperStyle}>
-      {active && <InputLabelStyle>{label}</InputLabelStyle>}
+      {active && <InputLabelStyle focused={isFocused}>{label}</InputLabelStyle>}
 
       <InputStyle
         style={[style, {paddingRight: suffixWidth + 16}]}
@@ -63,6 +63,7 @@ const Input: React.FC<IInputProps> = ({
         onFocus={handleFocus}
         placeholder={placeholder || (isFocused ? '' : label)}
         placeholderTextColor={isFocused ? Colors.main : Colors.placeholder}
+        focused={isFocused}
         {...inputProps}
         value={value}
         onChangeText={handleOnChangeText}

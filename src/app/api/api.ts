@@ -2,6 +2,8 @@ import {ACCESS_TOKEN_KEY} from '@/store/slicers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, {AxiosError} from 'axios';
 
+export const API_ORIGIN = 'http://192.168.0.4:8080/';
+
 export function errToAxiosError(err: any): AxiosError {
   const {message, code, config, request, response} = err;
 
@@ -9,7 +11,7 @@ export function errToAxiosError(err: any): AxiosError {
 }
 
 const api = axios.create({
-  baseURL: 'http://192.168.0.3:8080/api',
+  baseURL: `${API_ORIGIN}api`,
 });
 
 api.interceptors.request.use(async config => {

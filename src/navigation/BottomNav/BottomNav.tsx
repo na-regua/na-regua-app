@@ -22,6 +22,13 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
   const route = useRoute();
   const navigator = useAppNavigation();
 
+  const isActive = (checkRoute: string) => {
+    const currentRoutePrefix = route.name.split('/')[2];
+    const checkRoutePrefix = checkRoute.split('/')[2];
+
+    return currentRoutePrefix === checkRoutePrefix;
+  };
+
   if (!isAuthenticated) {
     return null;
   }
@@ -38,7 +45,7 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
         <Icons.TimeIcon
           width={27}
           height={26}
-          color={route.name === APP_ROUTES.BARBER_QUEUE ? 'main' : 'default'}
+          color={isActive(APP_ROUTES.BARBER_QUEUE) ? 'main' : 'default'}
         />
       </NavItem>
     ),
@@ -49,7 +56,7 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
         <Icons.ScheduleIcon
           width={26}
           height={26}
-          color={route.name === APP_ROUTES.BARBER_SCHEDULE ? 'main' : 'default'}
+          color={isActive(APP_ROUTES.BARBER_SCHEDULE) ? 'main' : 'default'}
         />
       </NavItem>
     ),
@@ -60,7 +67,7 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
         <Icons.MoneyIcon
           width={26}
           height={26}
-          color={route.name === APP_ROUTES.BARBER_BILLING ? 'main' : 'default'}
+          color={isActive(APP_ROUTES.BARBER_BILLING) ? 'main' : 'default'}
         />
       </NavItem>
     ),
@@ -71,7 +78,7 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
         <Icons.SettingsIcon
           width={28}
           height={28}
-          color={route.name === APP_ROUTES.BARBER_SETTINGS ? 'main' : 'default'}
+          color={isActive(APP_ROUTES.BARBER_SETTINGS) ? 'main' : 'default'}
         />
       </NavItem>
     ),

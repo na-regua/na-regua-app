@@ -1,4 +1,4 @@
-import {BarberServicesService} from '@/app/api';
+import {BarbersService, ServicesService} from '@/app/api';
 import {IBarberService, IBarberServiceIcon} from '@/app/models';
 import {
   Button,
@@ -15,13 +15,14 @@ import {
   Header,
 } from '@/components/molecules';
 import {useKeyboardVisible} from '@/hooks';
-import {APP_ROUTES, useAppNavigation} from '@/navigation';
+import {TRootStackParamList} from '@/navigation';
 import {RootState} from '@/store/Store';
 import {Colors} from '@/theme';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StatusBar} from 'react-native';
+import {RefreshControl, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {
@@ -36,10 +37,12 @@ import {
   styles,
 } from './styles';
 
-const BarberServices: React.FC = () => {
+const BarberServices: React.FC<
+  NativeStackScreenProps<TRootStackParamList, '/barber/settings/services'>
+> = ({route, navigation}) => {
+  const {showContinue} = route.params;
   const {t} = useTranslation();
   const insets = useSafeAreaInsets();
-  const navigator = useAppNavigation();
   const barber = useSelector((state: RootState) => state.auth.barber);
   const isKeyboardVisible = useKeyboardVisible();
 
@@ -68,15 +71,19 @@ const BarberServices: React.FC = () => {
   const saveProfile = async () => {
     setSavingProfile(true);
 
-    setTimeout(() => {
+    try {
+      await BarbersService.completeProfile();
+
       setSavingProfile(false);
-      navigator.navigate(APP_ROUTES.BARBER_COMPLETE_QR);
-    });
+      navigation.navigate('/barber/complete-qr');
+    } catch (error) {
+      setSavingProfile(false);
+    }
   };
 
   const goBack = () => {
-    if (navigator.canGoBack()) {
-      navigator.goBack();
+    if (navigation.canGoBack()) {
+      navigation.goBack();
     }
   };
 
@@ -113,7 +120,7 @@ const BarberServices: React.FC = () => {
 
     if (barber) {
       try {
-        const {data} = await BarberServicesService.getServices({
+        const {data} = await ServicesService.getServices({
           barberId: barber._id,
         });
         if (data) {
@@ -156,7 +163,20 @@ const BarberServices: React.FC = () => {
             {t('barber.services.subtitle')}
           </Typography>
         </ContentHeaderStyle>
-        <ContentScrollContentStyle>
+        <ContentScrollContentStyle
+          refreshControl={
+            <RefreshControl
+              refreshing={loadingServices}
+              size={14}
+              onRefresh={() => {
+                getServices();
+              }}
+              tintColor="transparent"
+              colors={['transparent']}
+              style={styles.refreshControl}
+              progressBackgroundColor="transparent"
+            />
+          }>
           <MenuItemsWrapperStyle>
             {!loadingServices ? (
               services.map(service => (
@@ -200,17 +220,19 @@ const BarberServices: React.FC = () => {
             colorScheme="primary"
             onPress={openAddServiceModal}
           />
-          <Button
-            title={t('barber.services.buttons.ok')}
-            onPress={saveProfile}
-            loading={savingProfile}
-            disabled={services.length === 0 || loadingServices}
-          />
+          {showContinue && (
+            <Button
+              title={t('barber.services.buttons.ok')}
+              onPress={saveProfile}
+              loading={savingProfile}
+              disabled={services.length === 0 || loadingServices}
+            />
+          )}
         </ContentActionsStyle>
         <Modal
           ref={addServiceModalRef}
           title={t('modals.barberService.titles.add')}
-          snapPoints={isKeyboardVisible ? ['88%'] : [452]}>
+          snapPoints={isKeyboardVisible ? ['90%'] : [452]}>
           <BarberServiceModal
             modalRef={addServiceModalRef}
             mode="add"
@@ -220,7 +242,7 @@ const BarberServices: React.FC = () => {
         <Modal
           ref={editServiceModalRef}
           title={t('modals.barberService.titles.edit')}
-          snapPoints={isKeyboardVisible ? ['88%'] : [452]}>
+          snapPoints={isKeyboardVisible ? ['100%'] : [452]}>
           {selectedToEdit && (
             <BarberServiceModal
               modalRef={editServiceModalRef}

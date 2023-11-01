@@ -33,6 +33,7 @@ export const ButtonThemeColor: Record<TButtonColorScheme, string> = {
   success: Colors.success,
   default: Colors.default,
   warning: Colors.warning,
+  white: Colors.white3,
 };
 
 export const ButtonStyle = styled.TouchableOpacity<{
@@ -77,5 +78,7 @@ export const LabelStyle = styled.Text<{
     `color: ${
       variant === 'filled' ? Colors.white3 : ButtonThemeColor[colorScheme]
     };`}
+  ${({variant, colorScheme}) =>
+    colorScheme === 'white' && variant === 'filled' && `color: ${Colors.main}`}
   ${({disabled}) => disabled && `color: ${Colors.black1};`}
 `;

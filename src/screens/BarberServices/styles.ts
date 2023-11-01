@@ -10,6 +10,9 @@ export const styles = StyleSheet.create({
   menuItem: {
     flex: 1,
   },
+  refreshControl: {
+    backgroundColor: 'transparent',
+  },
 });
 
 export const ContainerStyle = styled.View`

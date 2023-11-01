@@ -8,7 +8,7 @@ import AddressStep, {
 import {useKeyboardVisible} from '@/hooks';
 import {APP_ROUTES, useAppNavigation} from '@/navigation';
 import {AppDispatch} from '@/store/Store';
-import {createNotification} from '@/store/slicers';
+import {createNotification, setBarber, setUser} from '@/store/slicers';
 import {assetToBuffer} from '@/utils';
 import {AxiosError} from 'axios';
 import React, {useMemo, useState} from 'react';
@@ -93,7 +93,7 @@ const SignUpForm: React.FC = () => {
         stepTwoForm.getValues();
 
       const createBarber: ICreateBarber = {
-        user: stepOneForm.getValues(),
+        ...stepOneForm.getValues(),
         files: mappedThumbs,
         cep,
         neighborhood: bairro,
@@ -109,6 +109,8 @@ const SignUpForm: React.FC = () => {
 
         if (data) {
           setLoading(false);
+          dispatch(setBarber(data.barber));
+          dispatch(setUser(data.user));
 
           navigation.navigate(APP_ROUTES.GENERIC_VERIFY_PHONE);
         }

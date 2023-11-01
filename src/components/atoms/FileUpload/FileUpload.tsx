@@ -25,6 +25,7 @@ const FileUpload: React.FC<IFileUploadProps> = ({
       mediaType: 'photo',
       includeBase64: true,
       selectionLimit: limit - assets.length,
+      quality: 0.4,
     });
 
     if (result && result.assets) {

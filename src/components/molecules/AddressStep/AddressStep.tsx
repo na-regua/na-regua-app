@@ -1,13 +1,16 @@
 import ENDPOINTS from '@/app/api/endpoints';
 import {ICepApiData} from '@/app/models';
 import {Input, Step} from '@/components/atoms';
-import {maskCep, ufMask} from '@/utils';
-import axios from 'axios';
+import {AppDispatch} from '@/store/Store';
+import {createNotification} from '@/store/slicers';
+import {maskCep, numberMask, ufMask} from '@/utils';
+import axios, {AxiosError} from 'axios';
 import React, {useRef} from 'react';
 import {Controller, UseFormReturn} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
+import {useDispatch} from 'react-redux';
 
 export interface IAdressFormData {
   cep: string;
@@ -33,6 +36,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({
   goNext,
 }) => {
   const {t} = useTranslation();
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     control,
@@ -57,6 +61,10 @@ const AddressStep: React.FC<IAdressStepProps> = ({
           ENDPOINTS.VIA_CEP(removeMasktext),
         );
 
+        if (!!data.erro && data.erro) {
+          throw new AxiosError('CEP não encontrado');
+        }
+
         const sameKeys: string[] = [
           'localidade',
           'complemento',
@@ -69,14 +77,26 @@ const AddressStep: React.FC<IAdressStepProps> = ({
           if (sameKeys.includes(key)) {
             form.setValue(
               key as keyof IAdressFormData,
-              data[key as keyof ICepApiData],
+              data[key as keyof ICepApiData] as string,
             );
           }
         });
 
         trigger();
       } catch (error) {
-        console.error(error);
+        if (error instanceof AxiosError) {
+          const {message} = error;
+
+          if (message) {
+            dispatch(
+              createNotification({
+                id: 'search-cep',
+                type: 'error',
+                message,
+              }),
+            );
+          }
+        }
       }
     }
   };
@@ -159,7 +179,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({
               keyboardType="numeric"
               wrapperStyle={styles.formRowFieldHalf}
               onChangeText={text => {
-                const maskedText = maskCep(text);
+                const maskedText = numberMask(text);
                 handlePostalCodeChange(maskedText);
                 onChange(maskedText);
               }}

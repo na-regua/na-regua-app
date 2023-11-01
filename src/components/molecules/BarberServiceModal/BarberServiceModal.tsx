@@ -1,7 +1,6 @@
-import {BarberServicesService} from '@/app/api';
+import {ServicesService} from '@/app/api';
 import {IBarberServiceIcon} from '@/app/models';
 import {Button, Icons, Input, Typography} from '@/components/atoms';
-import {AppDispatch} from '@/store/Store';
 import {createNotification} from '@/store/slicers';
 import {numberMask} from '@/utils';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
@@ -23,6 +22,7 @@ import {
   SelectIconWrapperStyle,
   styles,
 } from './styles';
+import {AppDispatch} from '@/store/Store';
 
 export interface IBarberServiceForm {
   name: string;
@@ -72,7 +72,7 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
     setLoading(true);
 
     try {
-      const response = await BarberServicesService.createService(formValues);
+      const response = await ServicesService.createService(formValues);
 
       if (response) {
         if (modalRef.current) {
@@ -110,10 +110,7 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
           ...formValues,
         };
 
-        const response = await BarberServicesService.updateService(
-          serviceID,
-          params,
-        );
+        const response = await ServicesService.updateService(serviceID, params);
 
         if (response) {
           if (modalRef.current) {
@@ -160,7 +157,7 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
         enabled
         style={styles.flex1}
         behavior="padding"
-        keyboardVerticalOffset={48}>
+        keyboardVerticalOffset={18}>
         <ScrollViewStyle
           contentContainerStyle={styles.scrollContainer}
           showsVerticalScrollIndicator={false}>

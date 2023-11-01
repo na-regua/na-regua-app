@@ -19,7 +19,7 @@ const ptBr = {
       steps: {
         '1': {
           title: 'Perfil',
-          description: 'Preencha as informações de login.',
+          description: 'Preencha as informações da perfil.',
         },
         '2': {
           title: 'Endereço',
@@ -64,6 +64,78 @@ const ptBr = {
       buttons: {
         add: '+ Serviço',
         ok: 'Salvar',
+      },
+    },
+    completeQR: {
+      title: 'Pronto!',
+      subtitle: 'Seu perfil está completo, agora é só compartilhar o QRCode.',
+      buttons: {
+        skip: 'Pular',
+        share: 'Compartilhar',
+      },
+    },
+    shareQR: {
+      subtitle: 'Scaneie o QR Code para ser atendido.',
+      buttons: {
+        skip: 'Pular',
+        share: 'Compartilhar',
+      },
+    },
+    settings: {
+      title: 'Configurações',
+      subtitle: 'Ajustes e preferências do aplicativo.',
+      logout: 'Sair',
+      menus: {
+        profile: {
+          title: 'Perfil',
+          subtitle: 'Editar informações do perfil.',
+        },
+        plan: {
+          title: 'Plano',
+          subtitle: 'Gerenciar plano e pagamentos.',
+        },
+        custommers: {
+          title: 'Clientes',
+          subtitle: 'Gerenciar clientes.',
+        },
+        workers: {
+          title: 'Funcionários',
+          subtitle: 'Gerenciar funcionários.',
+        },
+        services: {
+          title: 'Serviços',
+          subtitle: 'Gerenciar serviços.',
+        },
+        serviceConfig: {
+          title: 'Atendimento',
+          subtitle: 'Ajustes de agendamento e fila.',
+        },
+      },
+    },
+    servicesConfig: {
+      title: 'Atendimento',
+      subtitle: 'Ajustes de agendamento e fila.',
+      goBack: 'Voltar',
+
+      sections: {
+        general: {
+          title: 'Geral',
+        },
+        businessDays: {
+          title: 'Dias úteis',
+        },
+        holidays: {
+          title: 'Fim de semana ou feriados',
+        },
+      },
+      fields: {
+        workTime: 'Horário de funcionamento',
+        workDays: 'Dias de funcionamento',
+        schedulesByDay: 'Agendamentos por dia',
+        scheduleLimit: 'Limite de agendamento',
+      },
+      buttons: {
+        save: 'Salvar',
       },
     },
   },
@@ -163,6 +235,16 @@ const ptBr = {
   units: {
     minutes: 'minutos',
     money: 'R$',
+  },
+  roles: {
+    custommer: 'Cliente',
+    worker: 'Barbeiro',
+    admin: 'Administrador',
+  },
+  scheduleLimits: {
+    week: '+ 1 semana',
+    twoWeeks: '+ 2 semanas',
+    month: '+ 1 mês',
   },
 };
 

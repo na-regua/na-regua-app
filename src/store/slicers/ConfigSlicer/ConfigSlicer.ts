@@ -1,5 +1,7 @@
+import {IFile} from '@/app/models';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
+  ActionCreatorWithPayload,
   SliceCaseReducers,
   createAsyncThunk,
   createSlice,
@@ -7,6 +9,9 @@ import {
 
 interface IConfigState {
   skipPre: boolean;
+  avatar?: IFile;
+  thumbs?: IFile[];
+  loadingFiles?: boolean;
 }
 
 export const SKIP_PRE_SIGN_UP_KEY = 'skipPreSignUp';
@@ -41,6 +46,11 @@ const ConfigSlicer = createSlice<
   },
 });
 
-const {reducer} = ConfigSlicer;
+const {reducer: ConfigReducer} = ConfigSlicer;
 
-export {reducer as ConfigReducer, ConfigSlicer, getSkipPre};
+export const {setLoadingFiles, setAvatar} = ConfigSlicer.actions as {
+  setLoadingFiles: ActionCreatorWithPayload<boolean>;
+  setAvatar: ActionCreatorWithPayload<IFile>;
+};
+
+export {ConfigReducer, ConfigSlicer, getSkipPre};

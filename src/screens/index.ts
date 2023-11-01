@@ -8,6 +8,7 @@ export {default as BarberServicesScreen} from './BarberServices/BarberServices';
 export {default as BarberSettingsScreen} from './BarberSettings/BarberSettings';
 export {default as BarberSignUpScreen} from './BarberSignUp/BarberSignUp';
 export {default as BarberWorkersScreen} from './BarberWorkers/BarberWorkers';
+export {default as BarberServicesConfigScreen} from './BarberServicesConfig/BarberServicesConfig';
 
 export {default as LoginScreen} from './Login/Login';
 export {default as SplashScreen} from './SplashScreen/SplashScreen';

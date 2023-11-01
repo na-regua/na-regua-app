@@ -19,7 +19,8 @@ export const shadowStyle: ViewStyle = {
     height: -2,
     width: 0,
   },
-  shadowOpacity: 0.1,
+  shadowOpacity: 0.05,
+  shadowRadius: 4,
 };
 
 export const NavItem = styled.TouchableOpacity`

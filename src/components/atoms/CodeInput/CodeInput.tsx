@@ -1,6 +1,6 @@
 import React = require('react');
 import {oneDigitMask} from '@/utils';
-import {createRef, useEffect, useMemo, useState} from 'react';
+import {createRef, useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {TextInput} from 'react-native';
 import {CodeInputStyle, CodeWrapperStyle} from './styles';
@@ -9,6 +9,7 @@ interface ICodeInputProps {
   onCodeChange: (code: string) => void;
   digits: number;
   onDone?: () => void;
+  disabled?: boolean;
 }
 
 interface ICodeInputsArr {
@@ -21,6 +22,7 @@ const CodeInput: React.FC<ICodeInputProps> = ({
   digits,
   onCodeChange,
   onDone,
+  disabled,
 }) => {
   const inputValuesArray: ICodeInputsArr[] = [];
   const {watch, register, control, setValue} = useForm();
@@ -110,6 +112,7 @@ const CodeInput: React.FC<ICodeInputProps> = ({
                 onBlur();
                 setIsFocused(false);
               }}
+              editable={!disabled}
               onChangeText={text => {
                 handleCodeOnChange(text, index, onChange);
               }}

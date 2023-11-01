@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 
+import {Colors} from '@/theme';
 import {Asset} from 'react-native-image-picker';
 import Icons from '../Icons/Icons';
+import Loader from '../Loader/Loader';
 import {
   AvatarContentStyle,
   AvatarPreviewStyle,
+  LoaderWrapperStyle,
   OffsetContainerStyle,
 } from './styles';
 
@@ -15,7 +18,9 @@ interface IAvatarProps {
   iconSize?: number;
   onAvatarChange?: (file: Asset) => void;
   borderOffset?: number;
-  initialAvatar?: string;
+  disabled?: boolean;
+  preview?: string;
+  loading?: boolean;
 }
 
 const Avatar: React.FC<IAvatarProps> = ({
@@ -23,23 +28,20 @@ const Avatar: React.FC<IAvatarProps> = ({
   iconSize = 32,
   borderOffset = 12,
   onAvatarChange,
-  initialAvatar = undefined,
+  disabled,
+  preview,
+  loading,
 }) => {
-  const [preview, setPreview] = useState<string | undefined>(initialAvatar);
-
   const getFile = async () => {
     const result = await ImagePicker.launchImageLibrary({
       mediaType: 'photo',
       includeBase64: true,
       selectionLimit: 1,
+      quality: 0.4,
     });
 
     if (result && result.assets && result.assets[0]) {
       const newAvatar: Asset = result.assets[0];
-
-      if (newAvatar.base64) {
-        setPreview(newAvatar.base64);
-      }
 
       if (onAvatarChange) {
         onAvatarChange(newAvatar);
@@ -49,7 +51,12 @@ const Avatar: React.FC<IAvatarProps> = ({
 
   return (
     <OffsetContainerStyle active={!!preview} size={size + borderOffset}>
-      <AvatarContentStyle size={size} activeOpacity={0.8} onPress={getFile}>
+      <AvatarContentStyle
+        size={size}
+        activeOpacity={0.8}
+        onPress={getFile}
+        loading={loading}
+        disabled={disabled || loading}>
         {!preview && (
           <Icons.UserIcon
             width={iconSize}
@@ -61,10 +68,17 @@ const Avatar: React.FC<IAvatarProps> = ({
         {preview && (
           <AvatarPreviewStyle
             size={size}
-            source={{uri: `data:image/jpeg;base64,${preview}`}}
+            source={{
+              uri: preview,
+            }}
           />
         )}
       </AvatarContentStyle>
+      {loading && (
+        <LoaderWrapperStyle>
+          <Loader color={Colors.main} />
+        </LoaderWrapperStyle>
+      )}
     </OffsetContainerStyle>
   );
 };

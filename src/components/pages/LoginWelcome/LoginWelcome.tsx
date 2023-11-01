@@ -1,6 +1,6 @@
-import {Button, Typography} from '@/components/atoms';
 import {TLoginSteps} from '@/app/models';
-import {useAppNavigation} from '@/navigation';
+import {Button, Typography} from '@/components/atoms';
+import {APP_ROUTES, useAppNavigation} from '@/navigation';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {TouchableOpacity, View} from 'react-native';
@@ -15,7 +15,7 @@ const LoginWelcome: React.FC<ILoginWelcomeProps> = ({onLoginMethod}) => {
   const navigation = useAppNavigation();
 
   const handleNavigateToSignUp = () => {
-    navigation.navigate('/barber/sign-up');
+    navigation.navigate(APP_ROUTES.BARBER_SIGN_UP);
   };
 
   return (

@@ -54,8 +54,12 @@ const Header: React.FC<IHeaderProps> = ({
             Na Régua
           </Typography>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Icons.BellIcon width={24} color={`${mainColor}` as any} />
+        <TouchableOpacity activeOpacity={0.8}>
+          <Icons.BellIcon
+            width={24}
+            height={24}
+            color={`${mainColor}` as any}
+          />
         </TouchableOpacity>
       </View>
       {showTitle && (

@@ -130,3 +130,7 @@ You can add universal styles here like flexDirection: row, centerAll, itemsEnd a
 - metrices- This will hold your device dimensions so you can export and use them for responsive layouts. It will manage all the fonts, margins, and images according to device size.
 
 - colors- All the colors your application using goes here. All the repeating colors, for example, your application has theme colors which are black & red so you can add primary & secondary colors like black & red.
+
+### Use buffer as base64 image:
+
+`data:image/jpeg;base64,${avatar}`

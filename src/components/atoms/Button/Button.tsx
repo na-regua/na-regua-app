@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {TouchableOpacityProps} from 'react-native';
 
 import {Colors} from '@/theme';
@@ -13,6 +13,7 @@ export type TButtonColorScheme =
   | 'danger'
   | 'success'
   | 'default'
+  | 'white'
   | 'warning';
 
 export type TButtonVariants = 'filled' | 'outlined';
@@ -33,6 +34,14 @@ const Button: React.FC<IButtonProps> = ({
   variant = 'filled',
   ...buttonProps
 }) => {
+  const loaderColor = useMemo(() => {
+    if (colorScheme === 'white' && variant === 'filled') {
+      return Colors.main;
+    }
+
+    return variant === 'filled' ? Colors.white3 : ButtonThemeColor[colorScheme];
+  }, [variant, colorScheme]);
+
   return (
     <ButtonStyle
       variant={variant}
@@ -50,11 +59,7 @@ const Button: React.FC<IButtonProps> = ({
           {title}
         </LabelStyle>
       ) : (
-        <Loader
-          color={
-            variant === 'filled' ? Colors.white3 : ButtonThemeColor[colorScheme]
-          }
-        />
+        <Loader color={loaderColor} />
       )}
     </ButtonStyle>
   );

@@ -9,6 +9,7 @@ export interface ICepApiData {
   gia: string;
   ddd: string;
   siafi: string;
+  erro?: boolean;
 }
 
 export interface IAdress {

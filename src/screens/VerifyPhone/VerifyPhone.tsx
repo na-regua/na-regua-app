@@ -1,5 +1,5 @@
 import {AuthService} from '@/app/api';
-import {Button, CodeInput, Typography} from '@/components/atoms';
+import {Button, CodeInput, Loader, Typography} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {APP_ROUTES, useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
@@ -35,6 +35,8 @@ const VerifyPhone: React.FC = () => {
   const [code, setCode] = useState('');
   const [expired, setExpired] = useState(false);
   const [timer, setTimer] = useState(60);
+  const [verifying, setVerifying] = useState(false);
+  const [sendingAgain, setSendingAgain] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -62,9 +64,11 @@ const VerifyPhone: React.FC = () => {
   const digits = 6;
 
   const handleSendAgain = async () => {
-    if (!barber || !user) {
+    if (!barber || !user || sendingAgain) {
       return;
     }
+
+    setSendingAgain(true);
 
     const {phone} = user;
 
@@ -75,7 +79,11 @@ const VerifyPhone: React.FC = () => {
         setTimer(60);
         setExpired(false);
       }
+
+      setSendingAgain(false);
     } catch (error) {
+      setSendingAgain(false);
+
       if (error instanceof AxiosError) {
         const {message} = error.response?.data;
 
@@ -93,9 +101,11 @@ const VerifyPhone: React.FC = () => {
   };
 
   const handleVerifyPhone = async () => {
-    if (!barber || !user) {
+    if (!barber || !user || verifying) {
       return;
     }
+
+    setVerifying(true);
 
     const {phone} = user;
 
@@ -103,24 +113,24 @@ const VerifyPhone: React.FC = () => {
       const {data} = await AuthService.verifyWhatsapp(code, phone);
 
       if (data) {
-        dispatch(setPersistedToken(data.accessToken));
+        await dispatch(setPersistedToken(data.accessToken));
 
-        if (data) {
-          await dispatch(setPersistedToken(data.accessToken));
+        if (data.barber) {
+          dispatch(setUser(data.user));
+          dispatch(setBarber(data.barber));
 
-          if (data.barber) {
-            dispatch(setUser(data.user));
-            dispatch(setBarber(data.barber));
-
-            if (data.barber.profileStatus === 'pre' && !skipPreSignUp) {
-              navigator.navigate(APP_ROUTES.BARBER_PRE_SIGN_UP);
-            } else {
-              navigator.navigate(APP_ROUTES.BARBER_QUEUE);
-            }
+          if (data.barber.profileStatus === 'pre' && !skipPreSignUp) {
+            navigator.navigate(APP_ROUTES.BARBER_PRE_SIGN_UP);
+          } else {
+            navigator.navigate(APP_ROUTES.BARBER_QUEUE);
           }
         }
       }
+
+      setVerifying(false);
     } catch (error) {
+      setVerifying(false);
+
       if (error instanceof AxiosError) {
         const {message} = error.response?.data;
 
@@ -161,14 +171,15 @@ const VerifyPhone: React.FC = () => {
               }}
               onDone={() => code.length === digits && handleVerifyPhone()}
             />
-            {!expired && (
+            {sendingAgain && <Loader color={Colors.primary} />}
+            {!expired && !sendingAgain && (
               <View style={styles.sendAgainWrapper}>
                 <Typography variant="button" color="placeholder">
                   0:{timer + 1 > 10 ? timer : `0${timer}`}
                 </Typography>
               </View>
             )}
-            {expired && (
+            {expired && !sendingAgain && (
               <TouchableOpacity
                 style={styles.sendAgainWrapper}
                 onPress={handleSendAgain}
@@ -184,6 +195,7 @@ const VerifyPhone: React.FC = () => {
             disabled={code.length !== digits}
             title={t('generic.verifyPhone.buttons.send')}
             style={styles.button}
+            loading={verifying}
           />
         </View>
       </TouchableWithoutFeedback>

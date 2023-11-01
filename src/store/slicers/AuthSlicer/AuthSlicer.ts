@@ -4,6 +4,7 @@ import {GenericAction} from '@/store/Store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   ActionCreatorWithPayload,
+  ActionCreatorWithoutPayload,
   SliceCaseReducers,
   createAsyncThunk,
   createSlice,
@@ -33,8 +34,8 @@ const setPersistedToken = createAsyncThunk(
   },
 );
 
-const getPersistedUser = createAsyncThunk(
-  'Auth/getPersistedToken',
+const getCurrentUser = createAsyncThunk(
+  'Auth/getCurrentUser',
   async (_, {rejectWithValue}) => {
     try {
       const token = await AsyncStorage.getItem(ACCESS_TOKEN_KEY);
@@ -43,7 +44,7 @@ const getPersistedUser = createAsyncThunk(
         const {data} = await AuthService.getCurrentUser(token);
 
         if (data) {
-          return {token, ...data};
+          return {...data, token};
         }
       }
     } catch (error) {
@@ -72,9 +73,15 @@ const AuthSlicer = createSlice<
     setUser: (state, action: GenericAction<IUser>) => {
       state.user = action.payload;
     },
+    logout: state => {
+      state.isAuthenticated = false;
+      state.token = '';
+      state.barber = undefined;
+      state.user = undefined;
+    },
   },
   extraReducers: builder => {
-    builder.addCase(getPersistedUser.fulfilled, (state, action) => {
+    builder.addCase(getCurrentUser.fulfilled, (state, action) => {
       state.isLoading = false;
 
       if (action.payload) {
@@ -82,12 +89,10 @@ const AuthSlicer = createSlice<
         state.token = action.payload.token;
         state.barber = action.payload.barber;
         state.user = action.payload.user;
-
-        console.log('Token: ', action.payload.token);
       }
     });
 
-    builder.addCase(getPersistedUser.rejected, (state, action) => {
+    builder.addCase(getCurrentUser.rejected, (state, action) => {
       if (action.payload instanceof AxiosError) {
         state.isLoading = false;
         state.isAuthenticated = false;
@@ -99,26 +104,22 @@ const AuthSlicer = createSlice<
       state.isLoading = false;
       state.isAuthenticated = true;
       state.token = action.payload;
-
-      console.log('Token: ', action.payload);
     });
   },
 });
 
 const {reducer} = AuthSlicer;
 
-const setBarber: ActionCreatorWithPayload<IBarber, string> = AuthSlicer.actions
-  .setBarber as any;
-
-const setUser: ActionCreatorWithPayload<IUser, string> = AuthSlicer.actions
-  .setUser as any;
+export const {logout, setUser, setBarber} = AuthSlicer.actions as {
+  logout: ActionCreatorWithoutPayload<string>;
+  setUser: ActionCreatorWithPayload<IUser, string>;
+  setBarber: ActionCreatorWithPayload<IBarber, string>;
+};
 
 export {
   ACCESS_TOKEN_KEY,
   reducer as AuthReducer,
   AuthSlicer,
-  getPersistedUser,
-  setBarber,
+  getCurrentUser,
   setPersistedToken,
-  setUser,
 };

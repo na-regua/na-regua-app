@@ -19,15 +19,15 @@ const CombinedProviders: React.FC = () => {
     <GestureHandlerRootView style={combinedProvidersStyles.gestureHandler}>
       <SafeAreaProvider>
         <ThemeProvider theme={{colors: Colors}}>
-          <BottomSheetModalProvider>
-            <StoreProvider store={store}>
+          <StoreProvider store={store}>
+            <BottomSheetModalProvider>
               <PersistedData />
 
               <AppNavigator />
 
               <NotifyProvider />
-            </StoreProvider>
-          </BottomSheetModalProvider>
+            </BottomSheetModalProvider>
+          </StoreProvider>
         </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

@@ -6,6 +6,7 @@ export {default as DeleteWorkerModal} from './DeleteWorkerModal/DeleteWorkerModa
 export {default as Header} from './Header/Header';
 export {default as PicturesStep} from './PicturesStep/PicturesStep';
 export {default as ProfileStep} from './ProfileStep/ProfileStep';
+export {default as ServiceConfigDaysCard} from './ServiceConfigDaysCard/ServiceConfigDaysCard';
 export {default as WorkerModal} from './WorkerModal/WorkerModal';
 
 export * from './AddressStep/AddressStep';

@@ -1,4 +1,4 @@
-import {BarberServicesService} from '@/app/api';
+import {ServicesService} from '@/app/api';
 import {IBarberService} from '@/app/models';
 import {Button, Typography} from '@/components/atoms';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
@@ -33,7 +33,7 @@ const DeleteServiceModal: React.FC<IDeleteServiceModalProps> = ({
     try {
       setLoading(true);
 
-      const response = await BarberServicesService.deleteService(service._id);
+      const response = await ServicesService.deleteService(service._id);
 
       if (response) {
         setLoading(false);
