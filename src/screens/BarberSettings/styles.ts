@@ -18,30 +18,28 @@ export const ContainerStyle = styled.View`
   background-color: ${Colors.bgLight};
 `;
 
-export const ContentStyle = styled.ScrollView`
+export const ScrollContentStyle = styled.ScrollView`
   flex: 1;
-  margin-bottom: 36px;
 `;
 
 export const HeaderStyle = styled.View`
-  flex: 1;
   gap: 2px;
 `;
 
 export const BarberProfileStyle = styled.View`
-  flex: 1;
   gap: 8px;
   position: relative;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 `;
 
 export const BarberProfileInfoStyle = styled.View`
   justify-items: center;
   align-content: center;
+  gap: 4px;
 `;
 
-export const QRWrapperStyle = styled.TouchableOpacity`
+export const QRWrapperStyle = styled.View`
   position: absolute;
   top: 0;
   right: 0;

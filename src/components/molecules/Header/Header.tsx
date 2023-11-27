@@ -1,6 +1,5 @@
 import {Icons, Typography} from '@/components/atoms';
 import {RootState} from '@/store/Store';
-import {Fonts} from '@/theme';
 import React, {useMemo} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {useSelector} from 'react-redux';
@@ -47,9 +46,7 @@ const Header: React.FC<IHeaderProps> = ({
           onPress={onIconPress}
           activeOpacity={0.8}
           disabled={!clickable}>
-          <ContainerInfoStyle lightContent={lightContent}>
-            <Typography variant="body1">I</Typography>
-          </ContainerInfoStyle>
+          <ContainerInfoStyle lightContent={lightContent}></ContainerInfoStyle>
           <Typography variant="body2" color={`${color}3` as any}>
             Na Régua
           </Typography>
@@ -64,7 +61,7 @@ const Header: React.FC<IHeaderProps> = ({
       </View>
       {showTitle && (
         <View style={styles.title}>
-          <Typography variant="h2" color={`${color}3` as any}>
+          <Typography variant="h3" color={`${color}3` as any}>
             {title}
           </Typography>
           <Typography variant="body1" color={`${color}1` as any}>
@@ -74,14 +71,11 @@ const Header: React.FC<IHeaderProps> = ({
       )}
       {showWelcome && isAuthenticated && user && (
         <View style={styles.title}>
-          <Typography variant="h2" color={`${color}3` as any}>
-            <Typography
-              variant="h2"
-              color={`${color}3` as any}
-              style={{fontWeight: Fonts.weights.regular}}>
-              Olá,
-            </Typography>{' '}
-            {user.name}
+          <Typography
+            variant="h3"
+            style={styles.welcomeText}
+            color={`${color}3` as any}>
+            Olá, {user.name}
           </Typography>
         </View>
       )}

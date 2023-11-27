@@ -38,6 +38,7 @@ export const SelectTimeButton = styled.TouchableOpacity<{
     `
     border-top-left-radius: 24px;
     border-bottom-left-radius: 24px;
+    margin-right: -1px;
   `}
 
 ${({isEnd}) =>

@@ -2,11 +2,11 @@ import React from 'react';
 
 import {Header} from '@/components/molecules';
 import {SignUpForm} from '@/components/pages';
-import Colors from '@/theme/colors';
 
+import {AppStatusBar} from '@/components/atoms';
 import {APP_ROUTES, useAppNavigation} from '@/navigation';
 import {useTranslation} from 'react-i18next';
-import {KeyboardAvoidingView, StatusBar} from 'react-native';
+import {KeyboardAvoidingView} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   ContainerStyle,
@@ -33,7 +33,7 @@ const BarberSignUp: React.FC = () => {
 
   return (
     <ContainerStyle style={[insetsStyles]}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.bgLight} />
+      <AppStatusBar />
       <KeyboardAvoidingView
         enabled
         behavior="padding"

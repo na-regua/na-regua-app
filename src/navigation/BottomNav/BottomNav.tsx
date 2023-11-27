@@ -1,22 +1,29 @@
 import {TUserRoles} from '@/app/models';
-import {Icons} from '@/components/atoms';
+import {Icons, Typography} from '@/components/atoms';
 import {RootState} from '@/store/Store';
 import {useRoute} from '@react-navigation/native';
 import React, {ReactNode} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {APP_ROUTES} from '../appRoutes';
-import {FloatingContainerStyle, NavItem, shadowStyle} from './styles';
+import {
+  FloatingContainerStyle,
+  NavItem,
+  labelStyle,
+  shadowStyle,
+} from './styles';
 import {useAppNavigation} from '../useAppNavigation/useAppNavigation';
+import {useTranslation} from 'react-i18next';
 
 interface IBottomNavProps {}
 
 const BottomNav: React.FC<IBottomNavProps> = () => {
+  const {t} = useTranslation();
   const {user, isAuthenticated} = useSelector((state: RootState) => state.auth);
 
   const insets = useSafeAreaInsets();
   const insetsStyles = {
-    paddingBottom: insets.bottom - 12,
+    paddingBottom: insets.bottom,
   };
 
   const route = useRoute();
@@ -46,7 +53,14 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
           width={27}
           height={26}
           color={isActive(APP_ROUTES.BARBER_QUEUE) ? 'main' : 'default'}
+          strokeWidth={isActive(APP_ROUTES.BARBER_QUEUE) ? 1.8 : 1.5}
         />
+        <Typography
+          variant="tip"
+          style={labelStyle}
+          color={isActive(APP_ROUTES.BARBER_QUEUE) ? 'main' : 'default'}>
+          {t('nav.links.queue')}
+        </Typography>
       </NavItem>
     ),
     [APP_ROUTES.BARBER_SCHEDULE]: (
@@ -57,7 +71,14 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
           width={26}
           height={26}
           color={isActive(APP_ROUTES.BARBER_SCHEDULE) ? 'main' : 'default'}
+          strokeWidth={isActive(APP_ROUTES.BARBER_SCHEDULE) ? 1.8 : 1.5}
         />
+        <Typography
+          variant="tip"
+          style={labelStyle}
+          color={isActive(APP_ROUTES.BARBER_SCHEDULE) ? 'main' : 'default'}>
+          {t('nav.links.schedule')}
+        </Typography>
       </NavItem>
     ),
     [APP_ROUTES.BARBER_BILLING]: (
@@ -68,7 +89,14 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
           width={26}
           height={26}
           color={isActive(APP_ROUTES.BARBER_BILLING) ? 'main' : 'default'}
+          strokeWidth={isActive(APP_ROUTES.BARBER_BILLING) ? 1.8 : 1.5}
         />
+        <Typography
+          variant="tip"
+          style={labelStyle}
+          color={isActive(APP_ROUTES.BARBER_BILLING) ? 'main' : 'default'}>
+          {t('nav.links.billing')}
+        </Typography>
       </NavItem>
     ),
     [APP_ROUTES.BARBER_SETTINGS]: (
@@ -76,10 +104,17 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
         activeOpacity={0.8}
         onPress={() => handleNavigateTo(APP_ROUTES.BARBER_SETTINGS)}>
         <Icons.SettingsIcon
-          width={28}
-          height={28}
+          width={26}
+          height={26}
           color={isActive(APP_ROUTES.BARBER_SETTINGS) ? 'main' : 'default'}
+          strokeWidth={isActive(APP_ROUTES.BARBER_SETTINGS) ? 1.5 : 1.3}
         />
+        <Typography
+          variant="tip"
+          color={isActive(APP_ROUTES.BARBER_SETTINGS) ? 'main' : 'default'}
+          style={labelStyle}>
+          {t('nav.links.settings')}
+        </Typography>
       </NavItem>
     ),
   };
@@ -91,7 +126,12 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
       APP_ROUTES.BARBER_BILLING,
       APP_ROUTES.BARBER_SETTINGS,
     ],
-    worker: [APP_ROUTES.BARBER_QUEUE, APP_ROUTES.BARBER_SCHEDULE],
+    worker: [
+      APP_ROUTES.BARBER_QUEUE,
+      APP_ROUTES.BARBER_SCHEDULE,
+      APP_ROUTES.BARBER_BILLING,
+      APP_ROUTES.BARBER_SETTINGS,
+    ],
     custommer: [],
   };
 

@@ -13,4 +13,8 @@ const metrics = {
   mdWidth: width < height ? width - 48 : height - 48,
 };
 
+export function gtDeviceHeight(compareHeight: number) {
+  return compareHeight > height;
+}
+
 export default metrics;

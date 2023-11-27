@@ -45,6 +45,7 @@ const MenuItem: React.FC<IMenuItemProps> = ({
       onPressOut={onPressOut}
       onPressIn={onPressIn}>
       {avatar && <Image source={{uri: avatar}} style={menuItemStyles.avatar} />}
+
       {icon && (
         <IconWrapperStyle style={menuItemStyles.avatar}>
           {icon}

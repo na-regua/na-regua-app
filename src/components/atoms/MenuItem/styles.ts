@@ -25,6 +25,12 @@ export const ContainerStyle = styled.TouchableOpacity<{pressed?: boolean}>`
     `
     background-color: ${Colors.borderHover};
   `}
+
+  ${({disabled}) =>
+    disabled &&
+    `
+    background-color: ${Colors.disabled};
+  `}
 `;
 
 export const IconWrapperStyle = styled.View`

@@ -75,16 +75,18 @@ const ptBr = {
       },
     },
     shareQR: {
-      subtitle: 'Scaneie o QR Code para ser atendido.',
+      subtitle: 'Aponte a câmera para o QR Code para ser atendido.',
       buttons: {
-        skip: 'Pular',
-        share: 'Compartilhar',
+        close: 'Fechar',
+        save: 'Salvar',
       },
     },
     settings: {
       title: 'Configurações',
       subtitle: 'Ajustes e preferências do aplicativo.',
       logout: 'Sair',
+      barbershop: 'Barbearia - ',
+      code: 'Código - ',
       menus: {
         profile: {
           title: 'Perfil',
@@ -120,12 +122,15 @@ const ptBr = {
       sections: {
         general: {
           title: 'Geral',
+          subtitle: 'Ajustes gerais de atendimento.',
         },
         businessDays: {
           title: 'Dias úteis',
+          subtitle: 'Ajustes de atendimento.',
         },
         holidays: {
           title: 'Fim de semana ou feriados',
+          subtitle: 'Ajustes de atendimento.',
         },
       },
       fields: {
@@ -133,9 +138,36 @@ const ptBr = {
         workDays: 'Dias de funcionamento',
         schedulesByDay: 'Agendamentos por dia',
         scheduleLimit: 'Limite de agendamento',
+        scheduleTime: 'Horários de agendamento',
       },
       buttons: {
         save: 'Salvar',
+      },
+    },
+    editUser: {
+      title: 'Perfil',
+      subtitle: 'Editar perfil',
+      goBack: 'Voltar',
+      sections: {
+        profile: 'Perfil',
+        address: 'Endereço',
+        pictures: 'Fotos',
+      },
+      buttons: {
+        save: 'Salvar',
+      },
+      fields: {
+        name: 'Nome',
+        email: 'E-mail',
+        phone: 'Whatsapp',
+        password: 'Senha',
+        postalCode: 'CEP',
+        street: 'Rua',
+        complement: 'Complemento',
+        number: 'N°',
+        city: 'Cidade',
+        uf: 'UF',
+        neighborhood: 'Bairro',
       },
     },
   },
@@ -198,6 +230,7 @@ const ptBr = {
         admin: 'Administrador ?!',
       },
       buttons: {
+        cancel: 'Cancelar',
         add: 'Adicionar',
         save: 'Salvar',
       },
@@ -211,6 +244,7 @@ const ptBr = {
         selectIcon: 'Selecione um ícone',
       },
       buttons: {
+        cancel: 'Cancelar',
         add: 'Adicionar',
         save: 'Salvar',
       },
@@ -231,6 +265,15 @@ const ptBr = {
         yes: 'Sim',
       },
     },
+    addScheduleTime: {
+      title: 'Adicionar horário',
+      fields: {
+        time: 'Horário',
+      },
+      buttons: {
+        add: 'Adicionar',
+      },
+    },
   },
   units: {
     minutes: 'minutos',
@@ -242,9 +285,17 @@ const ptBr = {
     admin: 'Administrador',
   },
   scheduleLimits: {
-    week: '+ 1 semana',
-    twoWeeks: '+ 2 semanas',
-    month: '+ 1 mês',
+    week: '+ 7 dias',
+    twoWeeks: '+ 15 dias',
+    month: '+ 30 dias',
+  },
+  nav: {
+    links: {
+      queue: 'Fila',
+      schedule: 'Agenda',
+      billing: 'Finanças',
+      settings: 'Ajustes',
+    },
   },
 };
 

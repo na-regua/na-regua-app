@@ -1,9 +1,8 @@
+import {AppStatusBar} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {BottomNav} from '@/navigation';
 import React from 'react';
-import {StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {ContainerStyle} from './styles';
 
 const BarberQueue: React.FC = () => {
@@ -17,7 +16,7 @@ const BarberQueue: React.FC = () => {
 
   return (
     <ContainerStyle style={insetsStyles}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.bgLight} />
+      <AppStatusBar />
       <Header showTitle={false} showBorder showWelcome />
 
       <BottomNav />

@@ -1,4 +1,4 @@
-import {Colors, Metrics} from '@/theme';
+import {Colors, Fonts, Metrics} from '@/theme';
 import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 
@@ -30,6 +30,10 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.border,
     width: Metrics.screenWidth,
     height: 1,
+  },
+  welcomeText: {
+    fontWeight: Fonts.weights.medium,
+    fontFamily: Fonts.types.medium,
   },
 });
 

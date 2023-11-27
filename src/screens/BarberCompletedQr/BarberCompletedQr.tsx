@@ -1,13 +1,18 @@
-import {Button, QRCode, Typography} from '@/components/atoms';
-import {Header} from '@/components/molecules';
+import {
+  AppStatusBar,
+  Button,
+  Modal,
+  QRCode,
+  Typography,
+} from '@/components/atoms';
+import {Header, ShareQRModal} from '@/components/molecules';
+import {APP_ROUTES, useAppNavigation} from '@/navigation';
 import {RootState} from '@/store/Store';
 import colors from '@/theme/colors';
-import React, {useRef, useState} from 'react';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import React, {useRef} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import ViewShot, {captureRef} from 'react-native-view-shot';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {useSelector} from 'react-redux';
 import {
   ActionsStyle,
@@ -16,8 +21,6 @@ import {
   QRContentStyle,
   styles,
 } from './styles';
-import Share from 'react-native-share';
-import {APP_ROUTES, useAppNavigation} from '@/navigation';
 
 const BarberCompletedQr: React.FC = () => {
   const {t} = useTranslation();
@@ -32,25 +35,12 @@ const BarberCompletedQr: React.FC = () => {
   };
   const {barber} = useSelector((state: RootState) => state.auth);
 
-  const [sharing, setSharing] = useState(false);
-  const ref = useRef<ViewShot>(null);
+  const shareQRModalRef = useRef<BottomSheetModal>(null);
 
   const shareQR = async () => {
-    setSharing(true);
-
-    setTimeout(async () => {
-      try {
-        const uri = await captureRef(ref, {format: 'png', quality: 1});
-
-        await Share.open({url: uri});
-
-        setTimeout(() => {
-          setSharing(false);
-        }, 500);
-      } catch (error) {
-        setSharing(false);
-      }
-    }, 500);
+    if (shareQRModalRef.current) {
+      shareQRModalRef.current?.present();
+    }
   };
 
   const skip = () => {
@@ -61,10 +51,10 @@ const BarberCompletedQr: React.FC = () => {
     <ContainerStyle
       style={insetsStyles}
       contentContainerStyle={styles.flexGrow1}>
-      <StatusBar barStyle={'light-content'} backgroundColor={Colors.bgLight} />
+      <AppStatusBar barStyle="light-content" />
       <Header showTitle={false} lightContent />
       <ContentStyle>
-        {barber && !sharing && (
+        {barber && (
           <QRContentStyle>
             <Typography variant="h2" color="white3">
               {t('barber.completeQR.title')}
@@ -89,32 +79,7 @@ const BarberCompletedQr: React.FC = () => {
             </Typography>
           </QRContentStyle>
         )}
-        {barber && sharing && (
-          <ViewShot style={styles.viewShot} ref={ref}>
-            <QRContentStyle>
-              <Typography variant="body1" color="white3">
-                {t('barber.shareQR.subtitle')}
-              </Typography>
 
-              <QRCode
-                style={styles.qrWrapper}
-                padding={12}
-                size={152}
-                qrCodeProps={{
-                  value: 'https://www.google.com',
-                  color: colors.black3,
-                }}
-              />
-
-              <Typography variant="h1" color="white3">
-                {barber.name}
-              </Typography>
-              <Typography variant="h4" color="white1">
-                {barber.code}
-              </Typography>
-            </QRContentStyle>
-          </ViewShot>
-        )}
         <ActionsStyle>
           <Button
             variant="outlined"
@@ -126,10 +91,15 @@ const BarberCompletedQr: React.FC = () => {
             colorScheme="white"
             title={t('barber.completeQR.buttons.share')}
             onPress={shareQR}
-            loading={sharing}
           />
         </ActionsStyle>
       </ContentStyle>
+      <Modal
+        ref={shareQRModalRef}
+        snapPoints={['100%']}
+        backgroundColor={colors.main}>
+        <ShareQRModal modalRef={shareQRModalRef} />
+      </Modal>
     </ContainerStyle>
   );
 };

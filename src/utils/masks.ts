@@ -73,3 +73,20 @@ export function ufMask(value: string): string {
 
   return value;
 }
+
+export function timeMask(value: string): string {
+  if (!value) {
+    return '';
+  }
+
+  value = value.replace(/\D/g, '');
+  value = value.replace(/(\d{2})(\d)/, '$1:$2');
+
+  if (value.length > 4) {
+    value = value.substring(0, 5);
+  }
+
+  return value;
+}
+
+export const timePattern = /([0-1][0-9]|[2][0-3]):[0-5][0-9]/;

@@ -22,7 +22,7 @@ export const SelectScheduleStyle = styled.TouchableOpacity<{
   active?: boolean;
 }>`
   padding: 4px 12px;
-  background-color: ${Colors.border};
+  border: 1px solid ${Colors.main};
   border-radius: 4px;
 
   ${({active}) =>

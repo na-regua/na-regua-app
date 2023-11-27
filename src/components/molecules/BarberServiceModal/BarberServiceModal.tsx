@@ -1,6 +1,7 @@
 import {ServicesService} from '@/app/api';
 import {IBarberServiceIcon} from '@/app/models';
-import {Button, Icons, Input, Typography} from '@/components/atoms';
+import {Icons, Input, Typography} from '@/components/atoms';
+import {AppDispatch} from '@/store/Store';
 import {createNotification} from '@/store/slicers';
 import {numberMask} from '@/utils';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
@@ -16,13 +17,14 @@ import {
 import {TextInput} from 'react-native-gesture-handler';
 import {useDispatch} from 'react-redux';
 import {
+  ActionsContainerStyle,
+  ButtonStyle,
   ScrollViewStyle,
   SelectIconItemStyle,
   SelectIconStyle,
   SelectIconWrapperStyle,
   styles,
 } from './styles';
-import {AppDispatch} from '@/store/Store';
 
 export interface IBarberServiceForm {
   name: string;
@@ -33,10 +35,10 @@ export interface IBarberServiceForm {
 
 interface IWorkerModalProps {
   modalRef: React.RefObject<BottomSheetModal | null>;
-  onClose?: () => void;
   mode: 'add' | 'edit';
   initialValues?: Partial<IBarberServiceForm>;
   serviceID?: string;
+  onClose?: (reloadData?: boolean) => void;
 }
 
 const BarberServiceModal: React.FC<IWorkerModalProps> = ({
@@ -76,10 +78,9 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
 
       if (response) {
         if (modalRef.current) {
-          modalRef.current.close();
-          onClose && onClose();
-
           setLoading(false);
+          modalRef.current.dismiss();
+          onClose && onClose(true);
         }
       }
     } catch (error) {
@@ -114,10 +115,9 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
 
         if (response) {
           if (modalRef.current) {
-            modalRef.current.close();
-            onClose && onClose();
-
             setLoading(false);
+            modalRef.current.dismiss();
+            onClose && onClose(true);
           }
         }
       } catch (error) {
@@ -137,6 +137,13 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
 
         setLoading(false);
       }
+    }
+  };
+
+  const close = () => {
+    if (modalRef.current) {
+      modalRef.current.dismiss();
+      onClose && onClose();
     }
   };
 
@@ -281,24 +288,32 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
             )}
           />
 
-          {mode === 'add' && (
-            <Button
-              title={t('modals.barberService.buttons.add')}
-              colorScheme="primary"
-              loading={loading}
-              disabled={!formState.isValid}
-              onPress={handleOnAdd}
+          <ActionsContainerStyle>
+            <ButtonStyle
+              title={t('modals.barberService.buttons.cancel')}
+              colorScheme="danger"
+              variant="outlined"
+              onPress={close}
             />
-          )}
-          {mode === 'edit' && (
-            <Button
-              title={t('modals.barberService.buttons.save')}
-              colorScheme="primary"
-              loading={loading}
-              disabled={!formState.isValid || !hasDiff}
-              onPress={handleOnUpdate}
-            />
-          )}
+            {mode === 'add' && (
+              <ButtonStyle
+                title={t('modals.barberService.buttons.add')}
+                colorScheme="primary"
+                loading={loading}
+                disabled={!formState.isValid}
+                onPress={handleOnAdd}
+              />
+            )}
+            {mode === 'edit' && (
+              <ButtonStyle
+                title={t('modals.barberService.buttons.save')}
+                colorScheme="primary"
+                loading={loading}
+                disabled={!formState.isValid || !hasDiff}
+                onPress={handleOnUpdate}
+              />
+            )}
+          </ActionsContainerStyle>
         </ScrollViewStyle>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

@@ -1,11 +1,10 @@
-import {Button, QRCode, Typography} from '@/components/atoms';
+import {AppStatusBar, Button, QRCode, Typography} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {RootState} from '@/store/Store';
+import colors from '@/theme/colors';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {useSelector} from 'react-redux';
 import {
   ActionsStyle,
@@ -14,7 +13,6 @@ import {
   QRContentStyle,
   styles,
 } from './styles';
-import colors from '@/theme/colors';
 
 const BarberShareQr: React.FC = () => {
   const {t} = useTranslation();
@@ -31,7 +29,7 @@ const BarberShareQr: React.FC = () => {
     <ContainerStyle
       style={insetsStyles}
       contentContainerStyle={styles.flexGrow1}>
-      <StatusBar barStyle={'light-content'} backgroundColor={Colors.bgLight} />
+      <AppStatusBar />
       <Header showTitle={false} lightContent />
       <ContentStyle>
         <QRContentStyle>

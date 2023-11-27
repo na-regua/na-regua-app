@@ -1,11 +1,11 @@
-import {Icons, Typography} from '@/components/atoms';
+import {TLoginSteps} from '@/app/models';
+import {AppStatusBar, Icons, Typography} from '@/components/atoms';
 import {LoginEmail, LoginVerifyCode, LoginWelcome} from '@/components/pages';
 import LoginWhatsapp from '@/components/pages/LoginWhatsapp/LoginWhatsapp';
-import {TLoginSteps} from '@/app/models';
-import {Colors, Metrics} from '@/theme';
+import {Metrics} from '@/theme';
 import React, {useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StatusBar, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {styles} from './styles';
 
@@ -42,7 +42,7 @@ const Login: React.FC = () => {
 
   return (
     <View style={[styles.container, insetsStyles]}>
-      <StatusBar barStyle={'light-content'} backgroundColor={Colors.bgLight} />
+      <AppStatusBar barStyle="light-content" />
       <View style={[styles.splash, {height: getSplashHeight}]} />
       {loginMethod === 'welcome' && (
         <LoginWelcome onLoginMethod={handleOnLoginMethod} />

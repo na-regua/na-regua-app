@@ -24,7 +24,7 @@ const PlusIcon: React.FC<IPlusIconProps> = ({
 
   return (
     <TouchableOpacity
-      activeOpacity={0.8}
+      activeOpacity={0.6}
       style={[styles.iconWrapper, style]}
       onPress={onPress}
       disabled={!clickable || disabled}>

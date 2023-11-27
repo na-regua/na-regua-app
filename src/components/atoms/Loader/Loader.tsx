@@ -11,13 +11,18 @@ interface ILoaderProps {
 const Loader: React.FC<ILoaderProps> = ({
   color,
   wrapperStyle,
-  size = Platform.OS === 'ios' ? 'small' : 64,
+  size = 'small',
 }) => {
   const loaderSize = useMemo(() => {
+    const androidSize = {
+      small: 16,
+      large: 26,
+    };
+
     if (Platform.OS === 'ios') {
       return size;
     } else {
-      return size === 'small' ? 64 : 128;
+      return androidSize[size];
     }
   }, [size]);
 

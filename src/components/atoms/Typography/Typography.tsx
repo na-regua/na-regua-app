@@ -17,15 +17,15 @@ type ITypographyVariants =
   | 'tip';
 
 export interface ITypographyProps extends PropsWithChildren {
-  variant: ITypographyVariants;
+  variant?: ITypographyVariants;
   color?: TColorsType;
   style?: TextStyle;
 }
 
 const Typography: React.FC<ITypographyProps> = ({
   children,
-  variant,
-  color,
+  variant = 'body1',
+  color = 'black3',
   style,
 }) => {
   const textColor = useMemo(() => color && Colors[color], [color]);

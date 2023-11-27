@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {SCHEDULE_DEFAULT_TIMES} from '../Calendar';
 import Typography from '../Typography/Typography';
@@ -10,21 +10,15 @@ import {
 } from './styles';
 
 interface ISelectScheduleLimitProps {
-  initialLimit: number;
-  onChanged: () => void;
+  limit: number;
+  onChange: (limit: number) => void;
 }
 
 const SelectScheduleLimit: React.FC<ISelectScheduleLimitProps> = ({
-  initialLimit,
-  onChanged,
+  limit,
+  onChange,
 }) => {
-  const [limit, setLimit] = useState<number>(initialLimit);
   const {t} = useTranslation();
-
-  const handleSelectLimit = (newLimit: number) => {
-    setLimit(newLimit);
-    onChanged();
-  };
 
   return (
     <ContainerStyle>
@@ -40,10 +34,10 @@ const SelectScheduleLimit: React.FC<ISelectScheduleLimitProps> = ({
             active={limit === time.value}
             key={index}
             activeOpacity={0.8}
-            onPress={() => handleSelectLimit(time.value)}>
+            onPress={() => onChange(time.value)}>
             <Typography
               variant="button"
-              color={limit === time.value ? 'white3' : 'default'}>
+              color={limit === time.value ? 'white3' : 'main'}>
               {t(time.label)}
             </Typography>
           </SelectScheduleStyle>

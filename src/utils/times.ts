@@ -34,13 +34,19 @@ export function hasCloseActiveTime(
   return closeTime !== undefined;
 }
 
+export function sortSchedulesByTime(
+  arr: IBarberCreateSchedule[],
+): IBarberCreateSchedule[] {
+  return arr.sort((a, b) => timeToNumber(a.time) - timeToNumber(b.time));
+}
+
 export function generateRecommendedTime(
   allSchedules: IBarberCreateSchedule[],
   schedulesByDay: number,
   workTime: TWorkTime,
   withActiveSchedules = true,
 ): IBarberCreateSchedule[] {
-  if (allSchedules.length === schedulesByDay) {
+  if (allSchedules.length >= schedulesByDay) {
     return allSchedules;
   }
 
@@ -95,9 +101,10 @@ export function generateRecommendedTime(
   let allSchedulesTime = mappedBarberSchedulesTime;
 
   if (withActiveSchedules) {
-    allSchedulesTime = [...mappedBarberSchedulesTime, ...activeSchedules].sort(
-      (a, b) => timeToNumber(a.time) - timeToNumber(b.time),
-    );
+    allSchedulesTime = sortSchedulesByTime([
+      ...mappedBarberSchedulesTime,
+      ...activeSchedules,
+    ]);
   }
 
   return allSchedulesTime;

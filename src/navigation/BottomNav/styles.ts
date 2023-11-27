@@ -1,6 +1,21 @@
-import {Colors, Metrics} from '@/theme';
-import {ViewStyle} from 'react-native';
+import {Colors, Fonts, Metrics} from '@/theme';
+import {TextStyle, ViewStyle} from 'react-native';
 import styled from 'styled-components/native';
+
+export const labelStyle: TextStyle = {
+  fontWeight: Fonts.weights.medium,
+  fontFamily: Fonts.types.medium,
+};
+
+export const shadowStyle: ViewStyle = {
+  shadowColor: Colors.black1,
+  shadowOffset: {
+    height: -2,
+    width: 0,
+  },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+};
 
 export const FloatingContainerStyle = styled.View`
   background-color: ${Colors.bgLight};
@@ -13,19 +28,11 @@ export const FloatingContainerStyle = styled.View`
   gap: 18px;
 `;
 
-export const shadowStyle: ViewStyle = {
-  shadowColor: Colors.black1,
-  shadowOffset: {
-    height: -2,
-    width: 0,
-  },
-  shadowOpacity: 0.05,
-  shadowRadius: 4,
-};
-
 export const NavItem = styled.TouchableOpacity`
   flex: 1;
   align-items: center;
   justify-content: flex-start;
-  padding: 12px;
+  padding-top: 8px;
+
+  gap: 2px;
 `;

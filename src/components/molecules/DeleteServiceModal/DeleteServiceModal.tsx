@@ -8,22 +8,22 @@ import {StyleSheet} from 'react-native';
 import {ModalActionsStyle, ModalContainerStyle} from './styles';
 
 interface IDeleteServiceModalProps {
-  onClose?: () => void;
   service?: IBarberService;
   modalRef: React.RefObject<BottomSheetModal | null>;
+  onClose?: (reloadData?: boolean) => void;
 }
 
 const DeleteServiceModal: React.FC<IDeleteServiceModalProps> = ({
-  onClose,
   service,
   modalRef,
+  onClose,
 }) => {
   const {t} = useTranslation();
   const [loading, setLoading] = React.useState<boolean>(false);
 
   if (!service) {
     if (modalRef.current) {
-      modalRef.current.close();
+      modalRef.current.dismiss();
     }
 
     return null;
@@ -39,8 +39,8 @@ const DeleteServiceModal: React.FC<IDeleteServiceModalProps> = ({
         setLoading(false);
 
         if (modalRef.current) {
-          modalRef.current.close();
-          onClose && onClose();
+          modalRef.current.dismiss();
+          onClose && onClose(true);
         }
       }
     } catch (error) {
@@ -50,7 +50,8 @@ const DeleteServiceModal: React.FC<IDeleteServiceModalProps> = ({
 
   const cancel = () => {
     if (modalRef.current) {
-      modalRef.current.close();
+      modalRef.current.dismiss();
+      onClose && onClose();
     }
   };
 

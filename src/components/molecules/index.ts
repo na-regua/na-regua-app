@@ -7,9 +7,12 @@ export {default as Header} from './Header/Header';
 export {default as PicturesStep} from './PicturesStep/PicturesStep';
 export {default as ProfileStep} from './ProfileStep/ProfileStep';
 export {default as ServiceConfigDaysCard} from './ServiceConfigDaysCard/ServiceConfigDaysCard';
+export {default as ServiceGeneralConfigCard} from './ServiceGeneralConfigCard/ServiceGeneralConfigCard';
+export {default as ShareQRModal} from './ShareQRModal/ShareQRModal';
 export {default as WorkerModal} from './WorkerModal/WorkerModal';
 
 export * from './AddressStep/AddressStep';
 export * from './BarberServiceModal/BarberServiceModal';
 export * from './ProfileStep/ProfileStep';
+export * from './ServiceGeneralConfigCard/ServiceGeneralConfigCard';
 export * from './WorkerModal/WorkerModal';

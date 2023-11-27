@@ -6,23 +6,9 @@ import {IIconProps} from '../Icons';
 
 interface ISettingsIconProps extends IIconProps {}
 
-<svg
-  width="21"
-  height="20"
-  viewBox="0 0 21 20"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg">
-  <g clip-path="url(#clip0_148_7809)"></g>
-  <defs>
-    <clipPath id="clip0_148_7809">
-      <rect width="20" height="20" fill="white" transform="translate(0.125)" />
-    </clipPath>
-  </defs>
-</svg>;
-
 const SettingsIcon: React.FC<ISettingsIconProps> = ({
-  width = 25,
-  height = 24,
+  width = 21,
+  height = 20,
   strokeWidth = 1.5,
   color = 'default',
   customColor,
@@ -34,7 +20,7 @@ const SettingsIcon: React.FC<ISettingsIconProps> = ({
 
   return (
     <View style={styles.iconWrapper}>
-      <Svg width={width} height={height} viewBox="0 0 25 24" fill="none">
+      <Svg width={width} height={height} viewBox="0 0 21 20" fill="none">
         <Path
           d="M10.125 12.5C11.5057 12.5 12.625 11.3807 12.625 10C12.625 8.61929 11.5057 7.5 10.125 7.5C8.74429 7.5 7.625 8.61929 7.625 10C7.625 11.3807 8.74429 12.5 10.125 12.5Z"
           stroke={getColor}

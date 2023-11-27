@@ -44,13 +44,15 @@ const AddressStep: React.FC<IAdressStepProps> = ({
     formState: {isValid},
   } = form;
 
-  const cepRef = useRef<TextInput>(null);
-  const logradouroRef = useRef<TextInput>(null);
-  const complementoRef = useRef<TextInput>(null);
-  const numeroRef = useRef<TextInput>(null);
-  const localidadeRef = useRef<TextInput>(null);
-  const ufRef = useRef<TextInput>(null);
-  const bairroRef = useRef<TextInput>(null);
+  const fieldsRef = {
+    cep: useRef<TextInput>(null),
+    logradouro: useRef<TextInput>(null),
+    complemento: useRef<TextInput>(null),
+    numero: useRef<TextInput>(null),
+    localidade: useRef<TextInput>(null),
+    uf: useRef<TextInput>(null),
+    bairro: useRef<TextInput>(null),
+  };
 
   const handlePostalCodeChange = async (text: string) => {
     const removeMasktext = text.replace(/\D/g, '');
@@ -108,14 +110,14 @@ const AddressStep: React.FC<IAdressStepProps> = ({
       number={2}
       disabled={!canJumpTo}
       completed={completed}
-      focusField={cepRef}>
+      focusField={fieldsRef.cep}>
       <Controller
         name="cep"
         control={control}
         rules={{required: true}}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
-            inputRef={cepRef}
+            inputRef={fieldsRef.cep}
             label={t('barber.signUp.fields.postalCode')}
             keyboardType="numeric"
             onChangeText={text => {
@@ -126,7 +128,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({
             onBlur={onBlur}
             value={value}
             returnKeyType="done"
-            onSubmitEditing={() => logradouroRef.current?.focus()}
+            onSubmitEditing={() => fieldsRef.logradouro.current?.focus()}
             blurOnSubmit={false}
             textContentType="postalCode"
           />
@@ -142,9 +144,9 @@ const AddressStep: React.FC<IAdressStepProps> = ({
             onChangeText={onChange}
             onBlur={onBlur}
             value={value}
-            inputRef={logradouroRef}
+            inputRef={fieldsRef.logradouro}
             returnKeyType="next"
-            onSubmitEditing={() => complementoRef.current?.focus()}
+            onSubmitEditing={() => fieldsRef.complemento.current?.focus()}
             blurOnSubmit={false}
             textContentType="fullStreetAddress"
           />
@@ -161,9 +163,9 @@ const AddressStep: React.FC<IAdressStepProps> = ({
               onChangeText={onChange}
               onBlur={onBlur}
               value={value}
-              inputRef={complementoRef}
+              inputRef={fieldsRef.complemento}
               returnKeyType="next"
-              onSubmitEditing={() => numeroRef.current?.focus()}
+              onSubmitEditing={() => fieldsRef.numero.current?.focus()}
               blurOnSubmit={false}
               textContentType="streetAddressLine2"
             />
@@ -185,9 +187,9 @@ const AddressStep: React.FC<IAdressStepProps> = ({
               }}
               onBlur={onBlur}
               value={value}
-              inputRef={numeroRef}
+              inputRef={fieldsRef.numero}
               returnKeyType="done"
-              onSubmitEditing={() => localidadeRef.current?.focus()}
+              onSubmitEditing={() => fieldsRef.localidade.current?.focus()}
               blurOnSubmit={false}
               textContentType="streetAddressLine2"
             />
@@ -206,9 +208,9 @@ const AddressStep: React.FC<IAdressStepProps> = ({
               onChangeText={onChange}
               onBlur={onBlur}
               value={value}
-              inputRef={localidadeRef}
+              inputRef={fieldsRef.localidade}
               returnKeyType="next"
-              onSubmitEditing={() => ufRef.current?.focus()}
+              onSubmitEditing={() => fieldsRef.uf.current?.focus()}
               blurOnSubmit={false}
               textContentType="addressCity"
             />
@@ -228,9 +230,9 @@ const AddressStep: React.FC<IAdressStepProps> = ({
               }}
               onBlur={onBlur}
               value={value}
-              inputRef={ufRef}
+              inputRef={fieldsRef.localidade}
               returnKeyType="next"
-              onSubmitEditing={() => bairroRef.current?.focus()}
+              onSubmitEditing={() => fieldsRef.bairro.current?.focus()}
               blurOnSubmit={false}
               textContentType="addressState"
             />
@@ -248,7 +250,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({
             onChangeText={onChange}
             onBlur={onBlur}
             value={value}
-            inputRef={bairroRef}
+            inputRef={fieldsRef.bairro}
             returnKeyType="done"
             onSubmitEditing={() => {
               if (isValid && goNext) {

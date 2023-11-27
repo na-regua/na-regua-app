@@ -6,9 +6,9 @@ The most useful barber app.
 
 To run use `yarn start` or `npm start`
 
-### Native dependencies
+## Native dependencies
 
-#### Camera
+### Camera
 
 ```
 npm install react-native-camera --save
@@ -49,7 +49,7 @@ android {
 ‍<key>NSMicrophoneUsageDescription</key><string>Your message to user when the microphone is accessed for the first time</string>
 ```
 
-#### Deprecated PropTypes Error
+### Deprecated PropTypes Error
 
 run npm i deprecated-react-native-prop-types
 

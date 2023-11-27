@@ -7,7 +7,7 @@ import {useTranslation} from 'react-i18next';
 import {TouchableOpacity} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 
-interface IProfileStepProps {
+export interface IProfileStepProps {
   form: UseFormReturn<ICreateUser>;
   completed?: boolean;
   goNext?: () => void;

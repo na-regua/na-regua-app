@@ -18,7 +18,7 @@ export type TButtonColorScheme =
 
 export type TButtonVariants = 'filled' | 'outlined';
 
-interface IButtonProps extends TouchableOpacityProps {
+export interface IButtonProps extends TouchableOpacityProps {
   colorScheme?: TButtonColorScheme;
   title?: string;
   disabled?: boolean;

@@ -1,11 +1,24 @@
 import {IBarberCreateSchedule, TWorkTime} from '@/app/models';
-import {generateRecommendedTime} from '@/utils';
-import React, {useCallback, useEffect, useState} from 'react';
+import {
+  generateRecommendedTime,
+  sortSchedulesByTime,
+  timeMask,
+  timePattern,
+  timeToNumber,
+} from '@/utils';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {KeyboardAvoidingView} from 'react-native';
+import Button from '../Button/Button';
+import Input from '../Input/Input';
+import Modal from '../Modal/Modal';
 import Typography from '../Typography/Typography';
 import {
   ContainerStyle,
   ContentWrapperStyle,
+  HeaderStyle,
+  PlusIconStyle,
   SelectScheduleTimeLabelStyle,
   SelectScheduleTimeStyle,
 } from './styles';
@@ -24,44 +37,72 @@ const SelectActiveSchedules: React.FC<ISelectActiveSchedulesProps> = ({
   onChange,
 }) => {
   const {t} = useTranslation();
+
   const [allSchedules, setAllSchedules] = useState<IBarberCreateSchedule[]>([]);
 
   const [deleteSchedulesSet, setDeleteSchedulesSet] = useState<string[]>([]);
+  const [addScheduleText, setAddScheduleText] = useState<string>('');
 
-  const generateRecommendedSchedules = useCallback(() => {
-    const newSchedules = generateRecommendedTime(
-      schedules,
-      schedulesByDay,
-      workTime,
-    );
+  const addScheduleModalRef = useRef<BottomSheetModal>(null);
 
-    setAllSchedules(newSchedules);
+  const isValidAddScheduleTime = useMemo(() => {
+    const addScheduleNumber = timeToNumber(addScheduleText);
+    const startNumber = timeToNumber(workTime.start);
+    const endNumber = timeToNumber(workTime.end);
 
-    console.log(workTime, schedulesByDay, newSchedules);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schedules, schedulesByDay, workTime]);
+    if (addScheduleNumber <= startNumber || addScheduleNumber >= endNumber) {
+      return false;
+    }
+
+    const isValid = timePattern.test(addScheduleText);
+
+    return isValid;
+  }, [addScheduleText, workTime]);
+
+  const openAddScheduleModal = () => {
+    if (addScheduleModalRef.current) {
+      addScheduleModalRef.current.present();
+    }
+  };
+
+  const addSchedule = () => {
+    const newSchedules = sortSchedulesByTime([
+      ...schedules,
+      {
+        time: addScheduleText,
+        active: true,
+        recommended: false,
+      },
+    ]);
+
+    onChange(newSchedules);
+
+    if (addScheduleModalRef.current) {
+      addScheduleModalRef.current.dismiss();
+      setAddScheduleText('');
+    }
+  };
 
   const addToDeleteSet = (schedule: IBarberCreateSchedule) => {
     setDeleteSchedulesSet(prev => [...prev, schedule.time]);
   };
 
   const selectSchedule = (schedule: IBarberCreateSchedule) => {
-    const newSchedules: IBarberCreateSchedule[] = [
+    const newSchedules: IBarberCreateSchedule[] = sortSchedulesByTime([
       ...schedules,
       {
         time: schedule.time,
         active: true,
         recommended: false,
       },
-    ];
+    ]);
 
     onChange(newSchedules);
   };
 
   const deleteSchedule = (schedule: IBarberCreateSchedule) => {
-    const newSchedules = schedules.filter(
-      item =>
-        item.time !== schedule.time && !deleteSchedulesSet.includes(item.time),
+    const newSchedules = sortSchedulesByTime(
+      schedules.filter(item => item.time !== schedule.time),
     );
 
     setDeleteSchedulesSet(prev => prev.filter(item => item !== schedule.time));
@@ -83,15 +124,35 @@ const SelectActiveSchedules: React.FC<ISelectActiveSchedulesProps> = ({
     }
   };
 
+  const generateRecommendedSchedules = useCallback(() => {
+    const newSchedules = generateRecommendedTime(
+      schedules,
+      schedulesByDay,
+      workTime,
+    );
+
+    setAllSchedules(newSchedules);
+  }, [schedules, schedulesByDay, workTime]);
+
   useEffect(() => {
     generateRecommendedSchedules();
   }, [generateRecommendedSchedules]);
 
   return (
     <ContainerStyle>
-      <Typography variant="caption" color="placeholder">
-        {t('barber.servicesConfig.fields.workTime')}
-      </Typography>
+      <HeaderStyle>
+        <Typography variant="caption" color="placeholder">
+          {t('barber.servicesConfig.fields.scheduleTime')}
+        </Typography>
+        <PlusIconStyle
+          onPress={openAddScheduleModal}
+          clickable
+          width={22}
+          height={22}
+          color="primary"
+        />
+      </HeaderStyle>
+
       <ContentWrapperStyle>
         {allSchedules.map((schedule, index) => (
           <SelectScheduleTimeStyle
@@ -110,6 +171,31 @@ const SelectActiveSchedules: React.FC<ISelectActiveSchedulesProps> = ({
           </SelectScheduleTimeStyle>
         ))}
       </ContentWrapperStyle>
+
+      <KeyboardAvoidingView enabled>
+        <Modal
+          ref={addScheduleModalRef}
+          title={t('modals.addScheduleTime.title')}
+          height={190}>
+          <Input
+            label={t('modals.addScheduleTime.fields.time')}
+            onChangeText={text => {
+              const maskedText = timeMask(text);
+              setAddScheduleText(maskedText);
+            }}
+            keyboardType="number-pad"
+            value={addScheduleText}
+            returnKeyType="done"
+            onSubmitEditing={addSchedule}
+          />
+          <Button
+            colorScheme="primary"
+            title={t('modals.addScheduleTime.buttons.add')}
+            disabled={!isValidAddScheduleTime}
+            onPress={addSchedule}
+          />
+        </Modal>
+      </KeyboardAvoidingView>
     </ContainerStyle>
   );
 };

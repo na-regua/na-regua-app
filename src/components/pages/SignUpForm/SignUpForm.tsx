@@ -21,7 +21,7 @@ import {ContainerStyle, ScrollContent} from './styles';
 const SignUpForm: React.FC = () => {
   const {t} = useTranslation();
   const navigation = useAppNavigation();
-  const isKeyboardVisible = useKeyboardVisible();
+  const {isKeyboardVisible} = useKeyboardVisible();
   const dispatch = useDispatch<AppDispatch>();
 
   const stepOneForm = useForm<ICreateUser>({

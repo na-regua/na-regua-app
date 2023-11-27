@@ -9,10 +9,11 @@ import PersistedData from '../PersistedData/PersistedData';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {combinedProvidersStyles} from './styles';
 
+import {Colors} from '@/theme';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {ThemeProvider} from 'styled-components/native';
-import {Colors} from '@/theme';
 import NotifyProvider from '../NotifyProvider/NotifyProvider';
+import {StatusBarProvider} from '../StatusBarProvider/StatusBarProvider';
 
 const CombinedProviders: React.FC = () => {
   return (
@@ -20,13 +21,15 @@ const CombinedProviders: React.FC = () => {
       <SafeAreaProvider>
         <ThemeProvider theme={{colors: Colors}}>
           <StoreProvider store={store}>
-            <BottomSheetModalProvider>
-              <PersistedData />
+            <StatusBarProvider>
+              <BottomSheetModalProvider>
+                <PersistedData />
 
-              <AppNavigator />
+                <AppNavigator />
 
-              <NotifyProvider />
-            </BottomSheetModalProvider>
+                <NotifyProvider />
+              </BottomSheetModalProvider>
+            </StatusBarProvider>
           </StoreProvider>
         </ThemeProvider>
       </SafeAreaProvider>

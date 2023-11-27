@@ -8,22 +8,22 @@ import {ModalActionsStyle, ModalContainerStyle} from './styles';
 import {StyleSheet} from 'react-native';
 
 interface IDeleteWorkerModalProps {
-  onClose?: () => void;
   worker?: IWorker;
   modalRef: React.RefObject<BottomSheetModal | null>;
+  onClose?: (reloadData?: boolean) => void;
 }
 
 const DeleteWorkerModal: React.FC<IDeleteWorkerModalProps> = ({
-  onClose,
   worker,
   modalRef,
+  onClose,
 }) => {
   const {t} = useTranslation();
   const [loading, setLoading] = React.useState<boolean>(false);
 
   if (!worker) {
     if (modalRef.current) {
-      modalRef.current.close();
+      modalRef.current.dismiss();
     }
 
     return null;
@@ -38,19 +38,18 @@ const DeleteWorkerModal: React.FC<IDeleteWorkerModalProps> = ({
       if (response) {
         setLoading(false);
 
-        if (modalRef.current) {
-          modalRef.current.close();
-          onClose && onClose();
-        }
+        close();
+        onClose && onClose(true);
       }
     } catch (error) {
       setLoading(false);
     }
   };
 
-  const cancel = () => {
+  const close = () => {
     if (modalRef.current) {
-      modalRef.current.close();
+      modalRef.current.dismiss();
+      onClose && onClose();
     }
   };
 
@@ -65,7 +64,7 @@ const DeleteWorkerModal: React.FC<IDeleteWorkerModalProps> = ({
           variant="outlined"
           title={t('modals.deleteWorker.buttons.no')}
           style={styles.flex}
-          onPress={cancel}
+          onPress={close}
         />
         <Button
           colorScheme="danger"

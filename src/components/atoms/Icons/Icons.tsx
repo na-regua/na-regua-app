@@ -21,6 +21,8 @@ import TimeIcon from './TimeIcon/TimeIcon';
 import UserCheckIcon from './UserCheckIcon/UserCheckIcon';
 import UserIcon from './UserIcon/UserIcon';
 import UsersIcon from './UsersIcon/UsersIcon';
+import ArrowDownIcon from './ArrowDown/ArrowDown';
+import ArrowUpIcon from './ArrowUp/ArrowUp';
 
 export interface IIconProps {
   width?: number;
@@ -35,7 +37,9 @@ export interface IIconProps {
 }
 
 export default {
+  ArrowDownIcon,
   ArrowLeftIcon,
+  ArrowUpIcon,
   BellIcon,
   CameraIcon,
   DeleteIcon,

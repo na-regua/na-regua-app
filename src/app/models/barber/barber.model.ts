@@ -52,3 +52,8 @@ export type TWorkTime = {
   start: string;
   end: string;
 };
+
+export interface IEditBarberProfileForm {
+  name: string;
+  address: string;
+}

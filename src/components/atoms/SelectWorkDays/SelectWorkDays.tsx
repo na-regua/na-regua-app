@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React from 'react';
 
 import {useTranslation} from 'react-i18next';
 import {WEEK_DAYS, WEEK_DAY_TO_PT_BR} from '../Calendar';
@@ -11,39 +11,21 @@ import {
 } from './styles';
 
 interface ISelectWorkDaysProps {
-  initialWorkDays: string[];
-  onChanged: () => void;
+  workDays: string[];
+  onChange: (workDays: string[]) => void;
 }
 
 const SelectWorkDays: React.FC<ISelectWorkDaysProps> = ({
-  initialWorkDays,
-  onChanged,
+  workDays,
+  onChange,
 }) => {
   const {t} = useTranslation();
-  const [workDays, setWorkDays] = useState<string[]>(initialWorkDays);
-
-  const workDaysChanged = useMemo(() => {
-    if (workDays.length !== initialWorkDays.length) {
-      return true;
-    }
-
-    const [bigger, smaller] =
-      workDays.length > initialWorkDays.length
-        ? [workDays, initialWorkDays]
-        : [initialWorkDays, workDays];
-
-    const hasDiff = bigger
-      .map(day => smaller.includes(day))
-      .some(item => !item);
-
-    return hasDiff;
-  }, [workDays, initialWorkDays]);
 
   const handleSelectWorkDays = (day: string) => {
     if (workDays.includes(day)) {
-      setWorkDays(workDays.filter(item => item !== day));
+      onChange(workDays.filter(item => item !== day));
     } else {
-      setWorkDays([...workDays, day]);
+      onChange([...workDays, day]);
     }
   };
 

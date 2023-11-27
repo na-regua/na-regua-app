@@ -1,6 +1,7 @@
-import {API_ORIGIN, WorkersService} from '@/app/api';
+import {WorkersService} from '@/app/api';
 import {IWorker} from '@/app/models';
 import {
+  AppStatusBar,
   Button,
   Icons,
   Loader,
@@ -10,7 +11,6 @@ import {
   Typography,
 } from '@/components/atoms';
 import {DeleteWorkerModal, Header, WorkerModal} from '@/components/molecules';
-import {useKeyboardVisible} from '@/hooks';
 import {TRootStackParamList} from '@/navigation';
 import {RootState} from '@/store/Store';
 import {Colors} from '@/theme';
@@ -18,7 +18,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {RefreshControl, StatusBar} from 'react-native';
+import {RefreshControl} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {
@@ -41,7 +41,6 @@ const BarberWorkers: React.FC<
   const {t} = useTranslation();
   const insets = useSafeAreaInsets();
   const barber = useSelector((state: RootState) => state.auth.barber);
-  const isKeyboardVisible = useKeyboardVisible();
 
   const addWorkerModalRef = useRef<BottomSheetModal>(null);
   const editWorkerModalRef = useRef<BottomSheetModal>(null);
@@ -80,11 +79,13 @@ const BarberWorkers: React.FC<
     }
   };
 
-  const handleShowSet = (id: string) => {
+  const addInShowSet = (id: string) => {
+    setShowSet(curr => [...curr, id]);
+  };
+
+  const removeFromShowSet = (id: string) => {
     if (showSet.includes(id)) {
       setShowSet(curr => curr.filter(currId => currId !== id));
-    } else {
-      setShowSet(curr => [...curr, id]);
     }
   };
 
@@ -128,7 +129,7 @@ const BarberWorkers: React.FC<
 
   return (
     <ContainerStyle style={insetsStyles}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.bgLight} />
+      <AppStatusBar />
       <Header showTitle={false} showBorder />
       <ContentStyle>
         <ContentBackLinkStyle onPress={goBack}>
@@ -141,7 +142,7 @@ const BarberWorkers: React.FC<
           <Typography variant="h5" color="black3">
             {t('barber.workers.title')}
           </Typography>
-          <Typography variant="body1" color="black1">
+          <Typography variant="body2" color="black1">
             {t('barber.workers.subtitle')}
           </Typography>
         </ContentHeaderStyle>
@@ -166,9 +167,9 @@ const BarberWorkers: React.FC<
                   <MenuItem
                     title={worker.user.name}
                     description={t(`roles.${worker.user.role}`)}
-                    avatar={API_ORIGIN + worker.user.avatar.url}
+                    avatar={worker.user.avatar.url}
                     clickable={worker.user.role === 'worker'}
-                    onPress={() => handleShowSet(worker._id)}
+                    onPress={() => addInShowSet(worker._id)}
                     style={styles.menuItem}
                   />
                   {showSet.includes(worker._id) &&
@@ -211,33 +212,43 @@ const BarberWorkers: React.FC<
         <Modal
           ref={addWorkerModalRef}
           title={t('modals.worker.titles.add')}
-          snapPoints={isKeyboardVisible ? ['100%'] : [548]}>
+          height={468}>
           <WorkerModal
             mode="add"
             modalRef={addWorkerModalRef}
-            onClose={getWorkers}
+            onClose={reloadData => {
+              if (reloadData) {
+                getWorkers();
+              }
+            }}
           />
         </Modal>
         <Modal
           ref={editWorkerModalRef}
           autoSize
+          height={410}
           title={t('modals.worker.titles.edit')}
-          snapPoints={isKeyboardVisible ? ['100%'] : [493]}>
+          onClose={() => {
+            if (selectedToEdit) {
+              removeFromShowSet(selectedToEdit._id);
+              setSelectedToEdit(undefined);
+            }
+          }}>
           {selectedToEdit && (
             <WorkerModal
               mode="edit"
               modalRef={editWorkerModalRef}
-              onClose={() => {
-                handleShowSet(selectedToEdit._id);
-                setSelectedToEdit(undefined);
-                getWorkers();
+              onClose={reloadData => {
+                if (reloadData) {
+                  getWorkers();
+                }
               }}
               initialValues={{
                 name: selectedToEdit.user.name,
                 email: selectedToEdit.user.email,
                 phone: selectedToEdit.user.phone,
               }}
-              initialAvatar={API_ORIGIN + selectedToEdit.user.avatar.url}
+              initialAvatar={selectedToEdit.user.avatar.url}
               workerID={selectedToEdit._id}
             />
           )}
@@ -245,13 +256,21 @@ const BarberWorkers: React.FC<
         <Modal
           ref={deleteWorkerModalRef}
           title={t('modals.deleteWorker.title')}
-          snapPoints={[230]}>
+          height={198}
+          onClose={() => {
+            if (selectedToDelete) {
+              removeFromShowSet(selectedToDelete._id);
+              setSelectedToDelete(undefined);
+            }
+          }}>
           {selectedToDelete && (
             <DeleteWorkerModal
-              onClose={() => {
-                handleShowSet(selectedToDelete._id);
+              onClose={reloadData => {
+                removeFromShowSet(selectedToDelete._id);
                 setSelectedToDelete(undefined);
-                getWorkers();
+                if (reloadData) {
+                  getWorkers();
+                }
               }}
               worker={selectedToDelete}
               modalRef={deleteWorkerModalRef}

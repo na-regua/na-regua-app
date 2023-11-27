@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
 
 export const MinusIconStyle = styled<React.FC<IIconProps>>(Icons.MinusIcon)`
   padding: 4px;
-  background-color: ${Colors.border};
+  background-color: ${Colors.main};
   border-bottom-left-radius: 4px;
   border-top-left-radius: 4px;
 
@@ -33,7 +33,7 @@ export const MinusIconStyle = styled<React.FC<IIconProps>>(Icons.MinusIcon)`
 
 export const PlusIconStyle = styled<React.FC<IIconProps>>(Icons.PlusIcon)`
   padding: 4px;
-  background-color: ${Colors.border};
+  background-color: ${Colors.main};
   border-bottom-right-radius: 4px;
   border-top-right-radius: 4px;
 `;
@@ -50,58 +50,12 @@ export const InputWrapperContainerStyle = styled.View`
 export const InputTextWrapperStyle = styled.View`
   padding: 4px 12px;
   border: 1px solid ${Colors.border};
-  border-left: none;
-  border-right: none;
+  border-left-width: none;
+  border-right-width: none;
 `;
 
 export const SelectTimeScrollStyle = styled.ScrollView``;
 
 export const SelectTimeWrapperStyle = styled.View`
   flex-direction: row;
-`;
-
-export const SelectTimeButton = styled.TouchableOpacity<{
-  active?: boolean;
-  selectedStart?: boolean;
-  selectedEnd?: boolean;
-  isStart?: boolean;
-  isEnd?: boolean;
-  activeColor?: string;
-}>`
-  padding: 4px 8px;
-
-  ${({active, activeColor}) =>
-    active &&
-    activeColor &&
-    `
-    background-color: ${activeColor}66;
-  `}
-
-  ${({isStart}) =>
-    isStart &&
-    `
-    border-top-left-radius: 24px;
-    border-bottom-left-radius: 24px;
-  `}
-
-${({isEnd}) =>
-    isEnd &&
-    `
-    border-top-right-radius: 24px;
-    border-bottom-right-radius: 24px;
-  `}
-
-${({isStart, selectedStart}) =>
-    isStart &&
-    selectedStart &&
-    `
-    background-color: ${Colors.warning};
-  `}
-
-${({isEnd, selectedEnd}) =>
-    isEnd &&
-    selectedEnd &&
-    `
-    background-color: ${Colors.main};
-  `}
 `;

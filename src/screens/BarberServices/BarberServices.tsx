@@ -1,6 +1,7 @@
 import {BarbersService, ServicesService} from '@/app/api';
 import {IBarberService, IBarberServiceIcon} from '@/app/models';
 import {
+  AppStatusBar,
   Button,
   Icons,
   Loader,
@@ -14,7 +15,6 @@ import {
   DeleteServiceModal,
   Header,
 } from '@/components/molecules';
-import {useKeyboardVisible} from '@/hooks';
 import {TRootStackParamList} from '@/navigation';
 import {RootState} from '@/store/Store';
 import {Colors} from '@/theme';
@@ -22,7 +22,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {RefreshControl, StatusBar} from 'react-native';
+import {RefreshControl} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {
@@ -44,7 +44,6 @@ const BarberServices: React.FC<
   const {t} = useTranslation();
   const insets = useSafeAreaInsets();
   const barber = useSelector((state: RootState) => state.auth.barber);
-  const isKeyboardVisible = useKeyboardVisible();
 
   const addServiceModalRef = useRef<BottomSheetModal>(null);
   const editServiceModalRef = useRef<BottomSheetModal>(null);
@@ -146,7 +145,7 @@ const BarberServices: React.FC<
 
   return (
     <ContainerStyle style={insetsStyles}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.bgLight} />
+      <AppStatusBar />
       <Header showTitle={false} showBorder />
       <ContentStyle>
         <ContentBackLinkStyle onPress={goBack}>
@@ -159,7 +158,7 @@ const BarberServices: React.FC<
           <Typography variant="h5" color="black3">
             {t('barber.services.title')}
           </Typography>
-          <Typography variant="body1" color="black1">
+          <Typography variant="body2" color="black1">
             {t('barber.services.subtitle')}
           </Typography>
         </ContentHeaderStyle>
@@ -206,10 +205,7 @@ const BarberServices: React.FC<
                 </MenuItemRowStyle>
               ))
             ) : (
-              <Loader
-                color={Colors.primary}
-                wrapperStyle={styles.loaderWrapper}
-              />
+              <Loader color={Colors.primary} />
             )}
           </MenuItemsWrapperStyle>
         </ContentScrollContentStyle>
@@ -232,26 +228,27 @@ const BarberServices: React.FC<
         <Modal
           ref={addServiceModalRef}
           title={t('modals.barberService.titles.add')}
-          snapPoints={isKeyboardVisible ? ['90%'] : [452]}>
+          height={414}>
           <BarberServiceModal
             modalRef={addServiceModalRef}
             mode="add"
-            onClose={getServices}
+            onClose={reloadData => reloadData && getServices()}
           />
         </Modal>
         <Modal
           ref={editServiceModalRef}
           title={t('modals.barberService.titles.edit')}
-          snapPoints={isKeyboardVisible ? ['100%'] : [452]}>
+          height={414}
+          onClose={() => {
+            if (selectedToEdit) {
+              handleShowSet(selectedToEdit._id);
+              setSelectedToEdit(undefined);
+            }
+          }}>
           {selectedToEdit && (
             <BarberServiceModal
               modalRef={editServiceModalRef}
               mode="edit"
-              onClose={() => {
-                handleShowSet(selectedToEdit._id);
-                setSelectedToEdit(undefined);
-                getServices();
-              }}
               initialValues={{
                 name: selectedToEdit.name,
                 icon: selectedToEdit.icon,
@@ -259,22 +256,25 @@ const BarberServices: React.FC<
                 price: selectedToEdit.price.toString(),
               }}
               serviceID={selectedToEdit._id}
+              onClose={reloadData => reloadData && getServices()}
             />
           )}
         </Modal>
         <Modal
           ref={deleteServiceModalRef}
           title={t('modals.deleteService.title')}
-          snapPoints={[230]}>
+          height={194}
+          onClose={() => {
+            if (selectedToDelete) {
+              handleShowSet(selectedToDelete._id);
+              setSelectedToDelete(undefined);
+            }
+          }}>
           {selectedToDelete && (
             <DeleteServiceModal
               modalRef={deleteServiceModalRef}
-              onClose={() => {
-                handleShowSet(selectedToDelete._id);
-                setSelectedToDelete(undefined);
-                getServices();
-              }}
               service={selectedToDelete}
+              onClose={reloadData => reloadData && getServices()}
             />
           )}
         </Modal>

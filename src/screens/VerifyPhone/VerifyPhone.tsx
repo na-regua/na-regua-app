@@ -1,5 +1,11 @@
 import {AuthService} from '@/app/api';
-import {Button, CodeInput, Loader, Typography} from '@/components/atoms';
+import {
+  AppStatusBar,
+  Button,
+  CodeInput,
+  Loader,
+  Typography,
+} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {APP_ROUTES, useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
@@ -15,7 +21,6 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
   Keyboard,
-  StatusBar,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -153,7 +158,7 @@ const VerifyPhone: React.FC = () => {
 
   return (
     <View style={[styles.container, insetsStyles]}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={Colors.bgLight} />
+      <AppStatusBar />
       <Header
         showTitle
         title={t('generic.verifyPhone.title')}

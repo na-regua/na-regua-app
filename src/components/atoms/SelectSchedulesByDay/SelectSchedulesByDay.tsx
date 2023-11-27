@@ -11,11 +11,13 @@ import {
 
 interface ISelectSchedulesByDayProps {
   schedulesByDay: number;
+  schedulesLength: number;
   onChange: (schedules: number) => void;
 }
 
 const SelectSchedulesByDay: React.FC<ISelectSchedulesByDayProps> = ({
   schedulesByDay,
+  schedulesLength,
   onChange,
 }) => {
   const {t} = useTranslation();
@@ -33,13 +35,15 @@ const SelectSchedulesByDay: React.FC<ISelectSchedulesByDayProps> = ({
         <MinusIconStyle
           clickable
           onPress={() => handleChangeSchedule(schedulesByDay - 1)}
-          disabled={schedulesByDay === 0}
+          disabled={schedulesByDay === schedulesLength}
+          color={schedulesByDay === schedulesLength ? 'black3' : 'white3'}
         />
         <InputTextWrapperStyle>
           <Typography variant="button">{schedulesByDay}</Typography>
         </InputTextWrapperStyle>
         <PlusIconStyle
           clickable
+          color="white3"
           onPress={() => handleChangeSchedule(schedulesByDay + 1)}
         />
       </InputWrapperContainerStyle>

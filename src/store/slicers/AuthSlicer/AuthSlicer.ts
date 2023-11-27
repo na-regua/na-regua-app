@@ -25,7 +25,7 @@ const setPersistedToken = createAsyncThunk(
   'Auth/setPersistedToken',
   async (token: string, {rejectWithValue}) => {
     try {
-      await AsyncStorage.setItem(ACCESS_TOKEN_KEY, token);
+      await AsyncStorage.setItem(ACCESS_TOKEN_KEY, token.toString());
 
       return token;
     } catch (error) {

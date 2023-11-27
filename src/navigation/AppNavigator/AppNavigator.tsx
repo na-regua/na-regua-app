@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 
 import {
   BarberBillingScreen,
@@ -8,6 +8,7 @@ import {
   BarberScheduleScreen,
   BarberServicesConfigScreen,
   BarberServicesScreen,
+  BarberSettingsProfileScreen,
   BarberSettingsScreen,
   BarberSignUpScreen,
   LoginScreen,
@@ -16,6 +17,8 @@ import {
 } from '@/screens';
 import BarberWorkers from '@/screens/BarberWorkers/BarberWorkers';
 import {RootState} from '@/store/Store';
+import {SKIP_PRE_SIGN_UP_KEY} from '@/store/slicers';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useSelector} from 'react-redux';
@@ -37,7 +40,7 @@ const AppNavigator: React.FC = () => {
 
     if (user) {
       if (barber && (user.role === 'admin' || user.role === 'worker')) {
-        if (barber.profileStatus !== 'completed' && !skipPreSignUp) {
+        if (!skipPreSignUp && barber.profileStatus !== 'completed') {
           return '/barber/pre-sign-up';
         }
 
@@ -49,6 +52,16 @@ const AppNavigator: React.FC = () => {
 
     return '/generic/login';
   }, [isAuthenticated, user, barber, skipPreSignUp]);
+
+  const setSkipPreSignUp = useCallback(async () => {
+    if (!skipPreSignUp && barber && barber.profileStatus === 'completed') {
+      await AsyncStorage.setItem(SKIP_PRE_SIGN_UP_KEY, 'true');
+    }
+  }, [skipPreSignUp, barber]);
+
+  useEffect(() => {
+    setSkipPreSignUp();
+  }, [setSkipPreSignUp]);
 
   const WorkerAuth = useMemo(
     () =>
@@ -102,6 +115,20 @@ const AppNavigator: React.FC = () => {
               component={BarberScheduleScreen}
               options={{animation: 'none'}}
             />
+            <Stack.Screen
+              name={'/barber/billing'}
+              component={BarberBillingScreen}
+              options={{animation: 'none'}}
+            />
+            <Stack.Screen
+              name={'/barber/settings'}
+              component={BarberSettingsScreen}
+              options={{animation: 'none'}}
+            />
+            <Stack.Screen
+              name={'/barber/settings/profile'}
+              component={BarberSettingsProfileScreen}
+            />
           </>
         )}
 
@@ -116,16 +143,6 @@ const AppNavigator: React.FC = () => {
               name={'/barber/settings/services'}
               component={BarberServicesScreen}
               initialParams={{showContinue: true}}
-            />
-            <Stack.Screen
-              name={'/barber/billing'}
-              component={BarberBillingScreen}
-              options={{animation: 'none'}}
-            />
-            <Stack.Screen
-              name={'/barber/settings'}
-              component={BarberSettingsScreen}
-              options={{animation: 'none'}}
             />
             <Stack.Screen
               name={'/barber/complete-qr'}

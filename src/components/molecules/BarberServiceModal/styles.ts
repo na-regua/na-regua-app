@@ -1,4 +1,6 @@
+import {Button, IButtonProps} from '@/components/atoms';
 import {Colors, Metrics} from '@/theme';
+import {FC} from 'react';
 import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 
@@ -47,4 +49,15 @@ export const SelectIconItemStyle = styled.TouchableOpacity<{active?: boolean}>`
     `
     background: ${Colors.primary};
   `}
+`;
+
+export const ActionsContainerStyle = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${Metrics.smPadding}px;
+  flex: 1;
+`;
+
+export const ButtonStyle = styled<FC<IButtonProps>>(Button)`
+  flex: 1;
 `;

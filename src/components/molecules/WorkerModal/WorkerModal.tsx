@@ -1,6 +1,6 @@
 import {WorkersService} from '@/app/api';
 import {IBuffer} from '@/app/models';
-import {Avatar, Button, Icons, Input} from '@/components/atoms';
+import {Avatar, Icons, Input} from '@/components/atoms';
 import {AppDispatch} from '@/store/Store';
 import {createNotification} from '@/store/slicers';
 import {assetToBuffer, phoneMask} from '@/utils';
@@ -18,7 +18,13 @@ import {
 import {TextInput} from 'react-native-gesture-handler';
 import {Asset} from 'react-native-image-picker';
 import {useDispatch} from 'react-redux';
-import {AvatarWrapperStyle, ScrollViewStyle, styles} from './styles';
+import {
+  ActionsContainerStyle,
+  AvatarWrapperStyle,
+  ButtonStyle,
+  ScrollViewStyle,
+  styles,
+} from './styles';
 
 export interface IWorkerForm {
   name: string;
@@ -29,11 +35,11 @@ export interface IWorkerForm {
 
 interface IWorkerModalProps {
   modalRef: React.RefObject<BottomSheetModal | null>;
-  onClose?: () => void;
   mode: 'add' | 'edit';
   initialValues?: Partial<IWorkerForm>;
   initialAvatar?: string;
   workerID?: string;
+  onClose?: (reloadData?: boolean) => void;
 }
 
 const WorkerModal: React.FC<IWorkerModalProps> = ({
@@ -92,10 +98,9 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
 
         if (response) {
           if (modalRef.current) {
-            modalRef.current.close();
-            onClose && onClose();
-
             setLoading(false);
+            modalRef.current.dismiss();
+            onClose && onClose(true);
           }
         }
       } catch (error) {
@@ -141,10 +146,9 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
 
         if (response) {
           if (modalRef.current) {
-            modalRef.current.close();
-            onClose && onClose();
-
             setLoading(false);
+            modalRef.current.dismiss();
+            onClose && onClose(true);
           }
         }
       } catch (error) {
@@ -164,6 +168,13 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
           }
         }
       }
+    }
+  };
+
+  const close = () => {
+    if (modalRef.current) {
+      modalRef.current.dismiss();
+      onClose && onClose();
     }
   };
 
@@ -316,24 +327,33 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
             )}
           /> */}
 
-          {mode === 'add' && (
-            <Button
-              title={t('modals.worker.buttons.add')}
-              colorScheme="primary"
-              loading={loading}
-              disabled={!isValid}
-              onPress={handleOnAdd}
+          <ActionsContainerStyle>
+            <ButtonStyle
+              title={t('modals.worker.buttons.cancel')}
+              colorScheme="danger"
+              variant="outlined"
+              onPress={close}
             />
-          )}
-          {mode === 'edit' && (
-            <Button
-              title={t('modals.worker.buttons.save')}
-              colorScheme="primary"
-              loading={loading}
-              disabled={!isValid}
-              onPress={handleOnUpdate}
-            />
-          )}
+            {mode === 'add' && (
+              <ButtonStyle
+                title={t('modals.worker.buttons.add')}
+                colorScheme="primary"
+                loading={loading}
+                disabled={!isValid}
+                onPress={handleOnAdd}
+              />
+            )}
+
+            {mode === 'edit' && (
+              <ButtonStyle
+                title={t('modals.worker.buttons.save')}
+                colorScheme="primary"
+                loading={loading}
+                disabled={!isValid}
+                onPress={handleOnUpdate}
+              />
+            )}
+          </ActionsContainerStyle>
         </ScrollViewStyle>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

@@ -3,10 +3,6 @@ import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 
 export const styles = StyleSheet.create({
-  loaderWrapper: {
-    flex: 1,
-    padding: 32,
-  },
   menuItem: {
     flex: 1,
   },
@@ -20,7 +16,6 @@ export const ContainerStyle = styled.View`
   justify-content: flex-start;
   align-items: flex-start;
   background-color: ${Colors.bgLight};
-  padding: 0 ${Metrics.smPadding}px;
 `;
 
 export const ContentStyle = styled.View`
