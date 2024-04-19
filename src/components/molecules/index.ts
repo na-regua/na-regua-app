@@ -16,3 +16,5 @@ export * from './BarberServiceModal/BarberServiceModal';
 export * from './ProfileStep/ProfileStep';
 export * from './ServiceGeneralConfigCard/ServiceGeneralConfigCard';
 export * from './WorkerModal/WorkerModal';
+export * from './BarberLoginMailForm/BarberLoginMailForm';
+export * from './BarberLoginPhoneForm/BarberLoginPhoneForm';

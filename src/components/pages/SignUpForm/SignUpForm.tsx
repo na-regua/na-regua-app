@@ -79,9 +79,7 @@ const SignUpForm: React.FC = () => {
     setAvatar(file);
   };
 
-  const handleOnFileUpload = (files: Asset[]) => {
-    setThumbs(files);
-  };
+  const handleOnFileUpload = (files: Asset[]) => {};
 
   const signUp = async () => {
     if (avatar) {

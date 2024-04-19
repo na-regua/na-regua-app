@@ -181,14 +181,49 @@ const ptBr = {
       },
     },
     login: {
-      title: 'Olá, Seja bem vindo',
-      subtitle: 'Para fazer o login selecione o método abaixo.',
+      title: 'Seja bem vindo ao',
+      subtitle1: 'Conectando histórias com estilo,',
+      subtitle2: 'um corte de cada vez.',
       buttons: {
         email: 'E-mail',
         whatsapp: 'Whatsapp',
+        barber: 'Barbeiro',
+        customer: 'Cliente',
+        continue: 'Continuar',
       },
-      signUp: 'Desejo me cadastrar!',
       backLink: 'Voltar',
+      show: 'Exibir',
+      hide: 'Esconder',
+      barber: {
+        mailSubtitle: 'Preencha o E-mail e a Senha para entrar.',
+        phoneSubtitle: 'Insira seu telefone whatsapp para fazer o login.',
+        verifySubtitle:
+          'Digite o código recebido no Whatsapp para poder continuar.',
+        link: 'Quero fazer parte!',
+        fields: {
+          email: 'E-mail',
+          password: 'Senha',
+          phone: 'Whatsapp',
+        },
+        buttons: {
+          join: 'Entrar',
+          send: 'Enviar',
+          phoneLogin: 'Entrar c/ Whatsapp',
+          mailLogin: 'Entrar c/ E-mail',
+        },
+      },
+      customer: {
+        phoneSubtitle: 'Insira seu telefone whatsapp para fazer o login.',
+        verifySubtitle:
+          'Digite o código recebido via Whatsapp para fazer login.',
+        fields: {
+          phone: 'Whatsapp',
+        },
+        buttons: {
+          send: 'Enviar',
+        },
+        link: 'Fazer cadastro rápido!',
+      },
     },
     loginEmail: {
       title: 'Login',
@@ -296,6 +331,7 @@ const ptBr = {
       billing: 'Finanças',
       settings: 'Ajustes',
     },
+    back: 'Voltar',
   },
 };
 

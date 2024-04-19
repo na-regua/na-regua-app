@@ -5,21 +5,24 @@ import {
   TextInput,
   TextInputFocusEventData,
   TextInputProps,
+  TextStyle,
   View,
   ViewStyle,
 } from 'react-native';
 import {InputLabelStyle, InputStyle, InputWrapperStyle, styles} from './styles';
+import {useTranslation} from 'react-i18next';
 
 interface IInputProps extends TextInputProps {
   label: string;
   suffix?: ReactNode;
+  textStyle?: TextStyle;
   wrapperStyle?: ViewStyle;
   inputRef?: React.RefObject<TextInput>;
 }
 
 const Input: React.FC<IInputProps> = ({
   label,
-  style,
+  textStyle,
   placeholder,
   suffix,
   wrapperStyle,
@@ -29,6 +32,7 @@ const Input: React.FC<IInputProps> = ({
   inputRef,
   ...inputProps
 }) => {
+  const {t} = useTranslation();
   const [isFocused, setIsFocused] = useState(false);
   const [suffixWidth, setSuffixWidth] = useState(0);
 
@@ -53,15 +57,22 @@ const Input: React.FC<IInputProps> = ({
 
   return (
     <InputWrapperStyle style={wrapperStyle}>
-      {active && <InputLabelStyle focused={isFocused}>{label}</InputLabelStyle>}
+      {active && (
+        <InputLabelStyle focused={isFocused}>
+          {label && t(label)}
+        </InputLabelStyle>
+      )}
 
       <InputStyle
-        style={[style, {paddingRight: suffixWidth + 16}]}
+        style={[{paddingRight: suffixWidth + 16}]}
         active={active}
+        borderColor={textStyle?.borderColor}
         autoCorrect={false}
         spellCheck={false}
         onFocus={handleFocus}
-        placeholder={placeholder || (isFocused ? '' : label)}
+        placeholder={
+          (placeholder && t(placeholder)) || (isFocused ? '' : t(label))
+        }
         placeholderTextColor={isFocused ? Colors.main : Colors.placeholder}
         focused={isFocused}
         {...inputProps}

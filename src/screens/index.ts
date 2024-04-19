@@ -5,12 +5,14 @@ export {default as BarberPreSignUpScreen} from './BarberPreSignUp/BarberPreSignU
 export {default as BarberQueueScreen} from './BarberQueue/BarberQueue';
 export {default as BarberScheduleScreen} from './BarberSchedule/BarberSchedule';
 export {default as BarberServicesScreen} from './BarberServices/BarberServices';
+export {default as BarberServicesConfigScreen} from './BarberServicesConfig/BarberServicesConfig';
 export {default as BarberSettingsScreen} from './BarberSettings/BarberSettings';
 export {default as BarberSettingsProfileScreen} from './BarberSettingsProfile/BarberSettingsProfile';
 export {default as BarberSignUpScreen} from './BarberSignUp/BarberSignUp';
 export {default as BarberWorkersScreen} from './BarberWorkers/BarberWorkers';
-export {default as BarberServicesConfigScreen} from './BarberServicesConfig/BarberServicesConfig';
 
+export {default as BarberLoginScreen} from './BarberLogin/BarberLogin';
+export {default as CustomerLoginScreen} from './CustomerLogin/CustomerLogin';
 export {default as LoginScreen} from './Login/Login';
 export {default as SplashScreen} from './SplashScreen/SplashScreen';
 export {default as VerifyPhoneScreen} from './VerifyPhone/VerifyPhone';

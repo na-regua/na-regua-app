@@ -19,6 +19,10 @@ const ENDPOINTS = {
   WORKERS_DELETE: '/workers/:id',
   WORKERS_UPDATE: '/workers/:id',
   /**
+   * Users
+   * */
+  USERS_UPDATE: '/users/:id',
+  /**
    * Files
    * */
   FILES_BARBER: '/files/barber',

@@ -171,13 +171,6 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
     }
   };
 
-  const close = () => {
-    if (modalRef.current) {
-      modalRef.current.dismiss();
-      onClose && onClose();
-    }
-  };
-
   const hasDiff = useMemo(
     () =>
       formValues.name !== initialValues?.name ||
@@ -315,25 +308,7 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
             )}
           />
 
-          {/* <Controller
-            name="admin"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <Checkbox
-                onChange={onChange}
-                label={t('modals.worker.fields.admin')}
-                value={value}
-              />
-            )}
-          /> */}
-
           <ActionsContainerStyle>
-            <ButtonStyle
-              title={t('modals.worker.buttons.cancel')}
-              colorScheme="danger"
-              variant="outlined"
-              onPress={close}
-            />
             {mode === 'add' && (
               <ButtonStyle
                 title={t('modals.worker.buttons.add')}

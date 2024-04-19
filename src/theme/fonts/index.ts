@@ -1,9 +1,9 @@
 const types = {
-  light: 'Poppins-Light',
-  regular: 'Poppins-Regular',
-  medium: 'Poppins-Medium',
-  semiBold: 'Poppins-SemiBold',
-  bold: 'Poppins-Bold',
+  light: 'NoirPro-Light',
+  regular: 'NoirPro-Regular',
+  medium: 'NoirPro-Medium',
+  semiBold: 'NoirPro-SemiBold',
+  bold: 'NoirPro-Bold',
 };
 
 const weights = {

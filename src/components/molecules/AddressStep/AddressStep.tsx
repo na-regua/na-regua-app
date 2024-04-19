@@ -1,5 +1,5 @@
 import ENDPOINTS from '@/app/api/endpoints';
-import {ICepApiData} from '@/app/models';
+import {IAdressFormData, ICepApiData} from '@/app/models';
 import {Input, Step} from '@/components/atoms';
 import {AppDispatch} from '@/store/Store';
 import {createNotification} from '@/store/slicers';
@@ -11,16 +11,6 @@ import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useDispatch} from 'react-redux';
-
-export interface IAdressFormData {
-  cep: string;
-  localidade: string;
-  complemento: string;
-  numero: string;
-  bairro: string;
-  uf: string;
-  logradouro: string;
-}
 
 interface IAdressStepProps {
   form: UseFormReturn<IAdressFormData>;

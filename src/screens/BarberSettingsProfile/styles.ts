@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     gap: Metrics.smPadding,
   },
   keyboardAvoidingView: {
-    flex: 1,
+    flexGrow: 1,
     gap: Metrics.smPadding,
     justifyContent: 'center',
   },

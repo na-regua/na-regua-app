@@ -1,5 +1,5 @@
 import {Colors, Fonts} from '@/theme';
-import {StyleSheet} from 'react-native';
+import {ColorValue, StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 
 export const styles = StyleSheet.create({
@@ -39,12 +39,13 @@ export const InputStyle = styled.TextInput<{
   active?: boolean;
   focused?: boolean;
   suffixWidth?: number;
+  borderColor?: ColorValue | string;
 }>`
-  height: 40px;
+  height: 42px;
   font-weight: ${Fonts.weights.semiBold};
   font-family: ${Fonts.types.semiBold};
-  border-width: 2px;
-  border-color: ${Colors.border};
+  border-width: 1px;
+  border-color: ${({borderColor}) => borderColor?.toString() || Colors.border};
   border-radius: 8px;
   padding: 0 12px;
   color: ${Colors.black3};

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Na Régua</string>
 	<key>CFBundleExecutable</key>
@@ -40,13 +40,13 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Bold.ttf</string>
@@ -54,6 +54,13 @@
 		<string>Poppins-Medium.ttf</string>
 		<string>Poppins-Regular.ttf</string>
 		<string>Poppins-SemiBold.ttf</string>
+		<string>NoirPro-Bold.otf</string>
+		<string>NoirPro-Heavy.otf</string>
+		<string>NoirPro-Italic.otf</string>
+		<string>NoirPro-Light.otf</string>
+		<string>NoirPro-Medium.otf</string>
+		<string>NoirPro-Regular.otf</string>
+		<string>NoirPro-SemiBold.otf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

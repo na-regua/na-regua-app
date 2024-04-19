@@ -140,13 +140,6 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
     }
   };
 
-  const close = () => {
-    if (modalRef.current) {
-      modalRef.current.dismiss();
-      onClose && onClose();
-    }
-  };
-
   const hasDiff = useMemo(
     () =>
       formValues.name !== initialValues?.name ||
@@ -289,12 +282,6 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
           />
 
           <ActionsContainerStyle>
-            <ButtonStyle
-              title={t('modals.barberService.buttons.cancel')}
-              colorScheme="danger"
-              variant="outlined"
-              onPress={close}
-            />
             {mode === 'add' && (
               <ButtonStyle
                 title={t('modals.barberService.buttons.add')}

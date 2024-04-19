@@ -4,9 +4,9 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Path, Svg} from 'react-native-svg';
 import {IIconProps} from '../Icons';
 
-interface IArrowDownIconProps extends IIconProps {}
+interface IwDownIconProps extends IIconProps {}
 
-const ArrowDownIcon: React.FC<IArrowDownIconProps> = ({
+const DownIcon: React.FC<IwDownIconProps> = ({
   width = 24,
   height = 24,
   strokeWidth = 1.5,
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ArrowDownIcon;
+export {DownIcon};

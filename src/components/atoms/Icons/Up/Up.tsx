@@ -5,9 +5,9 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Path, Svg} from 'react-native-svg';
 import {IIconProps} from '../Icons';
 
-interface IArrowUpIconProps extends IIconProps {}
+interface UpIconProps extends IIconProps {}
 
-const ArrowUpIcon: React.FC<IArrowUpIconProps> = ({
+const UpIcon: React.FC<UpIconProps> = ({
   width = 24,
   height = 24,
   strokeWidth = 1.5,
@@ -47,4 +47,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ArrowUpIcon;
+export default UpIcon;

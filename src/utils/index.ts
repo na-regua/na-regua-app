@@ -4,3 +4,4 @@ export * from './deleteNull';
 export * from './times';
 export * from './masks';
 export * from './queryBuilder';
+export * from './patterns';

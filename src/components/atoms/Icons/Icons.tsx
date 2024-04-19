@@ -1,10 +1,16 @@
 import {TColorsType} from '@/theme/colors';
+import {ViewStyle} from 'react-native';
 import ArrowLeftIcon from './ArrowLeft/ArrowLeft';
 import BellIcon from './BellIcon/BellIcon';
 import CameraIcon from './CameraIcon/CameraIcon';
 import DeleteIcon from './DeleteIcon/DeleteIcon';
+import {DownIcon} from './Down/Down';
 import EditIcon from './EditIcon/EditIcon';
 import EyeIcon from './EyeIcon/EyeIcon';
+import {LeftIcon} from './Left/Left';
+import {LinesIcon} from './Lines/Lines';
+import LogoMiniIcon from './LogoMini/LogoMini';
+import LogoWritingIcon from './LogoWriting/LogoWriting';
 import MaquinaIcon from './MaquinaIcon/MaquinaIcon';
 import MarketIcon from './MarketIcon/MarketIcon';
 import MinusIcon from './MinusIcon/MinusIcon';
@@ -18,11 +24,10 @@ import ScheduleIcon from './ScheduleIcon/ScheduleIcon';
 import SettingsIcon from './SettingsIcon/SettingsIcon';
 import SunIcon from './SunIcon/SunIcon';
 import TimeIcon from './TimeIcon/TimeIcon';
+import UpIcon from './Up/Up';
 import UserCheckIcon from './UserCheckIcon/UserCheckIcon';
 import UserIcon from './UserIcon/UserIcon';
 import UsersIcon from './UsersIcon/UsersIcon';
-import ArrowDownIcon from './ArrowDown/ArrowDown';
-import ArrowUpIcon from './ArrowUp/ArrowUp';
 
 export interface IIconProps {
   width?: number;
@@ -33,18 +38,20 @@ export interface IIconProps {
   clickable?: boolean;
   onPress?: () => void;
   disabled?: boolean;
-  style?: any;
+  wrapperStyle?: ViewStyle;
+  svgStyle?: ViewStyle;
 }
 
 export default {
-  ArrowDownIcon,
+  DownIcon,
   ArrowLeftIcon,
-  ArrowUpIcon,
+  UpIcon,
   BellIcon,
   CameraIcon,
   DeleteIcon,
   EditIcon,
   EyeIcon,
+  LeftIcon,
   MarketIcon,
   MaquinaIcon,
   MinusIcon,
@@ -61,4 +68,7 @@ export default {
   UserCheckIcon,
   UserIcon,
   UsersIcon,
+  LogoWritingIcon,
+  LinesIcon,
+  LogoMiniIcon,
 };

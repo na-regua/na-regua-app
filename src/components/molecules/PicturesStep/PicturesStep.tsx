@@ -2,12 +2,11 @@ import {FileUpload, Step} from '@/components/atoms';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
-import {Asset} from 'react-native-image-picker';
 
 interface IPicturesStepProps {
-  onFileUpload?: (files: Asset[]) => void;
+  onFileUpload?: (files: string[]) => void;
   completed?: boolean;
-  thumbs: Asset[];
+  thumbs: string[];
   canJumpTo?: boolean;
 }
 
@@ -27,7 +26,11 @@ const PicturesStep: React.FC<IPicturesStepProps> = ({
       disabled={!canJumpTo}
       completed={completed}>
       <View style={styles.fileUploadRow}>
-        <FileUpload assets={thumbs} onFileUpload={onFileUpload} limit={3} />
+        <FileUpload
+          initialMiniatures={thumbs}
+          onFileUpload={onFileUpload}
+          limit={3}
+        />
       </View>
     </Step>
   );

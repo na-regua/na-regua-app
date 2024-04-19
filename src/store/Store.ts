@@ -1,5 +1,10 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
-import {AuthReducer, ConfigReducer, NotifyReducer} from './slicers';
+import {
+  AuthReducer,
+  ConfigReducer,
+  LoginReducer,
+  NotifyReducer,
+} from './slicers';
 
 export interface GenericAction<T = any> {
   type: string;
@@ -10,6 +15,7 @@ const rootReducer = combineReducers({
   auth: AuthReducer,
   config: ConfigReducer,
   notify: NotifyReducer,
+  login: LoginReducer,
 });
 
 export const store = configureStore({

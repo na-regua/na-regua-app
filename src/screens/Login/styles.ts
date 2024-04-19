@@ -1,47 +1,45 @@
+import {Button} from '@/components/atoms';
 import {Colors, Metrics} from '@/theme';
-import {StyleSheet} from 'react-native';
+import {hexPercentage} from '@/theme/colors';
+import styled from 'styled-components/native';
 
-export const styles = StyleSheet.create({
-  splash: {
-    width: Metrics.screenWidth,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    borderBottomEndRadius: 24,
-    borderBottomStartRadius: 24,
-    backgroundColor: Colors.main,
-  },
-  container: {
-    flex: 1,
-    width: Metrics.screenWidth,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    backgroundColor: Colors.border,
-    position: 'relative',
-  },
-  logoHeader: {
-    width: 32,
-    height: 32,
-    backgroundColor: Colors.white3,
-    borderRadius: 4,
-  },
-  logoHeaderWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  content: {
-    flex: 1,
-    width: Metrics.screenWidth,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    gap: Metrics.mdPadding,
-    padding: Metrics.mdPadding,
-  },
-  backLink: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-});
+export const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: ${Colors.bgContrast};
+`;
+
+export const WelcomeContent = styled.View`
+  width: 300px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${Metrics.paddingX8}px;
+`;
+
+export const WelcomeTitle = styled.View`
+  width: 100%;
+  gap: ${Metrics.paddingX2}px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+`;
+
+export const SwitchButton = styled.View`
+  border-radius: 12px;
+  padding: 4px;
+  background: ${Colors.primary}${hexPercentage['20']};
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+`;
+
+export const SwitchButtonStyle = styled(Button)`
+  flex: 1;
+`;
+
+export const ContinueButtonStyle = styled(Button)`
+  width: 100%;
+`;

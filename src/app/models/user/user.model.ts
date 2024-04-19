@@ -1,6 +1,6 @@
 import {IFile} from '../file/file.model';
 
-export type TUserRoles = 'admin' | 'worker' | 'custommer';
+export type TUserRoles = 'admin' | 'worker' | 'customer';
 
 export interface IUser {
   _id: string;
@@ -21,3 +21,5 @@ export interface ICreateUser {
   phone: string;
   password: string;
 }
+
+export interface IUpdateUser extends Partial<Omit<ICreateUser, 'password'>> {}

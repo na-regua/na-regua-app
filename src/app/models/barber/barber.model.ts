@@ -1,6 +1,6 @@
 import {IAdress} from '../cep/cep.model';
 import {IFile} from '../file/file.model';
-import {ICreateUser} from '../user/user.model';
+import {ICreateUser, IUpdateUser} from '../user/user.model';
 
 export interface IBuffer {
   name: string;
@@ -56,4 +56,10 @@ export type TWorkTime = {
 export interface IEditBarberProfileForm {
   name: string;
   address: string;
+}
+
+export interface IBarberUpdate {
+  profileData?: IUpdateUser;
+  addressData?: Partial<IAdress>;
+  servicesConfig?: Partial<IBarberServiceConfig>;
 }

@@ -1,6 +1,7 @@
 import {Colors, Fonts} from '@/theme';
 import {TColorsType} from '@/theme/colors';
 import React, {PropsWithChildren, useMemo} from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, Text, TextStyle} from 'react-native';
 
 type ITypographyVariants =
@@ -20,6 +21,7 @@ export interface ITypographyProps extends PropsWithChildren {
   variant?: ITypographyVariants;
   color?: TColorsType;
   style?: TextStyle;
+  textAlign?: 'auto' | 'left' | 'right' | 'center' | 'justify' | undefined;
 }
 
 const Typography: React.FC<ITypographyProps> = ({
@@ -27,7 +29,10 @@ const Typography: React.FC<ITypographyProps> = ({
   variant = 'body1',
   color = 'black3',
   style,
+  textAlign,
 }) => {
+  const {t} = useTranslation();
+
   const textColor = useMemo(() => color && Colors[color], [color]);
 
   const stylesByVariant = useMemo(
@@ -36,8 +41,8 @@ const Typography: React.FC<ITypographyProps> = ({
   );
 
   return (
-    <Text style={{...stylesByVariant, color: textColor, ...style}}>
-      {children}
+    <Text style={{...stylesByVariant, textAlign, color: textColor, ...style}}>
+      {typeof children === 'string' ? t(children) : children}
     </Text>
   );
 };

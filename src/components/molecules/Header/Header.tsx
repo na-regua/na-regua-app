@@ -1,31 +1,50 @@
 import {Icons, Typography} from '@/components/atoms';
 import {RootState} from '@/store/Store';
 import React, {useMemo} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
-import {ContainerInfoStyle, ContainerStyle, styles} from './styles';
+import {
+  BackContainerStyle,
+  BorderContainerStyle,
+  ContainerStyle,
+  LogoContainerStyle,
+  LogoIconStyle,
+  TitleContainerStyle,
+  WelcomeTextStyle,
+} from './styles';
 
 interface IHeaderProps {
   showTitle?: boolean;
-  showBorder?: boolean;
+  showBack?: boolean;
   showWelcome?: boolean;
+  showBorder?: boolean;
+  showActions?: boolean;
+
   title?: string;
   subtitle?: string;
-  clickable?: boolean;
+  backText?: string;
+  iconClickable?: boolean;
   onIconPress?: () => void;
+  onBackPress?: () => void;
   lightContent?: boolean;
 }
 
 const Header: React.FC<IHeaderProps> = ({
   showTitle = true,
+  showBack = false,
+  backText = 'nav.back',
+  showActions = true,
   showWelcome = false,
   showBorder = false,
-  clickable = false,
   title = 'Title',
   subtitle = 'Subtitle',
   lightContent,
+  iconClickable = false,
   onIconPress,
+  onBackPress,
 }) => {
+  const {t} = useTranslation();
   const {user, isAuthenticated} = useSelector((state: RootState) => state.auth);
 
   const color = useMemo(
@@ -40,46 +59,48 @@ const Header: React.FC<IHeaderProps> = ({
 
   return (
     <ContainerStyle>
-      <View style={styles.containerInfo}>
-        <TouchableOpacity
-          style={styles.containerInfoGroup}
-          onPress={onIconPress}
-          activeOpacity={0.8}
-          disabled={!clickable}>
-          <ContainerInfoStyle lightContent={lightContent}></ContainerInfoStyle>
-          <Typography variant="body2" color={`${color}3` as any}>
-            Na Régua
-          </Typography>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.8}>
-          <Icons.BellIcon
-            width={24}
-            height={24}
-            color={`${mainColor}` as any}
+      {showActions && (
+        <LogoContainerStyle>
+          <LogoIconStyle
+            onPress={onIconPress}
+            activeOpacity={0.8}
+            disabled={!iconClickable}
           />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity activeOpacity={0.8}>
+            <Icons.BellIcon
+              width={24}
+              height={24}
+              color={`${mainColor}` as any}
+            />
+          </TouchableOpacity>
+        </LogoContainerStyle>
+      )}
       {showTitle && (
-        <View style={styles.title}>
+        <TitleContainerStyle>
           <Typography variant="h3" color={`${color}3` as any}>
             {title}
           </Typography>
           <Typography variant="body1" color={`${color}1` as any}>
             {subtitle}
           </Typography>
-        </View>
+        </TitleContainerStyle>
       )}
       {showWelcome && isAuthenticated && user && (
-        <View style={styles.title}>
-          <Typography
-            variant="h3"
-            style={styles.welcomeText}
-            color={`${color}3` as any}>
+        <TitleContainerStyle>
+          <WelcomeTextStyle variant="h3" color={`${color}3` as any}>
             Olá, {user.name}
-          </Typography>
-        </View>
+          </WelcomeTextStyle>
+        </TitleContainerStyle>
       )}
-      {showBorder && <View style={styles.border} />}
+      {showBack && (
+        <BackContainerStyle activeOpacity={0.8} onPress={onBackPress}>
+          <Icons.LeftIcon width={16} height={16} color="primary" />
+          <Typography variant="body1" color="primary">
+            {t(backText)}
+          </Typography>
+        </BackContainerStyle>
+      )}
+      {showBorder && <BorderContainerStyle />}
     </ContainerStyle>
   );
 };

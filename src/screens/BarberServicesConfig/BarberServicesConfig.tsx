@@ -2,7 +2,7 @@ import React, {useMemo, useState} from 'react';
 
 import {BarbersService} from '@/app/api';
 import {IBarberServiceConfig, IBarberServiceDayConfig} from '@/app/models';
-import {AppStatusBar, Button, Icons, Typography} from '@/components/atoms';
+import {AppStatusBar, Button, Typography} from '@/components/atoms';
 import {
   Header,
   IBarberServiceGeneralConfig,
@@ -19,7 +19,6 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   ContainerStyles,
-  ContentBackLinkStyle,
   ContentHeaderStyle,
   ContentStyle,
   ScrollContentStyle,
@@ -138,14 +137,14 @@ const BarberServicesConfig: React.FC<
   return (
     <ContainerStyles style={insetsStyles}>
       <AppStatusBar />
-      <Header showTitle={false} showBorder />
+      <Header
+        showTitle={false}
+        showBack
+        showActions={false}
+        showBorder
+        onBackPress={goBack}
+      />
       <ContentStyle>
-        <ContentBackLinkStyle onPress={goBack}>
-          <Icons.ArrowLeftIcon width={18} color="black1" />
-          <Typography variant="button" color="black1">
-            {t('barber.servicesConfig.goBack')}
-          </Typography>
-        </ContentBackLinkStyle>
         <ContentHeaderStyle>
           <Typography variant="h5" color="black3">
             {t('barber.servicesConfig.title')}
@@ -178,6 +177,7 @@ const BarberServicesConfig: React.FC<
         </ScrollContentStyle>
         <Button
           disabled={!hasChanges}
+          colorScheme="primary"
           title={t('barber.servicesConfig.buttons.save')}
           onPress={handleSaveChanges}
           loading={updating}

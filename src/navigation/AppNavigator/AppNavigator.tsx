@@ -3,6 +3,7 @@ import React, {useCallback, useEffect, useMemo} from 'react';
 import {
   BarberBillingScreen,
   BarberCompletedQrScreen,
+  BarberLoginScreen,
   BarberPreSignUpScreen,
   BarberQueueScreen,
   BarberScheduleScreen,
@@ -11,9 +12,9 @@ import {
   BarberSettingsProfileScreen,
   BarberSettingsScreen,
   BarberSignUpScreen,
+  CustomerLoginScreen,
   LoginScreen,
   SplashScreen,
-  VerifyPhoneScreen,
 } from '@/screens';
 import BarberWorkers from '@/screens/BarberWorkers/BarberWorkers';
 import {RootState} from '@/store/Store';
@@ -45,7 +46,7 @@ const AppNavigator: React.FC = () => {
         }
 
         return '/barber/queue';
-      } else if (user.role === 'custommer') {
+      } else if (user.role === 'customer') {
         return '';
       }
     }
@@ -99,8 +100,14 @@ const AppNavigator: React.FC = () => {
           options={{animation: 'none'}}
         />
         <Stack.Screen
-          name={'/generic/verify-phone'}
-          component={VerifyPhoneScreen}
+          name={'/generic/login/barber'}
+          component={BarberLoginScreen}
+          options={{animation: 'none'}}
+        />
+        <Stack.Screen
+          name={'/generic/login/customer'}
+          component={CustomerLoginScreen}
+          options={{animation: 'none'}}
         />
 
         {WorkerAuth && (

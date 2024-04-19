@@ -45,7 +45,7 @@ const BarberSignUp: React.FC = () => {
             title={t('barber.signUp.title')}
             subtitle={t('barber.signUp.subtitle')}
             onIconPress={handleNavigateToLogin}
-            clickable
+            showActions
           />
           <ContentStyle>
             <SignUpForm />

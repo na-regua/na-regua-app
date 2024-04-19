@@ -28,7 +28,6 @@ import {useSelector} from 'react-redux';
 import {
   ContainerStyle,
   ContentActionsStyle,
-  ContentBackLinkStyle,
   ContentHeaderStyle,
   ContentScrollContentStyle,
   ContentStyle,
@@ -146,14 +145,14 @@ const BarberServices: React.FC<
   return (
     <ContainerStyle style={insetsStyles}>
       <AppStatusBar />
-      <Header showTitle={false} showBorder />
+      <Header
+        showTitle={false}
+        showBack
+        showActions={false}
+        showBorder
+        onBackPress={goBack}
+      />
       <ContentStyle>
-        <ContentBackLinkStyle onPress={goBack}>
-          <Icons.ArrowLeftIcon width={18} color="black1" />
-          <Typography variant="button" color="black1">
-            {t('barber.services.goBack')}
-          </Typography>
-        </ContentBackLinkStyle>
         <ContentHeaderStyle>
           <Typography variant="h5" color="black3">
             {t('barber.services.title')}

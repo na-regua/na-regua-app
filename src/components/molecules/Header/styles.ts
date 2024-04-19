@@ -1,55 +1,53 @@
+import {Typography} from '@/components/atoms';
 import {Colors, Fonts, Metrics} from '@/theme';
 import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 
-export const styles = StyleSheet.create({
-  containerInfo: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  containerInfoGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  containerInfoIcon: {
-    borderRadius: 8,
-    width: 32,
-    height: 32,
-    backgroundColor: Colors.main,
-  },
-  title: {
-    flexDirection: 'column',
-    gap: 4,
-    paddingTop: Metrics.smPadding,
-  },
-  border: {
-    position: 'absolute',
-    bottom: 0,
-    backgroundColor: Colors.border,
-    width: Metrics.screenWidth,
-    height: 1,
-  },
-  welcomeText: {
-    fontWeight: Fonts.weights.medium,
-    fontFamily: Fonts.types.medium,
-  },
-});
+export const styles = StyleSheet.create({});
 
 export const ContainerStyle = styled.View`
   flex-direction: column;
-  padding: ${Metrics.smPadding}px;
+  padding: 12px 18px;
   width: ${Metrics.screenWidth}px;
   position: relative;
 `;
 
-export const ContainerInfoStyle = styled.View<{lightContent?: boolean}>`
-  border-radius: 8px;
+export const LogoContainerStyle = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+`;
+
+export const TitleContainerStyle = styled.View`
+  flex-direction: column;
+`;
+
+export const LogoIconStyle = styled.TouchableOpacity<{lightContent?: boolean}>`
+  border-radius: 6px;
   width: 32px;
   height: 32px;
   background-color: ${({lightContent}) =>
     lightContent ? Colors.white3 : Colors.main};
   justify-content: center;
   align-items: center;
+`;
+
+export const BorderContainerStyle = styled.View`
+  position: absolute;
+  bottom: 0;
+  background-color: ${Colors.border};
+  width: ${Metrics.screenWidth}px;
+  height: 1px;
+`;
+
+export const BackContainerStyle = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+`;
+
+export const WelcomeTextStyle = styled(Typography)`
+  font-weight: ${Fonts.weights.medium};
+  font-family: ${Fonts.types.medium};
 `;

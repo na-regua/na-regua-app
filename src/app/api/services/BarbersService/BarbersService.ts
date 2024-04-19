@@ -1,10 +1,5 @@
 import api, {errToAxiosError} from '@/app/api/api';
-import {
-  IBarber,
-  IBarberServiceConfig,
-  ICreateBarber,
-  IUser,
-} from '@/app/models';
+import {IBarber, IBarberUpdate, ICreateBarber, IUser} from '@/app/models';
 import {AxiosResponse} from 'axios';
 import {default as ENDPOINTS} from '../../endpoints';
 
@@ -18,11 +13,17 @@ const getBarbers = async (): Promise<AxiosResponse> => {
   }
 };
 
-const updateServiceConfig = async (
-  config: Partial<IBarberServiceConfig>,
-): Promise<AxiosResponse<null>> => {
+const update = async (params: IBarberUpdate): Promise<AxiosResponse<null>> => {
   try {
-    const data = await api.put(ENDPOINTS.BARBERS_UPDATE, config, {
+    let payload = {
+      ...params.profileData,
+      ...params.addressData,
+      ...params.servicesConfig,
+    };
+
+    console.log(payload);
+
+    const data = await api.put(ENDPOINTS.BARBERS_UPDATE, payload, {
       withCredentials: true,
     });
 
@@ -79,5 +80,5 @@ export default {
   completeProfile,
   getBarbers,
   signUpBarber,
-  updateServiceConfig,
+  update,
 };

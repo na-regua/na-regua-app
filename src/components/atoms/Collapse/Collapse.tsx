@@ -30,7 +30,7 @@ const Collapse: React.FC<PropsWithChildren<ICollapseProps>> = ({
         </Typography>
 
         {expand ? (
-          <Icons.ArrowUpIcon
+          <Icons.UpIcon
             width={24}
             height={24}
             clickable
@@ -38,7 +38,7 @@ const Collapse: React.FC<PropsWithChildren<ICollapseProps>> = ({
             color="default"
           />
         ) : (
-          <Icons.ArrowDownIcon
+          <Icons.DownIcon
             width={24}
             height={24}
             clickable
