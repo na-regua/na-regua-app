@@ -15,6 +15,11 @@ export const styles = StyleSheet.create({
   textCenter: {
     textAlign: 'center',
   },
+  qrSquare: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
 });
 
 export const ContainerStyle = styled.View`
@@ -25,7 +30,31 @@ export const ContainerStyle = styled.View`
 
 export const QRContentStyle = styled.View`
   flex: 1;
-  gap: 18px;
+  gap: 12px;
   justify-content: center;
+  align-items: center;
+
+  padding: 24px;
+`;
+
+export const InnerQRContentStyle = styled.View`
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+
+  gap: 18px;
+  padding: 32px;
+`;
+
+export const TestView = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px;
+`;
+
+export const InnerQRTitleStyle = styled.View`
+  gap: 8px;
   align-items: center;
 `;

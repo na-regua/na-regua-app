@@ -138,15 +138,24 @@ const BarberSettingsProfile: React.FC<
 
   const setBarberData = useCallback(() => {
     if (user && barber) {
-      const address: ETAddressForm = {
-        cep: barber.cep,
-        logradouro: barber.street,
-        complemento: barber.complement || '',
-        numero: barber.number.toString(),
-        localidade: barber.city,
-        uf: barber.uf,
-        bairro: barber.neighborhood,
-      };
+      if (barber.address) {
+        const address: ETAddressForm = {
+          cep: barber.address.cep,
+          logradouro: barber.address.street,
+          complemento: barber.address.complement || '',
+          numero: barber.address.number.toString(),
+          localidade: barber.address.city,
+          uf: barber.address.uf,
+          bairro: barber.address.neighborhood,
+        };
+
+        Object.keys(address).forEach(key => {
+          addressSetValue(
+            key as keyof ETAddressForm,
+            address[key as keyof ETAddressForm],
+          );
+        });
+      }
 
       let profileData: ETProfileForm = {
         name: barber.name,
@@ -161,13 +170,6 @@ const BarberSettingsProfile: React.FC<
           phone: phoneMask(user.phone.toString()),
         };
       }
-
-      Object.keys(address).forEach(key => {
-        addressSetValue(
-          key as keyof ETAddressForm,
-          address[key as keyof ETAddressForm],
-        );
-      });
 
       Object.keys(profileData).forEach(key => {
         profileSetValue(
@@ -203,19 +205,21 @@ const BarberSettingsProfile: React.FC<
   }, [barber, isAdmin, user, watchProfile]);
 
   const hasAddressChanged = useMemo(() => {
-    if (barber) {
+    if (barber && barber.address) {
       const compareArr: ETAddressForm = {
-        cep: barber.cep,
-        logradouro: barber.street,
-        complemento: barber.complement || '',
-        numero: barber.number.toString(),
-        localidade: barber.city,
-        uf: barber.uf,
-        bairro: barber.neighborhood,
+        cep: barber.address.cep,
+        logradouro: barber.address.street,
+        complemento: barber.address.complement || '',
+        numero: barber.address.number.toString(),
+        localidade: barber.address.city,
+        uf: barber.address.uf,
+        bairro: barber.address.neighborhood,
       };
 
       return checkDiff(watchAddress, compareArr);
     }
+
+    return false;
   }, [barber, watchAddress]);
 
   const canUpdate = useMemo(

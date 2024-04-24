@@ -10,11 +10,12 @@ export const labelStyle: TextStyle = {
 export const shadowStyle: ViewStyle = {
   shadowColor: Colors.black1,
   shadowOffset: {
-    height: -2,
+    height: -1,
     width: 0,
   },
   shadowOpacity: 0.1,
-  shadowRadius: 4,
+  elevation: 2,
+  shadowRadius: 2,
 };
 
 export const FloatingContainerStyle = styled.View`
@@ -26,6 +27,8 @@ export const FloatingContainerStyle = styled.View`
   align-items: center;
   justify-content: space-evenly;
   gap: 18px;
+  border: 1px solid transparent;
+  border-top-color: ${Colors.border};
 `;
 
 export const NavItem = styled.TouchableOpacity`

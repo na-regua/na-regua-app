@@ -35,6 +35,7 @@ import UpIcon from './Up/Up';
 import UserCheckIcon from './UserCheckIcon/UserCheckIcon';
 import UserIcon from './UserIcon/UserIcon';
 import UsersIcon from './UsersIcon/UsersIcon';
+import QRSquadIcon from './QRSquadIcon/QRSquadIcon';
 
 export interface IIconProps {
   width?: number;
@@ -85,4 +86,5 @@ export default {
   ReceiptIcon,
   SettingsTwotoneIcon,
   GaleryIcon,
+  QRSquadIcon,
 };

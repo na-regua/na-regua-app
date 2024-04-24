@@ -82,6 +82,8 @@ const AuthSlicer = createSlice<
   },
   extraReducers: builder => {
     builder.addCase(getCurrentUser.fulfilled, (state, action) => {
+      console.log(action.payload?.barber?.thumbs);
+
       if (action.payload) {
         state.isAuthenticated = true;
         state.token = action.payload.token;

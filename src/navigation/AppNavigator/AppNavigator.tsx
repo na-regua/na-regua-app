@@ -126,6 +126,7 @@ const AppNavigator: React.FC = () => {
             <Stack.Screen
               name={'/barber/settings/profile'}
               component={BarberSettingsProfileScreen}
+              initialParams={{hideBottomNav: true}}
             />
           </>
         )}

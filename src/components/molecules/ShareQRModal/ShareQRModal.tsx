@@ -1,16 +1,22 @@
 import React, {useRef, useState} from 'react';
 
-import {Button, QRCode, Typography} from '@/components/atoms';
+import {Button, Icons, QRCode, Typography} from '@/components/atoms';
 import {RootState} from '@/store/Store';
 import colors from '@/theme/colors';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useTranslation} from 'react-i18next';
+import {LayoutChangeEvent, ViewStyle} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Share from 'react-native-share';
 import ViewShot, {captureRef} from 'react-native-view-shot';
 import {useSelector} from 'react-redux';
-import {ContainerStyle, QRContentStyle, styles} from './styles';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {ViewStyle} from 'react-native';
+import {
+  ContainerStyle,
+  InnerQRContentStyle,
+  InnerQRTitleStyle,
+  QRContentStyle,
+  styles,
+} from './styles';
 
 interface IShareQRModalProps {
   modalRef: React.RefObject<BottomSheetModal | null>;
@@ -27,6 +33,10 @@ const ShareQRModal: React.FC<IShareQRModalProps> = ({modalRef}) => {
   const {barber} = useSelector((state: RootState) => state.auth);
 
   const [sharing, setSharing] = useState(false);
+  const [qrWrapperDimensions, setQrWrapperDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
 
   const close = () => {
     if (modalRef.current) {
@@ -52,6 +62,13 @@ const ShareQRModal: React.FC<IShareQRModalProps> = ({modalRef}) => {
     }, 500);
   };
 
+  const getQRWrapperHeight = (event: LayoutChangeEvent) => {
+    const {height, width} = event.nativeEvent.layout;
+
+    console.log({height, width});
+    setQrWrapperDimensions({height, width});
+  };
+
   if (!barber) {
     return null;
   }
@@ -60,25 +77,35 @@ const ShareQRModal: React.FC<IShareQRModalProps> = ({modalRef}) => {
     <ContainerStyle style={insetsStyles}>
       <ViewShot style={styles.viewShot} ref={ref}>
         <QRContentStyle>
+          <InnerQRContentStyle onLayout={getQRWrapperHeight}>
+            <Icons.QRSquadIcon
+              width={qrWrapperDimensions.width}
+              height={qrWrapperDimensions.height}
+              wrapperStyle={styles.qrSquare}
+            />
+
+            <QRCode
+              style={styles.qrWrapper}
+              padding={12}
+              size={152}
+              qrCodeProps={{
+                value: 'https://www.google.com',
+                color: colors.black3,
+              }}
+            />
+
+            <InnerQRTitleStyle>
+              <Typography variant="h1" color="white3">
+                {barber.name}
+              </Typography>
+              <Typography variant="h4" color="white1">
+                {barber.code}
+              </Typography>
+            </InnerQRTitleStyle>
+          </InnerQRContentStyle>
+
           <Typography variant="body1" color="white3" style={styles.textCenter}>
             {t('barber.shareQR.subtitle')}
-          </Typography>
-
-          <QRCode
-            style={styles.qrWrapper}
-            padding={12}
-            size={152}
-            qrCodeProps={{
-              value: 'https://www.google.com',
-              color: colors.black3,
-            }}
-          />
-
-          <Typography variant="h1" color="white3">
-            {barber.name}
-          </Typography>
-          <Typography variant="h4" color="white1">
-            {barber.code}
           </Typography>
         </QRContentStyle>
       </ViewShot>
