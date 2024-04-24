@@ -13,16 +13,19 @@ export const barberLoginStyles = StyleSheet.create({
 export const ContainerStyle = styled.ScrollView`
   flex: 1;
   background: ${Colors.bgContrast};
+  padding: 42px;
 `;
 
 export const ContentStyle = styled.View`
   flex: 1;
-  padding: 42px;
   padding-bottom: 24px;
   width: 100%;
   gap: ${Metrics.paddingX4}px;
   align-items: center;
   justify-content: space-between;
+
+  max-width: 320px;
+  min-width: 240px;
 `;
 
 export const FooterContainerStyle = styled.View`

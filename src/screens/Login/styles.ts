@@ -8,18 +8,22 @@ export const Container = styled.View`
   justify-content: center;
   align-items: center;
   background-color: ${Colors.bgContrast};
+  padding: ${Metrics.paddingX8}px;
 `;
 
 export const WelcomeContent = styled.View`
-  width: 300px;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: ${Metrics.paddingX8}px;
+  min-width: 240px;
+  max-width: 320px;
+  padding: ${Metrics.paddingX4}px;
 `;
 
 export const WelcomeTitle = styled.View`
-  width: 100%;
+  align-self: stretch;
   gap: ${Metrics.paddingX2}px;
   align-items: flex-start;
   justify-content: flex-start;
@@ -33,7 +37,6 @@ export const SwitchButton = styled.View`
   flex-direction: row;
   align-items: center;
   gap: 4px;
-  width: 100%;
 `;
 
 export const SwitchButtonStyle = styled(Button)`

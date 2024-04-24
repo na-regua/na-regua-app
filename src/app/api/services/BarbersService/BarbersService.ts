@@ -22,7 +22,6 @@ const update = async (params: IBarberUpdate): Promise<AxiosResponse<null>> => {
   try {
     let payload = {
       ...params.profileData,
-      ...params.addressData,
       ...params.servicesConfig,
     };
 
