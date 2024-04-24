@@ -31,6 +31,7 @@ import {
   MenuItemsWrapperStyle,
   styles,
 } from './styles';
+import {phoneMask} from '@/utils';
 
 const BarberWorkers: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/barber/settings/workers'>
@@ -62,6 +63,7 @@ const BarberWorkers: React.FC<
     paddingRight: insets.right,
   };
 
+  // From pre signup flow
   const goNext = () => {
     navigation.navigate('/barber/settings/services', {showContinue: true});
   };
@@ -78,13 +80,17 @@ const BarberWorkers: React.FC<
     }
   };
 
-  const addInShowSet = (id: string) => {
-    setShowSet(curr => [...curr, id]);
-  };
-
   const removeFromShowSet = (id: string) => {
     if (showSet.includes(id)) {
       setShowSet(curr => curr.filter(currId => currId !== id));
+    }
+  };
+
+  const handleShowSet = (id: string) => {
+    if (showSet.includes(id)) {
+      setShowSet(curr => curr.filter(currId => currId !== id));
+    } else {
+      setShowSet(curr => [...curr, id]);
     }
   };
 
@@ -130,9 +136,8 @@ const BarberWorkers: React.FC<
     <ContainerStyle style={insetsStyles}>
       <AppStatusBar />
       <Header
-        showTitle={false}
-        showBack
-        showActions={false}
+        showBack={!showContinue}
+        showActions={showContinue}
         showBorder
         onBackPress={goBack}
       />
@@ -168,7 +173,7 @@ const BarberWorkers: React.FC<
                     description={t(`roles.${worker.user.role}`)}
                     avatar={worker.user.avatar.url}
                     clickable={worker.user.role === 'worker'}
-                    onPress={() => addInShowSet(worker._id)}
+                    onPress={() => handleShowSet(worker._id)}
                     style={styles.menuItem}
                   />
                   {showSet.includes(worker._id) &&
@@ -195,8 +200,8 @@ const BarberWorkers: React.FC<
         </ContentScrollContentStyle>
         <ContentActionsStyle>
           <Button
-            variant="outlined"
             colorScheme="primary"
+            variant="ghost"
             title={t('barber.workers.buttons.add')}
             onPress={openAddWorkerModal}
           />
@@ -245,7 +250,7 @@ const BarberWorkers: React.FC<
               initialValues={{
                 name: selectedToEdit.user.name,
                 email: selectedToEdit.user.email,
-                phone: selectedToEdit.user.phone,
+                phone: phoneMask(selectedToEdit.user.phone.toString()),
               }}
               initialAvatar={selectedToEdit.user.avatar.url}
               workerID={selectedToEdit._id}

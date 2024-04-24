@@ -1,6 +1,7 @@
 import {ICreateUser} from '@/app/models';
-import {Icons, Input, Step} from '@/components/atoms';
-import {phoneMask} from '@/utils';
+import {Input, Step, Typography} from '@/components/atoms';
+import {Colors} from '@/theme';
+import {phoneMask, phoneRegex} from '@/utils';
 import React, {useRef, useState} from 'react';
 import {Controller, UseFormReturn} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
@@ -47,17 +48,16 @@ const ProfileStep: React.FC<IProfileStepProps> = ({
         name="name"
         control={control}
         rules={{required: true}}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange}}) => (
           <Input
             label={t('barber.signUp.fields.name')}
             onChangeText={onChange}
-            onBlur={onBlur}
-            value={value}
             returnKeyType="next"
             inputRef={fieldsRef.name}
             onSubmitEditing={() => fieldsRef.email.current?.focus()}
             blurOnSubmit={false}
             textContentType="name"
+            textStyle={{borderColor: Colors.primary}}
           />
         )}
       />
@@ -66,7 +66,7 @@ const ProfileStep: React.FC<IProfileStepProps> = ({
         name="email"
         rules={{required: true}}
         control={control}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange}}) => (
           <Input
             label={t('barber.signUp.fields.email')}
             autoCapitalize="none"
@@ -74,13 +74,12 @@ const ProfileStep: React.FC<IProfileStepProps> = ({
             onChangeText={text => {
               onChange(text);
             }}
-            onBlur={onBlur}
-            value={value}
             inputRef={fieldsRef.email}
             returnKeyType="next"
             onSubmitEditing={() => fieldsRef.password.current?.focus()}
             blurOnSubmit={false}
             textContentType="emailAddress"
+            textStyle={{borderColor: Colors.primary}}
           />
         )}
       />
@@ -89,24 +88,19 @@ const ProfileStep: React.FC<IProfileStepProps> = ({
         name="password"
         rules={{required: true, minLength: 5}}
         control={control}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange}}) => (
           <Input
             label={t('barber.signUp.fields.password')}
             autoCapitalize="none"
             secureTextEntry={!showPassword}
             onChangeText={onChange}
-            onBlur={onBlur}
-            value={value}
             suffix={
               <TouchableOpacity
                 activeOpacity={0.6}
                 onPress={handleShowPassword}>
-                <Icons.EyeIcon
-                  width={20}
-                  height={20}
-                  closed={showPassword}
-                  color="default"
-                />
+                <Typography variant="button" color="primary">
+                  {showPassword ? 'generic.login.hide' : 'generic.login.show'}
+                </Typography>
               </TouchableOpacity>
             }
             inputRef={fieldsRef.password}
@@ -114,15 +108,16 @@ const ProfileStep: React.FC<IProfileStepProps> = ({
             onSubmitEditing={() => fieldsRef.phone.current?.focus()}
             blurOnSubmit={false}
             textContentType="password"
+            textStyle={{borderColor: Colors.primary}}
           />
         )}
       />
 
       <Controller
         name="phone"
-        rules={{required: true}}
+        rules={{required: true, pattern: phoneRegex}}
         control={control}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange, value}}) => (
           <Input
             label={t('barber.signUp.fields.phone')}
             autoCapitalize="none"
@@ -131,7 +126,6 @@ const ProfileStep: React.FC<IProfileStepProps> = ({
               const maskedValue = phoneMask(text);
               onChange(maskedValue);
             }}
-            onBlur={onBlur}
             value={value}
             inputRef={fieldsRef.phone}
             returnKeyType={isValid ? 'done' : 'none'}
@@ -141,6 +135,7 @@ const ProfileStep: React.FC<IProfileStepProps> = ({
               }
             }}
             textContentType="telephoneNumber"
+            textStyle={{borderColor: Colors.primary}}
           />
         )}
       />

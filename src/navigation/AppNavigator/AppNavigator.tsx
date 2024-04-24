@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useMemo} from 'react';
 
 import {
   BarberBillingScreen,
@@ -18,12 +18,12 @@ import {
 } from '@/screens';
 import BarberWorkers from '@/screens/BarberWorkers/BarberWorkers';
 import {RootState} from '@/store/Store';
-import {SKIP_PRE_SIGN_UP_KEY} from '@/store/slicers';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useSelector} from 'react-redux';
+import BottomNav from '../BottomNav/BottomNav';
 import {TRootStackParamList} from '../appRoutes';
+import {navigationRef} from '../useNavigationContainer/useNavigationContainer';
 
 const Stack = createNativeStackNavigator<TRootStackParamList>();
 
@@ -32,37 +32,28 @@ const AppNavigator: React.FC = () => {
     (state: RootState) => state.auth,
   );
 
-  const skipPreSignUp = useSelector((state: RootState) => state.config.skipPre);
-
   const initialRouteName = useMemo(() => {
+    let routeName = '';
+
     if (!isAuthenticated) {
-      return '/generic/login';
+      routeName = '/generic/login';
     }
 
     if (user) {
       if (barber && (user.role === 'admin' || user.role === 'worker')) {
-        if (!skipPreSignUp && barber.profileStatus !== 'completed') {
-          return '/barber/pre-sign-up';
-        }
+        routeName = '/barber/queue';
 
-        return '/barber/queue';
-      } else if (user.role === 'customer') {
-        return '';
+        if (barber.profileStatus === 'pre') {
+          routeName = '/barber/settings/workers';
+        }
+      }
+
+      if (user.role === 'customer') {
       }
     }
 
-    return '/generic/login';
-  }, [isAuthenticated, user, barber, skipPreSignUp]);
-
-  const setSkipPreSignUp = useCallback(async () => {
-    if (!skipPreSignUp && barber && barber.profileStatus === 'completed') {
-      await AsyncStorage.setItem(SKIP_PRE_SIGN_UP_KEY, 'true');
-    }
-  }, [skipPreSignUp, barber]);
-
-  useEffect(() => {
-    setSkipPreSignUp();
-  }, [setSkipPreSignUp]);
+    return routeName;
+  }, [isAuthenticated, user, barber]);
 
   const WorkerAuth = useMemo(
     () =>
@@ -82,7 +73,7 @@ const AppNavigator: React.FC = () => {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator
         initialRouteName={initialRouteName as any}
         screenOptions={{
@@ -144,24 +135,28 @@ const AppNavigator: React.FC = () => {
             <Stack.Screen
               name={'/barber/settings/workers'}
               component={BarberWorkers}
-              initialParams={{showContinue: true}}
+              initialParams={{showContinue: true, hideBottomNav: true}}
             />
             <Stack.Screen
               name={'/barber/settings/services'}
               component={BarberServicesScreen}
-              initialParams={{showContinue: true}}
+              initialParams={{showContinue: true, hideBottomNav: true}}
             />
             <Stack.Screen
               name={'/barber/complete-qr'}
               component={BarberCompletedQrScreen}
+              initialParams={{hideBottomNav: true}}
             />
             <Stack.Screen
               name={'/barber/settings/services/config'}
               component={BarberServicesConfigScreen}
+              initialParams={{hideBottomNav: true}}
             />
           </>
         )}
       </Stack.Navigator>
+
+      <BottomNav />
     </NavigationContainer>
   );
 };

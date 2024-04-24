@@ -1,4 +1,5 @@
 import React = require('react');
+import {Colors} from '@/theme';
 import {oneDigitMask} from '@/utils';
 import {createRef, useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
@@ -10,6 +11,7 @@ interface ICodeInputProps {
   digits: number;
   onDone?: () => void;
   disabled?: boolean;
+  showDoneButton?: boolean;
 }
 
 interface ICodeInputsArr {
@@ -23,6 +25,7 @@ const CodeInput: React.FC<ICodeInputProps> = ({
   onCodeChange,
   onDone,
   disabled,
+  showDoneButton = false,
 }) => {
   const inputValuesArray: ICodeInputsArr[] = [];
   const {watch, register, control, setValue} = useForm();
@@ -74,7 +77,9 @@ const CodeInput: React.FC<ICodeInputProps> = ({
       }
 
       text = oneDigitMask(text);
-    } else {
+    }
+
+    if (text.length === 1) {
       text = oneDigitMask(text);
 
       if (text.length === 1) {
@@ -89,6 +94,7 @@ const CodeInput: React.FC<ICodeInputProps> = ({
         }
       }
     }
+
     cb(text);
   };
 
@@ -99,7 +105,7 @@ const CodeInput: React.FC<ICodeInputProps> = ({
           key={index}
           name={`code-${index}`}
           control={control}
-          render={({field: {onChange, onBlur, value}}) => (
+          render={({field: {onChange, value}}) => (
             <CodeInputStyle
               as={TextInput}
               ref={ref}
@@ -108,8 +114,8 @@ const CodeInput: React.FC<ICodeInputProps> = ({
                 setIsFocused(true);
               }}
               placeholder="0"
+              placeholderTextColor={Colors.placeholder}
               onBlur={() => {
-                onBlur();
                 setIsFocused(false);
               }}
               editable={!disabled}
@@ -126,7 +132,7 @@ const CodeInput: React.FC<ICodeInputProps> = ({
                 }
               }}
               keyboardType="number-pad"
-              returnKeyType="done"
+              returnKeyType={showDoneButton ? 'done' : 'default'}
               onSubmitEditing={() => onDone && onDone()}
             />
           )}

@@ -24,10 +24,17 @@ const createWorker = async (
   avatar: IBuffer,
 ): Promise<AxiosResponse<null>> => {
   try {
+    const unmaskedPhone = params.phone.replace(/\D/g, '');
+
+    const payload = {
+      ...params,
+      phone: unmaskedPhone,
+    };
+
     const formData = new FormData();
 
     for (const key in params) {
-      formData.append(key, params[key as keyof IWorkerForm]);
+      formData.append(key, payload[key as keyof IWorkerForm]);
     }
 
     formData.append('file', avatar);

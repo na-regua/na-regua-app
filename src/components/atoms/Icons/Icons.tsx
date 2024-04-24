@@ -1,5 +1,7 @@
 import {TColorsType} from '@/theme/colors';
 import {ViewStyle} from 'react-native';
+import Animated from 'react-native-reanimated';
+import {Path} from 'react-native-svg';
 import ArrowLeftIcon from './ArrowLeft/ArrowLeft';
 import BellIcon from './BellIcon/BellIcon';
 import CameraIcon from './CameraIcon/CameraIcon';
@@ -7,6 +9,7 @@ import DeleteIcon from './DeleteIcon/DeleteIcon';
 import {DownIcon} from './Down/Down';
 import EditIcon from './EditIcon/EditIcon';
 import EyeIcon from './EyeIcon/EyeIcon';
+import GaleryIcon from './GaleryIcon/GaleryIcon';
 import {LeftIcon} from './Left/Left';
 import {LinesIcon} from './Lines/Lines';
 import LogoMiniIcon from './LogoMini/LogoMini';
@@ -20,10 +23,14 @@ import NavalhaIcon from './NavalhaIcon/NavalhaIcon';
 import PenteIcon from './PenteIcon/PenteIcon';
 import PlusIcon from './PlusIcon/PlusIcon';
 import QRIcon from './QRIcon/QRIcon';
+import ReceiptIcon from './ReceiptIcon/ReceiptIcon';
 import ScheduleIcon from './ScheduleIcon/ScheduleIcon';
+import ScheduleTwotoneIcon from './ScheduleTwotoneIcon/ScheduleTwotoneIcon';
 import SettingsIcon from './SettingsIcon/SettingsIcon';
+import SettingsTwotoneIcon from './SettingsTwotoneIcon/SettingsTwotoneIcon';
 import SunIcon from './SunIcon/SunIcon';
 import TimeIcon from './TimeIcon/TimeIcon';
+import TimeTwotoneIcon from './TimeTwotoneIcon/TimeTwotoneIcon';
 import UpIcon from './Up/Up';
 import UserCheckIcon from './UserCheckIcon/UserCheckIcon';
 import UserIcon from './UserIcon/UserIcon';
@@ -41,6 +48,8 @@ export interface IIconProps {
   wrapperStyle?: ViewStyle;
   svgStyle?: ViewStyle;
 }
+
+export const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 export default {
   DownIcon,
@@ -71,4 +80,9 @@ export default {
   LogoWritingIcon,
   LinesIcon,
   LogoMiniIcon,
+  TimeTwotoneIcon,
+  ScheduleTwotoneIcon,
+  ReceiptIcon,
+  SettingsTwotoneIcon,
+  GaleryIcon,
 };

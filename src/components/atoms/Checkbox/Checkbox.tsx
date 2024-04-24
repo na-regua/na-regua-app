@@ -20,7 +20,7 @@ const Checkbox: React.FC<ICheckboxProps> = ({value, label, onChange}) => {
   };
 
   return (
-    <CheckboxWrapperStyle onPress={handleOnChange} activeOpacity={0.8}>
+    <CheckboxWrapperStyle onPress={handleOnChange} activeOpacity={0.6}>
       <CheckboxContainerStyle>
         <CheckboxDotStyle active={value} />
       </CheckboxContainerStyle>

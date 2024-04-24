@@ -1,5 +1,5 @@
 import {AppDispatch} from '@/store/Store';
-import {getCurrentUser, getSkipPre} from '@/store/slicers';
+import {getCurrentUser} from '@/store/slicers';
 import React, {useCallback, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 
@@ -13,10 +13,6 @@ const PersistedData: React.FC = () => {
   useEffect(() => {
     handlePersistedUser();
   }, [handlePersistedUser]);
-
-  useEffect(() => {
-    dispatch(getSkipPre());
-  }, [dispatch]);
 
   return <></>;
 };

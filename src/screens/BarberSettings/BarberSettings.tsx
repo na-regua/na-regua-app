@@ -7,11 +7,13 @@ import {
   Typography,
 } from '@/components/atoms';
 import {Header, ShareQRModal} from '@/components/molecules';
-import {BottomNav, TRootStackParamList} from '@/navigation';
+import {TRootStackParamList} from '@/navigation';
+import {StatusBarContext} from '@/providers';
 import {AppDispatch, RootState} from '@/store/Store';
-import {clearConfig, getCurrentUser, logout} from '@/store/slicers';
+import {ACCESS_TOKEN_KEY, getCurrentUser, logout} from '@/store/slicers';
 import colors from '@/theme/colors';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {ReactNode, useContext, useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -33,7 +35,6 @@ import {
   ScrollContentStyle,
   styles,
 } from './styles';
-import {StatusBarContext} from '@/providers';
 
 type TSettingsMenuType =
   | 'profile'
@@ -188,11 +189,12 @@ const BarberSettings: React.FC<
     }
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    dispatch(clearConfig());
-
+  const handleLogout = async () => {
     navigation.navigate('/generic/login');
+
+    await AsyncStorage.removeItem(ACCESS_TOKEN_KEY);
+
+    dispatch(logout());
   };
 
   return (
@@ -286,7 +288,6 @@ const BarberSettings: React.FC<
         onClose={() => setStatusbarStyle('dark-content')}>
         <ShareQRModal modalRef={shareQRModalRef} />
       </Modal>
-      <BottomNav />
     </ContainerStyle>
   );
 };

@@ -3,11 +3,15 @@ import {AxiosResponse} from 'axios';
 import api, {errToAxiosError} from '../../api';
 import ENDPOINTS from '../../endpoints';
 
-const sendWhatsappCode = async (
+const sendOTPCode = async (
   phone: string,
 ): Promise<AxiosResponse<{goToVerify: boolean}>> => {
   try {
-    const data = await api.post(ENDPOINTS.AUTH_SEND_WHATSAPP_CODE, {phone});
+    const unmaskedPhone = phone.replace(/\D/g, '');
+
+    const data = await api.post(ENDPOINTS.AUTH_SEND_CODE, {
+      phone: unmaskedPhone,
+    });
 
     return data;
   } catch (error) {
@@ -15,14 +19,16 @@ const sendWhatsappCode = async (
   }
 };
 
-const verifyWhatsapp = async (
+const verifyOTPCode = async (
   code: string,
   phone: string,
 ): Promise<AxiosResponse<ILoginResponse>> => {
   try {
-    const data = await api.post(ENDPOINTS.AUTH_VERIFY_WHATSAPP_CODE, {
+    const unmaskedPhone = phone.replace(/\D/g, '');
+
+    const data = await api.post(ENDPOINTS.AUTH_VERIFY_CODE, {
       code,
-      phone,
+      phone: unmaskedPhone,
     });
 
     return data;
@@ -60,8 +66,8 @@ const getCurrentUser = async (
 };
 
 export default {
-  verifyWhatsapp,
-  sendWhatsappCode,
+  verifyOTPCode,
+  sendOTPCode,
   loginWithEmail,
   getCurrentUser,
 };

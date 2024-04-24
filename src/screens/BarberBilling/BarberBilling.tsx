@@ -1,6 +1,5 @@
 import {AppStatusBar} from '@/components/atoms';
 import {Header} from '@/components/molecules';
-import {BottomNav} from '@/navigation';
 import React from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ContainerStyle} from './styles';
@@ -19,8 +18,6 @@ const BarberBilling: React.FC = () => {
       <AppStatusBar />
 
       <Header showTitle={false} showBorder showWelcome />
-
-      <BottomNav />
     </ContainerStyle>
   );
 };

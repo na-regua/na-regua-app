@@ -31,7 +31,6 @@ import {styles} from './styles';
 
 const VerifyPhone: React.FC = () => {
   const {barber, user} = useSelector((state: RootState) => state.auth);
-  const skipPreSignUp = useSelector((state: RootState) => state.config.skipPre);
   const {t} = useTranslation();
   const insets = useSafeAreaInsets();
   const navigator = useAppNavigation();
@@ -78,7 +77,7 @@ const VerifyPhone: React.FC = () => {
     const {phone} = user;
 
     try {
-      const data = await AuthService.sendWhatsappCode(phone);
+      const data = await AuthService.sendOTPCode(phone);
 
       if (data) {
         setTimer(60);
@@ -115,7 +114,7 @@ const VerifyPhone: React.FC = () => {
     const {phone} = user;
 
     try {
-      const {data} = await AuthService.verifyWhatsapp(code, phone);
+      const {data} = await AuthService.verifyOTPCode(code, phone);
 
       if (data) {
         await dispatch(setPersistedToken(data.accessToken));
@@ -124,11 +123,7 @@ const VerifyPhone: React.FC = () => {
           dispatch(setUser(data.user));
           dispatch(setBarber(data.barber));
 
-          if (data.barber.profileStatus === 'pre' && !skipPreSignUp) {
-            navigator.navigate(APP_ROUTES.BARBER_PRE_SIGN_UP);
-          } else {
-            navigator.navigate(APP_ROUTES.BARBER_QUEUE);
-          }
+          navigator.navigate(APP_ROUTES.BARBER_QUEUE);
         }
       }
 
@@ -164,7 +159,6 @@ const VerifyPhone: React.FC = () => {
         title={t('generic.verifyPhone.title')}
         subtitle={t('generic.verifyPhone.subtitle')}
         onIconPress={handleNavigateToLogin}
-        clickable
       />
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.content}>

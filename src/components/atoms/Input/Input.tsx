@@ -35,6 +35,7 @@ const Input: React.FC<IInputProps> = ({
   const {t} = useTranslation();
   const [isFocused, setIsFocused] = useState(false);
   const [suffixWidth, setSuffixWidth] = useState(0);
+  const [fieldValue, setFieldValue] = useState(value);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -47,11 +48,12 @@ const Input: React.FC<IInputProps> = ({
   };
 
   const active: boolean = useMemo(
-    () => isFocused || !!value,
-    [isFocused, value],
+    () => isFocused || !!value || !!fieldValue,
+    [isFocused, value, fieldValue],
   );
 
   const handleOnChangeText = (text: string) => {
+    setFieldValue(text);
     onChangeText?.(text);
   };
 

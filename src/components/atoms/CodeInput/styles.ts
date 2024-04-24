@@ -5,15 +5,15 @@ export const CodeWrapperStyle = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 `;
 
 export const CodeInputStyle = styled.TextInput<{isFocused?: boolean}>`
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 8px;
-  border-width: 2px;
-  border-color: ${Colors.border};
+  border-width: 1px;
+  border-color: ${Colors.primary};
   border-style: solid;
   text-align: center;
   color: ${Colors.black3};

@@ -1,10 +1,11 @@
-import ENDPOINTS from '@/app/api/endpoints';
+import {GeneralService} from '@/app/api';
 import {IAdressFormData, ICepApiData} from '@/app/models';
 import {Input, Step} from '@/components/atoms';
 import {AppDispatch} from '@/store/Store';
 import {createNotification} from '@/store/slicers';
+import {Colors} from '@/theme';
 import {maskCep, numberMask, ufMask} from '@/utils';
-import axios, {AxiosError} from 'axios';
+import {AxiosError} from 'axios';
 import React, {useRef} from 'react';
 import {Controller, UseFormReturn} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
@@ -49,9 +50,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({
 
     if (removeMasktext.length >= 8) {
       try {
-        const {data} = await axios.get<ICepApiData>(
-          ENDPOINTS.VIA_CEP(removeMasktext),
-        );
+        const {data} = await GeneralService.getCepData(removeMasktext);
 
         if (!!data.erro && data.erro) {
           throw new AxiosError('CEP não encontrado');
@@ -105,7 +104,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({
         name="cep"
         control={control}
         rules={{required: true}}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange, value}}) => (
           <Input
             inputRef={fieldsRef.cep}
             label={t('barber.signUp.fields.postalCode')}
@@ -115,12 +114,12 @@ const AddressStep: React.FC<IAdressStepProps> = ({
               handlePostalCodeChange(maskedText);
               onChange(maskedText);
             }}
-            onBlur={onBlur}
             value={value}
             returnKeyType="done"
             onSubmitEditing={() => fieldsRef.logradouro.current?.focus()}
             blurOnSubmit={false}
             textContentType="postalCode"
+            textStyle={{borderColor: Colors.primary}}
           />
         )}
       />
@@ -128,17 +127,17 @@ const AddressStep: React.FC<IAdressStepProps> = ({
         name="logradouro"
         control={control}
         rules={{required: true}}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange, value}}) => (
           <Input
             label={t('barber.signUp.fields.street')}
             onChangeText={onChange}
-            onBlur={onBlur}
             value={value}
             inputRef={fieldsRef.logradouro}
             returnKeyType="next"
             onSubmitEditing={() => fieldsRef.complemento.current?.focus()}
             blurOnSubmit={false}
             textContentType="fullStreetAddress"
+            textStyle={{borderColor: Colors.primary}}
           />
         )}
       />
@@ -146,18 +145,18 @@ const AddressStep: React.FC<IAdressStepProps> = ({
         <Controller
           name="complemento"
           control={control}
-          render={({field: {onChange, onBlur, value}}) => (
+          render={({field: {onChange, value}}) => (
             <Input
               label={t('barber.signUp.fields.complement')}
               wrapperStyle={styles.formRowField}
               onChangeText={onChange}
-              onBlur={onBlur}
               value={value}
               inputRef={fieldsRef.complemento}
               returnKeyType="next"
               onSubmitEditing={() => fieldsRef.numero.current?.focus()}
               blurOnSubmit={false}
-              textContentType="streetAddressLine2"
+              textContentType="streetAddressLine1"
+              textStyle={{borderColor: Colors.primary}}
             />
           )}
         />
@@ -165,7 +164,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({
           name="numero"
           control={control}
           rules={{required: true}}
-          render={({field: {onChange, onBlur, value}}) => (
+          render={({field: {onChange, value}}) => (
             <Input
               label={t('barber.signUp.fields.number')}
               keyboardType="numeric"
@@ -175,13 +174,13 @@ const AddressStep: React.FC<IAdressStepProps> = ({
                 handlePostalCodeChange(maskedText);
                 onChange(maskedText);
               }}
-              onBlur={onBlur}
               value={value}
               inputRef={fieldsRef.numero}
               returnKeyType="done"
               onSubmitEditing={() => fieldsRef.localidade.current?.focus()}
               blurOnSubmit={false}
               textContentType="streetAddressLine2"
+              textStyle={{borderColor: Colors.primary}}
             />
           )}
         />
@@ -191,18 +190,18 @@ const AddressStep: React.FC<IAdressStepProps> = ({
           name="localidade"
           control={control}
           rules={{required: true}}
-          render={({field: {onChange, onBlur, value}}) => (
+          render={({field: {onChange, value}}) => (
             <Input
               label={t('barber.signUp.fields.city')}
               wrapperStyle={styles.formRowField}
               onChangeText={onChange}
-              onBlur={onBlur}
               value={value}
               inputRef={fieldsRef.localidade}
               returnKeyType="next"
               onSubmitEditing={() => fieldsRef.uf.current?.focus()}
               blurOnSubmit={false}
               textContentType="addressCity"
+              textStyle={{borderColor: Colors.primary}}
             />
           )}
         />
@@ -210,7 +209,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({
           name="uf"
           control={control}
           rules={{required: true}}
-          render={({field: {onChange, onBlur, value}}) => (
+          render={({field: {onChange, value}}) => (
             <Input
               label={t('barber.signUp.fields.uf')}
               wrapperStyle={styles.formRowFieldHalf}
@@ -218,13 +217,13 @@ const AddressStep: React.FC<IAdressStepProps> = ({
                 const maskedText = ufMask(text);
                 onChange(maskedText);
               }}
-              onBlur={onBlur}
               value={value}
               inputRef={fieldsRef.localidade}
               returnKeyType="next"
               onSubmitEditing={() => fieldsRef.bairro.current?.focus()}
               blurOnSubmit={false}
               textContentType="addressState"
+              textStyle={{borderColor: Colors.primary}}
             />
           )}
         />
@@ -233,12 +232,11 @@ const AddressStep: React.FC<IAdressStepProps> = ({
         name="bairro"
         control={control}
         rules={{required: true}}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange, value}}) => (
           <Input
             label={t('barber.signUp.fields.neighborhood')}
             wrapperStyle={styles.formRowFieldHalf}
             onChangeText={onChange}
-            onBlur={onBlur}
             value={value}
             inputRef={fieldsRef.bairro}
             returnKeyType="done"
@@ -248,6 +246,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({
               }
             }}
             textContentType="sublocality"
+            textStyle={{borderColor: Colors.primary}}
           />
         )}
       />

@@ -74,9 +74,11 @@ const Modal = forwardRef<BottomSheetModal, IModalProps>(
         snapPoints={height > 0 ? modalHeight : snapPoints}
         onDismiss={onClose}>
         <View style={modalStyles.content}>
-          <Typography variant="h5" color="black3">
-            {title}
-          </Typography>
+          {title && (
+            <Typography variant="h5" color="black3">
+              {title}
+            </Typography>
+          )}
           {children}
         </View>
       </BottomSheetModal>

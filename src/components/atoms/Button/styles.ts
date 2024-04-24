@@ -17,21 +17,25 @@ export const ButtonThemeColor: Record<TButtonColorScheme, string> = {
 };
 
 export const shadowStyle: ViewStyle = {
+  // IOS
   shadowColor: Colors.black1,
   shadowOffset: {
     height: 2,
     width: 12,
   },
   shadowOpacity: 0.2,
-  elevation: 6,
   shadowRadius: 15,
+  // Android
+  elevation: 6,
 };
 
 const FilledButtonStyle = css``;
 
-const OutlinedButtonStyle = css`
+const OutlinedButtonStyle = css<{colorScheme: TButtonColorScheme}>`
   border-width: 1px;
-  background-color: transparent;
+  ${({colorScheme}) => `
+    background-color: ${ButtonThemeColor[colorScheme]}${hexPercentage['20']};
+  `}
 `;
 
 const GhostButtonStyle = css<{colorScheme: TButtonColorScheme}>`
@@ -57,11 +61,14 @@ export const ButtonStyle = styled.TouchableOpacity<{
   colorScheme: TButtonColorScheme;
   disabled?: boolean;
   loading?: boolean;
+  hasSuffix?: boolean;
 }>`
+  height: 42px;
+  padding: 12px 10px;
   align-items: center;
   justify-content: center;
-  height: 44px;
   border-radius: 8px;
+  position: relative;
 
   ${({colorScheme}) => `
     background-color: ${ButtonThemeColor[colorScheme]};
@@ -94,7 +101,13 @@ export const LabelStyle = styled.Text<{
     `color: ${
       variant === 'filled' ? Colors.white3 : ButtonThemeColor[colorScheme]
     };`}
+  ${({colorScheme}) => colorScheme === 'default' && `color: ${Colors.black2};`}
   ${({variant, colorScheme}) =>
     colorScheme === 'white' && variant === 'filled' && `color: ${Colors.main}`}
   ${({disabled}) => disabled && `color: ${Colors.black2};`}
+`;
+
+export const SuffixStyle = styled.View`
+  position: absolute;
+  right: 18px;
 `;

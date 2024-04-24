@@ -1,27 +1,29 @@
 import {BarbersService} from '@/app/api/services';
-import {ICreateBarber, ICreateUser} from '@/app/models';
-import {Button, Stepper} from '@/components/atoms';
+import {IAdressFormData, ICreateBarber, ICreateUser} from '@/app/models';
+import {AvoidKeyboard, Button, Stepper, Typography} from '@/components/atoms';
 import {AvatarStep, PicturesStep, ProfileStep} from '@/components/molecules';
-import AddressStep, {
-  IAdressFormData,
-} from '@/components/molecules/AddressStep/AddressStep';
-import {useKeyboardVisible} from '@/hooks';
-import {APP_ROUTES, useAppNavigation} from '@/navigation';
+import AddressStep from '@/components/molecules/AddressStep/AddressStep';
+import {useAppNavigation} from '@/navigation';
 import {AppDispatch} from '@/store/Store';
-import {createNotification, setBarber, setUser} from '@/store/slicers';
+import {
+  createNotification,
+  setBarber,
+  setPersistedToken,
+  setUser,
+} from '@/store/slicers';
 import {assetToBuffer} from '@/utils';
 import {AxiosError} from 'axios';
 import React, {useMemo, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
+import {Keyboard} from 'react-native';
 import {Asset} from 'react-native-image-picker';
 import {useDispatch} from 'react-redux';
-import {ContainerStyle, ScrollContent} from './styles';
+import {ContainerStyle, ContentHeaderStyle, ScrollContent} from './styles';
 
 const SignUpForm: React.FC = () => {
   const {t} = useTranslation();
-  const navigation = useAppNavigation();
-  const {isKeyboardVisible} = useKeyboardVisible();
+  const navigator = useAppNavigation();
   const dispatch = useDispatch<AppDispatch>();
 
   const stepOneForm = useForm<ICreateUser>({
@@ -71,15 +73,23 @@ const SignUpForm: React.FC = () => {
     ],
   );
 
-  const handleNextStep = () => {
-    setCurrentStep(curr => curr + 1);
+  const onNextStep = () => {
+    setCurrentStep(curr => {
+      if (curr + 1 > 2) {
+        Keyboard.dismiss();
+      }
+
+      return curr + 1;
+    });
   };
 
-  const handleOnAvatarChange = (file: Asset) => {
+  const onAvatarChange = (file: Asset) => {
     setAvatar(file);
   };
 
-  const handleOnFileUpload = (files: Asset[]) => {};
+  const onThumbUpload = (files: Asset[]) => {
+    setThumbs(files);
+  };
 
   const signUp = async () => {
     if (avatar) {
@@ -90,27 +100,47 @@ const SignUpForm: React.FC = () => {
       const {bairro, cep, complemento, localidade, logradouro, numero, uf} =
         stepTwoForm.getValues();
 
+      const {email, name, password, phone} = stepOneForm.getValues();
+
+      const unmaskedPhone = phone.replace(/\D/g, '');
+
       const createBarber: ICreateBarber = {
-        ...stepOneForm.getValues(),
+        email,
+        name,
+        password,
+        phone: unmaskedPhone,
         files: mappedThumbs,
-        cep,
-        neighborhood: bairro,
-        city: localidade,
-        uf: uf,
-        street: logradouro,
-        number: numero,
-        complement: complemento,
+        address: {
+          cep,
+          neighborhood: bairro,
+          city: localidade,
+          uf: uf,
+          street: logradouro,
+          number: +numero,
+          complement: complemento,
+        },
       };
 
       try {
         const {data} = await BarbersService.signUpBarber(createBarber);
 
         if (data) {
-          setLoading(false);
+          await dispatch(setPersistedToken(data.accessToken));
+
           dispatch(setBarber(data.barber));
           dispatch(setUser(data.user));
 
-          navigation.navigate(APP_ROUTES.GENERIC_VERIFY_PHONE);
+          setTimeout(() => {
+            setLoading(false);
+
+            navigator.navigate('/barber/settings/workers', {
+              showContinue: true,
+            });
+          });
+        }
+
+        if (!data) {
+          setLoading(false);
         }
       } catch (error) {
         setLoading(false);
@@ -134,47 +164,57 @@ const SignUpForm: React.FC = () => {
 
   return (
     <ContainerStyle>
-      <ScrollContent>
-        <Stepper currentStep={currentStep} setCurrentStep={setCurrentStep}>
-          <ProfileStep
-            goNext={handleNextStep}
-            form={stepOneForm}
-            completed={stepOneForm.formState.isValid}
+      <AvoidKeyboard>
+        <ScrollContent>
+          <ContentHeaderStyle>
+            <Typography variant="h2" color="black3">
+              {t('barber.signUp.title')}
+            </Typography>
+            <Typography variant="body2" color="black1">
+              {t('barber.signUp.subtitle')}
+            </Typography>
+          </ContentHeaderStyle>
+
+          <Stepper currentStep={currentStep} setCurrentStep={setCurrentStep}>
+            <ProfileStep
+              goNext={onNextStep}
+              form={stepOneForm}
+              completed={stepOneForm.formState.isValid}
+            />
+            <AddressStep
+              form={stepTwoForm}
+              completed={stepTwoForm.formState.isValid}
+              canJumpTo={canNextObj[1]}
+              goNext={onNextStep}
+            />
+            <PicturesStep
+              onFileUpload={onThumbUpload}
+              completed={thumbs && thumbs.length > 0}
+              canJumpTo={canNextObj[2]}
+            />
+            <AvatarStep
+              onAvatarChange={onAvatarChange}
+              completed={!!avatar && !!avatar.uri}
+              canJumpTo={canNextObj[3]}
+            />
+          </Stepper>
+        </ScrollContent>
+        {!allCompleted && currentStep !== 4 && canNextObj[currentStep] && (
+          <Button
+            disabled={!canNext}
+            onPress={onNextStep}
+            title={t('barber.signUp.buttons.next')}
           />
-          <AddressStep
-            form={stepTwoForm}
-            completed={stepTwoForm.formState.isValid}
-            canJumpTo={canNextObj[1]}
-            goNext={handleNextStep}
+        )}
+        {(allCompleted || currentStep === 4) && (
+          <Button
+            onPress={signUp}
+            disabled={!allCompleted}
+            loading={loading}
+            title={t('barber.signUp.buttons.send')}
           />
-          <PicturesStep
-            thumbs={thumbs}
-            onFileUpload={handleOnFileUpload}
-            completed={thumbs && thumbs.length > 0}
-            canJumpTo={canNextObj[2]}
-          />
-          <AvatarStep
-            onAvatarChange={handleOnAvatarChange}
-            completed={!!avatar && !!avatar.uri}
-            canJumpTo={canNextObj[3]}
-          />
-        </Stepper>
-      </ScrollContent>
-      {!allCompleted && currentStep !== 4 && !isKeyboardVisible && (
-        <Button
-          disabled={!canNext}
-          onPress={handleNextStep}
-          title={t('barber.signUp.buttons.next')}
-        />
-      )}
-      {(allCompleted || currentStep === 4) && !isKeyboardVisible && (
-        <Button
-          onPress={signUp}
-          disabled={!allCompleted}
-          loading={loading}
-          title={t('barber.signUp.buttons.send')}
-        />
-      )}
+        )}
+      </AvoidKeyboard>
     </ContainerStyle>
   );
 };

@@ -37,7 +37,7 @@ const Avatar: React.FC<IAvatarProps> = ({
       mediaType: 'photo',
       includeBase64: true,
       selectionLimit: 1,
-      quality: 0.4,
+      quality: 0.8,
     });
 
     if (result && result.assets && result.assets[0]) {
@@ -53,7 +53,7 @@ const Avatar: React.FC<IAvatarProps> = ({
     <OffsetContainerStyle active={!!preview} size={size + borderOffset}>
       <AvatarContentStyle
         size={size}
-        activeOpacity={0.8}
+        activeOpacity={0.6}
         onPress={getFile}
         loading={loading}
         disabled={disabled || loading}>
@@ -76,7 +76,7 @@ const Avatar: React.FC<IAvatarProps> = ({
       </AvatarContentStyle>
       {loading && (
         <LoaderWrapperStyle>
-          <Loader color={Colors.main} />
+          <Loader color={Colors.main} size="64" />
         </LoaderWrapperStyle>
       )}
     </OffsetContainerStyle>

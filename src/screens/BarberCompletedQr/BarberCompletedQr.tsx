@@ -5,8 +5,8 @@ import {
   QRCode,
   Typography,
 } from '@/components/atoms';
-import {Header, ShareQRModal} from '@/components/molecules';
-import {APP_ROUTES, useAppNavigation} from '@/navigation';
+import {ShareQRModal} from '@/components/molecules';
+import {useAppNavigation} from '@/navigation';
 import {RootState} from '@/store/Store';
 import colors from '@/theme/colors';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
@@ -44,7 +44,7 @@ const BarberCompletedQr: React.FC = () => {
   };
 
   const skip = () => {
-    navigator.navigate(APP_ROUTES.BARBER_QUEUE);
+    navigator.navigate('/barber/queue');
   };
 
   return (
@@ -52,7 +52,6 @@ const BarberCompletedQr: React.FC = () => {
       style={insetsStyles}
       contentContainerStyle={styles.flexGrow1}>
       <AppStatusBar barStyle="light-content" />
-      <Header showTitle={false} lightContent />
       <ContentStyle>
         {barber && (
           <QRContentStyle>

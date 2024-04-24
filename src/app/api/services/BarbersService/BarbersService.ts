@@ -1,5 +1,10 @@
 import api, {errToAxiosError} from '@/app/api/api';
-import {IBarber, IBarberUpdate, ICreateBarber, IUser} from '@/app/models';
+import {
+  IBarber,
+  IBarberUpdate,
+  ICreateBarber,
+  SignUpResponse,
+} from '@/app/models';
 import {AxiosResponse} from 'axios';
 import {default as ENDPOINTS} from '../../endpoints';
 
@@ -21,8 +26,6 @@ const update = async (params: IBarberUpdate): Promise<AxiosResponse<null>> => {
       ...params.servicesConfig,
     };
 
-    console.log(payload);
-
     const data = await api.put(ENDPOINTS.BARBERS_UPDATE, payload, {
       withCredentials: true,
     });
@@ -35,21 +38,22 @@ const update = async (params: IBarberUpdate): Promise<AxiosResponse<null>> => {
 
 const signUpBarber = async (
   barber: ICreateBarber,
-): Promise<AxiosResponse<{barber: IBarber; user: IUser}>> => {
+): Promise<AxiosResponse<SignUpResponse>> => {
   const formData = new FormData();
 
   for (const key in barber) {
+    if (key !== 'files' && key !== 'address') {
+      formData.append(key, barber[key as keyof ICreateBarber]);
+    }
+
+    if (key === 'address') {
+      formData.append(key, JSON.stringify(barber.address));
+    }
+
     if (key === 'files') {
-      barber[key].forEach((file: any) => {
+      barber.files.forEach((file: any) => {
         formData.append('files', file);
       });
-    } else if (key === 'user') {
-      formData.append(
-        'user',
-        JSON.stringify(barber[key as keyof ICreateBarber] as string),
-      );
-    } else {
-      formData.append(key, barber[key as keyof ICreateBarber]);
     }
   }
 

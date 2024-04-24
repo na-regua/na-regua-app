@@ -41,7 +41,7 @@ const Typography: React.FC<ITypographyProps> = ({
   );
 
   return (
-    <Text style={{...stylesByVariant, textAlign, color: textColor, ...style}}>
+    <Text style={[stylesByVariant, {textAlign, color: textColor}, style]}>
       {typeof children === 'string' ? t(children) : children}
     </Text>
   );
@@ -95,8 +95,8 @@ export const TypographyStyles = StyleSheet.create({
     fontSize: Fonts.sizes.button,
   },
   caption: {
-    fontWeight: Fonts.weights.medium,
-    fontFamily: Fonts.types.medium,
+    fontWeight: Fonts.weights.regular,
+    fontFamily: Fonts.types.regular,
     fontSize: Fonts.sizes.caption,
   },
   tip: {

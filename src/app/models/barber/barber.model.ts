@@ -1,6 +1,6 @@
 import {IAdress} from '../cep/cep.model';
 import {IFile} from '../file/file.model';
-import {ICreateUser, IUpdateUser} from '../user/user.model';
+import {ICreateUser, IUpdateUser, IUser} from '../user/user.model';
 
 export interface IBuffer {
   name: string;
@@ -8,32 +8,35 @@ export interface IBuffer {
   uri: string;
 }
 
-export interface ICreateBarber extends IAdress, ICreateUser {
+export interface ICreateBarber extends ICreateUser {
   files: IBuffer[];
+  address: IAdress;
 }
 
-export interface IBarber extends IAdress, IBarberServiceConfig {
+export interface IBarber extends IBarberServiceConfig {
   _id: string;
   name: string;
-  phone: string;
+  phone: number;
   email: string;
-  phoneConfirmed: boolean;
+  address: IAdress;
+  verified: boolean;
   code: string;
   thumbs: IFile[];
   avatar: IFile;
+  status: 'active' | 'inactive';
   profileStatus: 'pre' | 'completed';
-  approvedCustommers: any[];
-  workers: any[];
-  services: any[];
+  attendanceConfig: any;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface IBarberServiceConfig {
-  workDays: string[];
+  attendanceConfig: {
+    workDary: string[];
+    scheduleLimitDays: number;
+  };
   businessDaysConfig: IBarberServiceDayConfig;
   holidaysConfig: IBarberServiceDayConfig;
-  scheduleLimitDays: number;
 }
 
 export interface IBarberServiceDayConfig {
@@ -62,4 +65,10 @@ export interface IBarberUpdate {
   profileData?: IUpdateUser;
   addressData?: Partial<IAdress>;
   servicesConfig?: Partial<IBarberServiceConfig>;
+}
+
+export interface SignUpResponse {
+  barber: IBarber;
+  user: IUser;
+  accessToken: string;
 }

@@ -7,11 +7,17 @@ import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
 import {TUserType, setLoginUserType} from '@/store/slicers';
 import React from 'react';
-import {Keyboard, TouchableWithoutFeedback} from 'react-native';
+import {Keyboard} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {SwitchButton, SwitchButtonStyle} from '../Login/styles';
-import {ContainerStyle, FooterContainerStyle} from './styles';
+import {
+  ContainerStyle,
+  ContentStyle,
+  FooterContainerStyle,
+  TouchableWithoutFeedbackStyle,
+  barberLoginStyles,
+} from './styles';
 
 const BarberLogin = () => {
   const insets = useSafeAreaInsets();
@@ -38,37 +44,48 @@ const BarberLogin = () => {
     }
   };
 
-  return (
-    <TouchableWithoutFeedback
-      style={{flex: 1}}
-      onPress={() => Keyboard.dismiss()}>
-      <ContainerStyle style={insetsStyles}>
-        {method === 'e-mail' && <BarberLoginMailForm />}
-        {method === 'phone' && <BarberLoginPhoneForm />}
-        <FooterContainerStyle>
-          <SwitchButton>
-            <SwitchButtonStyle
-              title="generic.login.buttons.barber"
-              colorScheme="primary"
-              variant={userType === 'worker' ? 'filled' : 'text'}
-              onPress={() => handleSwitchUserType('worker')}
-            />
-            <SwitchButtonStyle
-              title="generic.login.buttons.customer"
-              colorScheme="primary"
-              variant={userType === 'customer' ? 'filled' : 'text'}
-              onPress={() => handleSwitchUserType('customer')}
-            />
-          </SwitchButton>
+  const navigateToBarberRegister = () => {
+    navigation.navigate('/barber/sign-up');
+  };
 
-          <Button
-            title="generic.login.barber.link"
-            colorScheme="primary"
-            variant="text"
-          />
-        </FooterContainerStyle>
+  return (
+    <TouchableWithoutFeedbackStyle onPress={() => Keyboard.dismiss()}>
+      <ContainerStyle
+        contentContainerStyle={[
+          insetsStyles,
+          barberLoginStyles.scrollContainer,
+        ]}>
+        <ContentStyle>
+          {method === 'e-mail' && <BarberLoginMailForm />}
+          {(method === 'phone' || method === 'verify-code') && (
+            <BarberLoginPhoneForm />
+          )}
+          <FooterContainerStyle>
+            <SwitchButton>
+              <SwitchButtonStyle
+                title="generic.login.buttons.barber"
+                colorScheme="primary"
+                variant={userType === 'worker' ? 'filled' : 'text'}
+                onPress={() => handleSwitchUserType('worker')}
+              />
+              <SwitchButtonStyle
+                title="generic.login.buttons.customer"
+                colorScheme="primary"
+                variant={userType === 'customer' ? 'filled' : 'text'}
+                onPress={() => handleSwitchUserType('customer')}
+              />
+            </SwitchButton>
+
+            <Button
+              title="generic.login.barber.link"
+              colorScheme="primary"
+              variant="text"
+              onPress={navigateToBarberRegister}
+            />
+          </FooterContainerStyle>
+        </ContentStyle>
       </ContainerStyle>
-    </TouchableWithoutFeedback>
+    </TouchableWithoutFeedbackStyle>
   );
 };
 

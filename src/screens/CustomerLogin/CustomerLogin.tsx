@@ -1,4 +1,4 @@
-import {ILoginPhoneFormData} from '@/app/models';
+import {ILoginPhone} from '@/app/models';
 import {Button, Icons, Input, Typography} from '@/components/atoms';
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
@@ -12,11 +12,12 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {SwitchButton, SwitchButtonStyle} from '../Login/styles';
 import {
-  AvoidingViewStyle,
   ContainerStyle,
+  ContentFormStyle,
   ContentStyle,
   FooterContainerStyle,
   LogoContainerStyle,
+  customerLoginStyles,
 } from './styles';
 
 const CustomerLogin = () => {
@@ -27,8 +28,7 @@ const CustomerLogin = () => {
   const {
     control,
     formState: {isValid},
-    getValues,
-  } = useForm<ILoginPhoneFormData>({mode: 'all'});
+  } = useForm<ILoginPhone>({mode: 'all'});
 
   const fieldsRef = {
     phone: useRef<TextInput>(null),
@@ -54,35 +54,36 @@ const CustomerLogin = () => {
   };
 
   const doLogin = () => {
-    console.log(getValues());
+    // console.log(getValues());
   };
 
   return (
     <TouchableWithoutFeedback
-      style={{flex: 1}}
+      style={customerLoginStyles.flex1}
       onPress={() => Keyboard.dismiss()}>
-      <ContainerStyle style={insetsStyles}>
+      <ContainerStyle
+        contentContainerStyle={[
+          insetsStyles,
+          customerLoginStyles.scrollContainer,
+        ]}>
         <ContentStyle>
-          <LogoContainerStyle>
-            <Icons.LogoMiniIcon
-              svgStyle={{borderRadius: 18, overflow: 'hidden'}}
-              disabled
-              width={80}
-              height={80}
+          <ContentFormStyle>
+            <LogoContainerStyle>
+              <Icons.LogoMiniIcon
+                svgStyle={{borderRadius: 18, overflow: 'hidden'}}
+                disabled
+                width={80}
+                height={80}
+              />
+              <Icons.LogoWritingIcon width={220} height={50} />
+            </LogoContainerStyle>
+            <Typography
+              variant="body1"
+              color="black1"
+              children="generic.login.customer.phoneSubtitle"
+              textAlign="justify"
             />
-            <Icons.LogoWritingIcon width={220} height={50} />
-          </LogoContainerStyle>
-          <Typography
-            variant="body1"
-            color="black1"
-            children="generic.login.customer.phoneSubtitle"
-            textAlign="justify"
-          />
 
-          <AvoidingViewStyle
-            enabled
-            behavior="padding"
-            keyboardVerticalOffset={18}>
             <Controller
               name="phone"
               rules={{required: true, pattern: phoneRegex}}
@@ -111,30 +112,31 @@ const CustomerLogin = () => {
               disabled={!isValid}
               onPress={doLogin}
             />
-          </AvoidingViewStyle>
-        </ContentStyle>
-        <FooterContainerStyle>
-          <SwitchButton>
-            <SwitchButtonStyle
-              title="generic.login.buttons.barber"
-              colorScheme="primary"
-              variant={userType === 'worker' ? 'filled' : 'text'}
-              onPress={() => handleSwitchUserType('worker')}
-            />
-            <SwitchButtonStyle
-              title="generic.login.buttons.customer"
-              colorScheme="primary"
-              variant={userType === 'customer' ? 'filled' : 'text'}
-              onPress={() => handleSwitchUserType('customer')}
-            />
-          </SwitchButton>
+          </ContentFormStyle>
 
-          <Button
-            title="generic.login.customer.link"
-            colorScheme="primary"
-            variant="text"
-          />
-        </FooterContainerStyle>
+          <FooterContainerStyle>
+            <SwitchButton>
+              <SwitchButtonStyle
+                title="generic.login.buttons.barber"
+                colorScheme="primary"
+                variant={userType === 'worker' ? 'filled' : 'text'}
+                onPress={() => handleSwitchUserType('worker')}
+              />
+              <SwitchButtonStyle
+                title="generic.login.buttons.customer"
+                colorScheme="primary"
+                variant={userType === 'customer' ? 'filled' : 'text'}
+                onPress={() => handleSwitchUserType('customer')}
+              />
+            </SwitchButton>
+
+            <Button
+              title="generic.login.customer.link"
+              colorScheme="primary"
+              variant="text"
+            />
+          </FooterContainerStyle>
+        </ContentStyle>
       </ContainerStyle>
     </TouchableWithoutFeedback>
   );

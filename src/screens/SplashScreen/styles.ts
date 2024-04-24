@@ -1,22 +1,21 @@
 import {Colors, Metrics} from '@/theme';
-import {StyleSheet} from 'react-native';
+import styled from 'styled-components/native';
 
-export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: Metrics.screenWidth,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    backgroundColor: Colors.main,
-    position: 'relative',
-  },
-  content: {
-    flex: 1,
-    width: Metrics.screenWidth,
-    padding: Metrics.smPadding,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 18,
-  },
-});
+export const SplashContainerStyle = styled.View`
+  flex: 1;
+  width: ${Metrics.screenWidth}px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: ${Colors.bgContrast};
+  position: relative;
+`;
+
+export const SpashContentStyle = styled.View`
+  flex: 1;
+  width: ${Metrics.screenWidth}px;
+  padding: ${Metrics.smPadding}px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: ${Metrics.paddingX3}px;
+`;

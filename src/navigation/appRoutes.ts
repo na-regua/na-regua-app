@@ -21,15 +21,15 @@ export type TRootStackParamList = {
   '/barber/sign-up': undefined;
   '/barber/pre-sign-up': undefined;
   '/barber/settings': undefined;
-  '/barber/settings/workers': {showContinue: boolean};
-  '/barber/settings/services': {showContinue: boolean};
-  '/barber/settings/services/config': undefined;
-  '/barber/settings/profile': undefined;
-  '/barber/plan': undefined;
+  '/barber/settings/workers': {showContinue: boolean; hideBottomNav?: boolean};
+  '/barber/settings/services': {showContinue: boolean; hideBottomNav?: boolean};
+  '/barber/settings/services/config'?: {hideBottomNav?: boolean};
+  '/barber/settings/profile'?: {hideBottomNav?: boolean};
+  '/barber/plan': {hideBottomNav?: boolean};
   '/barber/queue': undefined;
   '/barber/schedule': undefined;
   '/barber/billing': undefined;
-  '/barber/complete-qr': undefined;
+  '/barber/complete-qr'?: {hideBottomNav?: boolean};
 
   '/generic/login': undefined;
   '/generic/login/customer': undefined;

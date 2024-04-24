@@ -20,13 +20,17 @@ const CombinedProviders: React.FC = () => {
     <GestureHandlerRootView style={combinedProvidersStyles.gestureHandler}>
       <SafeAreaProvider>
         <ThemeProvider theme={{colors: Colors}}>
+          {/* Redux Store provider */}
           <StoreProvider store={store}>
+            {/* StatusBar provider */}
             <StatusBarProvider>
               <BottomSheetModalProvider>
+                {/* Get persisted data E.g Token */}
                 <PersistedData />
+                {/* App routes */}
 
                 <AppNavigator />
-
+                {/* App notifier */}
                 <NotifyProvider />
               </BottomSheetModalProvider>
             </StatusBarProvider>

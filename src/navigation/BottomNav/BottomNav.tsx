@@ -1,19 +1,19 @@
 import {TUserRoles} from '@/app/models';
 import {Icons, Typography} from '@/components/atoms';
 import {RootState} from '@/store/Store';
-import {useRoute} from '@react-navigation/native';
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useEffect, useMemo} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {APP_ROUTES} from '../appRoutes';
+import {useAppNavigation} from '../useAppNavigation/useAppNavigation';
+import {useNavigationContainerRef} from '../useNavigationContainer/useNavigationContainer';
 import {
   FloatingContainerStyle,
   NavItem,
   labelStyle,
   shadowStyle,
 } from './styles';
-import {useAppNavigation} from '../useAppNavigation/useAppNavigation';
-import {useTranslation} from 'react-i18next';
 
 interface IBottomNavProps {}
 
@@ -26,34 +26,52 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
     paddingBottom: insets.bottom,
   };
 
-  const route = useRoute();
   const navigator = useAppNavigation();
 
-  const isActive = (checkRoute: string) => {
-    const currentRoutePrefix = route.name.split('/')[2];
-    const checkRoutePrefix = checkRoute.split('/')[2];
+  const {currentRoute, startUpdateData, stopUpdateData} =
+    useNavigationContainerRef();
 
-    return currentRoutePrefix === checkRoutePrefix;
+  const hideBottomNav = useMemo(() => {
+    return (currentRoute?.params as any)?.hideBottomNav;
+  }, [currentRoute]);
+
+  useEffect(() => {
+    startUpdateData();
+
+    return () => {
+      stopUpdateData();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const isActive = (checkRoute: string) => {
+    if (!currentRoute) {
+      return false;
+    }
+
+    const currentRouteSuffix = currentRoute.name.split('/')[2];
+    const checkRouteSuffix = checkRoute.split('/')[2];
+
+    return currentRouteSuffix === checkRouteSuffix;
   };
 
   if (!isAuthenticated) {
     return null;
   }
 
-  const handleNavigateTo = (routeName: string) => {
+  const handleNavigateTo = (routeName: any) => {
     navigator.navigate(routeName);
   };
 
   const ALL_ROUTES: Record<string, ReactNode> = {
     [APP_ROUTES.BARBER_QUEUE]: (
       <NavItem
-        activeOpacity={0.8}
+        activeOpacity={0.6}
         onPress={() => handleNavigateTo(APP_ROUTES.BARBER_QUEUE)}>
-        <Icons.TimeIcon
-          width={27}
+        <Icons.TimeTwotoneIcon
+          width={26}
           height={26}
           color={isActive(APP_ROUTES.BARBER_QUEUE) ? 'main' : 'default'}
-          strokeWidth={isActive(APP_ROUTES.BARBER_QUEUE) ? 1.8 : 1.5}
         />
         <Typography
           variant="tip"
@@ -65,13 +83,12 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
     ),
     [APP_ROUTES.BARBER_SCHEDULE]: (
       <NavItem
-        activeOpacity={0.8}
+        activeOpacity={0.6}
         onPress={() => handleNavigateTo(APP_ROUTES.BARBER_SCHEDULE)}>
-        <Icons.ScheduleIcon
+        <Icons.ScheduleTwotoneIcon
           width={26}
           height={26}
           color={isActive(APP_ROUTES.BARBER_SCHEDULE) ? 'main' : 'default'}
-          strokeWidth={isActive(APP_ROUTES.BARBER_SCHEDULE) ? 1.8 : 1.5}
         />
         <Typography
           variant="tip"
@@ -83,13 +100,12 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
     ),
     [APP_ROUTES.BARBER_BILLING]: (
       <NavItem
-        activeOpacity={0.8}
+        activeOpacity={0.6}
         onPress={() => handleNavigateTo(APP_ROUTES.BARBER_BILLING)}>
-        <Icons.MoneyIcon
+        <Icons.ReceiptIcon
           width={26}
           height={26}
           color={isActive(APP_ROUTES.BARBER_BILLING) ? 'main' : 'default'}
-          strokeWidth={isActive(APP_ROUTES.BARBER_BILLING) ? 1.8 : 1.5}
         />
         <Typography
           variant="tip"
@@ -101,13 +117,12 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
     ),
     [APP_ROUTES.BARBER_SETTINGS]: (
       <NavItem
-        activeOpacity={0.8}
+        activeOpacity={0.6}
         onPress={() => handleNavigateTo(APP_ROUTES.BARBER_SETTINGS)}>
-        <Icons.SettingsIcon
+        <Icons.SettingsTwotoneIcon
           width={26}
           height={26}
           color={isActive(APP_ROUTES.BARBER_SETTINGS) ? 'main' : 'default'}
-          strokeWidth={isActive(APP_ROUTES.BARBER_SETTINGS) ? 1.5 : 1.3}
         />
         <Typography
           variant="tip"
@@ -132,12 +147,12 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
       APP_ROUTES.BARBER_BILLING,
       APP_ROUTES.BARBER_SETTINGS,
     ],
-    custommer: [],
+    customer: [],
   };
 
   return (
     <>
-      {user && (
+      {user && !hideBottomNav && (
         <FloatingContainerStyle style={[insetsStyles, shadowStyle]}>
           {routesByRole[user.role].map(routeName => (
             <React.Fragment key={routeName}>

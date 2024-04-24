@@ -3,8 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, {AxiosError} from 'axios';
 
 export let API_ORIGIN = 'http://localhost:8080/';
-API_ORIGIN = 'http://192.168.1.109:8080/';
-// API_ORIGIN = 'http://192.168.0.4:8080/';
+// API_ORIGIN = 'http://192.168.1.109:8080/';
+API_ORIGIN = 'http://192.168.0.3:8080/';
 
 export function errToAxiosError(err: any): AxiosError {
   const {message, code, config, request, response} = err;

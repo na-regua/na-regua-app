@@ -6,7 +6,7 @@ const ptBr = {
       fields: {
         name: 'Nome',
         email: 'E-mail',
-        phone: 'Whatsapp',
+        phone: 'Telefone',
         password: 'Senha',
         postalCode: 'CEP',
         street: 'Rua',
@@ -196,9 +196,8 @@ const ptBr = {
       hide: 'Esconder',
       barber: {
         mailSubtitle: 'Preencha o E-mail e a Senha para entrar.',
-        phoneSubtitle: 'Insira seu telefone whatsapp para fazer o login.',
-        verifySubtitle:
-          'Digite o código recebido no Whatsapp para poder continuar.',
+        phoneSubtitle: 'Insira seu número telefone para continuar.',
+        verifySubtitle: 'Digite o código recebido no SMS para enviar.',
         link: 'Quero fazer parte!',
         fields: {
           email: 'E-mail',
@@ -208,16 +207,18 @@ const ptBr = {
         buttons: {
           join: 'Entrar',
           send: 'Enviar',
-          phoneLogin: 'Entrar c/ Whatsapp',
+          phoneLogin: 'Entrar c/ Telefone',
           mailLogin: 'Entrar c/ E-mail',
+          back: 'Voltar',
         },
+        another: 'Entrar com outro número',
+        again: 'Enviar novamente',
       },
       customer: {
-        phoneSubtitle: 'Insira seu telefone whatsapp para fazer o login.',
-        verifySubtitle:
-          'Digite o código recebido via Whatsapp para fazer login.',
+        phoneSubtitle: 'Insira seu telefone para continuar.',
+        verifySubtitle: 'Digite o código recebido via SMS para enviar.',
         fields: {
-          phone: 'Whatsapp',
+          phone: 'Telefone',
         },
         buttons: {
           send: 'Enviar',
@@ -307,6 +308,14 @@ const ptBr = {
       },
       buttons: {
         add: 'Adicionar',
+      },
+    },
+    editPicture: {
+      titlePhoto: 'Editar foto',
+      titleAvatar: 'Editar avatar',
+      buttons: {
+        chooseFromGalery: 'Escolher foto da galeria',
+        removePhoto: 'Remover foto',
       },
     },
   },

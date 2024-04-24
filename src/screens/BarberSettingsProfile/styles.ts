@@ -7,11 +7,6 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     gap: Metrics.smPadding,
   },
-  keyboardAvoidingView: {
-    flexGrow: 1,
-    gap: Metrics.smPadding,
-    justifyContent: 'center',
-  },
   textCenter: {
     textAlign: 'center',
   },

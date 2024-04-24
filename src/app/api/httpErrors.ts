@@ -1,0 +1,4 @@
+export const HTTP_ERRORS = {
+  // Auth Erros
+  AUTH_VERIFY_MAX_ATTEMPTS: 'AUTH_VERIFY_MAX_ATTEMPTS',
+};

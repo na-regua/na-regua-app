@@ -4,7 +4,7 @@ import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
 import {TUserType, setLoginMethod, setLoginUserType} from '@/store/slicers';
 import {Fonts} from '@/theme';
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -36,24 +36,16 @@ const Login: React.FC = () => {
   const handleSwitchUserType = (type: TUserType) => {
     dispatch(setLoginUserType(type));
 
-    handleNavigateToMode();
-  };
-
-  const handleNavigateToMode = useCallback(async () => {
-    if (userType === 'worker') {
+    if (type === 'worker') {
       dispatch(setLoginMethod('e-mail'));
 
       navigation.navigate('/generic/login/barber');
     }
 
-    if (userType === 'customer') {
+    if (type === 'customer') {
       navigation.navigate('/generic/login/customer');
     }
-  }, [navigation, userType, dispatch]);
-
-  useEffect(() => {
-    handleNavigateToMode();
-  }, [handleNavigateToMode]);
+  };
 
   return (
     <Container style={insetsStyles}>

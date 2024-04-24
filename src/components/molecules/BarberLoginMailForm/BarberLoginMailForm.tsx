@@ -1,13 +1,22 @@
-import {ILoginMailFormData} from '@/app/models';
+import {ILoginEmail} from '@/app/models';
 import {Button, Icons, Input, Typography} from '@/components/atoms';
+import {AppDispatch} from '@/store/Store';
+import {
+  createNotification,
+  setBarber,
+  setLoginMethod,
+  setPersistedToken,
+  setUser,
+} from '@/store/slicers';
 import {Colors} from '@/theme';
 import React, {useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {TextInput, TouchableOpacity} from 'react-native';
-import {AvoidingViewStyle, ContentStyle, LogoContainerStyle} from './styles';
-import {setLoginMethod} from '@/store/slicers';
 import {useDispatch} from 'react-redux';
-import {AppDispatch} from '@/store/Store';
+import {ContentStyle, LogoContainerStyle} from './styles';
+import {AuthService} from '@/app/api';
+import {useAppNavigation} from '@/navigation';
+import {AxiosError} from 'axios';
 
 export interface IBarberLoginMailFormProps {}
 
@@ -16,10 +25,12 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
     control,
     formState: {isValid},
     getValues,
-  } = useForm<ILoginMailFormData>({mode: 'all'});
+  } = useForm<ILoginEmail>({mode: 'all'});
   const dispatch = useDispatch<AppDispatch>();
+  const navigator = useAppNavigation();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   const fieldsRef = {
     email: useRef<TextInput>(null),
@@ -34,8 +45,51 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
     dispatch(setLoginMethod('phone'));
   };
 
-  const doLogin = () => {
-    console.log(getValues());
+  const doLogin = async () => {
+    try {
+      setIsSending(true);
+      const {email, password} = getValues();
+
+      const {data} = await AuthService.loginWithEmail({email, password});
+
+      if (data) {
+        const {accessToken} = data;
+
+        await dispatch(setPersistedToken(accessToken));
+
+        if (data.barber) {
+          dispatch(setUser(data.user));
+          dispatch(setBarber(data.barber));
+          setIsSending(false);
+
+          if (data.barber.profileStatus === 'pre') {
+            navigator.navigate('/barber/settings/workers', {
+              showContinue: true,
+            });
+          }
+
+          if (data.barber.profileStatus === 'completed') {
+            navigator.navigate('/barber/queue');
+          }
+        }
+      }
+    } catch (error) {
+      setIsSending(false);
+
+      if (error instanceof AxiosError) {
+        const {message} = error.response?.data;
+
+        if (message) {
+          dispatch(
+            createNotification({
+              id: 'login-email',
+              type: 'error',
+              message,
+            }),
+          );
+        }
+      }
+    }
   };
 
   return (
@@ -56,63 +110,62 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
         textAlign="justify"
       />
 
-      <AvoidingViewStyle enabled behavior="padding" keyboardVerticalOffset={18}>
-        <Controller
-          name="email"
-          control={control}
-          rules={{required: true}}
-          render={({field: {onChange}}) => (
-            <Input
-              label="generic.login.barber.fields.email"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              onChangeText={text => {
-                onChange(text);
-              }}
-              inputRef={fieldsRef.email}
-              returnKeyType="next"
-              onSubmitEditing={() => fieldsRef.password.current?.focus()}
-              blurOnSubmit={false}
-              textContentType="emailAddress"
-              textStyle={{borderColor: Colors.primary}}
-            />
-          )}
-        />
+      <Controller
+        name="email"
+        control={control}
+        rules={{required: true}}
+        render={({field: {onChange}}) => (
+          <Input
+            label="generic.login.barber.fields.email"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            onChangeText={text => {
+              onChange(text);
+            }}
+            inputRef={fieldsRef.email}
+            returnKeyType="next"
+            onSubmitEditing={() => fieldsRef.password.current?.focus()}
+            blurOnSubmit={false}
+            textContentType="emailAddress"
+            textStyle={{borderColor: Colors.primary}}
+          />
+        )}
+      />
 
-        <Controller
-          name="password"
-          rules={{required: true, minLength: 5}}
-          control={control}
-          render={({field: {onChange}}) => (
-            <Input
-              label="generic.login.barber.fields.password"
-              autoCapitalize="none"
-              secureTextEntry={!showPassword}
-              onChangeText={onChange}
-              suffix={
-                <TouchableOpacity
-                  activeOpacity={0.6}
-                  onPress={handleShowPassword}>
-                  <Typography variant="button" color="primary">
-                    {showPassword ? 'generic.login.hide' : 'generic.login.show'}
-                  </Typography>
-                </TouchableOpacity>
-              }
-              inputRef={fieldsRef.password}
-              returnKeyType="done"
-              onSubmitEditing={() => isValid && doLogin()}
-              blurOnSubmit={true}
-              textContentType="password"
-              textStyle={{borderColor: Colors.primary}}
-            />
-          )}
-        />
-        <Button
-          title="generic.login.barber.buttons.join"
-          disabled={!isValid}
-          onPress={doLogin}
-        />
-      </AvoidingViewStyle>
+      <Controller
+        name="password"
+        rules={{required: true, minLength: 5}}
+        control={control}
+        render={({field: {onChange}}) => (
+          <Input
+            label="generic.login.barber.fields.password"
+            autoCapitalize="none"
+            secureTextEntry={!showPassword}
+            onChangeText={onChange}
+            suffix={
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={handleShowPassword}>
+                <Typography variant="button" color="primary">
+                  {showPassword ? 'generic.login.hide' : 'generic.login.show'}
+                </Typography>
+              </TouchableOpacity>
+            }
+            inputRef={fieldsRef.password}
+            returnKeyType="done"
+            onSubmitEditing={() => isValid && doLogin()}
+            blurOnSubmit={true}
+            textContentType="password"
+            textStyle={{borderColor: Colors.primary}}
+          />
+        )}
+      />
+      <Button
+        title="generic.login.barber.buttons.join"
+        disabled={!isValid}
+        onPress={doLogin}
+        loading={isSending}
+      />
       <Icons.LinesIcon />
       <Button
         variant="ghost"

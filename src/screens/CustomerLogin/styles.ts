@@ -1,18 +1,34 @@
 import {Colors, Metrics} from '@/theme';
+import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 
-export const ContainerStyle = styled.View`
+export const customerLoginStyles = StyleSheet.create({
+  flex1: {
+    flex: 1,
+  },
+  scrollContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+});
+
+export const ContainerStyle = styled.ScrollView`
   flex: 1;
   background: ${Colors.bgContrast};
-  align-items: center;
-  justify-content: flex-start;
-  gap: ${Metrics.paddingX4}px;
 `;
 
 export const ContentStyle = styled.View`
   flex: 1;
-  padding-top: 42px;
-  width: 300px;
+  width: 100%;
+  gap: ${Metrics.paddingX4}px;
+  padding: 42px;
+  padding-bottom: 24px;
+  justify-content: space-between;
+`;
+
+export const ContentFormStyle = styled.View`
+  flex: 1;
   gap: ${Metrics.paddingX3}px;
 `;
 
@@ -23,12 +39,7 @@ export const LogoContainerStyle = styled.View`
 `;
 
 export const FooterContainerStyle = styled.View`
-  width: 300px;
   gap: ${Metrics.paddingX4}px;
   justify-content: center;
   align-items: center;
-`;
-
-export const AvoidingViewStyle = styled.KeyboardAvoidingView`
-  gap: ${Metrics.paddingX3}px;
 `;

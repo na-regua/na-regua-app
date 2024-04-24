@@ -13,6 +13,7 @@ import {
   TitleContainerStyle,
   WelcomeTextStyle,
 } from './styles';
+import {Fonts} from '@/theme';
 
 interface IHeaderProps {
   showTitle?: boolean;
@@ -31,7 +32,7 @@ interface IHeaderProps {
 }
 
 const Header: React.FC<IHeaderProps> = ({
-  showTitle = true,
+  showTitle = false,
   showBack = false,
   backText = 'nav.back',
   showActions = true,
@@ -64,8 +65,9 @@ const Header: React.FC<IHeaderProps> = ({
           <LogoIconStyle
             onPress={onIconPress}
             activeOpacity={0.8}
-            disabled={!iconClickable}
-          />
+            disabled={!iconClickable}>
+            <Icons.LogoMiniIcon disabled width={32} height={32} />
+          </LogoIconStyle>
           <TouchableOpacity activeOpacity={0.8}>
             <Icons.BellIcon
               width={24}
@@ -75,23 +77,34 @@ const Header: React.FC<IHeaderProps> = ({
           </TouchableOpacity>
         </LogoContainerStyle>
       )}
+
       {showTitle && (
         <TitleContainerStyle>
           <Typography variant="h3" color={`${color}3` as any}>
-            {title}
+            {t(title)}
           </Typography>
           <Typography variant="body1" color={`${color}1` as any}>
-            {subtitle}
+            {t(subtitle)}
           </Typography>
         </TitleContainerStyle>
       )}
+
       {showWelcome && isAuthenticated && user && (
         <TitleContainerStyle>
+          <WelcomeTextStyle
+            variant="h3"
+            color={`${color}3` as any}
+            style={{
+              fontWeight: Fonts.weights.regular,
+            }}>
+            Olá,{' '}
+          </WelcomeTextStyle>
           <WelcomeTextStyle variant="h3" color={`${color}3` as any}>
-            Olá, {user.name}
+            {user.name}
           </WelcomeTextStyle>
         </TitleContainerStyle>
       )}
+
       {showBack && (
         <BackContainerStyle activeOpacity={0.8} onPress={onBackPress}>
           <Icons.LeftIcon width={16} height={16} color="primary" />
@@ -100,6 +113,7 @@ const Header: React.FC<IHeaderProps> = ({
           </Typography>
         </BackContainerStyle>
       )}
+
       {showBorder && <BorderContainerStyle />}
     </ContainerStyle>
   );

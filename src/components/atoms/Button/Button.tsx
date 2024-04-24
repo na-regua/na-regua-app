@@ -4,7 +4,13 @@ import {TouchableOpacityProps} from 'react-native';
 import {Colors} from '@/theme';
 import Loader from '../Loader/Loader';
 import {TypographyStyles} from '../Typography/Typography';
-import {ButtonStyle, ButtonThemeColor, LabelStyle, shadowStyle} from './styles';
+import {
+  ButtonStyle,
+  ButtonThemeColor,
+  LabelStyle,
+  SuffixStyle,
+  shadowStyle,
+} from './styles';
 import {useTranslation} from 'react-i18next';
 
 export type TButtonColorScheme =
@@ -25,6 +31,7 @@ export interface IButtonProps extends TouchableOpacityProps {
   disabled?: boolean;
   loading?: boolean;
   variant?: TButtonVariants;
+  suffix?: React.ReactNode;
 }
 
 const Button: React.FC<IButtonProps> = ({
@@ -33,6 +40,7 @@ const Button: React.FC<IButtonProps> = ({
   disabled,
   loading = false,
   variant = 'filled',
+  suffix,
   ...buttonProps
 }) => {
   const {t} = useTranslation();
@@ -54,21 +62,25 @@ const Button: React.FC<IButtonProps> = ({
     <ButtonStyle
       variant={variant}
       colorScheme={colorScheme}
-      activeOpacity={0.8}
-      disabled={disabled}
+      activeOpacity={0.6}
+      disabled={disabled || loading}
       loading={loading}
       style={buttonShadowStyle}
+      hasSuffix={!!suffix}
       {...buttonProps}>
       {!loading ? (
-        <LabelStyle
-          disabled={disabled}
-          colorScheme={colorScheme}
-          variant={variant}
-          style={TypographyStyles.button}>
-          {title && t(title)}
-        </LabelStyle>
+        <>
+          <LabelStyle
+            disabled={disabled}
+            colorScheme={colorScheme}
+            variant={variant}
+            style={TypographyStyles.button}>
+            {title && t(title)}
+          </LabelStyle>
+          {suffix && <SuffixStyle>{suffix}</SuffixStyle>}
+        </>
       ) : (
-        <Loader color={loaderColor} />
+        <Loader size="64" color={loaderColor} strokeWidth={3} />
       )}
     </ButtonStyle>
   );

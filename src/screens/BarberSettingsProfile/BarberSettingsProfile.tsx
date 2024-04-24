@@ -17,14 +17,13 @@ import {useKeyboardVisible} from '@/hooks';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
 import {createNotification, getCurrentUser} from '@/store/slicers';
-import {Metrics} from '@/theme';
 import {checkDiff, maskCep, numberMask, phoneMask, ufMask} from '@/utils';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AxiosError} from 'axios';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
-import {KeyboardAvoidingView, TextInput} from 'react-native';
+import {TextInput} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -152,14 +151,14 @@ const BarberSettingsProfile: React.FC<
       let profileData: ETProfileForm = {
         name: barber.name,
         email: barber.email,
-        phone: barber.phone,
+        phone: phoneMask(barber.phone.toString()),
       };
 
       if (!isAdmin) {
         profileData = {
           name: user.name,
           email: user.email,
-          phone: user.phone,
+          phone: phoneMask(user.phone.toString()),
         };
       }
 
@@ -186,14 +185,14 @@ const BarberSettingsProfile: React.FC<
       let compareArr: ETProfileForm = {
         name: barber.name,
         email: barber.email,
-        phone: barber.phone,
+        phone: phoneMask(barber.phone.toString()),
       };
 
       if (!isAdmin) {
         compareArr = {
           name: user.name,
           email: user.email,
-          phone: user.phone,
+          phone: phoneMask(user.phone.toString()),
         };
       }
 
@@ -246,10 +245,13 @@ const BarberSettingsProfile: React.FC<
 
     try {
       const payload: IBarberUpdate = {};
+
+      const unmaskedPhone = watchProfile.phone.replace(/\D/g, '');
+
       const profileData: ETProfileForm = {
         name: watchProfile.name,
         email: watchProfile.email,
-        phone: watchProfile.phone,
+        phone: unmaskedPhone,
       };
 
       if (hasAddressChanged) {
@@ -293,281 +295,262 @@ const BarberSettingsProfile: React.FC<
         showBorder
         onBackPress={goBack}
       />
-      <KeyboardAvoidingView
-        enabled
-        behavior="padding"
-        keyboardVerticalOffset={Metrics.smPadding}
-        style={styles.keyboardAvoidingView}>
-        <ContentStyle>
-          <ScrollContentStyle contentContainerStyle={styles.scrollContainer}>
-            <ContentHeaderStyle>
-              <Typography variant="h5" color="black3">
-                {t('barber.editUser.title')}
-              </Typography>
-              <Typography variant="body2" color="black1">
-                {t('barber.editUser.subtitle')}
-              </Typography>
-            </ContentHeaderStyle>
-            <CardGroupStyle>
-              <Typography variant="body1" color="black2">
-                {t('barber.editUser.sections.profile')}
-              </Typography>
-              <CardStyle>
+
+      <ContentStyle>
+        <ScrollContentStyle contentContainerStyle={styles.scrollContainer}>
+          <ContentHeaderStyle>
+            <Typography variant="h5" color="black3">
+              {t('barber.editUser.title')}
+            </Typography>
+            <Typography variant="body2" color="black1">
+              {t('barber.editUser.subtitle')}
+            </Typography>
+          </ContentHeaderStyle>
+          <CardGroupStyle>
+            <Typography variant="body1" color="black2">
+              {t('barber.editUser.sections.profile')}
+            </Typography>
+            <CardStyle>
+              <Controller
+                name="name"
+                control={profileControl}
+                rules={{required: true}}
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    label={t('barber.editUser.fields.name')}
+                    onChangeText={onChange}
+                    value={value}
+                    returnKeyType="next"
+                    inputRef={fieldsRef.name}
+                    onSubmitEditing={() => fieldsRef.email.current?.focus()}
+                    blurOnSubmit={false}
+                    textContentType="name"
+                  />
+                )}
+              />
+
+              <Controller
+                name="email"
+                rules={{required: true}}
+                control={profileControl}
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    label={t('barber.editUser.fields.email')}
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                    onChangeText={text => {
+                      onChange(text);
+                    }}
+                    value={value}
+                    inputRef={fieldsRef.email}
+                    returnKeyType="next"
+                    onSubmitEditing={() => fieldsRef.phone.current?.focus()}
+                    blurOnSubmit={false}
+                    textContentType="emailAddress"
+                  />
+                )}
+              />
+
+              <Controller
+                name="phone"
+                rules={{required: true}}
+                control={profileControl}
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    label={t('barber.editUser.fields.phone')}
+                    autoCapitalize="none"
+                    onChangeText={text => {
+                      const maskedValue = phoneMask(text);
+                      onChange(maskedValue);
+                    }}
+                    value={value}
+                    inputRef={fieldsRef.phone}
+                    returnKeyType={'done'}
+                    keyboardType="number-pad"
+                    onSubmitEditing={() => fieldsRef.cep.current?.focus()}
+                    textContentType="telephoneNumber"
+                  />
+                )}
+              />
+            </CardStyle>
+          </CardGroupStyle>
+          <CardGroupStyle>
+            <Typography variant="body1" color="black2">
+              {t('barber.editUser.sections.address')}
+            </Typography>
+            <CardStyle>
+              <Controller
+                name="cep"
+                control={addressControl}
+                rules={{required: true}}
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    inputRef={fieldsRef.cep}
+                    label={t('barber.signUp.fields.postalCode')}
+                    keyboardType="numeric"
+                    onChangeText={text => {
+                      const maskedText = maskCep(text);
+                      handlePostalCodeChange(maskedText);
+                      onChange(maskedText);
+                    }}
+                    value={value}
+                    returnKeyType="done"
+                    onSubmitEditing={() =>
+                      fieldsRef.logradouro.current?.focus()
+                    }
+                    blurOnSubmit={false}
+                    textContentType="postalCode"
+                  />
+                )}
+              />
+              <Controller
+                name="logradouro"
+                control={addressControl}
+                rules={{required: true}}
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    label={t('barber.signUp.fields.street')}
+                    onChangeText={onChange}
+                    value={value}
+                    inputRef={fieldsRef.logradouro}
+                    returnKeyType="next"
+                    onSubmitEditing={() =>
+                      fieldsRef.complemento.current?.focus()
+                    }
+                    blurOnSubmit={false}
+                    textContentType="fullStreetAddress"
+                  />
+                )}
+              />
+              <FormRow>
                 <Controller
-                  name="name"
-                  control={profileControl}
-                  rules={{required: true}}
-                  render={({field: {onChange, onBlur, value}}) => (
+                  name="complemento"
+                  control={addressControl}
+                  render={({field: {onChange, value}}) => (
                     <Input
-                      label={t('barber.editUser.fields.name')}
+                      label={t('barber.signUp.fields.complement')}
+                      wrapperStyle={styles.formRowField}
                       onChangeText={onChange}
-                      onBlur={onBlur}
                       value={value}
+                      inputRef={fieldsRef.complemento}
                       returnKeyType="next"
-                      inputRef={fieldsRef.name}
-                      onSubmitEditing={() => fieldsRef.email.current?.focus()}
+                      onSubmitEditing={() => fieldsRef.numero.current?.focus()}
                       blurOnSubmit={false}
-                      textContentType="name"
+                      textContentType="streetAddressLine2"
                     />
                   )}
                 />
-
                 <Controller
-                  name="email"
-                  rules={{required: true}}
-                  control={profileControl}
-                  render={({field: {onChange, onBlur, value}}) => (
-                    <Input
-                      label={t('barber.editUser.fields.email')}
-                      autoCapitalize="none"
-                      keyboardType="email-address"
-                      onChangeText={text => {
-                        onChange(text);
-                      }}
-                      onBlur={onBlur}
-                      value={value}
-                      inputRef={fieldsRef.email}
-                      returnKeyType="next"
-                      onSubmitEditing={() => fieldsRef.phone.current?.focus()}
-                      blurOnSubmit={false}
-                      textContentType="emailAddress"
-                    />
-                  )}
-                />
-
-                <Controller
-                  name="phone"
-                  rules={{required: true}}
-                  control={profileControl}
-                  render={({field: {onChange, onBlur, value}}) => (
-                    <Input
-                      label={t('barber.editUser.fields.phone')}
-                      autoCapitalize="none"
-                      keyboardType="number-pad"
-                      onChangeText={text => {
-                        const maskedValue = phoneMask(text);
-                        onChange(maskedValue);
-                      }}
-                      onBlur={onBlur}
-                      value={value}
-                      inputRef={fieldsRef.phone}
-                      returnKeyType={'done'}
-                      onSubmitEditing={() => fieldsRef.cep.current?.focus()}
-                      textContentType="telephoneNumber"
-                    />
-                  )}
-                />
-              </CardStyle>
-            </CardGroupStyle>
-            <CardGroupStyle>
-              <Typography variant="body1" color="black2">
-                {t('barber.editUser.sections.address')}
-              </Typography>
-              <CardStyle>
-                <Controller
-                  name="cep"
+                  name="numero"
                   control={addressControl}
                   rules={{required: true}}
-                  render={({field: {onChange, onBlur, value}}) => (
+                  render={({field: {onChange, value}}) => (
                     <Input
-                      inputRef={fieldsRef.cep}
-                      label={t('barber.signUp.fields.postalCode')}
+                      label={t('barber.signUp.fields.number')}
                       keyboardType="numeric"
+                      wrapperStyle={styles.formRowFieldHalf}
                       onChangeText={text => {
-                        const maskedText = maskCep(text);
-                        handlePostalCodeChange(maskedText);
+                        const maskedText = numberMask(text);
                         onChange(maskedText);
                       }}
-                      onBlur={onBlur}
                       value={value}
+                      inputRef={fieldsRef.numero}
                       returnKeyType="done"
                       onSubmitEditing={() =>
-                        fieldsRef.logradouro.current?.focus()
+                        fieldsRef.localidade.current?.focus()
                       }
                       blurOnSubmit={false}
-                      textContentType="postalCode"
+                      textContentType="streetAddressLine2"
                     />
                   )}
                 />
+              </FormRow>
+              <FormRow>
                 <Controller
-                  name="logradouro"
+                  name="localidade"
                   control={addressControl}
                   rules={{required: true}}
-                  render={({field: {onChange, onBlur, value}}) => (
+                  render={({field: {onChange, value}}) => (
                     <Input
-                      label={t('barber.signUp.fields.street')}
+                      label={t('barber.signUp.fields.city')}
+                      wrapperStyle={styles.formRowField}
                       onChangeText={onChange}
-                      onBlur={onBlur}
                       value={value}
-                      inputRef={fieldsRef.logradouro}
+                      inputRef={fieldsRef.localidade}
                       returnKeyType="next"
-                      onSubmitEditing={() =>
-                        fieldsRef.complemento.current?.focus()
-                      }
+                      onSubmitEditing={() => fieldsRef.uf.current?.focus()}
                       blurOnSubmit={false}
-                      textContentType="fullStreetAddress"
+                      textContentType="addressCity"
                     />
                   )}
                 />
-                <FormRow>
-                  <Controller
-                    name="complemento"
-                    control={addressControl}
-                    render={({field: {onChange, onBlur, value}}) => (
-                      <Input
-                        label={t('barber.signUp.fields.complement')}
-                        wrapperStyle={styles.formRowField}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        value={value}
-                        inputRef={fieldsRef.complemento}
-                        returnKeyType="next"
-                        onSubmitEditing={() =>
-                          fieldsRef.numero.current?.focus()
-                        }
-                        blurOnSubmit={false}
-                        textContentType="streetAddressLine2"
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="numero"
-                    control={addressControl}
-                    rules={{required: true}}
-                    render={({field: {onChange, onBlur, value}}) => (
-                      <Input
-                        label={t('barber.signUp.fields.number')}
-                        keyboardType="numeric"
-                        wrapperStyle={styles.formRowFieldHalf}
-                        onChangeText={text => {
-                          const maskedText = numberMask(text);
-                          onChange(maskedText);
-                        }}
-                        onBlur={onBlur}
-                        value={value}
-                        inputRef={fieldsRef.numero}
-                        returnKeyType="done"
-                        onSubmitEditing={() =>
-                          fieldsRef.localidade.current?.focus()
-                        }
-                        blurOnSubmit={false}
-                        textContentType="streetAddressLine2"
-                      />
-                    )}
-                  />
-                </FormRow>
-                <FormRow>
-                  <Controller
-                    name="localidade"
-                    control={addressControl}
-                    rules={{required: true}}
-                    render={({field: {onChange, onBlur, value}}) => (
-                      <Input
-                        label={t('barber.signUp.fields.city')}
-                        wrapperStyle={styles.formRowField}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        value={value}
-                        inputRef={fieldsRef.localidade}
-                        returnKeyType="next"
-                        onSubmitEditing={() => fieldsRef.uf.current?.focus()}
-                        blurOnSubmit={false}
-                        textContentType="addressCity"
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="uf"
-                    control={addressControl}
-                    rules={{required: true}}
-                    render={({field: {onChange, onBlur, value}}) => (
-                      <Input
-                        label={t('barber.signUp.fields.uf')}
-                        wrapperStyle={styles.formRowFieldHalf}
-                        onChangeText={text => {
-                          const maskedText = ufMask(text);
-                          onChange(maskedText);
-                        }}
-                        onBlur={onBlur}
-                        value={value}
-                        inputRef={fieldsRef.uf}
-                        returnKeyType="next"
-                        onSubmitEditing={() =>
-                          fieldsRef.bairro.current?.focus()
-                        }
-                        blurOnSubmit={false}
-                        textContentType="addressState"
-                      />
-                    )}
-                  />
-                </FormRow>
                 <Controller
-                  name="bairro"
+                  name="uf"
                   control={addressControl}
                   rules={{required: true}}
-                  render={({field: {onChange, onBlur, value}}) => (
+                  render={({field: {onChange, value}}) => (
                     <Input
-                      label={t('barber.signUp.fields.neighborhood')}
+                      label={t('barber.signUp.fields.uf')}
                       wrapperStyle={styles.formRowFieldHalf}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      inputRef={fieldsRef.bairro}
-                      returnKeyType="done"
-                      onSubmitEditing={() => {
-                        if (canUpdate) {
-                          saveProfile();
-                        }
+                      onChangeText={text => {
+                        const maskedText = ufMask(text);
+                        onChange(maskedText);
                       }}
-                      textContentType="sublocality"
+                      value={value}
+                      inputRef={fieldsRef.uf}
+                      returnKeyType="next"
+                      onSubmitEditing={() => fieldsRef.bairro.current?.focus()}
+                      blurOnSubmit={false}
+                      textContentType="addressState"
                     />
                   )}
                 />
-              </CardStyle>
-            </CardGroupStyle>
-            <CardGroupStyle>
-              <Typography variant="body1" color="black2">
-                {t('barber.editUser.sections.pictures')}
-              </Typography>
-              <CardStyle>
-                <FileUpload
-                  limit={3}
-                  initialMiniatures={barber.thumbs.map(el => el.url)}
-                />
-              </CardStyle>
-            </CardGroupStyle>
-          </ScrollContentStyle>
-          {!isKeyboardVisible && (
-            <Button
-              disabled={!canUpdate}
-              onPress={saveProfile}
-              loading={saving}
-              colorScheme="primary"
-              title={t('barber.editUser.buttons.save')}
-            />
-          )}
-        </ContentStyle>
-      </KeyboardAvoidingView>
+              </FormRow>
+              <Controller
+                name="bairro"
+                control={addressControl}
+                rules={{required: true}}
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    label={t('barber.signUp.fields.neighborhood')}
+                    wrapperStyle={styles.formRowFieldHalf}
+                    onChangeText={onChange}
+                    value={value}
+                    inputRef={fieldsRef.bairro}
+                    returnKeyType="done"
+                    onSubmitEditing={() => {
+                      if (canUpdate) {
+                        saveProfile();
+                      }
+                    }}
+                    textContentType="sublocality"
+                  />
+                )}
+              />
+            </CardStyle>
+          </CardGroupStyle>
+          <CardGroupStyle>
+            <Typography variant="body1" color="black2">
+              {t('barber.editUser.sections.pictures')}
+            </Typography>
+            <CardStyle>
+              <FileUpload
+                limit={3}
+                initialMiniatures={barber.thumbs.map(el => el.url)}
+              />
+            </CardStyle>
+          </CardGroupStyle>
+        </ScrollContentStyle>
+        {!isKeyboardVisible && (
+          <Button
+            disabled={!canUpdate}
+            onPress={saveProfile}
+            loading={saving}
+            colorScheme="primary"
+            title={t('barber.editUser.buttons.save')}
+          />
+        )}
+      </ContentStyle>
     </ContainerStyle>
   );
 };

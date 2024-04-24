@@ -11,6 +11,7 @@ export type TUserType = 'worker' | 'customer';
 interface ILoginState {
   method: TLoginSteps;
   userType?: TUserType;
+  currentPhone?: string;
 }
 
 const LoginSlicer = createSlice<
@@ -29,14 +30,19 @@ const LoginSlicer = createSlice<
     setLoginUserType: (state, action: GenericAction<TUserType>) => {
       state.userType = action.payload;
     },
+    setCurrentPhone: (state, action: GenericAction<string>) => {
+      state.currentPhone = action.payload;
+    },
   },
 });
 
 const {reducer: LoginReducer} = LoginSlicer;
 
-export const {setLoginMethod, setLoginUserType} = LoginSlicer.actions as {
-  setLoginMethod: ActionCreatorWithPayload<TLoginSteps>;
-  setLoginUserType: ActionCreatorWithPayload<TUserType>;
-};
+export const {setLoginMethod, setLoginUserType, setCurrentPhone} =
+  LoginSlicer.actions as {
+    setLoginMethod: ActionCreatorWithPayload<TLoginSteps>;
+    setLoginUserType: ActionCreatorWithPayload<TUserType>;
+    setCurrentPhone: ActionCreatorWithPayload<string>;
+  };
 
 export {LoginReducer, LoginSlicer};

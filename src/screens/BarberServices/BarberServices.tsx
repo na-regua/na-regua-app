@@ -211,7 +211,7 @@ const BarberServices: React.FC<
         <ContentActionsStyle>
           <Button
             title={t('barber.services.buttons.add')}
-            variant="outlined"
+            variant="ghost"
             colorScheme="primary"
             onPress={openAddServiceModal}
           />

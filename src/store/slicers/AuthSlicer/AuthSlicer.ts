@@ -19,7 +19,7 @@ interface IAuthState {
   user?: IUser;
 }
 
-const ACCESS_TOKEN_KEY = 'access_token';
+const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
 
 const setPersistedToken = createAsyncThunk(
   'Auth/setPersistedToken',
@@ -82,22 +82,23 @@ const AuthSlicer = createSlice<
   },
   extraReducers: builder => {
     builder.addCase(getCurrentUser.fulfilled, (state, action) => {
-      state.isLoading = false;
-
       if (action.payload) {
         state.isAuthenticated = true;
         state.token = action.payload.token;
         state.barber = action.payload.barber;
         state.user = action.payload.user;
       }
+
+      state.isLoading = false;
     });
 
     builder.addCase(getCurrentUser.rejected, (state, action) => {
       if (action.payload instanceof AxiosError) {
-        state.isLoading = false;
         state.isAuthenticated = false;
         state.token = '';
       }
+
+      state.isLoading = false;
     });
 
     builder.addCase(setPersistedToken.fulfilled, (state, action) => {
@@ -111,7 +112,7 @@ const AuthSlicer = createSlice<
 const {reducer} = AuthSlicer;
 
 export const {logout, setUser, setBarber} = AuthSlicer.actions as {
-  logout: ActionCreatorWithoutPayload<string>;
+  logout: ActionCreatorWithoutPayload;
   setUser: ActionCreatorWithPayload<IUser, string>;
   setBarber: ActionCreatorWithPayload<IBarber, string>;
 };

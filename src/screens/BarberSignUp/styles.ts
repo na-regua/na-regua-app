@@ -1,8 +1,8 @@
 import {Colors, Metrics} from '@/theme';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import styled from 'styled-components/native';
 
-export const styles = StyleSheet.create({
+export const barberSignupStyles = StyleSheet.create({
   keyboardAvoid: {
     flex: 1,
   },
@@ -13,19 +13,9 @@ export const styles = StyleSheet.create({
 
 export const ContainerStyle = styled.View`
   flex: 1;
-  background-color: ${Colors.bgLight};
+  background-color: ${Colors.bgContrast};
 `;
 
-export const ScrollContentStyle = styled.ScrollView`
+export const TouchableWithoutFeedbackStyle = styled(TouchableWithoutFeedback)`
   flex: 1;
-  width: ${Metrics.screenWidth}px;
-  flex-direction: column;
-  gap: 18px;
-`;
-
-export const ContentStyle = styled.View`
-  flex: 1;
-  flex-direction: column;
-  padding: ${Metrics.smPadding}px;
-  gap: 18px;
 `;

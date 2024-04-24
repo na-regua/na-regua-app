@@ -9,7 +9,6 @@ import {
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {KeyboardAvoidingView} from 'react-native';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 import Modal from '../Modal/Modal';
@@ -172,30 +171,28 @@ const SelectActiveSchedules: React.FC<ISelectActiveSchedulesProps> = ({
         ))}
       </ContentWrapperStyle>
 
-      <KeyboardAvoidingView enabled>
-        <Modal
-          ref={addScheduleModalRef}
-          title={t('modals.addScheduleTime.title')}
-          height={190}>
-          <Input
-            label={t('modals.addScheduleTime.fields.time')}
-            onChangeText={text => {
-              const maskedText = timeMask(text);
-              setAddScheduleText(maskedText);
-            }}
-            keyboardType="number-pad"
-            value={addScheduleText}
-            returnKeyType="done"
-            onSubmitEditing={addSchedule}
-          />
-          <Button
-            colorScheme="primary"
-            title={t('modals.addScheduleTime.buttons.add')}
-            disabled={!isValidAddScheduleTime}
-            onPress={addSchedule}
-          />
-        </Modal>
-      </KeyboardAvoidingView>
+      <Modal
+        ref={addScheduleModalRef}
+        title={t('modals.addScheduleTime.title')}
+        height={190}>
+        <Input
+          label={t('modals.addScheduleTime.fields.time')}
+          onChangeText={text => {
+            const maskedText = timeMask(text);
+            setAddScheduleText(maskedText);
+          }}
+          keyboardType="number-pad"
+          value={addScheduleText}
+          returnKeyType="done"
+          onSubmitEditing={addSchedule}
+        />
+        <Button
+          colorScheme="primary"
+          title={t('modals.addScheduleTime.buttons.add')}
+          disabled={!isValidAddScheduleTime}
+          onPress={addSchedule}
+        />
+      </Modal>
     </ContainerStyle>
   );
 };

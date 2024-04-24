@@ -20,7 +20,7 @@ export const LogoContainerStyle = styled.View`
 `;
 
 export const TitleContainerStyle = styled.View`
-  flex-direction: column;
+  flex-direction: row;
 `;
 
 export const LogoIconStyle = styled.TouchableOpacity<{lightContent?: boolean}>`
@@ -42,6 +42,7 @@ export const BorderContainerStyle = styled.View`
 `;
 
 export const BackContainerStyle = styled.TouchableOpacity`
+  align-self: flex-start;
   flex-direction: row;
   align-items: center;
   gap: 4px;

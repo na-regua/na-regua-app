@@ -6,18 +6,18 @@ export interface ILoginEmail {
   password: string;
 }
 
-export interface ILoginWhatsapp {
+export interface ILoginPhone {
   phone: string;
 }
 
-export interface IVerifyWhatsappCode {
+export interface IVerifyCode {
   phone: string;
   code: string;
 }
 
 export interface ILoginResponse {
   accessToken: string;
-  barber?: IBarber;
+  barber: IBarber;
   user: IUser;
 }
 
