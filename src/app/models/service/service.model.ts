@@ -14,3 +14,10 @@ export interface IBarberService {
 export interface IGetBarberServicesParams {
   barberId?: string;
 }
+
+export interface IBarberServiceForm {
+  name: string;
+  durationInMinutes: string;
+  price: string;
+  icon: IBarberServiceIcon;
+}

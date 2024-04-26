@@ -65,7 +65,6 @@ const ShareQRModal: React.FC<IShareQRModalProps> = ({modalRef}) => {
   const getQRWrapperHeight = (event: LayoutChangeEvent) => {
     const {height, width} = event.nativeEvent.layout;
 
-    console.log({height, width});
     setQrWrapperDimensions({height, width});
   };
 

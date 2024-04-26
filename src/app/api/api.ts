@@ -1,6 +1,7 @@
 import {ACCESS_TOKEN_KEY} from '@/store/slicers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, {AxiosError} from 'axios';
+import {onUnauthorizedResponse} from './interceptors';
 
 export let API_ORIGIN = 'http://localhost:8080/';
 // API_ORIGIN = 'http://192.168.1.109:8080/';
@@ -27,5 +28,7 @@ api.interceptors.request.use(async config => {
 
   return config;
 });
+
+api.interceptors.response.use(undefined, onUnauthorizedResponse);
 
 export default api;

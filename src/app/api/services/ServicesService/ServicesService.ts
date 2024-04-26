@@ -1,5 +1,8 @@
-import {IBarberService, IGetBarberServicesParams} from '@/app/models';
-import {IBarberServiceForm} from '@/components/molecules';
+import {
+  IBarberService,
+  IBarberServiceForm,
+  IGetBarberServicesParams,
+} from '@/app/models';
 import {queryBuilder} from '@/utils';
 import {AxiosResponse} from 'axios';
 import api, {errToAxiosError} from '../../api';

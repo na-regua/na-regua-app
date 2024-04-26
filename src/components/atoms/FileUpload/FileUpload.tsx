@@ -1,19 +1,21 @@
 import React = require('react');
 import {ImagePickerType} from '@/app/models';
 import {EditPictureModal} from '@/components/modals';
-import {Colors} from '@/theme';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useRef, useState} from 'react';
-import {
-  Image,
-  ImageSourcePropType,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ImageSourcePropType} from 'react-native';
 import {Asset} from 'react-native-image-picker';
 import Icons from '../Icons/Icons';
+import Loader from '../Loader/Loader';
 import Modal from '../Modal/Modal';
+import {
+  ImagePreview,
+  LoaderWrapperStyle,
+  PickerStyle,
+  PickerWrapperStyle,
+  PreviewWrapperStyle,
+} from './styles';
+import {Colors} from '@/theme';
 
 const ImagePicker: ImagePickerType = require('react-native-image-picker');
 
@@ -21,12 +23,22 @@ interface IFileUploadProps {
   limit: number;
   initialMiniatures?: string[];
   onFileUpload?: (files: Asset[]) => void;
+  disabled?: boolean;
+  loading?: boolean;
+  width?: number;
+  height?: number;
+  previewBorder?: number;
 }
 
 const FileUpload: React.FC<IFileUploadProps> = ({
   onFileUpload,
   initialMiniatures,
   limit,
+  width = 72,
+  height = 100,
+  disabled,
+  loading,
+  previewBorder = 2,
 }) => {
   const editPictureModalRef = useRef<BottomSheetModal>(null);
 
@@ -55,8 +67,8 @@ const FileUpload: React.FC<IFileUploadProps> = ({
     if (result && result.assets) {
       const resultAssets: Asset[] = result.assets;
 
-      const miniatureImages = resultAssets.map((asset: Asset) =>
-        asset.base64 ? asset.base64 : '',
+      const miniatureImages = resultAssets.map(
+        (asset: Asset) => asset.base64 || '',
       );
 
       const newFile = miniatureImages[0];
@@ -73,10 +85,12 @@ const FileUpload: React.FC<IFileUploadProps> = ({
         setMiniatures(newFiles);
       }
 
-      setAssets(resultAssets);
+      const newAssets = [...assets, ...resultAssets];
+
+      setAssets(newAssets);
 
       if (onFileUpload) {
-        onFileUpload(resultAssets);
+        onFileUpload(newAssets);
       }
     }
 
@@ -85,9 +99,11 @@ const FileUpload: React.FC<IFileUploadProps> = ({
     }
   };
 
-  const removePicture = (pictureIndex: number) => {
-    const newFiles = miniatures.filter((_, index) => index !== pictureIndex);
-    const newAssets = assets.filter((_, index) => index !== pictureIndex);
+  const removePicture = (pictureToRemove: string) => {
+    const newFiles = miniatures.filter(picture => picture !== pictureToRemove);
+    const newAssets = assets.filter(
+      picture => picture.base64 !== pictureToRemove,
+    );
 
     setMiniatures(newFiles);
     setAssets(newAssets);
@@ -122,10 +138,12 @@ const FileUpload: React.FC<IFileUploadProps> = ({
         setMiniatures(files);
       }
 
-      setAssets(resultAssets);
+      const newAssets = [...assets, ...resultAssets];
+
+      setAssets(newAssets);
 
       if (onFileUpload) {
-        onFileUpload(resultAssets);
+        onFileUpload(newAssets);
       }
     }
   };
@@ -143,28 +161,39 @@ const FileUpload: React.FC<IFileUploadProps> = ({
   };
 
   return (
-    <View style={styles.pickerWrapper}>
+    <PickerWrapperStyle>
       {miniatures.map((image: string, index: number) => (
-        <TouchableOpacity
+        <PreviewWrapperStyle
           activeOpacity={0.6}
-          style={styles.previewWrapper}
           key={index}
-          onPress={() => onEditPicture(image, index)}>
-          <Image source={getPreviewSource(image)} style={styles.preview} />
-        </TouchableOpacity>
+          onPress={() => onEditPicture(image, index)}
+          disabled={disabled}>
+          <ImagePreview
+            width={width - 2 * previewBorder}
+            height={height - 2 * previewBorder}
+            source={getPreviewSource(image)}
+          />
+          {loading && (
+            <LoaderWrapperStyle>
+              <Loader color={Colors.white3} size="64" strokeWidth={2.5} />
+            </LoaderWrapperStyle>
+          )}
+        </PreviewWrapperStyle>
       ))}
       {miniatures.length !== limit && (
-        <TouchableOpacity
+        <PickerStyle
+          width={width}
+          height={height}
           activeOpacity={0.6}
-          style={styles.picker}
-          onPress={getLibraryFiles}>
+          onPress={getLibraryFiles}
+          disabled={disabled}>
           <Icons.CameraIcon
             color="default"
             width={24}
             height={24}
             strokeWidth={2}
           />
-        </TouchableOpacity>
+        </PickerStyle>
       )}
       <Modal ref={editPictureModalRef} height={292}>
         {selectedToEdit && (
@@ -172,46 +201,12 @@ const FileUpload: React.FC<IFileUploadProps> = ({
             picture={selectedToEdit.picture}
             actions={['chooseFromGallery', 'removePicture']}
             chooseFromGallery={() => overridePicture(selectedToEdit.index)}
-            removePicture={() => removePicture(selectedToEdit.index)}
+            removePicture={() => removePicture(selectedToEdit.picture)}
           />
         )}
       </Modal>
-    </View>
+    </PickerWrapperStyle>
   );
 };
-
-const styles = StyleSheet.create({
-  pickerWrapper: {
-    flexDirection: 'row',
-    gap: 24,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flex: 1,
-  },
-  picker: {
-    minHeight: 100,
-    maxWidth: 72,
-    flex: 1,
-    paddingHorizontal: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Colors.border,
-    borderWidth: 2,
-    borderStyle: 'dashed',
-    borderColor: Colors.default,
-    borderRadius: 4,
-  },
-  preview: {
-    width: 72,
-    height: 100,
-    resizeMode: 'cover',
-  },
-  previewWrapper: {
-    borderWidth: 2,
-    borderStyle: 'solid',
-    borderColor: Colors.main,
-    borderRadius: 4,
-  },
-});
 
 export default FileUpload;

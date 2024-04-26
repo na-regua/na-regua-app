@@ -5,6 +5,7 @@ import {
   SliceCaseReducers,
   createSlice,
 } from '@reduxjs/toolkit';
+import {getCurrentUser} from '../AuthSlicer/AuthSlicer';
 
 export type TUserType = 'worker' | 'customer';
 
@@ -33,6 +34,20 @@ const LoginSlicer = createSlice<
     setCurrentPhone: (state, action: GenericAction<string>) => {
       state.currentPhone = action.payload;
     },
+  },
+  extraReducers: builder => {
+    // Add extra reducers here
+    builder.addCase(getCurrentUser.fulfilled, (state, action) => {
+      if (action.payload) {
+        if (action.payload.user && action.payload.user.role === 'customer') {
+          state.userType = 'customer';
+        }
+
+        if (action.payload.user && action.payload.barber) {
+          state.userType = 'worker';
+        }
+      }
+    });
   },
 });
 

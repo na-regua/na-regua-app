@@ -18,17 +18,17 @@ export const ContainerStyle = styled.ScrollView`
 
 export const ContentStyle = styled.View`
   flex: 1;
-  padding-bottom: 24px;
   width: 100%;
   gap: ${Metrics.paddingX4}px;
   align-items: center;
   justify-content: space-between;
-
-  max-width: 320px;
+  width: 100%;
+  max-width: 360px;
   min-width: 240px;
 `;
 
 export const FooterContainerStyle = styled.View`
+  align-self: stretch;
   gap: ${Metrics.paddingX4}px;
   justify-content: center;
   align-items: center;

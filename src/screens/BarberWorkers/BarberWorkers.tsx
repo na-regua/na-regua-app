@@ -10,10 +10,12 @@ import {
   Modal,
   Typography,
 } from '@/components/atoms';
-import {DeleteWorkerModal, Header, WorkerModal} from '@/components/molecules';
+import {DeleteWorkerModal, WorkerModal} from '@/components/modals';
+import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {RootState} from '@/store/Store';
 import {Colors} from '@/theme';
+import {phoneMask} from '@/utils';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
@@ -31,7 +33,6 @@ import {
   MenuItemsWrapperStyle,
   styles,
 } from './styles';
-import {phoneMask} from '@/utils';
 
 const BarberWorkers: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/barber/settings/workers'>

@@ -70,8 +70,8 @@ const Header: React.FC<IHeaderProps> = ({
           </LogoIconStyle>
           <TouchableOpacity activeOpacity={0.8}>
             <Icons.BellIcon
-              width={24}
-              height={24}
+              width={28}
+              height={28}
               color={`${mainColor}` as any}
             />
           </TouchableOpacity>

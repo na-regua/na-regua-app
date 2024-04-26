@@ -34,3 +34,14 @@ export function queryBuilder(
 
   return url;
 }
+
+export function mapPathVariables(
+  url: string,
+  paths: Record<string, string>,
+): string {
+  Object.keys(paths).forEach(key => {
+    url = url.replace(`:${key}`, paths[key]);
+  });
+
+  return url;
+}

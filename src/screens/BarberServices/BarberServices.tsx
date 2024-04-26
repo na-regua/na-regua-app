@@ -10,11 +10,7 @@ import {
   Modal,
   Typography,
 } from '@/components/atoms';
-import {
-  BarberServiceModal,
-  DeleteServiceModal,
-  Header,
-} from '@/components/molecules';
+import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {RootState} from '@/store/Store';
 import {Colors} from '@/theme';
@@ -35,6 +31,7 @@ import {
   MenuItemsWrapperStyle,
   styles,
 } from './styles';
+import {BarberServiceModal, DeleteServiceModal} from '@/components/modals';
 
 const BarberServices: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/barber/settings/services'>

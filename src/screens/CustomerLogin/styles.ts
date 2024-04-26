@@ -21,12 +21,12 @@ export const ContainerStyle = styled.ScrollView`
 
 export const ContentStyle = styled.View`
   flex: 1;
-  width: 100%;
   gap: ${Metrics.paddingX4}px;
-  padding-bottom: 24px;
+  padding-bottom: 0;
   justify-content: space-between;
   max-width: 360px;
   min-width: 240px;
+  width: 100%;
 `;
 
 export const ContentFormStyle = styled.View`

@@ -18,8 +18,9 @@ export const WelcomeContent = styled.View`
   justify-content: center;
   gap: ${Metrics.paddingX8}px;
   min-width: 240px;
-  max-width: 320px;
+  max-width: 360px;
   padding: ${Metrics.paddingX4}px;
+  width: 100%;
 `;
 
 export const WelcomeTitle = styled.View`

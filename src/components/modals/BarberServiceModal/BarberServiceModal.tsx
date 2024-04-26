@@ -1,5 +1,5 @@
 import {ServicesService} from '@/app/api';
-import {IBarberServiceIcon} from '@/app/models';
+import {IBarberServiceForm} from '@/app/models';
 import {Icons, Input, Typography} from '@/components/atoms';
 import {AppDispatch} from '@/store/Store';
 import {createNotification} from '@/store/slicers';
@@ -21,13 +21,6 @@ import {
   SelectIconWrapperStyle,
   styles,
 } from './styles';
-
-export interface IBarberServiceForm {
-  name: string;
-  durationInMinutes: string;
-  price: string;
-  icon: IBarberServiceIcon;
-}
 
 interface IWorkerModalProps {
   modalRef: React.RefObject<BottomSheetModal | null>;

@@ -61,3 +61,11 @@ export const FormRow = styled.View`
   flex-direction: row;
   gap: 18px;
 `;
+
+export const FileUploadRowStyle = styled.View`
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 24px;
+`;

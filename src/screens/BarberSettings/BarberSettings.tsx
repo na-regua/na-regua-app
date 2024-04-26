@@ -6,7 +6,8 @@ import {
   Modal,
   Typography,
 } from '@/components/atoms';
-import {Header, ShareQRModal} from '@/components/molecules';
+import {ShareQRModal} from '@/components/modals';
+import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {StatusBarContext} from '@/providers';
 import {AppDispatch, RootState} from '@/store/Store';
@@ -68,6 +69,7 @@ const BarberSettings: React.FC<
   };
 
   const {barber, user} = useSelector((state: RootState) => state.auth);
+  const {userType} = useSelector((state: RootState) => state.login);
 
   const [changingAvatar, setChangingAvatar] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -190,11 +192,17 @@ const BarberSettings: React.FC<
   };
 
   const handleLogout = async () => {
-    navigation.navigate('/generic/login');
-
     await AsyncStorage.removeItem(ACCESS_TOKEN_KEY);
 
     dispatch(logout());
+
+    if (userType === 'customer') {
+      navigation.navigate('/generic/login/customer');
+    }
+
+    if (userType === 'worker') {
+      navigation.navigate('/generic/login/barber');
+    }
   };
 
   return (

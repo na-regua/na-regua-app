@@ -17,6 +17,9 @@ interface IEditPictureModalProps {
   actions?: TEditPictureActions[];
   chooseFromGallery?: () => void;
   removePicture?: () => void;
+  loaders?: Record<TEditPictureActions, boolean>;
+  width?: number;
+  height?: number;
   // takePicture: () => void;
 }
 
@@ -26,6 +29,9 @@ const EditPictureModal: React.FC<IEditPictureModalProps> = ({
   removePicture,
   actions,
   isAvatar,
+  loaders,
+  width = 72,
+  height = 100,
 }) => {
   const {t} = useTranslation();
 
@@ -44,7 +50,11 @@ const EditPictureModal: React.FC<IEditPictureModalProps> = ({
   return (
     <ModalContainerStyle>
       <ModalContainerTitleStyle>
-        <ImagePreviewStyle source={getPreviewSource(picture)} />
+        <ImagePreviewStyle
+          width={width}
+          height={height}
+          source={getPreviewSource(picture)}
+        />
 
         {isAvatar ? (
           <Typography variant="h5" color="black3">
@@ -64,6 +74,7 @@ const EditPictureModal: React.FC<IEditPictureModalProps> = ({
               variant="ghost"
               title="modals.editPicture.buttons.chooseFromGalery"
               onPress={chooseFromGallery}
+              loading={loaders?.chooseFromGallery}
               suffix={
                 <Icons.GaleryIcon width={18} height={18} color="black2" />
               }
@@ -75,6 +86,7 @@ const EditPictureModal: React.FC<IEditPictureModalProps> = ({
               colorScheme="danger"
               title="modals.editPicture.buttons.removePhoto"
               onPress={removePicture}
+              loading={loaders?.removePicture}
               suffix={
                 <Icons.DeleteIcon
                   width={18}
@@ -91,4 +103,4 @@ const EditPictureModal: React.FC<IEditPictureModalProps> = ({
   );
 };
 
-export {EditPictureModal};
+export default EditPictureModal;

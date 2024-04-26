@@ -5,14 +5,8 @@ import {
   ICepApiData,
   ICreateUser,
 } from '@/app/models';
-import {
-  AppStatusBar,
-  Button,
-  FileUpload,
-  Input,
-  Typography,
-} from '@/components/atoms';
-import {Header} from '@/components/molecules';
+import {AppStatusBar, Button, Input, Typography} from '@/components/atoms';
+import {Header, UpdateBarberThumbs} from '@/components/molecules';
 import {useKeyboardVisible} from '@/hooks';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
@@ -180,7 +174,7 @@ const BarberSettingsProfile: React.FC<
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [barber, user]);
 
   const hasUserChanged = useMemo(() => {
     if (barber && user) {
@@ -278,8 +272,11 @@ const BarberSettingsProfile: React.FC<
         }
       }
 
-      if (canUpdate) {
+      if (hasAddressChanged || hasUserChanged) {
         await BarbersService.update(payload);
+      }
+
+      if (canUpdate) {
         await dispatch(getCurrentUser());
       }
 
@@ -301,7 +298,9 @@ const BarberSettingsProfile: React.FC<
       />
 
       <ContentStyle>
-        <ScrollContentStyle contentContainerStyle={styles.scrollContainer}>
+        <ScrollContentStyle
+          contentContainerStyle={styles.scrollContainer}
+          showsVerticalScrollIndicator={false}>
           <ContentHeaderStyle>
             <Typography variant="h5" color="black3">
               {t('barber.editUser.title')}
@@ -378,6 +377,7 @@ const BarberSettingsProfile: React.FC<
               />
             </CardStyle>
           </CardGroupStyle>
+
           <CardGroupStyle>
             <Typography variant="body1" color="black2">
               {t('barber.editUser.sections.address')}
@@ -533,17 +533,7 @@ const BarberSettingsProfile: React.FC<
               />
             </CardStyle>
           </CardGroupStyle>
-          <CardGroupStyle>
-            <Typography variant="body1" color="black2">
-              {t('barber.editUser.sections.pictures')}
-            </Typography>
-            <CardStyle>
-              <FileUpload
-                limit={3}
-                initialMiniatures={barber.thumbs.map(el => el.url)}
-              />
-            </CardStyle>
-          </CardGroupStyle>
+          <UpdateBarberThumbs />
         </ScrollContentStyle>
         {!isKeyboardVisible && (
           <Button

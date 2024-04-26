@@ -16,6 +16,7 @@ const StyledNotifyWrapper = styled.View`
   width: ${Metrics.screenWidth}px;
   padding: 18px;
   gap: 18px;
+  z-index: 99999999;
 `;
 
 interface INotifyProvider {}
