@@ -15,4 +15,3 @@ export {default as BarberLoginScreen} from './BarberLogin/BarberLogin';
 export {default as CustomerLoginScreen} from './CustomerLogin/CustomerLogin';
 export {default as LoginScreen} from './Login/Login';
 export {default as SplashScreen} from './SplashScreen/SplashScreen';
-export {default as VerifyPhoneScreen} from './VerifyPhone/VerifyPhone';
