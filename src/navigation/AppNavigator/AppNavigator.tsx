@@ -14,6 +14,7 @@ import {
   BarberSignUpScreen,
   CustomerLoginScreen,
   LoginScreen,
+  NotificationsScreen,
   SplashScreen,
 } from '@/screens';
 import BarberWorkers from '@/screens/BarberWorkers/BarberWorkers';
@@ -41,7 +42,7 @@ const AppNavigator: React.FC = () => {
 
     if (user) {
       if (barber && (user.role === 'admin' || user.role === 'worker')) {
-        routeName = '/barber/queue';
+        routeName = '/barber/schedule';
 
         if (barber.profileStatus === 'pre') {
           routeName = '/barber/settings/workers';
@@ -100,6 +101,15 @@ const AppNavigator: React.FC = () => {
           component={CustomerLoginScreen}
           options={{animation: 'none'}}
         />
+
+        {isAuthenticated && (
+          <>
+            <Stack.Screen
+              name={'/user/notifications'}
+              component={NotificationsScreen}
+            />
+          </>
+        )}
 
         {WorkerAuth && (
           <>

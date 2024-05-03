@@ -1,12 +1,10 @@
 import React, {useMemo, useState} from 'react';
 
-import {BarbersService} from '@/app/api';
-import {IBarberServiceConfig, IBarberServiceDayConfig} from '@/app/models';
+import {IBarberServiceConfig} from '@/app/models';
 import {AppStatusBar, Button, Typography} from '@/components/atoms';
 import {
   Header,
   IBarberServiceGeneralConfig,
-  ServiceConfigDaysCard,
   ServiceGeneralConfigCard,
 } from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
@@ -45,35 +43,14 @@ const BarberServicesConfig: React.FC<
   const [updating, setUpdating] = useState(false);
   const [newGeneralConfig, setNewGeneralConfig] =
     useState<IBarberServiceGeneralConfig | null>(null);
-  const [newBusinessDaysConfig, setNewBusinessDaysConfig] =
-    useState<IBarberServiceDayConfig | null>(null);
-  const [newHolidaysConfig, setNewHolidaysConfig] =
-    useState<IBarberServiceDayConfig | null>(null);
 
-  const hasChanges = useMemo(
-    () => !!newGeneralConfig || !!newBusinessDaysConfig || !!newHolidaysConfig,
-    [newBusinessDaysConfig, newGeneralConfig, newHolidaysConfig],
-  );
+  const hasChanges = useMemo(() => !!newGeneralConfig, [newGeneralConfig]);
 
   const handleGeneralChange = (
     config: IBarberServiceGeneralConfig,
     changed: boolean,
   ) => {
     setNewGeneralConfig(changed ? config : null);
-  };
-
-  const handleBusinessDaysChange = (
-    config: IBarberServiceDayConfig,
-    changed: boolean,
-  ) => {
-    setNewBusinessDaysConfig(changed ? config : null);
-  };
-
-  const handleHolidaysChange = (
-    config: IBarberServiceDayConfig,
-    changed: boolean,
-  ) => {
-    setNewHolidaysConfig(changed ? config : null);
   };
 
   const goBack = () => {
@@ -98,21 +75,11 @@ const BarberServicesConfig: React.FC<
           payload.scheduleLimitDays = newGeneralConfig.scheduleLimitDays;
         }
 
-        if (newBusinessDaysConfig) {
-          payload.businessDaysConfig = newBusinessDaysConfig;
-        }
-
-        if (newHolidaysConfig) {
-          payload.holidaysConfig = newHolidaysConfig;
-        }
-
-        await BarbersService.updateServiceConfig(payload);
+        // await BarbersService.updateServiceConfig(payload);
 
         await dispatch(getCurrentUser());
 
         setNewGeneralConfig(null);
-        setNewBusinessDaysConfig(null);
-        setNewHolidaysConfig(null);
         setUpdating(false);
       } catch (error) {
         setUpdating(false);
@@ -157,22 +124,10 @@ const BarberServicesConfig: React.FC<
           contentContainerStyle={styles.scrollContentContainer}>
           <ServiceGeneralConfigCard
             config={{
-              workDays: barber.workDays,
-              scheduleLimitDays: barber.scheduleLimitDays,
+              workDays: barber.config.workDays,
+              scheduleLimitDays: barber.config.scheduleLimitDays,
             }}
             onChange={handleGeneralChange}
-          />
-          <ServiceConfigDaysCard
-            title="barber.servicesConfig.sections.businessDays.title"
-            subtitle="barber.servicesConfig.sections.businessDays.subtitle"
-            config={barber.businessDaysConfig}
-            onChange={handleBusinessDaysChange}
-          />
-          <ServiceConfigDaysCard
-            title="barber.servicesConfig.sections.holidays.title"
-            subtitle="barber.servicesConfig.sections.holidays.subtitle"
-            config={barber.holidaysConfig}
-            onChange={handleHolidaysChange}
           />
         </ScrollContentStyle>
         <Button

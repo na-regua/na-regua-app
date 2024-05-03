@@ -3,14 +3,14 @@ import {Dimensions} from 'react-native';
 const {width, height} = Dimensions.get('window');
 
 const metrics = {
-  paddingX1: 6,
-  paddingX2: 12,
-  paddingX3: 18,
-  paddingX4: 24,
-  paddingX5: 30,
-  paddingX6: 36,
-  paddingX7: 42,
-  paddingX8: 48,
+  unitX1: 6,
+  unitX2: 12,
+  unitX3: 18,
+  unitX4: 24,
+  unitX5: 30,
+  unitX6: 36,
+  unitX7: 42,
+  unitX8: 48,
 
   basePadding: 6,
   smPadding: 18,

@@ -2,11 +2,16 @@ import {TColorsType} from '@/theme/colors';
 import {ViewStyle} from 'react-native';
 import Animated from 'react-native-reanimated';
 import {Path} from 'react-native-svg';
-import ArrowLeftIcon from './ArrowLeft/ArrowLeft';
+import ArrowLeftIcon from './ArrowLeftIcon/ArrowLeftIcon';
+import ArrowRightIcon from './ArrowRightIcon/ArrowRightIcon';
 import BellIcon from './BellIcon/BellIcon';
 import CameraIcon from './CameraIcon/CameraIcon';
+import ChevronDoubleLeftIcon from './ChevronDoubleLeftIcon/ChevronDoubleLeftIcon';
+import {ChevronDownIcon} from './ChevronDownIcon/ChevronDownIcon';
+import ChevronLeftIcon from './ChevronLeftIcon/ChevronLeftIcon';
+import ChevronRightIcon from './ChevronRightIcon/ChevronRightIcon';
+import ChevronUpIcon from './ChevronUpIcon/ChevronUpIcon';
 import DeleteIcon from './DeleteIcon/DeleteIcon';
-import {DownIcon} from './Down/Down';
 import EditIcon from './EditIcon/EditIcon';
 import EyeIcon from './EyeIcon/EyeIcon';
 import GaleryIcon from './GaleryIcon/GaleryIcon';
@@ -23,6 +28,7 @@ import NavalhaIcon from './NavalhaIcon/NavalhaIcon';
 import PenteIcon from './PenteIcon/PenteIcon';
 import PlusIcon from './PlusIcon/PlusIcon';
 import QRIcon from './QRIcon/QRIcon';
+import QRSquadIcon from './QRSquadIcon/QRSquadIcon';
 import ReceiptIcon from './ReceiptIcon/ReceiptIcon';
 import ScheduleIcon from './ScheduleIcon/ScheduleIcon';
 import ScheduleTwotoneIcon from './ScheduleTwotoneIcon/ScheduleTwotoneIcon';
@@ -31,11 +37,10 @@ import SettingsTwotoneIcon from './SettingsTwotoneIcon/SettingsTwotoneIcon';
 import SunIcon from './SunIcon/SunIcon';
 import TimeIcon from './TimeIcon/TimeIcon';
 import TimeTwotoneIcon from './TimeTwotoneIcon/TimeTwotoneIcon';
-import UpIcon from './Up/Up';
 import UserCheckIcon from './UserCheckIcon/UserCheckIcon';
 import UserIcon from './UserIcon/UserIcon';
 import UsersIcon from './UsersIcon/UsersIcon';
-import QRSquadIcon from './QRSquadIcon/QRSquadIcon';
+import ChevronDoubleRightIcon from './ChevronDoubleRightIcon/ChevronDoubleRightIcon';
 
 export interface IIconProps {
   width?: number;
@@ -53,9 +58,9 @@ export interface IIconProps {
 export const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 export default {
-  DownIcon,
+  ChevronDownIcon,
   ArrowLeftIcon,
-  UpIcon,
+  ChevronUpIcon,
   BellIcon,
   CameraIcon,
   DeleteIcon,
@@ -87,4 +92,9 @@ export default {
   SettingsTwotoneIcon,
   GaleryIcon,
   QRSquadIcon,
+  ArrowRightIcon,
+  ChevronRightIcon,
+  ChevronLeftIcon,
+  ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
 };

@@ -73,7 +73,9 @@ const SelectWorkTime: React.FC<ISelectWorkTimeProps> = ({
     if (selectWorkTime === 'start') {
       onChange({...workTime, start: time});
       setSelectToEnd();
-    } else {
+    }
+
+    if (selectWorkTime === 'end') {
       onChange({...workTime, end: time});
       setSelectToStart();
     }

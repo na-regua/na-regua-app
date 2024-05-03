@@ -21,7 +21,7 @@ export const ContainerStyle = styled.ScrollView`
 
 export const ContentStyle = styled.View`
   flex: 1;
-  gap: ${Metrics.paddingX4}px;
+  gap: ${Metrics.unitX4}px;
   padding-bottom: 0;
   justify-content: space-between;
   max-width: 360px;
@@ -31,17 +31,17 @@ export const ContentStyle = styled.View`
 
 export const ContentFormStyle = styled.View`
   flex: 1;
-  gap: ${Metrics.paddingX3}px;
+  gap: ${Metrics.unitX3}px;
 `;
 
 export const LogoContainerStyle = styled.View`
   align-items: center;
   justify-content: center;
-  gap: ${Metrics.paddingX4}px;
+  gap: ${Metrics.unitX4}px;
 `;
 
 export const FooterContainerStyle = styled.View`
-  gap: ${Metrics.paddingX4}px;
+  gap: ${Metrics.unitX4}px;
   justify-content: center;
   align-items: center;
 `;

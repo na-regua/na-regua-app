@@ -1,13 +1,12 @@
 import {Colors} from '@/theme';
 import React, {useMemo} from 'react';
-import {StyleSheet} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Path, Svg} from 'react-native-svg';
 import {IIconProps} from '../Icons';
 
-interface UpIconProps extends IIconProps {}
+interface IChevronDownIconProps extends IIconProps {}
 
-const UpIcon: React.FC<UpIconProps> = ({
+const ChevronDownIcon: React.FC<IChevronDownIconProps> = ({
   width = 24,
   height = 24,
   strokeWidth = 1.5,
@@ -29,7 +28,7 @@ const UpIcon: React.FC<UpIconProps> = ({
       style={styles.iconWrapper}>
       <Svg width={width} height={height} viewBox="0 0 24 24" fill="none">
         <Path
-          d="M18 15.5245L12 9.52454L6 15.5245"
+          d="M6 9.52454L12 15.5245L18 9.52454"
           stroke={getColor}
           strokeWidth={strokeWidth}
           strokeLinecap="round"
@@ -47,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UpIcon;
+export {ChevronDownIcon};

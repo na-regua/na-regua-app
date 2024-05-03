@@ -170,6 +170,31 @@ const ptBr = {
         neighborhood: 'Bairro',
       },
     },
+    queue: {
+      buttons: {
+        start: 'Iniciar',
+      },
+      carousel: {
+        qr: {
+          title1: 'Compartilhe',
+          title2: 'seu código',
+          subtitle: 'Nunca foi tão fácil te achar.',
+        },
+        notifications: {
+          title1: 'Acompanhe',
+          title2: 'suas atividades',
+          subtitle: 'Você no controle de tudo.',
+        },
+        billing: {
+          title1: 'Veja seu',
+          title2: 'negócio crescer',
+          subtitle: 'Dinheiro? Cartão ? Pix? A gente anota pra você',
+        },
+      },
+    },
+    schedule: {
+      title: 'Agendamentos',
+    },
   },
   generic: {
     verifyPhone: {
@@ -341,6 +366,67 @@ const ptBr = {
       settings: 'Ajustes',
     },
     back: 'Voltar',
+  },
+  calendar: {
+    months: {
+      full: {
+        jan: 'Janeiro',
+        feb: 'Fevereiro',
+        mar: 'Março',
+        apr: 'Abril',
+        may: 'Maio',
+        jun: 'Junho',
+        jul: 'Julho',
+        aug: 'Agosto',
+        sep: 'Setembro',
+        oct: 'Outubro',
+        nov: 'Novembro',
+        dec: 'Dezembro',
+      },
+      short: {
+        jan: 'Jan',
+        feb: 'Fev',
+        mar: 'Mar',
+        apr: 'Abr',
+        may: 'Mai',
+        jun: 'Jun',
+        jul: 'Jul',
+        aug: 'Ago',
+        sep: 'Set',
+        oct: 'Out',
+        nov: 'Nov',
+        dec: 'Dez',
+      },
+    },
+    weekDays: {
+      single: {
+        sun: 'D',
+        mon: 'S',
+        tue: 'T',
+        wed: 'Q',
+        thu: 'Q',
+        fri: 'S',
+        sat: 'S',
+      },
+      short: {
+        sun: 'Dom',
+        mon: 'Seg',
+        tue: 'Ter',
+        wed: 'Qua',
+        thu: 'Qui',
+        fri: 'Sex',
+        sat: 'Sab',
+      },
+      full: {
+        sun: 'Domingo',
+        mon: 'Segunda',
+        tue: 'Terça',
+        wed: 'Quarta',
+        thu: 'Quinta',
+        fri: 'Sexta',
+        sat: 'Sábado',
+      },
+    },
   },
 };
 

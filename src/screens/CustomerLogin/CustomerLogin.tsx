@@ -2,10 +2,10 @@ import {ILoginPhone} from '@/app/models';
 import {Button, Icons, Input, Typography} from '@/components/atoms';
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {TUserType, setLoginUserType} from '@/store/slicers';
+import {TUserType, setLoginMethod, setLoginUserType} from '@/store/slicers';
 import {Colors} from '@/theme';
 import {phoneMask, phoneRegex} from '@/utils';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {Keyboard, TextInput, TouchableWithoutFeedback} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -22,7 +22,7 @@ import {
 
 const CustomerLogin = () => {
   const insets = useSafeAreaInsets();
-  const {userType} = useSelector((state: RootState) => state.login);
+  const {userType, method} = useSelector((state: RootState) => state.login);
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useAppNavigation();
   const {
@@ -40,6 +40,17 @@ const CustomerLogin = () => {
     paddingLeft: insets.left,
     paddingRight: insets.right,
   };
+
+  const setAutoMethod = () => {
+    if (method === 'welcome') {
+      dispatch(setLoginMethod('phone'));
+    }
+  };
+
+  useEffect(() => {
+    setAutoMethod();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSwitchUserType = (type: TUserType) => {
     dispatch(setLoginUserType(type));

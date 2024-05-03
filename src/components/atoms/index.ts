@@ -22,6 +22,7 @@ export {default as SelectWorkTime} from './SelectWorkTime/SelectWorkTime';
 export {default as Step} from './Step/Step';
 export {default as Stepper} from './Stepper/Stepper';
 export {default as Typography} from './Typography/Typography';
+export * from './Carousel/Carousel';
 
 export * from './Button/Button';
 export * from './Calendar';

@@ -17,5 +17,5 @@ export const SpashContentStyle = styled.View`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: ${Metrics.paddingX3}px;
+  gap: ${Metrics.unitX3}px;
 `;

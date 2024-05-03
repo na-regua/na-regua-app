@@ -14,8 +14,8 @@ const PlusIcon: React.FC<IPlusIconProps> = ({
   customColor,
   clickable,
   onPress,
-  style,
   disabled,
+  wrapperStyle,
 }) => {
   const getColor = useMemo(
     () => Colors[color] || customColor,
@@ -25,7 +25,7 @@ const PlusIcon: React.FC<IPlusIconProps> = ({
   return (
     <TouchableOpacity
       activeOpacity={0.6}
-      style={[styles.iconWrapper, style]}
+      style={[styles.iconWrapper, wrapperStyle]}
       onPress={onPress}
       disabled={!clickable || disabled}>
       <Svg width={width} height={height} viewBox="0 0 20 20" fill="none">

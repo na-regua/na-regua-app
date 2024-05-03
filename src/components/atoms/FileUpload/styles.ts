@@ -1,4 +1,5 @@
 import {Colors} from '@/theme';
+import {hexPercentage} from '@/theme/colors';
 import styled from 'styled-components/native';
 
 export const PickerWrapperStyle = styled.View`
@@ -45,6 +46,6 @@ export const LoaderWrapperStyle = styled.View`
   height: 100%;
   justify-content: center;
   align-items: center;
-  background-color: rgba(#333333, 0.2);
+  background-color: #333333 ${hexPercentage[20]};
   z-index: 9;
 `;

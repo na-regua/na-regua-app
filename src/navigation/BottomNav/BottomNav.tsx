@@ -23,7 +23,7 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
 
   const insets = useSafeAreaInsets();
   const insetsStyles = {
-    paddingBottom: insets.bottom,
+    marginBottom: insets.bottom,
   };
 
   const navigator = useAppNavigation();

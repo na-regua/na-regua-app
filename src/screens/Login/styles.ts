@@ -8,7 +8,7 @@ export const Container = styled.View`
   justify-content: center;
   align-items: center;
   background-color: ${Colors.bgContrast};
-  padding: ${Metrics.paddingX8}px;
+  padding: ${Metrics.unitX8}px;
 `;
 
 export const WelcomeContent = styled.View`
@@ -16,16 +16,16 @@ export const WelcomeContent = styled.View`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: ${Metrics.paddingX8}px;
+  gap: ${Metrics.unitX8}px;
   min-width: 240px;
   max-width: 360px;
-  padding: ${Metrics.paddingX4}px;
+  padding: ${Metrics.unitX4}px;
   width: 100%;
 `;
 
 export const WelcomeTitle = styled.View`
   align-self: stretch;
-  gap: ${Metrics.paddingX2}px;
+  gap: ${Metrics.unitX2}px;
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;

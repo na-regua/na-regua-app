@@ -2,6 +2,8 @@ import {Colors, Fonts, Metrics} from '@/theme';
 import {TextStyle, ViewStyle} from 'react-native';
 import styled from 'styled-components/native';
 
+export const BOTTOM_NAV_HEIGHT = 60;
+
 export const labelStyle: TextStyle = {
   fontWeight: Fonts.weights.medium,
   fontFamily: Fonts.types.medium,
@@ -10,11 +12,11 @@ export const labelStyle: TextStyle = {
 export const shadowStyle: ViewStyle = {
   shadowColor: Colors.black1,
   shadowOffset: {
-    height: -1,
+    height: -2,
     width: 0,
   },
-  shadowOpacity: 0.1,
-  elevation: 2,
+  shadowOpacity: 0.08,
+  elevation: 1,
   shadowRadius: 2,
 };
 
@@ -29,6 +31,7 @@ export const FloatingContainerStyle = styled.View`
   gap: 18px;
   border: 1px solid transparent;
   border-top-color: ${Colors.border};
+  height: ${`${BOTTOM_NAV_HEIGHT}px`};
 `;
 
 export const NavItem = styled.TouchableOpacity`

@@ -5,8 +5,8 @@ import {
 } from '@/components/molecules';
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {TUserType, setLoginUserType} from '@/store/slicers';
-import React from 'react';
+import {TUserType, setLoginMethod, setLoginUserType} from '@/store/slicers';
+import React, {useEffect} from 'react';
 import {Keyboard} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -47,6 +47,17 @@ const BarberLogin = () => {
   const navigateToBarberRegister = () => {
     navigation.navigate('/barber/sign-up');
   };
+
+  const setAutoMethod = () => {
+    if (method === 'welcome') {
+      dispatch(setLoginMethod('e-mail'));
+    }
+  };
+
+  useEffect(() => {
+    setAutoMethod();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <TouchableWithoutFeedbackStyle onPress={() => Keyboard.dismiss()}>

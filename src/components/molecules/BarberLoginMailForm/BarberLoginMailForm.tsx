@@ -1,5 +1,7 @@
+import {AuthService} from '@/app/api';
 import {ILoginEmail} from '@/app/models';
 import {Button, Icons, Input, Typography} from '@/components/atoms';
+import {useAppNavigation} from '@/navigation';
 import {AppDispatch} from '@/store/Store';
 import {
   createNotification,
@@ -9,14 +11,12 @@ import {
   setUser,
 } from '@/store/slicers';
 import {Colors} from '@/theme';
+import {AxiosError} from 'axios';
 import React, {useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {TextInput, TouchableOpacity} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {ContentStyle, LogoContainerStyle} from './styles';
-import {AuthService} from '@/app/api';
-import {useAppNavigation} from '@/navigation';
-import {AxiosError} from 'axios';
 
 export interface IBarberLoginMailFormProps {}
 
@@ -25,6 +25,7 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
     control,
     formState: {isValid},
     getValues,
+    reset,
   } = useForm<ILoginEmail>({mode: 'all'});
   const dispatch = useDispatch<AppDispatch>();
   const navigator = useAppNavigation();
@@ -71,6 +72,8 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
           if (data.barber.profileStatus === 'completed') {
             navigator.navigate('/barber/queue');
           }
+
+          reset();
         }
       }
     } catch (error) {
@@ -114,7 +117,7 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
         name="email"
         control={control}
         rules={{required: true}}
-        render={({field: {onChange}}) => (
+        render={({field: {onChange, value}}) => (
           <Input
             label="generic.login.barber.fields.email"
             autoCapitalize="none"
@@ -122,6 +125,7 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
             onChangeText={text => {
               onChange(text);
             }}
+            value={value}
             inputRef={fieldsRef.email}
             returnKeyType="next"
             onSubmitEditing={() => fieldsRef.password.current?.focus()}
@@ -136,12 +140,13 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
         name="password"
         rules={{required: true, minLength: 5}}
         control={control}
-        render={({field: {onChange}}) => (
+        render={({field: {onChange, value}}) => (
           <Input
             label="generic.login.barber.fields.password"
             autoCapitalize="none"
             secureTextEntry={!showPassword}
             onChangeText={onChange}
+            value={value}
             suffix={
               <TouchableOpacity
                 activeOpacity={0.6}

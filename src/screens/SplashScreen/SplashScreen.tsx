@@ -20,7 +20,7 @@ const SplashScreen: React.FC = () => {
       <SpashContentStyle>
         <Icons.LogoMiniIcon width={92} height={92} />
         <Icons.LogoWritingIcon width={260} height={60} />
-        <Loader color={Colors.main} />
+        <Loader color={Colors.main} strokeWidth={4} />
       </SpashContentStyle>
     </SplashContainerStyle>
   );

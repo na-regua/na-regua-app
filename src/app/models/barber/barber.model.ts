@@ -25,22 +25,15 @@ export interface IBarber extends IBarberServiceConfig {
   avatar: IFile;
   status: 'active' | 'inactive';
   profileStatus: 'pre' | 'completed';
-  attendanceConfig: any;
   createdAt: string;
   updatedAt: string;
+  config: IBarberServiceConfig;
 }
 
 export interface IBarberServiceConfig {
-  attendanceConfig: {
-    workDary: string[];
-    scheduleLimitDays: number;
-  };
-  businessDaysConfig: IBarberServiceDayConfig;
-  holidaysConfig: IBarberServiceDayConfig;
-}
-
-export interface IBarberServiceDayConfig {
+  workDays: string[];
   workTime: TWorkTime;
+  scheduleLimitDays: number;
   schedulesByDay: number;
   schedules: IBarberCreateSchedule[];
 }

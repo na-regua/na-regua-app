@@ -1,3 +1,5 @@
+import {IBarber} from '@/app/models';
+
 export enum APP_ROUTES {
   BARBER_SIGN_UP = '/barber/sign-up',
   BARBER_PRE_SIGN_UP = '/barber/pre-sign-up',
@@ -34,6 +36,8 @@ export type TRootStackParamList = {
   '/generic/login': undefined;
   '/generic/login/customer': undefined;
   '/generic/login/barber': undefined;
+
+  '/user/notifications': undefined;
 };
 
 export type TRouteName = keyof TRootStackParamList;

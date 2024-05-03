@@ -18,7 +18,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {ReactNode, useContext, useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {ViewStyle} from 'react-native';
 import {Asset} from 'react-native-image-picker';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -63,9 +62,6 @@ const BarberSettings: React.FC<
     paddingBottom: insets.bottom,
     paddingLeft: insets.left,
     paddingRight: insets.right,
-  };
-  const scrollStyles: ViewStyle = {
-    marginBottom: 60,
   };
 
   const {barber, user} = useSelector((state: RootState) => state.auth);
@@ -210,7 +206,7 @@ const BarberSettings: React.FC<
       <AppStatusBar />
       <Header showTitle={false} showBorder />
       <ScrollContentStyle
-        style={scrollStyles}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.scrollContainer]}>
         <HeaderStyle>
           <Typography variant="h5" color="black3">

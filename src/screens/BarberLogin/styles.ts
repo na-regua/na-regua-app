@@ -19,7 +19,7 @@ export const ContainerStyle = styled.ScrollView`
 export const ContentStyle = styled.View`
   flex: 1;
   width: 100%;
-  gap: ${Metrics.paddingX4}px;
+  gap: ${Metrics.unitX4}px;
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -29,7 +29,7 @@ export const ContentStyle = styled.View`
 
 export const FooterContainerStyle = styled.View`
   align-self: stretch;
-  gap: ${Metrics.paddingX4}px;
+  gap: ${Metrics.unitX4}px;
   justify-content: center;
   align-items: center;
 `;
