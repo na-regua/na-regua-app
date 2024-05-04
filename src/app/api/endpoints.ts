@@ -33,6 +33,12 @@ enum ENDPOINTS {
   FILES_DELETE_BARBER_THUMBS = '/files/barber/thumb/:thumbId',
   FILES_UPDATE_USER = '/files/barber',
   /**
+   * Notifications
+   * */
+  NOTIFICATION_LIST_BY_USER = '/notifications',
+  NOTIFICATION_MARK_AS_VIEWED = '/notifications/:userId/:notificationId',
+  NOTIFICATION_MARK_ALL_AS_VIEWED = '/notifications/:userId',
+  /**
    * Services
    * */
   SERVICES_LIST = '/services',

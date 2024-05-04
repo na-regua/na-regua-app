@@ -66,7 +66,7 @@ const SelectDay: React.FC = () => {
     <CalendarRowStyled key={weekIndex}>
       {week.map((day, weekDayIndex) => (
         <CalendarRowItemStyled
-          activeOpacity={0.8}
+          activeOpacity={0.6}
           key={weekDayIndex}
           isActive={compareDays(day, selectedDate)}
           showMarker={showMarker}

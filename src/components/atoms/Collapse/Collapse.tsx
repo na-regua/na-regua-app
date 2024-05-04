@@ -24,7 +24,7 @@ const Collapse: React.FC<PropsWithChildren<ICollapseProps>> = ({
 
   return (
     <CollapseStyle>
-      <HeaderStyle onPress={handleExpand} activeOpacity={0.9}>
+      <HeaderStyle onPress={handleExpand} activeOpacity={0.6}>
         <Typography variant="body1" color="black3">
           {title && t(title)}
         </Typography>

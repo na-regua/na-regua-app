@@ -1,8 +1,10 @@
 import {Icons, Typography} from '@/components/atoms';
+import {useAppNavigation} from '@/navigation';
 import {RootState} from '@/store/Store';
+import {Fonts} from '@/theme';
+import {TColorsType} from '@/theme/colors';
 import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import {
   BackContainerStyle,
@@ -13,7 +15,6 @@ import {
   TitleContainerStyle,
   WelcomeTextStyle,
 } from './styles';
-import {Fonts} from '@/theme';
 
 interface IHeaderProps {
   showTitle?: boolean;
@@ -47,6 +48,7 @@ const Header: React.FC<IHeaderProps> = ({
 }) => {
   const {t} = useTranslation();
   const {user, isAuthenticated} = useSelector((state: RootState) => state.auth);
+  const navigator = useAppNavigation();
 
   const color = useMemo(
     () => (lightContent ? 'white' : 'black'),
@@ -58,32 +60,36 @@ const Header: React.FC<IHeaderProps> = ({
     [lightContent],
   );
 
+  const navigateToNotifications = () => {
+    navigator.navigate('/user/notifications');
+  };
+
   return (
     <ContainerStyle>
       {showActions && (
         <LogoContainerStyle>
           <LogoIconStyle
             onPress={onIconPress}
-            activeOpacity={0.8}
+            activeOpacity={0.6}
             disabled={!iconClickable}>
             <Icons.LogoMiniIcon disabled width={32} height={32} />
           </LogoIconStyle>
-          <TouchableOpacity activeOpacity={0.8}>
-            <Icons.BellIcon
-              width={28}
-              height={28}
-              color={`${mainColor}` as any}
-            />
-          </TouchableOpacity>
+
+          <Icons.BellIcon
+            width={24}
+            height={24}
+            color={mainColor}
+            onPress={navigateToNotifications}
+          />
         </LogoContainerStyle>
       )}
 
       {showTitle && (
         <TitleContainerStyle>
-          <Typography variant="h3" color={`${color}3` as any}>
+          <Typography variant="h3" color={color as TColorsType}>
             {t(title)}
           </Typography>
-          <Typography variant="body1" color={`${color}1` as any}>
+          <Typography variant="body1" color={color as TColorsType}>
             {t(subtitle)}
           </Typography>
         </TitleContainerStyle>
@@ -106,7 +112,7 @@ const Header: React.FC<IHeaderProps> = ({
       )}
 
       {showBack && (
-        <BackContainerStyle activeOpacity={0.8} onPress={onBackPress}>
+        <BackContainerStyle activeOpacity={0.6} onPress={onBackPress}>
           <Icons.LeftIcon width={16} height={16} color="primary" />
           <Typography variant="body1" color="primary">
             {t(backText)}

@@ -31,7 +31,7 @@ const Notify: React.FC<INotifyProps> = ({id, type, message}) => {
   return (
     <NotifyContainer
       type={type}
-      activeOpacity={0.8}
+      activeOpacity={0.6}
       onPress={handleRemoveNotification}>
       {type === 'error' && (
         <View>

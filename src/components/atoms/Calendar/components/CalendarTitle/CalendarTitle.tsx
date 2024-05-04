@@ -37,7 +37,7 @@ const CalendarTitle: React.FC<CalendarTitleProps> = ({
     <CalendarTitleWrapperStyled>
       {show.includes('day') && (
         <CalendarTitleTouchableStyled
-          activeOpacity={0.8}
+          activeOpacity={0.6}
           disabled={disable?.includes('day')}
           onPress={() => onTitlePress('SelectDay')}>
           <Typography
@@ -55,7 +55,7 @@ const CalendarTitle: React.FC<CalendarTitleProps> = ({
       )}
       {show.includes('month') && (
         <CalendarTitleTouchableStyled
-          activeOpacity={0.8}
+          activeOpacity={0.6}
           disabled={disable?.includes('month')}
           onPress={() => onTitlePress('SelectMonth')}>
           <Typography
@@ -73,7 +73,7 @@ const CalendarTitle: React.FC<CalendarTitleProps> = ({
       )}
       {show.includes('year') && (
         <CalendarTitleTouchableStyled
-          activeOpacity={0.8}
+          activeOpacity={0.6}
           disabled={disable?.includes('year')}
           onPress={() => onTitlePress('SelectYear')}>
           <Typography

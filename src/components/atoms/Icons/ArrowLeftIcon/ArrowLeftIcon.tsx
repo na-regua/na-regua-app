@@ -22,7 +22,7 @@ const ArrowLeftIcon: React.FC<IArrowLeftIconProps> = ({
   return (
     <IconTouchableViewStyle
       onPress={onPress}
-      activeOpacity={0.8}
+      activeOpacity={0.6}
       disabled={disabled}>
       <Svg width={width} height={height} viewBox="0 0 16 16" fill="none">
         <Path

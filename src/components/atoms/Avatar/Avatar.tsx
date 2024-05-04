@@ -21,6 +21,7 @@ interface IAvatarProps {
   disabled?: boolean;
   preview?: string;
   loading?: boolean;
+  showBorder?: boolean;
 }
 
 const Avatar: React.FC<IAvatarProps> = ({
@@ -31,6 +32,7 @@ const Avatar: React.FC<IAvatarProps> = ({
   disabled,
   preview,
   loading,
+  showBorder = true,
 }) => {
   const getFile = async () => {
     const result = await ImagePicker.launchImageLibrary({
@@ -50,7 +52,10 @@ const Avatar: React.FC<IAvatarProps> = ({
   };
 
   return (
-    <OffsetContainerStyle active={!!preview} size={size + borderOffset}>
+    <OffsetContainerStyle
+      showBorder={showBorder}
+      active={!!preview}
+      size={size + borderOffset}>
       <AvatarContentStyle
         size={size}
         activeOpacity={0.6}

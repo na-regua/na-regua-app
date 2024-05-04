@@ -280,6 +280,15 @@ const ptBr = {
         login: 'Entrar',
       },
     },
+    notifications: {
+      title: 'Notificações',
+      subtitle: 'Acompanhe suas notificações.',
+      markAllRead: 'ler todas',
+      tabs: {
+        all: 'Todas',
+        unread: 'Não lidas',
+      },
+    },
   },
   modals: {
     worker: {
@@ -427,6 +436,22 @@ const ptBr = {
         sat: 'Sábado',
       },
     },
+  },
+  notification: {
+    CUSTOMER_JOINED_QUEUE: 'Cliente {{data.customer.name}} entrou na fila.',
+    USER_ASK_TO_JOIN_QUEUE: '{{data.user.name}} pediu para entrar na fila.',
+    CUSTOMER_LEFT_QUEUE: 'Cliente {{data.customer.name}} saiu da fila.',
+    USER_ASK_TO_SCHEDULE:
+      '{{data.user.name}} pediu para agendar as {{time}} do dia {{day}}.',
+    USER_WILL_BE_LATE_TO_APPOINTMENT:
+      '{{data.user.name}} vai se atrasar para o agendamento das {{time}} do dia {{day}}.',
+    CUSTOMER_SCHEDULED_APPOINTMENT:
+      'Cliente {{data.customer.name}} agendou para as {{time}} do dia {{day}}.',
+    CUSTOMER_CANCELLED_APPOINTMENT:
+      'Cliente {{data.customer.name}} cancelou o agendamento das {{time}} do dia {{day}}.',
+    USER_REJECTED_APPOINTMENT_RESCHEDULE:
+      '{{data.user.name}} rejeitou o reagendamento para as {{time}} do dia {{day}}.',
+    GENERATED_STATEMENT: 'Foi gerado um extrato financeiro para o dia {{day}}.',
   },
 };
 

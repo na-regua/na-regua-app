@@ -27,11 +27,11 @@ const NotifyProvider: React.FC<INotifyProvider> = () => {
     top: insets.top + 48,
   };
 
-  const {notifications} = useSelector((state: RootState) => state.notify);
+  const {systemNotifications} = useSelector((state: RootState) => state.notify);
 
   return (
     <StyledNotifyWrapper style={insetBottomStyle}>
-      {notifications.map((notify, index) => (
+      {systemNotifications.map((notify, index) => (
         <Notify {...notify} key={index} />
       ))}
     </StyledNotifyWrapper>

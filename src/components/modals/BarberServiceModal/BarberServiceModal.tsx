@@ -228,7 +228,7 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
               </Typography>
               <SelectIconWrapperStyle>
                 <SelectIconItemStyle
-                  activeOpacity={0.8}
+                  activeOpacity={0.6}
                   onPress={() => onChange('pente')}
                   active={value === 'pente'}>
                   <Icons.PenteIcon
@@ -238,7 +238,7 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
                   />
                 </SelectIconItemStyle>
                 <SelectIconItemStyle
-                  activeOpacity={0.8}
+                  activeOpacity={0.6}
                   onPress={() => onChange('maquina')}
                   active={value === 'maquina'}>
                   <Icons.MaquinaIcon
@@ -248,7 +248,7 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
                   />
                 </SelectIconItemStyle>
                 <SelectIconItemStyle
-                  activeOpacity={0.8}
+                  activeOpacity={0.6}
                   onPress={() => onChange('navalha')}
                   active={value === 'navalha'}>
                   <Icons.NavalhaIcon

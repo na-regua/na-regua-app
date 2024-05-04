@@ -14,3 +14,4 @@ export * from './ServiceGeneralConfigCard/ServiceGeneralConfigCard';
 export * from './BarberLoginMailForm/BarberLoginMailForm';
 export * from './BarberLoginPhoneForm/BarberLoginPhoneForm';
 export * from './QueueCarouselItems/QueueCarouselItems';
+export * from './NotificationCenterItem/NotificationCenterItem';

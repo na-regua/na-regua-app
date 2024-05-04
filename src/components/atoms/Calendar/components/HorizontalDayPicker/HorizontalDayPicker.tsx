@@ -74,7 +74,7 @@ const HorizontalDayPicker: React.FC<HorizontalDayPickerProps> = ({
         {days.map((day, index) => (
           <HDPDayStyled
             key={index}
-            activeOpacity={0.8}
+            activeOpacity={0.6}
             active={isActive(day)}
             onPress={() => onDayPress(day)}
             width={CARD_DAY_WIDTH}>

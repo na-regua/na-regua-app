@@ -2,6 +2,7 @@ import React, {useMemo} from 'react';
 import {TouchableOpacityProps} from 'react-native';
 
 import {Colors} from '@/theme';
+import {useTranslation} from 'react-i18next';
 import Loader from '../Loader/Loader';
 import {TypographyStyles} from '../Typography/Typography';
 import {
@@ -11,7 +12,6 @@ import {
   SuffixStyle,
   shadowStyle,
 } from './styles';
-import {useTranslation} from 'react-i18next';
 
 export type TButtonColorScheme =
   | 'main'

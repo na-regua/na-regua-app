@@ -17,7 +17,7 @@ const MenuItemAction: React.FC<IMenuItemActionProps> = ({
   return (
     <TouchableOpacity
       style={[menuItemActionStyles.container, menuItemActionThemeStyles[theme]]}
-      activeOpacity={0.8}
+      activeOpacity={0.6}
       onPress={onPress}>
       {children}
     </TouchableOpacity>

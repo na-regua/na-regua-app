@@ -34,16 +34,22 @@ export const AvatarPreviewStyle = styled.Image<{size: number}>`
 export const OffsetContainerStyle = styled.View<{
   active: boolean;
   size: number;
+  showBorder?: boolean;
 }>`
   align-items: center;
   justify-content: center;
-  border-width: 2px;
-  border-style: solid;
-  border-color: ${Colors.border};
   border-radius: 500000px;
 
   width: ${({size}) => size}px;
   height: ${({size}) => size}px;
+
+  ${({showBorder}) =>
+    showBorder &&
+    `
+     border-width: 2px;
+     border-style: solid;
+     border-color: ${Colors.border};
+  `}
 
   ${({active}) =>
     active &&

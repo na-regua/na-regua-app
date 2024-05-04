@@ -23,7 +23,7 @@ const ChevronRightIcon: React.FC<IChevronRightIconProps> = ({
   return (
     <IconTouchableViewStyle
       onPress={onPress}
-      activeOpacity={0.8}
+      activeOpacity={0.6}
       disabled={disabled}>
       <Svg width={width} height={height} viewBox="0 0 20 20" fill="none">
         <Path

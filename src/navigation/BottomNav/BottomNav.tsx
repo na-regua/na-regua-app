@@ -71,12 +71,12 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
         <Icons.TimeTwotoneIcon
           width={26}
           height={26}
-          color={isActive(APP_ROUTES.BARBER_QUEUE) ? 'main' : 'default'}
+          color={isActive(APP_ROUTES.BARBER_QUEUE) ? 'main' : 'black1'}
         />
         <Typography
           variant="tip"
           style={labelStyle}
-          color={isActive(APP_ROUTES.BARBER_QUEUE) ? 'main' : 'default'}>
+          color={isActive(APP_ROUTES.BARBER_QUEUE) ? 'main' : 'black1'}>
           {t('nav.links.queue')}
         </Typography>
       </NavItem>
@@ -88,12 +88,12 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
         <Icons.ScheduleTwotoneIcon
           width={26}
           height={26}
-          color={isActive(APP_ROUTES.BARBER_SCHEDULE) ? 'main' : 'default'}
+          color={isActive(APP_ROUTES.BARBER_SCHEDULE) ? 'main' : 'black1'}
         />
         <Typography
           variant="tip"
           style={labelStyle}
-          color={isActive(APP_ROUTES.BARBER_SCHEDULE) ? 'main' : 'default'}>
+          color={isActive(APP_ROUTES.BARBER_SCHEDULE) ? 'main' : 'black1'}>
           {t('nav.links.schedule')}
         </Typography>
       </NavItem>
@@ -105,12 +105,12 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
         <Icons.ReceiptIcon
           width={26}
           height={26}
-          color={isActive(APP_ROUTES.BARBER_BILLING) ? 'main' : 'default'}
+          color={isActive(APP_ROUTES.BARBER_BILLING) ? 'main' : 'black1'}
         />
         <Typography
           variant="tip"
           style={labelStyle}
-          color={isActive(APP_ROUTES.BARBER_BILLING) ? 'main' : 'default'}>
+          color={isActive(APP_ROUTES.BARBER_BILLING) ? 'main' : 'black1'}>
           {t('nav.links.billing')}
         </Typography>
       </NavItem>
@@ -122,11 +122,11 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
         <Icons.SettingsTwotoneIcon
           width={26}
           height={26}
-          color={isActive(APP_ROUTES.BARBER_SETTINGS) ? 'main' : 'default'}
+          color={isActive(APP_ROUTES.BARBER_SETTINGS) ? 'main' : 'black1'}
         />
         <Typography
           variant="tip"
-          color={isActive(APP_ROUTES.BARBER_SETTINGS) ? 'main' : 'default'}
+          color={isActive(APP_ROUTES.BARBER_SETTINGS) ? 'main' : 'black1'}
           style={labelStyle}>
           {t('nav.links.settings')}
         </Typography>

@@ -108,7 +108,7 @@ const SelectWorkTime: React.FC<ISelectWorkTimeProps> = ({
                 isEnd={time === workTime.end}
                 selectedStart={selectWorkTime === 'start'}
                 selectedEnd={selectWorkTime === 'end'}
-                activeOpacity={0.8}
+                activeOpacity={0.6}
                 activeColor={
                   selectWorkTime === 'start' ? Colors.warning : Colors.main
                 }>

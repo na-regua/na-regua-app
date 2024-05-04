@@ -33,7 +33,7 @@ const SelectScheduleLimit: React.FC<ISelectScheduleLimitProps> = ({
           <SelectScheduleStyle
             active={limit === time.value}
             key={index}
-            activeOpacity={0.8}
+            activeOpacity={0.6}
             onPress={() => onChange(time.value)}>
             <Typography
               variant="button"

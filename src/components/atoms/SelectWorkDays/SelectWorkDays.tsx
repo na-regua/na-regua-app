@@ -42,7 +42,7 @@ const SelectWorkDays: React.FC<ISelectWorkDaysProps> = ({
           <SelectDayStyle
             key={index}
             active={workDays.includes(day)}
-            activeOpacity={0.8}
+            activeOpacity={0.6}
             onPress={() => handleSelectWorkDays(day)}>
             <Typography
               variant="button"

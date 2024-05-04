@@ -22,7 +22,7 @@ const ChevronDownIcon: React.FC<IChevronDownIconProps> = ({
 
   return (
     <TouchableOpacity
-      activeOpacity={0.8}
+      activeOpacity={0.6}
       onPress={onPress}
       disabled={disabled}
       style={styles.iconWrapper}>

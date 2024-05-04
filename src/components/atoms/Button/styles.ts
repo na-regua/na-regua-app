@@ -47,6 +47,7 @@ const GhostButtonStyle = css<{colorScheme: TButtonColorScheme}>`
 
 const TextButtonStyle = css`
   background-color: transparent;
+  padding: 4px;
 `;
 
 const VariantsButton: Record<TButtonVariants, RuleSet<any>> = {

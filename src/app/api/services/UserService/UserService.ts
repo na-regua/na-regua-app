@@ -1,6 +1,6 @@
 import {IUpdateUser} from '@/app/models';
-import api, {errToAxiosError} from '../../api';
 import {queryBuilder} from '@/utils';
+import api, {errToAxiosError} from '../../api';
 import ENDPOINTS from '../../endpoints';
 
 const updateUser = async (userData: IUpdateUser, id: string) => {

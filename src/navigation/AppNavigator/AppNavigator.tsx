@@ -42,7 +42,7 @@ const AppNavigator: React.FC = () => {
 
     if (user) {
       if (barber && (user.role === 'admin' || user.role === 'worker')) {
-        routeName = '/barber/schedule';
+        routeName = '/barber/queue';
 
         if (barber.profileStatus === 'pre') {
           routeName = '/barber/settings/workers';
@@ -107,6 +107,11 @@ const AppNavigator: React.FC = () => {
             <Stack.Screen
               name={'/user/notifications'}
               component={NotificationsScreen}
+              options={{
+                animation: 'simple_push',
+                animationDuration: 200,
+              }}
+              initialParams={{hideBottomNav: true}}
             />
           </>
         )}

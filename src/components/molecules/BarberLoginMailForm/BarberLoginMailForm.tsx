@@ -130,7 +130,6 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
             returnKeyType="next"
             onSubmitEditing={() => fieldsRef.password.current?.focus()}
             blurOnSubmit={false}
-            textContentType="emailAddress"
             textStyle={{borderColor: Colors.primary}}
           />
         )}
@@ -160,7 +159,6 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
             returnKeyType="done"
             onSubmitEditing={() => isValid && doLogin()}
             blurOnSubmit={true}
-            textContentType="password"
             textStyle={{borderColor: Colors.primary}}
           />
         )}

@@ -158,7 +158,7 @@ const SelectActiveSchedules: React.FC<ISelectActiveSchedulesProps> = ({
             key={index}
             active={schedule.active}
             recommended={schedule.recommended}
-            activeOpacity={0.8}
+            activeOpacity={0.6}
             onPress={() => handleSelectSchedule(schedule)}
             isOnDelete={deleteSchedulesSet.includes(schedule.time)}>
             <SelectScheduleTimeLabelStyle

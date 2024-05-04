@@ -14,6 +14,7 @@ import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {ThemeProvider} from 'styled-components/native';
 import NotifyProvider from '../NotifyProvider/NotifyProvider';
 import {StatusBarProvider} from '../StatusBarProvider/StatusBarProvider';
+import {SocketProvider} from '../../socket';
 
 const CombinedProviders: React.FC = () => {
   return (
@@ -22,18 +23,21 @@ const CombinedProviders: React.FC = () => {
         <ThemeProvider theme={{colors: Colors}}>
           {/* Redux Store provider */}
           <StoreProvider store={store}>
-            {/* StatusBar provider */}
-            <StatusBarProvider>
-              <BottomSheetModalProvider>
-                {/* Get persisted data E.g Token */}
-                <PersistedData />
-                {/* App routes */}
+            {/* Socket provider */}
+            <SocketProvider>
+              {/* StatusBar provider */}
+              <StatusBarProvider>
+                <BottomSheetModalProvider>
+                  {/* Get persisted data E.g Token */}
+                  <PersistedData />
+                  {/* App routes */}
 
-                <AppNavigator />
-                {/* App notifier */}
-                <NotifyProvider />
-              </BottomSheetModalProvider>
-            </StatusBarProvider>
+                  <AppNavigator />
+                  {/* App notifier */}
+                  <NotifyProvider />
+                </BottomSheetModalProvider>
+              </StatusBarProvider>
+            </SocketProvider>
           </StoreProvider>
         </ThemeProvider>
       </SafeAreaProvider>

@@ -37,7 +37,7 @@ export type TRootStackParamList = {
   '/generic/login/customer': undefined;
   '/generic/login/barber': undefined;
 
-  '/user/notifications': undefined;
+  '/user/notifications'?: {hideBottomNav: boolean};
 };
 
 export type TRouteName = keyof TRootStackParamList;
