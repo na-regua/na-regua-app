@@ -6,3 +6,4 @@ export {default as ServicesService} from './ServicesService/ServicesService';
 export {default as UserService} from './UserService/UserService';
 export {default as WorkersService} from './WorkersService/WorkersService';
 export {default as NotificationService} from './NotificationService/NotificationService';
+export {default as QueueService} from './QueueService/QueueService';

@@ -139,9 +139,13 @@ const ptBr = {
         schedulesByDay: 'Agendamentos por dia',
         scheduleLimit: 'Limite de agendamento',
         scheduleTime: 'Horários de agendamento',
+        openBarberAuto: 'Abrir ao iniciar dia de funcionamento',
+        openQueueAuto: 'Iniciar fila ao iniciar horário de funcionamento',
       },
       buttons: {
         save: 'Salvar',
+        yes: 'Sim',
+        no: 'Não',
       },
     },
     editUser: {
@@ -194,6 +198,26 @@ const ptBr = {
     },
     schedule: {
       title: 'Agendamentos',
+    },
+    onQueue: {
+      titles: {
+        on: 'Fila aberta',
+        paused: 'Fila pausada',
+        off: 'Fila encerrada',
+      },
+      subtitles: {
+        total: 'Clientes na fila: {{total}}',
+        totalServed: 'Atendidos: {{total}}',
+      },
+      buttons: {
+        pause: 'Pausar',
+        resume: 'Continuar',
+        finish: 'Encerrar',
+        next: 'Próximo',
+      },
+      filters: {
+        oldTickets: 'Clientes anteriores da fila',
+      },
     },
   },
   generic: {
@@ -451,7 +475,11 @@ const ptBr = {
       'Cliente {{data.customer.name}} cancelou o agendamento das {{time}} do dia {{day}}.',
     USER_REJECTED_APPOINTMENT_RESCHEDULE:
       '{{data.user.name}} rejeitou o reagendamento para as {{time}} do dia {{day}}.',
-    GENERATED_STATEMENT: 'Foi gerado um extrato financeiro para o dia {{day}}.',
+    GENERATED_STATEMENT:
+      'Foi gerado um extrato financeiro para o dia {{-day}}.',
+  },
+  socketEvent: {
+    WORKER_JOINED_QUEUE: '{{worker.user.name}} entrou na fila.',
   },
 };
 

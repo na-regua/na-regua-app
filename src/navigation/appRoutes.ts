@@ -29,6 +29,7 @@ export type TRootStackParamList = {
   '/barber/settings/profile'?: {hideBottomNav?: boolean};
   '/barber/plan': {hideBottomNav?: boolean};
   '/barber/queue': undefined;
+  '/barber/queue/fs'?: {hideBottomNav?: boolean};
   '/barber/schedule': undefined;
   '/barber/billing': undefined;
   '/barber/complete-qr'?: {hideBottomNav?: boolean};

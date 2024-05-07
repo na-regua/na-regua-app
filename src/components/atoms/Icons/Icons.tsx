@@ -7,6 +7,7 @@ import ArrowRightIcon from './ArrowRightIcon/ArrowRightIcon';
 import BellIcon from './BellIcon/BellIcon';
 import CameraIcon from './CameraIcon/CameraIcon';
 import ChevronDoubleLeftIcon from './ChevronDoubleLeftIcon/ChevronDoubleLeftIcon';
+import ChevronDoubleRightIcon from './ChevronDoubleRightIcon/ChevronDoubleRightIcon';
 import {ChevronDownIcon} from './ChevronDownIcon/ChevronDownIcon';
 import ChevronLeftIcon from './ChevronLeftIcon/ChevronLeftIcon';
 import ChevronRightIcon from './ChevronRightIcon/ChevronRightIcon';
@@ -14,6 +15,7 @@ import ChevronUpIcon from './ChevronUpIcon/ChevronUpIcon';
 import DeleteIcon from './DeleteIcon/DeleteIcon';
 import EditIcon from './EditIcon/EditIcon';
 import EyeIcon from './EyeIcon/EyeIcon';
+import FullscreenIcon from './FullscreenIcon/FullscreenIcon';
 import GaleryIcon from './GaleryIcon/GaleryIcon';
 import {LeftIcon} from './Left/Left';
 import {LinesIcon} from './Lines/Lines';
@@ -40,7 +42,8 @@ import TimeTwotoneIcon from './TimeTwotoneIcon/TimeTwotoneIcon';
 import UserCheckIcon from './UserCheckIcon/UserCheckIcon';
 import UserIcon from './UserIcon/UserIcon';
 import UsersIcon from './UsersIcon/UsersIcon';
-import ChevronDoubleRightIcon from './ChevronDoubleRightIcon/ChevronDoubleRightIcon';
+import FullscreenOutIcon from './FullscreenOutIcon/FullscreenOutIcon';
+import RefreshIcon from './RefreshIcon/RefreshIcon';
 
 export interface IIconProps {
   width?: number;
@@ -97,4 +100,7 @@ export default {
   ChevronLeftIcon,
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
+  FullscreenIcon,
+  FullscreenOutIcon,
+  RefreshIcon,
 };

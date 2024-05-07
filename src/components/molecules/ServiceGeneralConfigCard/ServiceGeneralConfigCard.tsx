@@ -4,16 +4,19 @@ import {
   Collapse,
   SelectScheduleLimit,
   SelectWorkDays,
+  SwitchButton,
 } from '@/components/atoms';
 
 export interface IBarberServiceGeneralConfig {
   workDays: string[];
   scheduleLimitDays: number;
+  openBarberAuto: boolean;
+  openQueueAuto: boolean;
 }
 
 interface IServiceGeneralConfigCardProps {
   config: IBarberServiceGeneralConfig;
-  onChange: (newConfig: IBarberServiceGeneralConfig, changed: boolean) => void;
+  onChange: (newConfig: Partial<IBarberServiceGeneralConfig>) => void;
 }
 
 const ServiceGeneralConfigCard: React.FC<IServiceGeneralConfigCardProps> = ({
@@ -24,6 +27,8 @@ const ServiceGeneralConfigCard: React.FC<IServiceGeneralConfigCardProps> = ({
   const [scheduleLimitDays, setScheduleLimitDays] = useState(
     config.scheduleLimitDays,
   );
+  const [openBarberAuto, setOpenBarberAuto] = useState(config.openBarberAuto);
+  const [openQueueAuto, setOpenQueueAuto] = useState(config.openQueueAuto);
 
   const handleWorkDaysChange = (newWorkDays: string[]) => {
     setWorkDays(newWorkDays);
@@ -31,6 +36,14 @@ const ServiceGeneralConfigCard: React.FC<IServiceGeneralConfigCardProps> = ({
 
   const handleScheduleLimitDaysChange = (newScheduleLimitDays: number) => {
     setScheduleLimitDays(newScheduleLimitDays);
+  };
+
+  const handleOpenBarberAutoChange = (value: boolean) => {
+    setOpenBarberAuto(value);
+  };
+
+  const handleOpenQueueAutoChange = (value: boolean) => {
+    setOpenQueueAuto(value);
   };
 
   const workDaysChanged = useMemo(() => {
@@ -55,13 +68,38 @@ const ServiceGeneralConfigCard: React.FC<IServiceGeneralConfigCardProps> = ({
     [scheduleLimitDays, config.scheduleLimitDays],
   );
 
+  const openBarberAutoChanged = useMemo(
+    () => openBarberAuto !== config.openBarberAuto,
+    [openBarberAuto, config.openBarberAuto],
+  );
+
+  const openQueueAutoChanged = useMemo(
+    () => openQueueAuto !== config.openQueueAuto,
+    [openQueueAuto, config.openQueueAuto],
+  );
+
   useEffect(() => {
-    onChange(
-      {workDays, scheduleLimitDays},
-      workDaysChanged || scheduleLimitDaysChanged,
-    );
+    const onChangePayload: Partial<IBarberServiceGeneralConfig> = {};
+
+    if (workDaysChanged) {
+      onChangePayload.workDays = workDays;
+    }
+
+    if (scheduleLimitDaysChanged) {
+      onChangePayload.scheduleLimitDays = scheduleLimitDays;
+    }
+
+    if (openBarberAutoChanged) {
+      onChangePayload.openBarberAuto = openBarberAuto;
+    }
+
+    if (openQueueAutoChanged) {
+      onChangePayload.openQueueAuto = openQueueAuto;
+    }
+
+    onChange(onChangePayload);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workDays, scheduleLimitDays]);
+  }, [workDays, scheduleLimitDays, openBarberAuto, openQueueAuto]);
 
   return (
     <Collapse
@@ -71,6 +109,24 @@ const ServiceGeneralConfigCard: React.FC<IServiceGeneralConfigCardProps> = ({
       <SelectScheduleLimit
         limit={scheduleLimitDays}
         onChange={handleScheduleLimitDaysChange}
+      />
+      <SwitchButton<boolean>
+        value={openBarberAuto}
+        onChange={handleOpenBarberAutoChange}
+        label="barber.servicesConfig.fields.openBarberAuto"
+        buttons={[
+          {label: 'barber.servicesConfig.buttons.yes', value: true},
+          {label: 'barber.servicesConfig.buttons.no', value: false},
+        ]}
+      />
+      <SwitchButton<boolean>
+        value={openQueueAuto}
+        onChange={handleOpenQueueAutoChange}
+        label="barber.servicesConfig.fields.openQueueAuto"
+        buttons={[
+          {label: 'barber.servicesConfig.buttons.yes', value: true},
+          {label: 'barber.servicesConfig.buttons.no', value: false},
+        ]}
       />
     </Collapse>
   );

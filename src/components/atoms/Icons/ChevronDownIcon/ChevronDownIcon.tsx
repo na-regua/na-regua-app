@@ -1,8 +1,8 @@
 import {Colors} from '@/theme';
 import React, {useMemo} from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Path, Svg} from 'react-native-svg';
 import {IIconProps} from '../Icons';
+import {IconTouchableViewStyle} from '../styles';
 
 interface IChevronDownIconProps extends IIconProps {}
 
@@ -14,6 +14,7 @@ const ChevronDownIcon: React.FC<IChevronDownIconProps> = ({
   customColor,
   disabled,
   onPress,
+  wrapperStyle,
 }) => {
   const getColor = useMemo(
     () => Colors[color] || customColor,
@@ -21,11 +22,11 @@ const ChevronDownIcon: React.FC<IChevronDownIconProps> = ({
   );
 
   return (
-    <TouchableOpacity
+    <IconTouchableViewStyle
       activeOpacity={0.6}
       onPress={onPress}
       disabled={disabled}
-      style={styles.iconWrapper}>
+      style={wrapperStyle}>
       <Svg width={width} height={height} viewBox="0 0 24 24" fill="none">
         <Path
           d="M6 9.52454L12 15.5245L18 9.52454"
@@ -35,15 +36,8 @@ const ChevronDownIcon: React.FC<IChevronDownIconProps> = ({
           strokeLinejoin="round"
         />
       </Svg>
-    </TouchableOpacity>
+    </IconTouchableViewStyle>
   );
 };
-
-const styles = StyleSheet.create({
-  iconWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export {ChevronDownIcon};

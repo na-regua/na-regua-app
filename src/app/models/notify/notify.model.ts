@@ -14,6 +14,7 @@ export interface INotificationData {
   user?: IUser;
   service?: IBarberService;
   customer?: IUser;
+  date?: string;
 }
 export interface INotification {
   _id: string;
@@ -59,3 +60,9 @@ export const NOTIFICATION_TRANSLATION_KEYS: Record<
   GENERATED_STATEMENT: 'notifications.generatedStatement',
   OTHERS: 'notifications.others',
 };
+
+export interface GetNotificationResponse {
+  notifications: INotification[];
+  total: number;
+  hasUnread: boolean;
+}

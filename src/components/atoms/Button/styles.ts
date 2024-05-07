@@ -78,13 +78,14 @@ export const ButtonStyle = styled.TouchableOpacity<{
 
   ${({variant}) => VariantsButton[variant]}
 
-  ${({disabled, loading}) =>
+  ${({disabled, variant, loading}) =>
     disabled &&
     !loading &&
-    `
-    background-color: ${Colors.disabled};
-    border-color: ${Colors.disabled};
-  `}
+    variant !== 'text' &&
+    `background-color: ${Colors.disabled};
+  border-color: ${Colors.disabled};
+    
+    `}
 
   ${({loading}) =>
     loading &&
@@ -106,6 +107,8 @@ export const LabelStyle = styled.Text<{
   ${({variant, colorScheme}) =>
     colorScheme === 'white' && variant === 'filled' && `color: ${Colors.main}`}
   ${({disabled}) => disabled && `color: ${Colors.black2};`}
+  ${({disabled, variant}) =>
+    disabled && variant === 'text' && `color: ${Colors.disabled};`}
 `;
 
 export const SuffixStyle = styled.View`

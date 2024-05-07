@@ -1,5 +1,6 @@
 import React, {useMemo, useState} from 'react';
 
+import {BarbersService} from '@/app/api';
 import {IBarberServiceConfig} from '@/app/models';
 import {AppStatusBar, Button, Typography} from '@/components/atoms';
 import {
@@ -42,15 +43,16 @@ const BarberServicesConfig: React.FC<
 
   const [updating, setUpdating] = useState(false);
   const [newGeneralConfig, setNewGeneralConfig] =
-    useState<IBarberServiceGeneralConfig | null>(null);
+    useState<Partial<IBarberServiceGeneralConfig> | null>(null);
 
-  const hasChanges = useMemo(() => !!newGeneralConfig, [newGeneralConfig]);
+  const hasChanges = useMemo(() => {
+    return Object.keys(newGeneralConfig || {}).length > 0;
+  }, [newGeneralConfig]);
 
   const handleGeneralChange = (
-    config: IBarberServiceGeneralConfig,
-    changed: boolean,
+    config: Partial<IBarberServiceGeneralConfig>,
   ) => {
-    setNewGeneralConfig(changed ? config : null);
+    setNewGeneralConfig(config);
   };
 
   const goBack = () => {
@@ -68,14 +70,13 @@ const BarberServicesConfig: React.FC<
       setUpdating(true);
 
       try {
-        const payload: Partial<IBarberServiceConfig> = {};
+        const payload: Partial<IBarberServiceConfig> = {
+          ...newGeneralConfig,
+        };
 
-        if (newGeneralConfig) {
-          payload.workDays = newGeneralConfig.workDays;
-          payload.scheduleLimitDays = newGeneralConfig.scheduleLimitDays;
-        }
-
-        // await BarbersService.updateServiceConfig(payload);
+        await BarbersService.update({
+          servicesConfig: payload,
+        });
 
         await dispatch(getCurrentUser());
 
@@ -126,6 +127,8 @@ const BarberServicesConfig: React.FC<
             config={{
               workDays: barber.config.workDays,
               scheduleLimitDays: barber.config.scheduleLimitDays,
+              openBarberAuto: barber.config.openBarberAuto,
+              openQueueAuto: barber.config.openQueueAuto,
             }}
             onChange={handleGeneralChange}
           />

@@ -33,7 +33,7 @@ export const MinusIconStyle = styled<React.FC<IIconProps>>(Icons.MinusIcon)`
 
 export const PlusIconStyle = styled<React.FC<IIconProps>>(Icons.PlusIcon)`
   padding: 4px;
-  background-color: ${Colors.main};
+  background-color: ${Colors.primary};
   border-bottom-right-radius: 4px;
   border-top-right-radius: 4px;
 `;

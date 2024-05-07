@@ -3,6 +3,7 @@ import {RootState} from '@/store/Store';
 import React, {PropsWithChildren, createContext, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {Socket, io} from 'socket.io-client';
+import {NotificationSocketEvents} from '../events';
 
 interface SocketContextProps {
   socket: Socket | null;
@@ -35,7 +36,10 @@ const SocketProvider: React.FC<PropsWithChildren> = ({children}) => {
 
   return (
     <SocketContext.Provider value={{socket, connect}}>
-      {children}
+      <>
+        <NotificationSocketEvents />
+        {children}
+      </>
     </SocketContext.Provider>
   );
 };

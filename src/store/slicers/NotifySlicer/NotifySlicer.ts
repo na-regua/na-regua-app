@@ -1,5 +1,10 @@
 import {NotificationService} from '@/app/api';
-import {IGetNotificationFilters, INotification, INotify} from '@/app/models';
+import {
+  GetNotificationResponse,
+  IGetNotificationFilters,
+  INotification,
+  INotify,
+} from '@/app/models';
 import {GenericAction, RootState} from '@/store/Store';
 import {
   ActionCreatorWithPayload,
@@ -13,21 +18,26 @@ interface INotifyState {
   userNotifications: INotification[];
   filters: IGetNotificationFilters;
   loading: boolean;
+  total: number;
+  hasUnread: boolean;
 }
 
-export const fetchUserNotifications = createAsyncThunk<INotification[]>(
+export const fetchUserNotifications = createAsyncThunk<
+  GetNotificationResponse,
+  {reload?: boolean} | undefined
+>(
   'Notification/getUserNotifications',
-  async (_, {dispatch, getState, rejectWithValue}) => {
+  async (params = {reload: true}, {dispatch, getState, rejectWithValue}) => {
     try {
-      dispatch(setIsLoadingNotifications(true));
+      if (params.reload) {
+        dispatch(setIsLoadingNotifications(true));
+      }
 
       const filters = (getState() as RootState).notify.filters;
 
       const {data} = await NotificationService.getNotifications(filters);
 
-      if (data) {
-        return data;
-      }
+      return data;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -44,9 +54,11 @@ const NotifySlicer = createSlice<
     systemNotifications: [],
     userNotifications: [],
     loading: false,
+    total: 0,
     filters: {
       limit: 20,
     },
+    hasUnread: false,
   },
   reducers: {
     createNotification: (state, action: GenericAction<INotify>) => {
@@ -69,8 +81,13 @@ const NotifySlicer = createSlice<
   },
   extraReducers: builder => {
     builder.addCase(fetchUserNotifications.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.userNotifications = action.payload.notifications;
+        state.total = action.payload.total;
+        state.hasUnread = action.payload.hasUnread;
+      }
+
       state.loading = false;
-      state.userNotifications = action.payload;
     });
 
     builder.addCase(fetchUserNotifications.rejected, state => {

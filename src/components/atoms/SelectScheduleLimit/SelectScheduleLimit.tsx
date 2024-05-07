@@ -37,7 +37,7 @@ const SelectScheduleLimit: React.FC<ISelectScheduleLimitProps> = ({
             onPress={() => onChange(time.value)}>
             <Typography
               variant="button"
-              color={limit === time.value ? 'white3' : 'main'}>
+              color={limit === time.value ? 'white3' : 'primary'}>
               {t(time.label)}
             </Typography>
           </SelectScheduleStyle>

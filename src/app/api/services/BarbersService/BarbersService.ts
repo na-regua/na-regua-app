@@ -22,7 +22,7 @@ const update = async (params: IBarberUpdate): Promise<AxiosResponse<null>> => {
   try {
     let payload = {
       ...params.profileData,
-      ...params.servicesConfig,
+      config: params.servicesConfig,
     };
 
     const data = await api.put(ENDPOINTS.BARBERS_UPDATE, payload, {

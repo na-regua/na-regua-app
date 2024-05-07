@@ -52,6 +52,12 @@ enum ENDPOINTS {
   AUTH_SEND_CODE = 'auth/send/code',
   AUTH_LOGIN_EMAIL = 'auth/login/email',
   AUTH_GET_CURRENT_USER = 'auth/me',
+  /**
+   * Queue
+   * */
+  QUEUE_CREATE = '/queues/',
+  QUEUE_LIST = '/queues/',
+  QUEUE_GET_TODAY = '/queues/today',
 }
 
 export type TEndpoints = typeof ENDPOINTS;

@@ -1,5 +1,6 @@
 import React, {useMemo} from 'react';
 
+import {BarberOnQueue} from '@/components/pages';
 import {
   BarberBillingScreen,
   BarberCompletedQrScreen,
@@ -122,6 +123,15 @@ const AppNavigator: React.FC = () => {
               name={'/barber/queue'}
               component={BarberQueueScreen}
               options={{animation: 'none'}}
+            />
+            <Stack.Screen
+              name={'/barber/queue/fs'}
+              component={BarberOnQueue}
+              options={{
+                animation: 'fade_from_bottom',
+                animationDuration: 300,
+              }}
+              initialParams={{hideBottomNav: true}}
             />
             <Stack.Screen
               name={'/barber/schedule'}

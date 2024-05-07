@@ -22,7 +22,11 @@ export function queryBuilder(
 
   const query = [];
   for (const key in params) {
-    if (params.hasOwnProperty(key)) {
+    if (
+      params.hasOwnProperty(key) &&
+      params[key] !== undefined &&
+      params[key] !== null
+    ) {
       query.push(`${key}=${params[key]}`);
     }
   }

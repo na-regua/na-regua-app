@@ -1,7 +1,9 @@
 import {Colors, Metrics} from '@/theme';
 import styled from 'styled-components/native';
 
-export const NotificationItemStyled = styled.View<{read?: boolean}>`
+export const NotificationItemStyled = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.6,
+})<{read?: boolean}>`
   padding: ${Metrics.unitX2}px;
   border-bottom-width: 1px;
   border-bottom-color: ${Colors.border};

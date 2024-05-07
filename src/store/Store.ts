@@ -4,6 +4,7 @@ import {
   ConfigReducer,
   LoginReducer,
   NotifyReducer,
+  QueueReducer,
 } from './slicers';
 
 export interface GenericAction<T = any> {
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   config: ConfigReducer,
   notify: NotifyReducer,
   login: LoginReducer,
+  queue: QueueReducer,
 });
 
 export const store = configureStore({

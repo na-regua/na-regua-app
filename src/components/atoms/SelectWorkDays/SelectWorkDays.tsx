@@ -7,7 +7,6 @@ import {
   SelectDayStyle,
   SelectDaysContainerStyle,
   WorkDaysContainerStyle,
-  styles,
 } from './styles';
 
 interface ISelectWorkDaysProps {
@@ -35,7 +34,6 @@ const SelectWorkDays: React.FC<ISelectWorkDaysProps> = ({
         {t('barber.servicesConfig.fields.workDays')}
       </Typography>
       <SelectDaysContainerStyle
-        contentContainerStyle={styles.scrollContentContainer}
         horizontal
         showsHorizontalScrollIndicator={false}>
         {WEEK_DAYS.map((day, index) => (

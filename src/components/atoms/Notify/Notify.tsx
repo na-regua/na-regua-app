@@ -7,10 +7,12 @@ import Typography from '../Typography/Typography';
 import {NotifyContainer} from './styles';
 import {View} from 'react-native';
 import Icons from '../Icons/Icons';
+import {useTranslation} from 'react-i18next';
 
 interface INotifyProps extends INotify {}
 
 const Notify: React.FC<INotifyProps> = ({id, type, message}) => {
+  const {t} = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
   const handleRemoveNotification = () => {
@@ -39,7 +41,7 @@ const Notify: React.FC<INotifyProps> = ({id, type, message}) => {
         </View>
       )}
       <Typography variant="button" color="white3">
-        {message}
+        {t(message)}
       </Typography>
     </NotifyContainer>
   );

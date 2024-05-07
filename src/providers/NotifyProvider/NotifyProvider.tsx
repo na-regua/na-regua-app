@@ -1,8 +1,9 @@
 import {Notify} from '@/components/atoms';
 import {RootState} from '@/store/Store';
 import {Metrics} from '@/theme';
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {ViewStyle} from 'react-native';
+import {Notification, Notifications} from 'react-native-notifications';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import styled from 'styled-components/native';
@@ -28,6 +29,30 @@ const NotifyProvider: React.FC<INotifyProvider> = () => {
   };
 
   const {systemNotifications} = useSelector((state: RootState) => state.notify);
+
+  const initPushNotificationConfig = useCallback(() => {
+    Notifications.registerRemoteNotifications();
+
+    Notifications.events().registerNotificationReceivedForeground(
+      (notification: Notification, completion) => {
+        console.log(
+          `Notification received in foreground: ${notification.title} : ${notification.body}`,
+        );
+        completion({alert: false, sound: false, badge: false});
+      },
+    );
+
+    Notifications.events().registerNotificationOpened(
+      (notification: Notification, completion) => {
+        console.log(`Notification opened: ${notification.payload}`);
+        completion();
+      },
+    );
+  }, []);
+
+  useEffect(() => {
+    initPushNotificationConfig();
+  }, [initPushNotificationConfig]);
 
   return (
     <StyledNotifyWrapper style={insetBottomStyle}>

@@ -1,9 +1,13 @@
 import React, {PropsWithChildren, useState} from 'react';
 
 import {useTranslation} from 'react-i18next';
-import Icons from '../Icons/Icons';
 import Typography from '../Typography/Typography';
-import {CollapseStyle, HeaderStyle} from './styles';
+import {
+  CollapseStyle,
+  DownIconStyled,
+  HeaderStyle,
+  UpIconStyled,
+} from './styles';
 
 interface ICollapseProps {
   title?: string;
@@ -24,13 +28,13 @@ const Collapse: React.FC<PropsWithChildren<ICollapseProps>> = ({
 
   return (
     <CollapseStyle>
-      <HeaderStyle onPress={handleExpand} activeOpacity={0.6}>
+      <HeaderStyle disabled>
         <Typography variant="body1" color="black3">
           {title && t(title)}
         </Typography>
 
         {expand ? (
-          <Icons.ChevronUpIcon
+          <UpIconStyled
             width={24}
             height={24}
             clickable
@@ -38,7 +42,7 @@ const Collapse: React.FC<PropsWithChildren<ICollapseProps>> = ({
             color="default"
           />
         ) : (
-          <Icons.ChevronDownIcon
+          <DownIconStyled
             width={24}
             height={24}
             clickable

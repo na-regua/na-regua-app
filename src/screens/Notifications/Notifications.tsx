@@ -22,6 +22,8 @@ import {
   TabItemStyled,
   TabsContainerStyled,
 } from './styles';
+import {AxiosError} from 'axios';
+import {NotificationService} from '@/app/api';
 
 const Notifications: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/user/notifications'>
@@ -39,9 +41,11 @@ const Notifications: React.FC<
     paddingRight: insets.right,
   };
   const dispatch = useDispatch<AppDispatch>();
-  const {userNotifications, loading: loadingNotifications} = useSelector(
-    (state: RootState) => state.notify,
-  );
+  const {
+    userNotifications,
+    loading: loadingNotifications,
+    hasUnread,
+  } = useSelector((state: RootState) => state.notify);
 
   const getUserNotifications = useCallback(() => {
     dispatch(fetchUserNotifications());
@@ -64,7 +68,16 @@ const Notifications: React.FC<
     await dispatch(fetchUserNotifications());
   };
 
-  const markAllAsRead = () => {};
+  const markAllAsRead = async () => {
+    try {
+      await NotificationService.markAllAsRead();
+
+      await dispatch(fetchUserNotifications());
+    } catch (error) {
+      if (error instanceof AxiosError) {
+      }
+    }
+  };
 
   return (
     <NotificationsContainerStyled style={[insetsStyles]}>
@@ -81,6 +94,7 @@ const Notifications: React.FC<
               {'generic.notifications.title'}
             </Typography>
             <Button
+              disabled={loadingNotifications || !hasUnread}
               onPress={markAllAsRead}
               variant="text"
               title="generic.notifications.markAllRead"
