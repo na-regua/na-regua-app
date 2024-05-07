@@ -9,9 +9,10 @@ export {default as ServiceGeneralConfigCard} from './ServiceGeneralConfigCard/Se
 export {default as UpdateBarberThumbs} from './UpdateBarberThumbs/UpdateBarberThumbs';
 
 export * from './AddressStep/AddressStep';
-export * from './ProfileStep/ProfileStep';
-export * from './ServiceGeneralConfigCard/ServiceGeneralConfigCard';
 export * from './BarberLoginMailForm/BarberLoginMailForm';
 export * from './BarberLoginPhoneForm/BarberLoginPhoneForm';
-export * from './QueueCarouselItems/QueueCarouselItems';
 export * from './NotificationCenterItem/NotificationCenterItem';
+export * from './OnQueueHeader/OnQueueHeader';
+export * from './ProfileStep/ProfileStep';
+export * from './QueueCarouselItems/QueueCarouselItems';
+export * from './ServiceGeneralConfigCard/ServiceGeneralConfigCard';
