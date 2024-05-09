@@ -5,8 +5,8 @@ import {
 } from '@/components/molecules';
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {TUserType, setLoginMethod, setLoginUserType} from '@/store/slicers';
-import React, {useEffect} from 'react';
+import {TUserType, setLoginUserType} from '@/store/slicers';
+import React from 'react';
 import {Keyboard} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -21,7 +21,9 @@ import {
 
 const BarberLogin = () => {
   const insets = useSafeAreaInsets();
-  const {userType, method} = useSelector((state: RootState) => state.login);
+  const {userType, barberMethod} = useSelector(
+    (state: RootState) => state.login,
+  );
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useAppNavigation();
 
@@ -48,17 +50,6 @@ const BarberLogin = () => {
     navigation.navigate('/barber/sign-up');
   };
 
-  const setAutoMethod = () => {
-    if (method === 'welcome') {
-      dispatch(setLoginMethod('e-mail'));
-    }
-  };
-
-  useEffect(() => {
-    setAutoMethod();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <TouchableWithoutFeedbackStyle onPress={() => Keyboard.dismiss()}>
       <ContainerStyle
@@ -67,8 +58,8 @@ const BarberLogin = () => {
           barberLoginStyles.scrollContainer,
         ]}>
         <ContentStyle>
-          {method === 'e-mail' && <BarberLoginMailForm />}
-          {(method === 'phone' || method === 'verify-code') && (
+          {barberMethod === 'e-mail' && <BarberLoginMailForm />}
+          {(barberMethod === 'phone' || barberMethod === 'verify-code') && (
             <BarberLoginPhoneForm />
           )}
           <FooterContainerStyle>

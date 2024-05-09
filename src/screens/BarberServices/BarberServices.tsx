@@ -80,6 +80,10 @@ const BarberServices: React.FC<
     if (navigation.canGoBack()) {
       navigation.goBack();
     }
+
+    if (!navigation.canGoBack()) {
+      navigation.navigate('/barber/settings');
+    }
   };
 
   const openAddServiceModal = () => {

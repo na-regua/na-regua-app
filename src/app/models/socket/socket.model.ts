@@ -1,3 +1,5 @@
+import {IQueue} from '../queue/queue.model';
+
 export enum SocketUrls {
   WorkerJoinQueue = 'queue/worker/join',
   UserJoinQueue = 'queue/user/join',
@@ -19,6 +21,10 @@ export enum SocketUrls {
 
 export interface SocketQueueEvent {
   queueId?: string;
+}
+
+export interface QueueUpdateEvent {
+  queue: IQueue;
 }
 
 export interface ISocketEvent {

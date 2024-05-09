@@ -1,2 +1,1 @@
-export * from './BarberSocketEvents';
-export * from './NotificationSocketEvents';
+export * from './BarberQueueSocketEvents';

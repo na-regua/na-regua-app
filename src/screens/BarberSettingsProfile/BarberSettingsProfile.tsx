@@ -115,7 +115,7 @@ const BarberSettingsProfile: React.FC<
               createNotification({
                 id: 'search-cep',
                 type: 'error',
-                message,
+                message: `error.${message}`,
               }),
             );
           }
@@ -127,6 +127,10 @@ const BarberSettingsProfile: React.FC<
   const goBack = () => {
     if (navigation.canGoBack()) {
       navigation.goBack();
+    }
+
+    if (!navigation.canGoBack()) {
+      navigation.navigate('/barber/settings');
     }
   };
 

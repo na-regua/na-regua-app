@@ -6,7 +6,7 @@ import {AppDispatch} from '@/store/Store';
 import {
   createNotification,
   setBarber,
-  setLoginMethod,
+  setBarberMethod,
   setPersistedToken,
   setUser,
 } from '@/store/slicers';
@@ -43,7 +43,7 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
   };
 
   const setPhoneLoginMethod = () => {
-    dispatch(setLoginMethod('phone'));
+    dispatch(setBarberMethod('phone'));
   };
 
   const doLogin = async () => {
@@ -87,7 +87,7 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
             createNotification({
               id: 'login-email',
               type: 'error',
-              message,
+              message: `error.${message}`,
             }),
           );
         }
@@ -98,12 +98,7 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
   return (
     <ContentStyle>
       <LogoContainerStyle>
-        <Icons.LogoMiniIcon
-          svgStyle={{borderRadius: 18, overflow: 'hidden'}}
-          disabled
-          width={80}
-          height={80}
-        />
+        <Icons.LogoMiniIcon disabled width={80} height={80} />
         <Icons.LogoWritingIcon width={220} height={50} />
       </LogoContainerStyle>
       <Typography
@@ -130,6 +125,7 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
             returnKeyType="next"
             onSubmitEditing={() => fieldsRef.password.current?.focus()}
             blurOnSubmit={false}
+            textContentType="emailAddress"
             textStyle={{borderColor: Colors.primary}}
           />
         )}
@@ -142,9 +138,9 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
         render={({field: {onChange, value}}) => (
           <Input
             label="generic.login.barber.fields.password"
-            autoCapitalize="none"
             secureTextEntry={!showPassword}
             onChangeText={onChange}
+            autoCapitalize="none"
             value={value}
             suffix={
               <TouchableOpacity

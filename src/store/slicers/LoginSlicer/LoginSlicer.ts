@@ -1,4 +1,4 @@
-import {TLoginSteps} from '@/app/models';
+import {TBarberSteps, TCustomerSteps, TLoginSteps} from '@/app/models';
 import {GenericAction} from '@/store/Store';
 import {
   ActionCreatorWithPayload,
@@ -10,7 +10,9 @@ import {getCurrentUser} from '../AuthSlicer/AuthSlicer';
 export type TUserType = 'worker' | 'customer';
 
 interface ILoginState {
-  method: TLoginSteps;
+  steps: TLoginSteps;
+  barberMethod: TBarberSteps;
+  customerMethod: TCustomerSteps;
   userType?: TUserType;
   currentPhone?: string;
 }
@@ -22,11 +24,19 @@ const LoginSlicer = createSlice<
 >({
   name: 'Login',
   initialState: {
-    method: 'welcome',
+    steps: 'welcome',
+    barberMethod: 'e-mail',
+    customerMethod: 'phone',
   },
   reducers: {
-    setLoginMethod: (state, action: GenericAction<TLoginSteps>) => {
-      state.method = action.payload;
+    setLoginStep: (state, action: GenericAction<TLoginSteps>) => {
+      state.steps = action.payload;
+    },
+    setCustomerMethod: (state, action: GenericAction<TCustomerSteps>) => {
+      state.customerMethod = action.payload;
+    },
+    setBarberMethod: (state, action: GenericAction<TBarberSteps>) => {
+      state.barberMethod = action.payload;
     },
     setLoginUserType: (state, action: GenericAction<TUserType>) => {
       state.userType = action.payload;
@@ -53,11 +63,18 @@ const LoginSlicer = createSlice<
 
 const {reducer: LoginReducer} = LoginSlicer;
 
-export const {setLoginMethod, setLoginUserType, setCurrentPhone} =
-  LoginSlicer.actions as {
-    setLoginMethod: ActionCreatorWithPayload<TLoginSteps>;
-    setLoginUserType: ActionCreatorWithPayload<TUserType>;
-    setCurrentPhone: ActionCreatorWithPayload<string>;
-  };
+export const {
+  setLoginStep,
+  setLoginUserType,
+  setCurrentPhone,
+  setBarberMethod,
+  setCustomerMethod,
+} = LoginSlicer.actions as {
+  setLoginStep: ActionCreatorWithPayload<TLoginSteps>;
+  setLoginUserType: ActionCreatorWithPayload<TUserType>;
+  setCurrentPhone: ActionCreatorWithPayload<string>;
+  setBarberMethod: ActionCreatorWithPayload<TBarberSteps>;
+  setCustomerMethod: ActionCreatorWithPayload<TCustomerSteps>;
+};
 
 export {LoginReducer, LoginSlicer};

@@ -48,6 +48,19 @@ export const BackContainerStyle = styled.TouchableOpacity`
   gap: 4px;
 `;
 
+export const UserClickContainerStyled = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.6,
+})`
+  align-items: center;
+  justify-content: center;
+`;
+
+export const UserImageStyle = styled.Image`
+  width: 42px;
+  height: 42px;
+  border-radius: 50px;
+`;
+
 export const WelcomeTextStyle = styled(Typography)`
   font-weight: ${Fonts.weights.medium};
   font-family: ${Fonts.types.medium};

@@ -16,7 +16,6 @@ PushNotification.configure({
     console.log('TOKEN:', token);
   },
   onNotification: function (notification) {
-    console.log('NOTIFICATION:', notification);
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
   popInitialNotification: true,

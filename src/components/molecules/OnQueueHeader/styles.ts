@@ -4,11 +4,11 @@ import {TColorsType} from '@/theme/colors';
 import {Animated, View} from 'react-native';
 import styled from 'styled-components/native';
 
-export const OnQueueHeaderContainerStyled = styled.View`
+const AnimatedView = Animated.createAnimatedComponent(View);
+
+export const OnQueueHeaderContainerStyled = styled(AnimatedView)`
   gap: ${Metrics.unitX3}px;
 `;
-
-const AnimatedView = Animated.createAnimatedComponent(View);
 
 export const OnQueueTitleDotStyled = styled(AnimatedView)<{
   color: TColorsType;

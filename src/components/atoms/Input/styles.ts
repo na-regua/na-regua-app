@@ -45,7 +45,8 @@ export const InputStyle = styled.TextInput<{
   font-weight: ${Fonts.weights.semiBold};
   font-family: ${Fonts.types.semiBold};
   border-width: 1px;
-  border-color: ${({borderColor}) => borderColor?.toString() || Colors.border};
+  border-color: ${({borderColor}) =>
+    (borderColor && borderColor?.toString()) || Colors.border};
   border-radius: 8px;
   padding: 0 12px;
   color: ${Colors.black3};

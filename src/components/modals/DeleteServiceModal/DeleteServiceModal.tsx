@@ -60,7 +60,7 @@ const DeleteServiceModal: React.FC<IDeleteServiceModalProps> = ({
             createNotification({
               id: 'delete-service',
               type: 'error',
-              message,
+              message: `error.${message}`,
             }),
           );
         }

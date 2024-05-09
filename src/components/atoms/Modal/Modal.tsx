@@ -5,6 +5,7 @@ import {useKeyboardVisible} from '@/hooks';
 import {Colors} from '@/theme';
 import {gtDeviceHeight} from '@/theme/metrics';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useTranslation} from 'react-i18next';
 import {View, ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Typography from '../Typography/Typography';
@@ -40,6 +41,7 @@ const Modal = forwardRef<BottomSheetModal, IModalProps>(
     },
     ref,
   ) => {
+    const {t} = useTranslation();
     const insets = useSafeAreaInsets();
     const {isKeyboardVisible, keyboardHeight} = useKeyboardVisible();
 
@@ -76,7 +78,7 @@ const Modal = forwardRef<BottomSheetModal, IModalProps>(
         <View style={modalStyles.content}>
           {title && (
             <Typography variant="h5" color="black3">
-              {title}
+              {t(title)}
             </Typography>
           )}
           {children}

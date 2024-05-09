@@ -2,9 +2,9 @@ import {AppStatusBar, Icons, Typography} from '@/components/atoms';
 
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {TUserType, setLoginMethod, setLoginUserType} from '@/store/slicers';
+import {TUserType, setLoginStep, setLoginUserType} from '@/store/slicers';
 import {Fonts} from '@/theme';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -27,18 +27,34 @@ const Login: React.FC = () => {
 
   const {t} = useTranslation();
 
-  const {userType} = useSelector((state: RootState) => state.login);
+  const {userType, steps} = useSelector((state: RootState) => state.login);
 
   const dispatch = useDispatch<AppDispatch>();
 
   const navigation = useAppNavigation();
 
+  const skipWelcome = () => {
+    if (steps === 'login') {
+      if (userType === 'worker') {
+        navigation.navigate('/generic/login/barber');
+      }
+
+      if (userType === 'customer') {
+        navigation.navigate('/generic/login/customer');
+      }
+    }
+  };
+
+  useEffect(() => {
+    skipWelcome();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleSwitchUserType = (type: TUserType) => {
     dispatch(setLoginUserType(type));
+    dispatch(setLoginStep('login'));
 
     if (type === 'worker') {
-      dispatch(setLoginMethod('e-mail'));
-
       navigation.navigate('/generic/login/barber');
     }
 

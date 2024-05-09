@@ -46,6 +46,7 @@ const Notifications: React.FC<
     loading: loadingNotifications,
     hasUnread,
   } = useSelector((state: RootState) => state.notify);
+  const {user} = useSelector((state: RootState) => state.auth);
 
   const getUserNotifications = useCallback(() => {
     dispatch(fetchUserNotifications());
@@ -56,7 +57,19 @@ const Notifications: React.FC<
   }, [getUserNotifications]);
 
   const onBackPress = () => {
-    navigation.goBack();
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+
+    if (!navigation.canGoBack()) {
+      if (user?.role === 'customer') {
+        navigation.navigate('/customer/home');
+      }
+
+      if (user?.role !== 'customer') {
+        navigation.navigate('/barber/queue');
+      }
+    }
   };
 
   const changeTab = async (tab: number) => {

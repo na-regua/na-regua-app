@@ -60,7 +60,7 @@ const DeleteWorkerModal: React.FC<IDeleteWorkerModalProps> = ({
             createNotification({
               id: 'delete-worker',
               type: 'error',
-              message,
+              message: `error.${message}`,
             }),
           );
         }

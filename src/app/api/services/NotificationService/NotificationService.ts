@@ -10,8 +10,6 @@ const getNotifications = async (
   try {
     const url = queryBuilder(ENDPOINTS.NOTIFICATION_LIST_BY_USER, filters);
 
-    console.log(url);
-
     const response = await api.get(url, {
       withCredentials: true,
     });

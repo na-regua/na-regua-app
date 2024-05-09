@@ -73,6 +73,10 @@ const BarberWorkers: React.FC<
     if (navigation.canGoBack()) {
       navigation.goBack();
     }
+
+    if (!navigation.canGoBack()) {
+      navigation.navigate('/barber/settings');
+    }
   };
 
   const openAddWorkerModal = () => {
@@ -230,7 +234,6 @@ const BarberWorkers: React.FC<
         </Modal>
         <Modal
           ref={editWorkerModalRef}
-          autoSize
           height={410}
           title={t('modals.worker.titles.edit')}
           onClose={() => {

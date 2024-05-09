@@ -13,7 +13,11 @@ import {
   BarberSettingsProfileScreen,
   BarberSettingsScreen,
   BarberSignUpScreen,
+  CustomerHomeScreen,
   CustomerLoginScreen,
+  CustomerSettingsScreen,
+  CustomerSignUpScreen,
+  CustomerSignUpVerifyScreen,
   LoginScreen,
   NotificationsScreen,
   SplashScreen,
@@ -51,11 +55,17 @@ const AppNavigator: React.FC = () => {
       }
 
       if (user.role === 'customer') {
+        routeName = '/customer/home';
       }
     }
 
     return routeName;
   }, [isAuthenticated, user, barber]);
+
+  const CustomerAuth = useMemo(
+    () => user && isAuthenticated && user.role === 'customer',
+    [isAuthenticated, user],
+  );
 
   const WorkerAuth = useMemo(
     () =>
@@ -102,6 +112,14 @@ const AppNavigator: React.FC = () => {
           component={CustomerLoginScreen}
           options={{animation: 'none'}}
         />
+        <Stack.Screen
+          name={'/customer/sign-up'}
+          component={CustomerSignUpScreen}
+        />
+        <Stack.Screen
+          name={'/customer/sign-up/verify'}
+          component={CustomerSignUpVerifyScreen}
+        />
 
         {isAuthenticated && (
           <>
@@ -117,6 +135,19 @@ const AppNavigator: React.FC = () => {
           </>
         )}
 
+        {CustomerAuth && (
+          <>
+            <Stack.Screen
+              name={'/customer/home'}
+              component={CustomerHomeScreen}
+            />
+            <Stack.Screen
+              name={'/customer/settings'}
+              component={CustomerSettingsScreen}
+            />
+          </>
+        )}
+
         {WorkerAuth && (
           <>
             <Stack.Screen
@@ -124,15 +155,7 @@ const AppNavigator: React.FC = () => {
               component={BarberQueueScreen}
               options={{animation: 'none'}}
             />
-            <Stack.Screen
-              name={'/barber/queue/fs'}
-              component={BarberOnQueue}
-              options={{
-                animation: 'fade_from_bottom',
-                animationDuration: 300,
-              }}
-              initialParams={{hideBottomNav: true}}
-            />
+            <Stack.Screen name={'/barber/queue/fs'} component={BarberOnQueue} />
             <Stack.Screen
               name={'/barber/schedule'}
               component={BarberScheduleScreen}

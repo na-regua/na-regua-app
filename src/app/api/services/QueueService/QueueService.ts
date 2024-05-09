@@ -15,4 +15,18 @@ const getTodayQueue = async (): Promise<AxiosResponse<{queue: IQueue}>> => {
   }
 };
 
-export default {getTodayQueue};
+const startQueue = async (): Promise<AxiosResponse<{queue: IQueue}>> => {
+  try {
+    const res = await api.post(
+      ENDPOINTS.QUEUE_CREATE,
+      {},
+      {withCredentials: true},
+    );
+
+    return res;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
+export default {getTodayQueue, startQueue};

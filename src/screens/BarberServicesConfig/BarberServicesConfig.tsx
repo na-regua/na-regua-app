@@ -59,6 +59,10 @@ const BarberServicesConfig: React.FC<
     if (navigation.canGoBack()) {
       navigation.goBack();
     }
+
+    if (!navigation.canGoBack()) {
+      navigation.navigate('/barber/settings');
+    }
   };
 
   if (!barber) {
@@ -93,7 +97,7 @@ const BarberServicesConfig: React.FC<
               createNotification({
                 id: 'service-update',
                 type: 'error',
-                message,
+                message: `error.${message}`,
               }),
             );
           }

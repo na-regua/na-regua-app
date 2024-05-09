@@ -1,6 +1,6 @@
 import React = require('react');
 import {Colors} from '@/theme';
-import {oneDigitMask} from '@/utils';
+import {numberMask, oneDigitMask} from '@/utils';
 import {createRef, useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {TextInput} from 'react-native';
@@ -28,7 +28,7 @@ const CodeInput: React.FC<ICodeInputProps> = ({
   showDoneButton = false,
 }) => {
   const inputValuesArray: ICodeInputsArr[] = [];
-  const {watch, register, control, setValue} = useForm();
+  const {watch, register, control, setValue, getValues} = useForm();
 
   const formValue = watch();
 
@@ -52,45 +52,59 @@ const CodeInput: React.FC<ICodeInputProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formValue]);
 
+  const findNextRef = (from: number): number => {
+    const mappedNoValues = Object.keys(getValues()).filter((key, index) => {
+      if (index <= from) {
+        return false;
+      }
+
+      const value = watch(key);
+
+      if (value === undefined || value === '') {
+        return index;
+      }
+    });
+
+    if (mappedNoValues.length === 0) {
+      return digits - 1;
+    }
+
+    const nextIndex = +mappedNoValues[0].split('-')[1];
+
+    return nextIndex;
+  };
+
   const handleCodeOnChange = (
     text: string,
     index: number,
     cb: (...event: any) => void,
   ) => {
-    // Check if the input is a number and if the value is higher than one digit
-    // if so, set the value of the next input and focus the next from it
+    if (text.length > 1) {
+      const restantDigits = digits - (index + 1);
 
-    const onlyDecimal = /\D/g.test(text);
-    if (text.length > 1 && !onlyDecimal) {
-      const nextIndex = index + 1;
+      const arrText = text.slice(1, restantDigits + 1).split('');
 
-      if (nextIndex < digits) {
-        setValue(`code-${nextIndex}`, text[1]);
+      arrText.forEach((value, i) => {
+        const nextIndex = index + i + 1;
 
-        if (inputValuesArray[nextIndex + 1]) {
-          inputValuesArray[index + 2].ref.current?.focus();
-        } else {
-          inputValuesArray[index + 1].ref.current?.focus();
+        if (nextIndex < digits) {
+          setValue(`code-${nextIndex}`, value);
         }
-      } else {
-        text = text[1];
-      }
-
-      text = oneDigitMask(text);
+      });
     }
 
-    if (text.length === 1) {
-      text = oneDigitMask(text);
+    text = oneDigitMask(text);
+    const isTyping = text.length !== 0;
 
-      if (text.length === 1) {
-        if (index < digits - 1) {
-          inputValuesArray[index + 1].ref.current?.focus();
-        }
-      } else if (text.length === 0) {
-        const prevValue = watch(`code-${index - 1}`);
+    if (isTyping) {
+      const hasNext = index + 1 < digits;
 
-        if (index > 0 && !prevValue) {
-          inputValuesArray[index - 1].ref.current?.focus();
+      // moving focus to next available input
+      if (hasNext) {
+        const nextIndex = findNextRef(index);
+
+        if (nextIndex > 0) {
+          inputValuesArray[nextIndex].ref.current?.focus();
         }
       }
     }
@@ -119,7 +133,8 @@ const CodeInput: React.FC<ICodeInputProps> = ({
                 setIsFocused(false);
               }}
               editable={!disabled}
-              onChangeText={text => {
+              onChange={({nativeEvent: {text}}) => {
+                text = numberMask(text);
                 handleCodeOnChange(text, index, onChange);
               }}
               isFocused={isFocused}
@@ -131,9 +146,14 @@ const CodeInput: React.FC<ICodeInputProps> = ({
                   }
                 }
               }}
+              textContentType="oneTimeCode"
               keyboardType="number-pad"
               returnKeyType={showDoneButton ? 'done' : 'default'}
-              onSubmitEditing={() => onDone && onDone()}
+              onSubmitEditing={() => {
+                if (onDone) {
+                  onDone();
+                }
+              }}
             />
           )}
         />

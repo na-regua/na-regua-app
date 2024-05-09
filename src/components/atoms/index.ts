@@ -1,7 +1,9 @@
 export {default as AppStatusBar} from './AppStatusBar/AppStatusBar';
 export {default as Avatar} from './Avatar/Avatar';
 export {default as AvoidKeyboard} from './AvoidKeyboard/AvoidKeyboard';
+export * from './Button/Button';
 export {default as Button} from './Button/Button';
+export * from './Calendar';
 export * from './Carousel/Carousel';
 export {default as Checkbox} from './Checkbox/Checkbox';
 export {default as CodeInput} from './CodeInput/CodeInput';
@@ -21,11 +23,8 @@ export {default as SelectSchedulesByDay} from './SelectSchedulesByDay/SelectSche
 export {default as SelectWorkDays} from './SelectWorkDays/SelectWorkDays';
 export {default as SelectWorkTime} from './SelectWorkTime/SelectWorkTime';
 export {default as Step} from './Step/Step';
-export {default as Stepper} from './Stepper/Stepper';
-export {default as Typography} from './Typography/Typography';
-
-export * from './Button/Button';
-export * from './Calendar';
 export * from './Stepper/Stepper';
+export {default as Stepper} from './Stepper/Stepper';
 export * from './SwitchButton/SwitchButton';
 export * from './Typography/Typography';
+export {default as Typography} from './Typography/Typography';

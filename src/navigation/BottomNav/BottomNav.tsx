@@ -59,6 +59,10 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
     return null;
   }
 
+  if (user?.role === 'customer') {
+    return null;
+  }
+
   const handleNavigateTo = (routeName: any) => {
     navigator.navigate(routeName);
   };

@@ -83,7 +83,7 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
             createNotification({
               id: 'add-service',
               type: 'error',
-              message,
+              message: `error.${message}`,
             }),
           );
         }
@@ -118,7 +118,7 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
               createNotification({
                 id: 'update-service',
                 type: 'error',
-                message,
+                message: `error.${message}`,
               }),
             );
           }

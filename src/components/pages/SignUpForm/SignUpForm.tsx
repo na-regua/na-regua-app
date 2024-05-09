@@ -153,7 +153,7 @@ const SignUpForm: React.FC = () => {
               createNotification({
                 id: 'sign-up-barber',
                 type: 'error',
-                message,
+                message: `error.${message}`,
               }),
             );
           }

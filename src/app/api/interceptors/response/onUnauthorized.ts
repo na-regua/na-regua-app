@@ -11,7 +11,7 @@ export async function onUnauthorizedResponse(error: any) {
     store.dispatch(
       createNotification({
         id: 'unauthorized',
-        message: 'Unauthorized',
+        message: 'errors.UNAUTHORIZED',
         type: 'error',
       }),
     );

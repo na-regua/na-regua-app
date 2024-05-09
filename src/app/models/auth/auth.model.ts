@@ -25,3 +25,8 @@ export interface IGetUserResponse {
   user: IUser;
   barber?: IBarber;
 }
+
+export interface ICustomerSignUp {
+  name: string;
+  phone: string;
+}

@@ -1,17 +1,16 @@
 import {Button} from '@/components/atoms';
+import {BOTTOM_NAV_HEIGHT} from '@/navigation/BottomNav/styles';
 import {Colors, Metrics} from '@/theme';
 import {EdgeInsets} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 
 export const OnQueueContainerStyled = styled.View<{
-  fs: boolean;
   insets: EdgeInsets;
 }>`
   flex: 1;
   background: ${Colors.bgLight};
 
-  ${({fs, insets}) =>
-    fs &&
+  ${({insets}) =>
     `
     padding-top: ${insets.top}px;
     padding-bottom: ${insets.bottom}px;
@@ -23,7 +22,13 @@ export const OnQueueContainerStyled = styled.View<{
 export const OnQueueContentStyled = styled.View<{fs: boolean}>`
   flex: 1;
   gap: 18px;
-  ${({fs}) => fs && `padding: ${Metrics.unitX3}px`};
+  padding: 18px;
+
+  ${({fs}) =>
+    !fs &&
+    `
+    margin-bottom: ${BOTTOM_NAV_HEIGHT}px;
+  `}
 `;
 
 export const OnQueueActionsStyled = styled.View`

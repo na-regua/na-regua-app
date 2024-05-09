@@ -30,14 +30,19 @@ const OnQueueHeader = () => {
     (state: RootState) => state.queue,
   );
 
-  const sv = useSharedValue<number>(0);
+  const sv = useSharedValue<number>(1);
+
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: sv.value,
   }));
 
   useEffect(() => {
     if (todayQueue?.status === 'on') {
-      sv.value = withRepeat(withTiming(1, {duration: 500}), -1);
+      sv.value = withRepeat(withTiming(0, {duration: 1000}), -1);
+    }
+
+    if (todayQueue?.status === 'paused') {
+      sv.value = 1;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [todayQueue]);
@@ -54,7 +59,7 @@ const OnQueueHeader = () => {
     }
 
     if (todayQueue.status === 'paused') {
-      return 'warning';
+      return 'default';
     }
 
     return 'danger';
@@ -79,7 +84,7 @@ const OnQueueHeader = () => {
   }
 
   return (
-    <OnQueueHeaderContainerStyled>
+    <OnQueueHeaderContainerStyled as={Animated.View}>
       <OnQueueHeaderStyled>
         <OnQueueHeaderRowStyled>
           <OnqueueTitleGroupStyled>
@@ -89,7 +94,7 @@ const OnQueueHeader = () => {
               color={titleColor}
             />
             <OnQueueTitleStyled color={titleColor} variant="h5">
-              {'barber.onQueue.titles.on'}
+              {`barber.onQueue.titles.${todayQueue.status}`}
             </OnQueueTitleStyled>
           </OnqueueTitleGroupStyled>
 

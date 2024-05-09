@@ -11,7 +11,12 @@ import {useTranslation} from 'react-i18next';
 
 interface INotifyProps extends INotify {}
 
-const Notify: React.FC<INotifyProps> = ({id, type, message}) => {
+const Notify: React.FC<INotifyProps> = ({
+  id,
+  type,
+  message,
+  translate = true,
+}) => {
   const {t} = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -41,7 +46,7 @@ const Notify: React.FC<INotifyProps> = ({id, type, message}) => {
         </View>
       )}
       <Typography variant="button" color="white3">
-        {t(message)}
+        {translate ? t(message) : message}
       </Typography>
     </NotifyContainer>
   );

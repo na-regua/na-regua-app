@@ -83,7 +83,7 @@ const AddressStep: React.FC<IAdressStepProps> = ({
               createNotification({
                 id: 'search-cep',
                 type: 'error',
-                message,
+                message: `error.${message}`,
               }),
             );
           }

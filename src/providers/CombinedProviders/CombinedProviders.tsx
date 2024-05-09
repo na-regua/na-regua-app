@@ -9,12 +9,12 @@ import PersistedData from '../PersistedData/PersistedData';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {combinedProvidersStyles} from './styles';
 
+import {SocketProvider} from '@/socket';
 import {Colors} from '@/theme';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {ThemeProvider} from 'styled-components/native';
 import NotifyProvider from '../NotifyProvider/NotifyProvider';
 import {StatusBarProvider} from '../StatusBarProvider/StatusBarProvider';
-import {SocketProvider} from '../../socket';
 
 const CombinedProviders: React.FC = () => {
   return (

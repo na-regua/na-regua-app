@@ -22,4 +22,9 @@ export interface ICreateUser {
   password: string;
 }
 
+export interface ICreateCustomerUser {
+  name: string;
+  phone: string;
+}
+
 export interface IUpdateUser extends Partial<Omit<ICreateUser, 'password'>> {}

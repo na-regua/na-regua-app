@@ -21,7 +21,12 @@ enum ENDPOINTS {
   /**
    * Users
    * */
+  USERS_LIST = '/users/',
+  USERS_CREATE = '/users/',
   USERS_UPDATE = '/users/:id',
+  USERS_SEND_WHATSAPP_CODE = '/users/send/whatsapp-code',
+  USERS_VERIFY_WHATSAPP_CODE = '/users/verify/whatsapp',
+  USERS_DELETE = '/users/:id',
   /**
    * Files
    * */

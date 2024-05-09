@@ -1,7 +1,7 @@
 import {Notify} from '@/components/atoms';
 import {RootState} from '@/store/Store';
 import {Metrics} from '@/theme';
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import {ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
@@ -28,12 +28,6 @@ const NotifyProvider: React.FC<INotifyProvider> = () => {
   };
 
   const {systemNotifications} = useSelector((state: RootState) => state.notify);
-
-  const initPushNotificationConfig = useCallback(() => {}, []);
-
-  useEffect(() => {
-    initPushNotificationConfig();
-  }, [initPushNotificationConfig]);
 
   return (
     <StyledNotifyWrapper style={insetBottomStyle}>

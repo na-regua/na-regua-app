@@ -6,8 +6,8 @@ import {AppDispatch, RootState} from '@/store/Store';
 import {
   createNotification,
   setBarber,
+  setBarberMethod,
   setCurrentPhone,
-  setLoginMethod,
   setPersistedToken,
   setUser,
 } from '@/store/slicers';
@@ -27,7 +27,9 @@ const BarberLoginPhoneForm = () => {
     getValues,
     reset,
   } = useForm<ILoginPhone>({mode: 'all'});
-  const {method, currentPhone} = useSelector((state: RootState) => state.login);
+  const {barberMethod, currentPhone} = useSelector(
+    (state: RootState) => state.login,
+  );
   const dispatch = useDispatch<AppDispatch>();
   const navigator = useAppNavigation();
 
@@ -40,7 +42,7 @@ const BarberLoginPhoneForm = () => {
   };
 
   const setLoginMailMethod = () => {
-    dispatch(setLoginMethod('e-mail'));
+    dispatch(setBarberMethod('e-mail'));
   };
 
   const sendCode = async () => {
@@ -53,7 +55,7 @@ const BarberLoginPhoneForm = () => {
 
       if (data.goToVerify) {
         dispatch(setCurrentPhone(phone));
-        dispatch(setLoginMethod('verify-code'));
+        dispatch(setBarberMethod('verify-code'));
 
         setIsSending(false);
       }
@@ -67,7 +69,7 @@ const BarberLoginPhoneForm = () => {
             createNotification({
               id: 'send-whatsapp-code-error',
               type: 'error',
-              message,
+              message: `error.${message}`,
             }),
           );
         }
@@ -86,7 +88,7 @@ const BarberLoginPhoneForm = () => {
           }),
         );
 
-        dispatch(setLoginMethod('phone'));
+        dispatch(setBarberMethod('phone'));
 
         return;
       }
@@ -120,7 +122,7 @@ const BarberLoginPhoneForm = () => {
               createNotification({
                 id: 'send-whatsapp-code-error',
                 type: 'error',
-                message,
+                message: `error.${message}`,
               }),
             );
           }
@@ -130,7 +132,7 @@ const BarberLoginPhoneForm = () => {
   };
 
   const backToPhone = () => {
-    dispatch(setLoginMethod('phone'));
+    dispatch(setBarberMethod('phone'));
   };
 
   useEffect(() => {
@@ -142,22 +144,16 @@ const BarberLoginPhoneForm = () => {
   return (
     <ContentStyle>
       <LogoContainerStyle>
-        <Icons.LogoMiniIcon
-          svgStyle={{borderRadius: 18, overflow: 'hidden'}}
-          disabled
-          width={80}
-          height={80}
-        />
+        <Icons.LogoMiniIcon disabled width={80} height={80} />
         <Icons.LogoWritingIcon width={220} height={50} />
       </LogoContainerStyle>
 
-      {method === 'phone' && (
+      {barberMethod === 'phone' && (
         <>
           <Typography
             variant="body1"
             color="black1"
             children="generic.login.barber.phoneSubtitle"
-            textAlign="justify"
           />
           <Controller
             name="phone"
@@ -191,13 +187,12 @@ const BarberLoginPhoneForm = () => {
           />
         </>
       )}
-      {method === 'verify-code' && (
+      {barberMethod === 'verify-code' && (
         <>
           <Typography
             variant="body1"
             color="black1"
             children="generic.login.barber.verifySubtitle"
-            textAlign="justify"
           />
           <CodeInput
             digits={6}

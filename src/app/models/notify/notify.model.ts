@@ -8,6 +8,7 @@ export interface INotify {
   id: string;
   message: string;
   type: TNotifyTypes;
+  translate?: boolean;
 }
 
 export interface INotificationData {

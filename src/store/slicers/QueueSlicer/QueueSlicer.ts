@@ -79,6 +79,9 @@ const QueueSlicer = createSlice<
     setFilters: (state, action) => {
       state.filters = {...state.filters, ...action.payload};
     },
+    updateQueueData: (state, action) => {
+      state.todayQueue = action.payload;
+    },
   },
   extraReducers(builder) {
     builder.addCase(fetchPersistedViewMode.fulfilled, (state, action) => {
@@ -111,10 +114,12 @@ const QueueSlicer = createSlice<
   },
 });
 
-export const {setLoadingTodayQueue, setFilters} = QueueSlicer.actions as {
-  setLoadingTodayQueue: ActionCreatorWithPayload<boolean>;
-  setFilters: ActionCreatorWithPayload<QueueSlicerState['filters']>;
-};
+export const {setLoadingTodayQueue, setFilters, updateQueueData} =
+  QueueSlicer.actions as {
+    setLoadingTodayQueue: ActionCreatorWithPayload<boolean>;
+    setFilters: ActionCreatorWithPayload<QueueSlicerState['filters']>;
+    updateQueueData: ActionCreatorWithPayload<IQueue>;
+  };
 
 const QueueReducer = QueueSlicer.reducer;
 

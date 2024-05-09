@@ -1,4 +1,4 @@
-import {Colors, Metrics} from '@/theme';
+import {Colors} from '@/theme';
 import {StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import styled from 'styled-components/native';
 
@@ -13,7 +13,7 @@ export const barberSignupStyles = StyleSheet.create({
 
 export const ContainerStyle = styled.View`
   flex: 1;
-  background-color: ${Colors.bgContrast};
+  background-color: ${Colors.bgLight};
 `;
 
 export const TouchableWithoutFeedbackStyle = styled(TouchableWithoutFeedback)`

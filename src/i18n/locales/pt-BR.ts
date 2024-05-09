@@ -220,6 +220,42 @@ const ptBr = {
       },
     },
   },
+  customer: {
+    signUp: {
+      title: 'Cadastro',
+      subtitle: 'Preencha as informações abaixo para criar seu perfil.',
+      buttons: {
+        continue: 'Continuar',
+      },
+      fields: {
+        name: 'Nome',
+        phone: 'Telefone',
+      },
+    },
+    verify: {
+      title: 'Verificação',
+      subtitle:
+        'Digite o código recebido via SMS para verificar seu número de telefone.',
+      buttons: {
+        send: 'Enviar',
+      },
+      sendAgain: 'Enviar novamente',
+    },
+    settings: {
+      title: 'Configurações',
+      subtitle: 'Ajustes e preferências do aplicativo.',
+      menus: {
+        profile: {
+          title: 'Perfil',
+          subtitle: 'Editar dados do perfil.',
+        },
+        history: {
+          title: 'Histórico',
+          subtitle: 'Ver histórico de atendimentos.',
+        },
+      },
+    },
+  },
   generic: {
     verifyPhone: {
       title: 'Validação',
@@ -245,8 +281,8 @@ const ptBr = {
       hide: 'Esconder',
       barber: {
         mailSubtitle: 'Preencha o E-mail e a Senha para entrar.',
-        phoneSubtitle: 'Insira seu número telefone para continuar.',
-        verifySubtitle: 'Digite o código recebido no SMS para enviar.',
+        phoneSubtitle: 'Insira seu telefone para continuar.',
+        verifySubtitle: 'Digite o código recebido via SMS para enviar.',
         link: 'Quero fazer parte!',
         fields: {
           email: 'E-mail',
@@ -271,6 +307,9 @@ const ptBr = {
         },
         buttons: {
           send: 'Enviar',
+          enter: 'Entrar',
+          anotherPhone: 'Entrar com outro número',
+          sendAgain: 'Enviar novamente',
         },
         link: 'Fazer cadastro rápido!',
       },
@@ -376,6 +415,16 @@ const ptBr = {
         removePhoto: 'Remover foto',
       },
     },
+    joinQueue: {
+      title: 'Ops!',
+      isOnQueue:
+        'Você já está em uma fila, deseja entrar no modo de atendimento ?',
+      queueOpened: 'Existe uma fila aberta, deseja entrar entrar e atender ?',
+      buttons: {
+        cancel: 'Cancelar',
+        join: 'Entrar',
+      },
+    },
   },
   units: {
     minutes: 'minutos',
@@ -479,7 +528,86 @@ const ptBr = {
       'Foi gerado um extrato financeiro para o dia {{-day}}.',
   },
   socketEvent: {
-    WORKER_JOINED_QUEUE: '{{worker.user.name}} entrou na fila.',
+    WORKER_JOINED_QUEUE: 'Barbeiro {{worker.user.name}} entrou na fila.',
+    WORKER_NOT_OWNER: '{{worker.user.name}} não é o proprietário da fila.',
+    WORKER_IS_NOT_IN_QUEUE: '{{worker.user.name}} não está na fila.',
+    WORKER_IS_ALREADY_IN_QUEUE: '{{worker.user.name}} já está na fila.',
+    WORKER_NOT_FOUND: 'O Funcionário não foi encontrado.',
+    TICKET_SERVED: 'O cliente {{customer.name}} foi atendido.',
+    TICKET_MISSED: 'O cliente {{customer.name}} perdeu o atendimento.',
+    TICKET_REMOVED:
+      'O ticket de atendimento do cliente {{customer.name}} foi removido.',
+    TICKET_NOT_FOUND: 'O ticket de atendimento não encontrado.',
+    TICKET_NOT_CREATED: 'O ticket de atendimento não foi criado.',
+    TICKET_IS_NOT_IN_QUEUE: 'O ticket não está na fila.',
+    QUEUE_FINISHED: 'A fila foi finalizada.',
+    QUEUE_PAUSED: 'A fila foi pausada.',
+    QUEUE_RESUMED: 'A fila foi retomada.',
+    QUEUE_OFF: 'A fila está encerrada.',
+    QUEUE_NOT_FOUND: 'Não foi possível encontrar a Fila!',
+    BARBER_NOT_FOUND: 'Não foi possível encontrar a Barbearia.',
+    BARBER_IS_CLOSED: 'A Barbearia está fechada.',
+    USER_IS_NOT_WORKER: 'OPS! Você não é Funcionário da Barbearia.',
+    USER_DENIED:
+      '{{worker.name}} negou o ticket de atendimento de {{customer.name}}.',
+    USER_APPROVED:
+      '{{worker.name}} aprovou o ticket de atendimento de {{customer.name}}.',
+    USER_JOINED: '{{user.name}} entrou na fila.',
+  },
+
+  errors: {
+    INVALID_CEP: 'CEP inválido.',
+    INVALID_PHONE_NUMBER: 'Número de telefone inválido.',
+    INVALID_CODE: 'Código inválido.',
+    INVALID_EMAIL: 'E-mail inválido.',
+    INVALID_PASSWORD: 'Senha inválida.',
+    INVALID_LOGIN_TYPE: 'Tipo de login inválido.',
+    INVALID_TOKEN: 'Token inválido.',
+    INVALID_FILE: 'Arquivo inválido.',
+    INVALID_SCHEDULE_DATE: 'Data de agendamento inválida.',
+
+    TOKEN_NOT_FOUND: 'Token não encontrado.',
+
+    BARBER_NOT_CREATED: 'Barbeiro não foi criado.',
+    BARBER_NOT_COMPLETED: 'Barbeiro não foi completado.',
+    BARBER_NOT_FOUND: 'Barbeiro não encontrado.',
+
+    QUEUE_NOT_FOUND: 'Fila não encontrada.',
+    QUEUE_CAN_CREATE_ONLY_ONE_PER_DAY:
+      'Somente uma fila pode ser criada por dia.',
+
+    USER_NOT_CREATED: 'Usuário não foi criado.',
+    USER_ALREADY_EXISTS: 'Usuário já existe.',
+    USER_NOT_FOUND: 'Usuário não encontrado.',
+
+    INTERNAL_SERVER_ERROR: 'Erro interno do servidor.',
+    UNAUTHORIZED: 'Não autorizado.',
+    FORBIDDEN: 'Proibido.',
+
+    FILE_NOT_FOUND: 'Arquivo não encontrado.',
+    FILE_NOT_SENT: 'Arquivo não enviado.',
+    FILE_NOT_CREATED: 'Arquivo não foi criado.',
+    THUMBS_LIMIT_EXCEEDED: 'Limite de miniaturas excedido.',
+
+    NOTIFICATION_NOT_FOUND: 'Notificação não encontrada.',
+
+    SERVICE_NOT_CREATED: 'Serviço não foi criado.',
+    SERVICE_NOT_FOUND: 'Serviço não encontrado.',
+    BARBER_SHOULD_HAVE_ONE_SERVICE: 'Barbeiro deve ter pelo menos um serviço.',
+    NO_SERVICES_TO_DELETE: 'Nenhum serviço para deletar.',
+
+    SCHEDULE_NOT_CREATED: 'Agendamento não foi criado.',
+
+    WORKER_NOT_FOUND: 'Trabalhador não encontrado.',
+    WORKER_NOT_CREATED: 'Trabalhador não foi criado.',
+    NO_WORKERS_TO_DELETE: 'Nenhum trabalhador para deletar.',
+    BARBER_SHOULD_HAVE_ONE_WORKER:
+      'Barbeiro deve ter pelo menos um trabalhador.',
+
+    '20404': 'Nenhuma verificação de autenticação encontrada.',
+    '60202': 'Máximo de tentativas de verificação atingido.',
+    '60203': 'Máximo de tentativas de envio atingido.',
+    UNAVAILABLE_MESSAGE_SERVICE: 'Serviço de mensagens indisponível.',
   },
 };
 

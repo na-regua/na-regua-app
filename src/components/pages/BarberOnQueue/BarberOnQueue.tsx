@@ -1,11 +1,15 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 
-import {Button, Loader, MenuItem} from '@/components/atoms';
-import {useAppNavigation} from '@/navigation';
+import {SocketUrls} from '@/app/models';
+import {AppStatusBar, Button, Loader, MenuItem} from '@/components/atoms';
+import {Header, OnQueueHeader} from '@/components/molecules';
+import {TRootStackParamList} from '@/navigation';
+import {BarberQueueSocketEvents} from '@/socket/events';
 import {AppDispatch, RootState} from '@/store/Store';
 import {fetchPersistedViewMode} from '@/store/slicers';
 import {Colors} from '@/theme';
 import {useRoute} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -17,12 +21,13 @@ import {
   OnQueueLoaderWrapperStyled,
   OnQueueScrollStyled,
 } from './styles';
-import {OnQueueHeader} from '@/components/molecules';
 
-const BarberOnQueue = () => {
+const BarberOnQueue: React.FC<
+  NativeStackScreenProps<TRootStackParamList, '/barber/queue/fs'>
+> = ({navigation}) => {
+  const {socket} = useSelector((state: RootState) => state.socket);
   const insets = useSafeAreaInsets();
 
-  const navigator = useAppNavigation();
   const route = useRoute();
 
   const {todayQueue, loadingTodayQueue} = useSelector(
@@ -45,23 +50,48 @@ const BarberOnQueue = () => {
     getPersistedViewMode();
   }, [getPersistedViewMode]);
 
-  useEffect(() => {
-    if (viewMode === 'fs' && route.name !== '/barber/queue/fs') {
-      navigator.navigate('/barber/queue/fs');
-    }
-
-    if (viewMode === 'fs-out' && route.name !== '/barber/queue') {
-      navigator.navigate('/barber/queue');
-    }
+  const onChangeFs = useCallback(() => {
+    navigation.setParams({hideBottomNav: isFs});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewMode]);
 
+  useEffect(() => {
+    onChangeFs();
+  }, [onChangeFs]);
+
+  const pauseQueue = () => {
+    if (socket) {
+      socket.emit(SocketUrls.WorkerPauseQueue);
+    }
+  };
+
+  const resumeQueue = () => {
+    if (socket) {
+      socket.emit(SocketUrls.WorkerResumeQueue);
+    }
+  };
+
   if (!todayQueue) {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+
+    if (!navigation.canGoBack()) {
+      navigation.navigate('/barber/queue');
+    }
+
     return null;
   }
 
   return (
-    <OnQueueContainerStyled fs={isFs} insets={insets}>
+    <OnQueueContainerStyled insets={insets}>
+      {socket && <BarberQueueSocketEvents />}
+      {!isFs && (
+        <>
+          <AppStatusBar />
+          <Header showTitle={false} showBorder showWelcome />
+        </>
+      )}
       <OnQueueContentStyled fs={isFs}>
         <OnQueueHeader />
         <OnQueueScrollStyled showsVerticalScrollIndicator={false}>
@@ -88,12 +118,14 @@ const BarberOnQueue = () => {
                 title="barber.onQueue.buttons.pause"
                 colorScheme="default"
                 variant="outlined"
+                onPress={pauseQueue}
               />
             )}
             {todayQueue.status === 'paused' && (
               <OnQueueButtonStyled
                 title="barber.onQueue.buttons.resume"
                 colorScheme="success"
+                onPress={resumeQueue}
               />
             )}
             <OnQueueButtonStyled
@@ -101,7 +133,11 @@ const BarberOnQueue = () => {
               colorScheme="danger"
             />
           </OnQueueActionsRowStyled>
-          <Button title="barber.onQueue.buttons.next" colorScheme="primary" />
+          <Button
+            title="barber.onQueue.buttons.next"
+            colorScheme="primary"
+            disabled={todayQueue.status === 'paused'}
+          />
         </OnQueueActionsStyled>
       </OnQueueContentStyled>
     </OnQueueContainerStyled>

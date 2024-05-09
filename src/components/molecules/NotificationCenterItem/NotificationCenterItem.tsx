@@ -8,7 +8,7 @@ import {AxiosError} from 'axios';
 import {NotificationService} from '@/app/api';
 import {useDispatch} from 'react-redux';
 import {AppDispatch} from '@/store/Store';
-import {fetchUserNotifications} from '@/store/slicers';
+import {createNotification, fetchUserNotifications} from '@/store/slicers';
 
 interface NotificationCenterItemProps extends INotification {}
 
@@ -60,7 +60,16 @@ const NotificationCenterItem: React.FC<NotificationCenterItemProps> = ({
       setReading(false);
 
       if (error instanceof AxiosError) {
-        console.log(error.response);
+        const {message} = error.response?.data;
+        if (message) {
+          dispatch(
+            createNotification({
+              id: 'mark-as-read',
+              type: 'error',
+              message: `error.${message}`,
+            }),
+          );
+        }
       }
     }
   };

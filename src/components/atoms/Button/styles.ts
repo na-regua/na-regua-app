@@ -29,7 +29,9 @@ export const shadowStyle: ViewStyle = {
   elevation: 6,
 };
 
-const FilledButtonStyle = css``;
+const FilledButtonStyle = css`
+  border: none;
+`;
 
 const OutlinedButtonStyle = css<{colorScheme: TButtonColorScheme}>`
   border-width: 1px;

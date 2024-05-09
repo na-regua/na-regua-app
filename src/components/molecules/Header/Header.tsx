@@ -13,6 +13,8 @@ import {
   LogoContainerStyle,
   LogoIconStyle,
   TitleContainerStyle,
+  UserClickContainerStyled,
+  UserImageStyle,
   WelcomeTextStyle,
 } from './styles';
 
@@ -22,12 +24,15 @@ interface IHeaderProps {
   showWelcome?: boolean;
   showBorder?: boolean;
   showActions?: boolean;
+  showUser?: boolean;
 
   title?: string;
   subtitle?: string;
   backText?: string;
   iconClickable?: boolean;
+  userClickable?: boolean;
   onIconPress?: () => void;
+  onUserPress?: () => void;
   onBackPress?: () => void;
   lightContent?: boolean;
 }
@@ -39,12 +44,15 @@ const Header: React.FC<IHeaderProps> = ({
   showActions = true,
   showWelcome = false,
   showBorder = false,
+  showUser = false,
   title = 'Title',
   subtitle = 'Subtitle',
   lightContent,
   iconClickable = false,
   onIconPress,
   onBackPress,
+  userClickable,
+  onUserPress,
 }) => {
   const {t} = useTranslation();
   const {user, isAuthenticated} = useSelector((state: RootState) => state.auth);
@@ -66,6 +74,23 @@ const Header: React.FC<IHeaderProps> = ({
 
   return (
     <ContainerStyle>
+      {showUser && (
+        <LogoContainerStyle>
+          <UserClickContainerStyled
+            disabled={!userClickable}
+            onPress={onUserPress}>
+            {user && user.avatar.url && (
+              <UserImageStyle source={{uri: user.avatar.url}} />
+            )}
+          </UserClickContainerStyled>
+          <Icons.BellIcon
+            width={24}
+            height={24}
+            color={mainColor}
+            onPress={navigateToNotifications}
+          />
+        </LogoContainerStyle>
+      )}
       {showActions && (
         <LogoContainerStyle>
           <LogoIconStyle
