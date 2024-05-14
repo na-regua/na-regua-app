@@ -1,6 +1,7 @@
 export * from './auth/auth.model';
 export * from './barber/barber.model';
 export * from './cep/cep.model';
+export * from './cut/cut.model';
 export * from './file/file.model';
 export * from './generic';
 export * from './notify/notify.model';

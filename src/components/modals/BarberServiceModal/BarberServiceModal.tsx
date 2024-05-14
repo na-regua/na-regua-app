@@ -141,7 +141,11 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
   return (
     <TouchableWithoutFeedback
       style={styles.flex1}
-      onPress={() => Keyboard.dismiss()}>
+      onPress={() => {
+        if (Keyboard.isVisible()) {
+          Keyboard.dismiss();
+        }
+      }}>
       <ScrollViewStyle
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}>

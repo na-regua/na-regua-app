@@ -118,9 +118,17 @@ const CustomerSignUp: React.FC<
   };
 
   return (
-    <CSUNoFeedbackStyled onPress={() => Keyboard.dismiss()}>
+    <CSUNoFeedbackStyled
+      onPress={() => {
+        if (Keyboard.isVisible()) {
+          Keyboard.dismiss();
+        }
+      }}>
       <CSUContainerStyled style={insetsStyles}>
-        <Header onBackPress={goBack} showBack showActions={false} showBorder />
+        <Header.Container>
+          <Header.GoBack pressables={{back: goBack}} />
+          <Header.Border />
+        </Header.Container>
         <CSUContentStyled>
           <CSUHeaderStyled>
             <Typography variant="h2" color="black3">

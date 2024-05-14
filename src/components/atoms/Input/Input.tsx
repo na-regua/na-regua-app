@@ -66,7 +66,7 @@ const Input: React.FC<IInputProps> = ({
       )}
 
       <InputStyle
-        style={[{paddingRight: suffixWidth + 16}]}
+        style={[{paddingRight: suffixWidth + 16}, inputProps.style]}
         active={active}
         borderColor={textStyle?.borderColor}
         autoCorrect={false}

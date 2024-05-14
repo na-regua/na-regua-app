@@ -2,6 +2,7 @@ export * from './assetToBuffer';
 export * from './carousel';
 export * from './checkDiff';
 export * from './deleteNull';
+export * from './isCloseToBottom';
 export * from './masks';
 export * from './patterns';
 export * from './queryBuilder';

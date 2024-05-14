@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {TouchableOpacityProps} from 'react-native';
+import {StyleProp, TouchableOpacityProps, ViewStyle} from 'react-native';
 
 import {Colors} from '@/theme';
 import {useTranslation} from 'react-i18next';
@@ -32,6 +32,9 @@ export interface IButtonProps extends TouchableOpacityProps {
   loading?: boolean;
   variant?: TButtonVariants;
   suffix?: React.ReactNode;
+  translate?: boolean;
+  customContent?: React.ReactNode;
+  fillSpace?: boolean;
 }
 
 const Button: React.FC<IButtonProps> = ({
@@ -41,22 +44,36 @@ const Button: React.FC<IButtonProps> = ({
   loading = false,
   variant = 'filled',
   suffix,
+  translate = true,
+  customContent,
+  fillSpace,
   ...buttonProps
 }) => {
   const {t} = useTranslation();
 
-  const buttonShadowStyle = useMemo(
+  const buttonShadowStyle: StyleProp<ViewStyle> = useMemo(
     () => variant === 'filled' && shadowStyle,
     [variant],
   );
 
-  const loaderColor = useMemo(() => {
+  const customStyles: StyleProp<ViewStyle> = useMemo(
+    () => ({...(fillSpace ? {flex: 1} : {})}),
+    [fillSpace],
+  );
+
+  const loaderColor: string = useMemo(() => {
     if (colorScheme === 'white' && variant === 'filled') {
       return Colors.main;
     }
 
     return variant === 'filled' ? Colors.white3 : ButtonThemeColor[colorScheme];
   }, [variant, colorScheme]);
+
+  const buttonText: string = useMemo(
+    () => (title ? (translate ? t(title) : title) : ''),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [title, translate],
+  );
 
   return (
     <ButtonStyle
@@ -65,23 +82,23 @@ const Button: React.FC<IButtonProps> = ({
       activeOpacity={0.6}
       disabled={disabled || loading}
       loading={loading}
-      style={buttonShadowStyle}
+      style={[buttonShadowStyle, customStyles]}
       hasSuffix={!!suffix}
       {...buttonProps}>
-      {!loading ? (
+      {!loading && !!customContent && customContent}
+      {!loading && !customContent && (
         <>
           <LabelStyle
             disabled={disabled}
             colorScheme={colorScheme}
             variant={variant}
             style={TypographyStyles.button}>
-            {title && t(title)}
+            {buttonText}
           </LabelStyle>
           {suffix && <SuffixStyle>{suffix}</SuffixStyle>}
         </>
-      ) : (
-        <Loader size="64" color={loaderColor} strokeWidth={3} />
       )}
+      {loading && <Loader size="64" color={loaderColor} strokeWidth={3} />}
     </ButtonStyle>
   );
 };

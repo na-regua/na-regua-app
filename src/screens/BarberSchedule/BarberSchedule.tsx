@@ -36,7 +36,11 @@ const BarberSchedule: React.FC<
   return (
     <ScheduleContainerStyled style={insetsStyles}>
       <AppStatusBar />
-      <Header showTitle={false} showBorder showWelcome />
+      <Header.Container>
+        <Header.Actions />
+        <Header.Welcome />
+        <Header.Border />
+      </Header.Container>
       <ScheduleScrollContentStyled>
         <ScheduleGroupItemStyled>
           <Calendar

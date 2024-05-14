@@ -109,13 +109,10 @@ const BarberServicesConfig: React.FC<
   return (
     <ContainerStyles style={insetsStyles}>
       <AppStatusBar />
-      <Header
-        showTitle={false}
-        showBack
-        showActions={false}
-        showBorder
-        onBackPress={goBack}
-      />
+      <Header.Container>
+        <Header.GoBack pressables={{back: goBack}} />
+        <Header.Border />
+      </Header.Container>
       <ContentStyle>
         <ContentHeaderStyle>
           <Typography variant="h5" color="black3">

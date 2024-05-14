@@ -1,5 +1,4 @@
 import {AppStatusBar, Button} from '@/components/atoms';
-import {Header} from '@/components/molecules';
 import {APP_ROUTES, useAppNavigation} from '@/navigation';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
@@ -32,10 +31,10 @@ const BarberPreSignUp: React.FC = () => {
     <ContainerStyle style={insetsStyles}>
       <AppStatusBar />
 
-      <Header
+      {/* <Header
         title={t('barber.preSignUp.title')}
         subtitle={t('barber.preSignUp.subtitle')}
-      />
+      /> */}
       <ContentStyle>
         <ActionsStyle>
           <Button

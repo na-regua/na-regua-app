@@ -89,7 +89,10 @@ const BarberOnQueue: React.FC<
       {!isFs && (
         <>
           <AppStatusBar />
-          <Header showTitle={false} showBorder showWelcome />
+          <Header.Container>
+            <Header.GoBack />
+            <Header.Border />
+          </Header.Container>
         </>
       )}
       <OnQueueContentStyled fs={isFs}>

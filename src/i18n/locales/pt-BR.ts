@@ -255,6 +255,64 @@ const ptBr = {
         },
       },
     },
+    home: {
+      titles: {
+        ask1: 'O que',
+        ask2: 'vai fazer?',
+      },
+      actions: {
+        cut: {
+          title: 'Cortar',
+          description: 'Procure a barbearia ideal para você.',
+        },
+      },
+      buttons: {
+        readQr: 'Ler QR Code',
+      },
+      tabs: {
+        attendance: 'Pra hoje',
+        history: 'Histórico',
+      },
+    },
+    cut: {
+      fields: {
+        search: 'Buscar',
+        code: 'Insira o código ou busque pelo nome.',
+      },
+      select: {
+        title: 'Quer cortar ?',
+        subtitle: 'Selecione uma Barbearia',
+        near: {
+          title: 'Barbearias por perto:',
+          subtitle: 'Confira as barbearias próximas a você.',
+        },
+        recents: {
+          title: 'Recentes',
+        },
+      },
+      attendance: {
+        title: 'Atendimento',
+        types: {
+          queue: 'Fila',
+          queueDesc: '{{total}} clientes na fila.',
+          schedule: 'Agendamento',
+          scheduleDesc: '+{{total}} horários livres.',
+        },
+        select: {
+          type: 'Selecione o atendimento',
+          service: 'Selecione o serviço',
+          day: 'Dia',
+          time: '',
+        },
+      },
+      buttons: {
+        select: 'Selecionar',
+        join: 'Entrar',
+        schedule: 'Agendar',
+        other: 'Outra',
+        joinWait: 'Ficar em espera ...',
+      },
+    },
   },
   generic: {
     verifyPhone: {
@@ -351,6 +409,9 @@ const ptBr = {
         all: 'Todas',
         unread: 'Não lidas',
       },
+    },
+    header: {
+      hello: 'Olá, ',
     },
   },
   modals: {
@@ -609,6 +670,7 @@ const ptBr = {
     '60203': 'Máximo de tentativas de envio atingido.',
     UNAVAILABLE_MESSAGE_SERVICE: 'Serviço de mensagens indisponível.',
   },
+  currency: {symbol: 'R$', format: 'R$ {{value}}'},
 };
 
 export default ptBr;

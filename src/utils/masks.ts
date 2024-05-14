@@ -1,3 +1,5 @@
+import {IAdress} from '@/app/models';
+
 export function maskCep(value: string): string {
   if (!value) {
     return '';
@@ -87,6 +89,14 @@ export function timeMask(value: string): string {
   }
 
   return value;
+}
+
+export function generateAddress(params: IAdress): string {
+  const {cep, street, number, complement, neighborhood, city, uf} = params;
+
+  return `${cep}, ${street}, ${number},${
+    complement ? ` ${complement},` : ''
+  }${neighborhood}, ${city}, ${uf}`;
 }
 
 export const timePattern = /([0-1][0-9]|[2][0-3]):[0-5][0-9]/;

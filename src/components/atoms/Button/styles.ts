@@ -29,6 +29,19 @@ export const shadowStyle: ViewStyle = {
   elevation: 6,
 };
 
+export const softShadowStyle: ViewStyle = {
+  // IOS
+  shadowColor: Colors.black3,
+  shadowOffset: {
+    height: 12,
+    width: 0,
+  },
+  shadowOpacity: 0.1,
+  shadowRadius: 12,
+  // Android
+  elevation: 3,
+};
+
 const FilledButtonStyle = css`
   border: none;
 `;
@@ -66,11 +79,11 @@ export const ButtonStyle = styled.TouchableOpacity<{
   loading?: boolean;
   hasSuffix?: boolean;
 }>`
-  height: 42px;
-  padding: 12px 10px;
+  min-height: 44px;
+  padding: 12px;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 12px;
   position: relative;
 
   ${({colorScheme}) => `

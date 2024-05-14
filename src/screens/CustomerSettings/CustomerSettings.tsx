@@ -91,7 +91,7 @@ const CustomerSettings: React.FC<
     return null;
   }
 
-  const onAvatarChange = async (file: Asset) => {
+  const onAvatarChange = async (_file: Asset) => {
     setChangingAvatar(true);
 
     try {
@@ -119,7 +119,7 @@ const CustomerSettings: React.FC<
     }
   };
 
-  const onBackPress = () => {
+  const goBack = () => {
     if (navigation.canGoBack()) {
       navigation.goBack();
     }
@@ -132,12 +132,10 @@ const CustomerSettings: React.FC<
   return (
     <ContainerStyle style={insetsStyles}>
       <AppStatusBar />
-      <Header
-        onBackPress={onBackPress}
-        showBack
-        showActions={false}
-        showBorder
-      />
+      <Header.Container>
+        <Header.GoBack pressables={{back: goBack}} />
+        <Header.Border />
+      </Header.Container>
       <ScrollContentStyle
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.scrollContainer]}>

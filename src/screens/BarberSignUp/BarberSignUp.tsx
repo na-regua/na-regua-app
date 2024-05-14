@@ -24,21 +24,23 @@ const BarberSignUp: React.FC = () => {
     [isKeyboardVisible, insets],
   );
 
-  const backToLogin = () => {
-    navigation.navigate('/generic/login/barber');
+  const goBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+
+    if (!navigation.canGoBack()) {
+      navigation.navigate('/generic/login/barber');
+    }
   };
 
   return (
     <TouchableWithoutFeedbackStyle onPress={() => Keyboard.dismiss()}>
       <ContainerStyle style={[insetsStyles]}>
-        <Header
-          showBack
-          showActions={false}
-          showTitle={false}
-          showBorder
-          onBackPress={backToLogin}
-        />
-
+        <Header.Container>
+          <Header.GoBack pressables={{back: goBack}} />
+          <Header.Border />
+        </Header.Container>
         <SignUpForm />
       </ContainerStyle>
     </TouchableWithoutFeedbackStyle>

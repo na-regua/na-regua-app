@@ -56,7 +56,7 @@ const Notifications: React.FC<
     getUserNotifications();
   }, [getUserNotifications]);
 
-  const onBackPress = () => {
+  const goBack = () => {
     if (navigation.canGoBack()) {
       navigation.goBack();
     }
@@ -94,12 +94,10 @@ const Notifications: React.FC<
 
   return (
     <NotificationsContainerStyled style={[insetsStyles]}>
-      <Header
-        showActions={false}
-        showBack
-        showBorder
-        onBackPress={onBackPress}
-      />
+      <Header.Container>
+        <Header.GoBack pressables={{back: goBack}} />
+        <Header.Border />
+      </Header.Container>
       <NotificationContentStyle>
         <NotificationHeaderStyled>
           <NotificationHeaderRowStyled>

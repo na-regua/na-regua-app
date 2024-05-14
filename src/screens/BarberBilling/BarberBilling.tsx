@@ -17,7 +17,11 @@ const BarberBilling: React.FC = () => {
     <ContainerStyle style={insetsStyles}>
       <AppStatusBar />
 
-      <Header showTitle={false} showBorder showWelcome />
+      <Header.Container>
+        <Header.Actions />
+        <Header.Welcome />
+        <Header.Border />
+      </Header.Container>
     </ContainerStyle>
   );
 };

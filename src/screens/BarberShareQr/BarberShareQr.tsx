@@ -30,7 +30,10 @@ const BarberShareQr: React.FC = () => {
       style={insetsStyles}
       contentContainerStyle={styles.flexGrow1}>
       <AppStatusBar />
-      <Header showTitle={false} lightContent />
+      <Header.Container>
+        <Header.Actions lightContent />
+        <Header.Border />
+      </Header.Container>
       <ContentStyle>
         <QRContentStyle>
           <Typography variant="h2" color="white3">

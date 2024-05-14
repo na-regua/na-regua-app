@@ -140,12 +140,10 @@ const BarberWorkers: React.FC<
   return (
     <ContainerStyle style={insetsStyles}>
       <AppStatusBar />
-      <Header
-        showBack={!showContinue}
-        showActions={showContinue}
-        showBorder
-        onBackPress={goBack}
-      />
+      <Header.Container>
+        <Header.GoBack pressables={{back: goBack}} />
+        <Header.Border />
+      </Header.Container>
       <ContentStyle>
         <ContentHeaderStyle>
           <Typography variant="h5" color="black3">

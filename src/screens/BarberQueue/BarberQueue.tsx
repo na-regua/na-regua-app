@@ -83,7 +83,11 @@ const BarberQueue: React.FC<
   return (
     <QueueContainerStyled style={insetsStyles}>
       <AppStatusBar />
-      <Header showTitle={false} showBorder showWelcome />
+      <Header.Container>
+        <Header.Actions />
+        <Header.Welcome />
+        <Header.Border />
+      </Header.Container>
       <QueueScrollContentStyled>
         <Carousel
           items={[

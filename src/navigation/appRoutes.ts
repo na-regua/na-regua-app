@@ -18,23 +18,23 @@ export enum APP_ROUTES {
 }
 
 export type TRootStackParamList = {
-  '/barber/sign-up': undefined;
-  '/barber/pre-sign-up': undefined;
-  '/barber/settings': undefined;
+  '/barber/sign-up'?: {};
+  '/barber/pre-sign-up'?: {};
+  '/barber/settings'?: {};
   '/barber/settings/workers': {showContinue: boolean; hideBottomNav?: boolean};
   '/barber/settings/services': {showContinue: boolean; hideBottomNav?: boolean};
   '/barber/settings/services/config'?: {hideBottomNav?: boolean};
   '/barber/settings/profile'?: {hideBottomNav?: boolean};
   '/barber/plan': {hideBottomNav?: boolean};
-  '/barber/queue': undefined;
+  '/barber/queue'?: {};
   '/barber/queue/fs'?: {hideBottomNav?: boolean};
-  '/barber/schedule': undefined;
-  '/barber/billing': undefined;
+  '/barber/schedule'?: {};
+  '/barber/billing'?: {};
   '/barber/complete-qr'?: {hideBottomNav?: boolean};
 
-  '/generic/login': undefined;
-  '/generic/login/customer': undefined;
-  '/generic/login/barber': undefined;
+  '/generic/login'?: {};
+  '/generic/login/customer'?: {};
+  '/generic/login/barber'?: {};
 
   '/user/notifications'?: {hideBottomNav: boolean};
   '/customer/sign-up'?: {};
@@ -43,6 +43,7 @@ export type TRootStackParamList = {
   };
   '/customer/home'?: {};
   '/customer/settings'?: {};
+  '/customer/cut'?: {};
 };
 
 export type TRouteName = keyof TRootStackParamList;

@@ -1,0 +1,108 @@
+import {isCloseToBottom} from '@/utils';
+import React, {PropsWithChildren, useMemo, useState} from 'react';
+import {NativeScrollEvent, NativeSyntheticEvent, ViewProps} from 'react-native';
+import {FadeInDown} from 'react-native-reanimated';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {
+  PageCardContainer,
+  PageCardContentStyled,
+  PageCardScrollStyled,
+  PageFooterStyled,
+} from './styles';
+
+interface PageCardProps extends PropsWithChildren {
+  scrollable?: boolean;
+  footer?: React.ReactNode;
+  onScroll?: (
+    contentOffsetY: number,
+    isScrolling: boolean,
+    closeToBottom: boolean,
+    event?: NativeSyntheticEvent<NativeScrollEvent>,
+  ) => void;
+  onScrollEnds?: (
+    contentOffsetY: number,
+    isScrolling: boolean,
+    closeToBottom: boolean,
+  ) => void;
+  bounce?: boolean;
+  wrapperProps?: ViewProps;
+  scrollProps?: ViewProps;
+  resetScroll?: () => void;
+}
+
+const PageCard: React.FC<PageCardProps> = ({
+  children,
+  footer,
+  scrollable = false,
+  onScroll,
+  bounce = true,
+  wrapperProps,
+  scrollProps,
+}) => {
+  const insets = useSafeAreaInsets();
+  const [isScrolling, setIsScrolling] = useState(false);
+  const [closeToBottom, setCloseToBottom] = useState(false);
+  const [_contentOffsetY, setContentOffsetY] = useState(0);
+
+  const insetsStyles = {
+    paddingBottom: insets.bottom,
+  };
+
+  const hasFooter = useMemo(() => !!footer, [footer]);
+
+  const pageFooterStyles = useMemo(() => {
+    if (hasFooter) return {};
+
+    return insetsStyles;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasFooter]);
+
+  const footerStyles = useMemo(() => {
+    if (!hasFooter) {
+      return {};
+    }
+
+    return insetsStyles;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasFooter]);
+
+  const handleOnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const {contentOffset} = event.nativeEvent;
+    const _isScrolling = contentOffset.y !== 0;
+    const _closeToBottom = isCloseToBottom(event.nativeEvent);
+
+    setIsScrolling(isScrolling);
+    setCloseToBottom(closeToBottom);
+    setContentOffsetY(contentOffset.y);
+
+    if (onScroll) {
+      onScroll(contentOffset.y, _isScrolling, _closeToBottom, event);
+    }
+  };
+
+  return (
+    <PageCardContainer
+      style={[pageFooterStyles]}
+      {...wrapperProps}
+      entering={FadeInDown.delay(100).duration(300)}>
+      {scrollable ? (
+        <PageCardScrollStyled
+          bounces={bounce}
+          alwaysBounceVertical={bounce}
+          onScroll={handleOnScroll}
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+          {...scrollProps}>
+          {children}
+        </PageCardScrollStyled>
+      ) : (
+        <PageCardContentStyled>{children}</PageCardContentStyled>
+      )}
+      {!!footer && (
+        <PageFooterStyled style={[footerStyles]}>{footer}</PageFooterStyled>
+      )}
+    </PageCardContainer>
+  );
+};
+
+export {PageCard};

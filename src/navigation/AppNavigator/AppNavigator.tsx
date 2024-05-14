@@ -13,6 +13,7 @@ import {
   BarberSettingsProfileScreen,
   BarberSettingsScreen,
   BarberSignUpScreen,
+  CustomerCutScreen,
   CustomerHomeScreen,
   CustomerLoginScreen,
   CustomerSettingsScreen,
@@ -144,6 +145,10 @@ const AppNavigator: React.FC = () => {
             <Stack.Screen
               name={'/customer/settings'}
               component={CustomerSettingsScreen}
+            />
+            <Stack.Screen
+              name={'/customer/cut'}
+              component={CustomerCutScreen}
             />
           </>
         )}

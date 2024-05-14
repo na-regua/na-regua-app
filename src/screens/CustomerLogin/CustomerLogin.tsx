@@ -15,7 +15,8 @@ import {Colors} from '@/theme';
 import {phoneMask, phoneRegex} from '@/utils';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AxiosError} from 'axios';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {intervalToDuration} from 'date-fns';
+import React, {useMemo, useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {Keyboard, TextInput, TouchableWithoutFeedback} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -44,16 +45,19 @@ const CustomerLogin: React.FC<
   const [timer, setTimer] = useState(60);
   const [sended, setSended] = useState(false);
 
+  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+
   const timerStr = useMemo(() => {
     if (timer > 0) {
-      const minutes = Math.floor(timer / 60);
+      const {seconds, minutes} = intervalToDuration({
+        start: 0,
+        end: timer * 1000,
+      });
 
-      const seconds = timer % 60;
-
-      return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      return `${minutes}:${seconds?.toString().padStart(2, '0')}`;
     }
 
-    return 'generic.login.customer.buttons.sendAgain';
+    return '0';
   }, [timer]);
 
   const {
@@ -85,6 +89,32 @@ const CustomerLogin: React.FC<
     }
   };
 
+  const initTimer = () => {
+    const interval = setInterval(() => {
+      setTimer(curr => {
+        if (curr - 1 === 0) {
+          clearTimer();
+        }
+
+        return curr - 1;
+      });
+    }, 1000);
+
+    setTimerId(interval);
+  };
+
+  const clearTimer = () => {
+    if (timerId) {
+      clearInterval(timerId);
+      setSended(false);
+      setTimerId(null);
+    }
+  };
+
+  const goToSignUp = () => {
+    navigation.navigate('/customer/sign-up');
+  };
+
   const sendCode = async () => {
     try {
       setIsSending(true);
@@ -97,8 +127,14 @@ const CustomerLogin: React.FC<
         setIsSending(false);
 
         dispatch(setCustomerMethod('verify-code'));
+
+        setSended(true);
+        initTimer();
       }
     } catch (error) {
+      setIsSending(false);
+      clearTimer();
+
       if (error instanceof AxiosError) {
         const {message} = error.response?.data;
         if (message) {
@@ -114,8 +150,27 @@ const CustomerLogin: React.FC<
     }
   };
 
-  const goToSignUp = () => {
-    navigation.navigate('/customer/sign-up');
+  const sendAgain = async () => {
+    try {
+      await AuthService.sendOTPCode(getValues().phone);
+
+      setSended(true);
+      initTimer();
+    } catch (error) {
+      clearTimer();
+      if (error instanceof AxiosError) {
+        const {message} = error.response?.data;
+        if (message) {
+          dispatch(
+            createNotification({
+              id: 'customer-login',
+              message: `erro.${message}`,
+              type: 'error',
+            }),
+          );
+        }
+      }
+    }
   };
 
   const verifyCode = async () => {
@@ -136,6 +191,7 @@ const CustomerLogin: React.FC<
         }
       }
 
+      clearTimer();
       setIsVerifying(false);
     } catch (error) {
       setIsVerifying(false);
@@ -155,42 +211,6 @@ const CustomerLogin: React.FC<
     }
   };
 
-  useEffect(() => {
-    if (timer && timer > 0) {
-      const interval = setInterval(() => {
-        const newTimer = timer - 1;
-        setTimer(newTimer);
-
-        if (newTimer === 0) {
-          setSended(false);
-          clearInterval(interval);
-        }
-      }, 1000);
-    }
-  }, [timer]);
-
-  const sendAgain = async () => {
-    try {
-      await AuthService.sendOTPCode(getValues().phone);
-
-      setSended(true);
-      setTimer(60);
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'customer-login',
-              message: `erro.${message}`,
-              type: 'error',
-            }),
-          );
-        }
-      }
-    }
-  };
-
   const useAnotherPhone = () => {
     dispatch(setCustomerMethod('phone'));
   };
@@ -198,7 +218,11 @@ const CustomerLogin: React.FC<
   return (
     <TouchableWithoutFeedback
       style={customerLoginStyles.flex1}
-      onPress={() => Keyboard.dismiss()}>
+      onPress={() => {
+        if (Keyboard.isVisible()) {
+          Keyboard.dismiss();
+        }
+      }}>
       <ContainerStyle
         contentContainerStyle={[
           insetsStyles,
@@ -210,6 +234,7 @@ const CustomerLogin: React.FC<
               <Icons.LogoMiniIcon disabled width={80} height={80} />
               <Icons.LogoWritingIcon width={220} height={50} />
             </LogoContainerStyle>
+
             {customerMethod === 'phone' && (
               <>
                 <Typography
@@ -233,7 +258,7 @@ const CustomerLogin: React.FC<
                       }}
                       value={value}
                       inputRef={fieldsRef.phone}
-                      returnKeyType="done"
+                      returnKeyType={(isValid && 'done') || 'none'}
                       onSubmitEditing={() => {}}
                       blurOnSubmit={true}
                       keyboardType="number-pad"
@@ -262,11 +287,16 @@ const CustomerLogin: React.FC<
                 <CodeInput onCodeChange={text => setCode(text)} digits={6} />
 
                 <Button
-                  title={timerStr}
+                  title={
+                    sended
+                      ? timerStr
+                      : 'generic.login.customer.buttons.sendAgain'
+                  }
                   variant="text"
                   colorScheme="primary"
-                  disabled={sended}
                   onPress={sendAgain}
+                  translate={!sended}
+                  disabled={sended}
                 />
 
                 <Button

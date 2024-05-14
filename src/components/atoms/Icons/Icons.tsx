@@ -16,12 +16,14 @@ import DeleteIcon from './DeleteIcon/DeleteIcon';
 import EditIcon from './EditIcon/EditIcon';
 import EyeIcon from './EyeIcon/EyeIcon';
 import FullscreenIcon from './FullscreenIcon/FullscreenIcon';
+import FullscreenOutIcon from './FullscreenOutIcon/FullscreenOutIcon';
 import GaleryIcon from './GaleryIcon/GaleryIcon';
 import {LeftIcon} from './Left/Left';
 import {LinesIcon} from './Lines/Lines';
 import LogoMiniIcon from './LogoMini/LogoMini';
 import LogoWritingIcon from './LogoWriting/LogoWriting';
 import MaquinaIcon from './MaquinaIcon/MaquinaIcon';
+import MarkerIcon from './MarkerIcon/MarkerIcon';
 import MarketIcon from './MarketIcon/MarketIcon';
 import MinusIcon from './MinusIcon/MinusIcon';
 import MoneyIcon from './MoneyIcon/MoneyIcon';
@@ -32,8 +34,10 @@ import PlusIcon from './PlusIcon/PlusIcon';
 import QRIcon from './QRIcon/QRIcon';
 import QRSquadIcon from './QRSquadIcon/QRSquadIcon';
 import ReceiptIcon from './ReceiptIcon/ReceiptIcon';
+import RefreshIcon from './RefreshIcon/RefreshIcon';
 import ScheduleIcon from './ScheduleIcon/ScheduleIcon';
 import ScheduleTwotoneIcon from './ScheduleTwotoneIcon/ScheduleTwotoneIcon';
+import SearchIcon from './SearchIcon/SearchIcon';
 import SettingsIcon from './SettingsIcon/SettingsIcon';
 import SettingsTwotoneIcon from './SettingsTwotoneIcon/SettingsTwotoneIcon';
 import SunIcon from './SunIcon/SunIcon';
@@ -42,8 +46,7 @@ import TimeTwotoneIcon from './TimeTwotoneIcon/TimeTwotoneIcon';
 import UserCheckIcon from './UserCheckIcon/UserCheckIcon';
 import UserIcon from './UserIcon/UserIcon';
 import UsersIcon from './UsersIcon/UsersIcon';
-import FullscreenOutIcon from './FullscreenOutIcon/FullscreenOutIcon';
-import RefreshIcon from './RefreshIcon/RefreshIcon';
+import StarIcon from './StarIcon/StarIcon';
 
 export interface IIconProps {
   width?: number;
@@ -103,4 +106,7 @@ export default {
   FullscreenIcon,
   FullscreenOutIcon,
   RefreshIcon,
+  SearchIcon,
+  MarkerIcon,
+  StarIcon,
 };

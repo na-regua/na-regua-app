@@ -41,14 +41,14 @@ export const InputStyle = styled.TextInput<{
   suffixWidth?: number;
   borderColor?: ColorValue | string;
 }>`
-  height: 42px;
+  min-height: 44px;
   font-weight: ${Fonts.weights.semiBold};
   font-family: ${Fonts.types.semiBold};
   border-width: 1px;
   border-color: ${({borderColor}) =>
     (borderColor && borderColor?.toString()) || Colors.border};
   border-radius: 8px;
-  padding: 0 12px;
+  padding: 12px 12px;
   color: ${Colors.black3};
   font-size: 14px;
 

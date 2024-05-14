@@ -43,7 +43,7 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* NaReguaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NaReguaTests.m; sourceTree = "<group>"; };
 		0466B8446D1E461CAEEBDF51 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../src/assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
-		0690F00E694E41BCB37F717E /* NoirPro-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-Italic.otf"; path = "../src/assets/fonts/NoirPro-Italic.otf"; sourceTree = "<group>"; };
+		0690F00E694E41BCB37F717E /* NoirPro-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-Italic.otf"; path = "../src/assets/fonts/NoirPro-Italic.otf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* NaRegua.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaRegua.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = NaRegua/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = NaRegua/AppDelegate.mm; sourceTree = "<group>"; };
@@ -57,15 +57,15 @@
 		5709B34CF0A7D63546082F79 /* Pods-NaRegua.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaRegua.release.xcconfig"; path = "Target Support Files/Pods-NaRegua/Pods-NaRegua.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-NaRegua-NaReguaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaRegua-NaReguaTests.debug.xcconfig"; path = "Target Support Files/Pods-NaRegua-NaReguaTests/Pods-NaRegua-NaReguaTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-NaRegua.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NaRegua.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5F0FA6E43E2E429FB8783DBA /* NoirPro-SemiBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-SemiBold.otf"; path = "../src/assets/fonts/NoirPro-SemiBold.otf"; sourceTree = "<group>"; };
-		68E11A477EE442A5A3DB2E77 /* NoirPro-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-Regular.otf"; path = "../src/assets/fonts/NoirPro-Regular.otf"; sourceTree = "<group>"; };
-		6BB01877AE0043EF98271F96 /* NoirPro-Heavy.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-Heavy.otf"; path = "../src/assets/fonts/NoirPro-Heavy.otf"; sourceTree = "<group>"; };
+		5F0FA6E43E2E429FB8783DBA /* NoirPro-SemiBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-SemiBold.otf"; path = "../src/assets/fonts/NoirPro-SemiBold.otf"; sourceTree = "<group>"; };
+		68E11A477EE442A5A3DB2E77 /* NoirPro-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-Regular.otf"; path = "../src/assets/fonts/NoirPro-Regular.otf"; sourceTree = "<group>"; };
+		6BB01877AE0043EF98271F96 /* NoirPro-Heavy.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-Heavy.otf"; path = "../src/assets/fonts/NoirPro-Heavy.otf"; sourceTree = "<group>"; };
 		6D8FBED105834E7F88123D0C /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../src/assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = NaRegua/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		85C5F2BBBD834C8F9EF183C8 /* NoirPro-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-Bold.otf"; path = "../src/assets/fonts/NoirPro-Bold.otf"; sourceTree = "<group>"; };
+		85C5F2BBBD834C8F9EF183C8 /* NoirPro-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-Bold.otf"; path = "../src/assets/fonts/NoirPro-Bold.otf"; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-NaRegua-NaReguaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaRegua-NaReguaTests.release.xcconfig"; path = "Target Support Files/Pods-NaRegua-NaReguaTests/Pods-NaRegua-NaReguaTests.release.xcconfig"; sourceTree = "<group>"; };
-		DFC3B3D5139649BBB082BC22 /* NoirPro-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-Light.otf"; path = "../src/assets/fonts/NoirPro-Light.otf"; sourceTree = "<group>"; };
-		E41C19F060A544F7A9E4AD5E /* NoirPro-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-Medium.otf"; path = "../src/assets/fonts/NoirPro-Medium.otf"; sourceTree = "<group>"; };
+		DFC3B3D5139649BBB082BC22 /* NoirPro-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-Light.otf"; path = "../src/assets/fonts/NoirPro-Light.otf"; sourceTree = "<group>"; };
+		E41C19F060A544F7A9E4AD5E /* NoirPro-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NoirPro-Medium.otf"; path = "../src/assets/fonts/NoirPro-Medium.otf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F8EDC8FF87D5460AB0DA674F /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../src/assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -663,7 +663,8 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					" ",
+					"-Wl",
+					"-ld_classic",
 					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
@@ -737,7 +738,8 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					" ",
+					"-Wl",
+					"-ld_classic",
 					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";

@@ -1,6 +1,5 @@
 import {AuthService} from '@/app/api';
 import {AvoidKeyboard, Button, CodeInput, Typography} from '@/components/atoms';
-import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch} from '@/store/Store';
 import {createNotification, setPersistedToken, setUser} from '@/store/slicers';
@@ -80,9 +79,13 @@ const CustomerSignUpVerify: React.FC<
   };
 
   return (
-    <CVNoFeedbackStyled onPress={() => Keyboard.dismiss()}>
+    <CVNoFeedbackStyled
+      onPress={() => {
+        if (Keyboard.isVisible()) {
+          Keyboard.dismiss();
+        }
+      }}>
       <CVContainerStyled style={insetsStyles}>
-        <Header showUser showActions={false} showBorder />
         <AvoidKeyboard keyboardBackgroundColor="bgLight">
           <CVContentStyled>
             <CVHeaderStyled>

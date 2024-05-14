@@ -204,7 +204,10 @@ const BarberSettings: React.FC<
   return (
     <ContainerStyle style={insetsStyles}>
       <AppStatusBar />
-      <Header showTitle={false} showBorder />
+      <Header.Container>
+        <Header.Actions />
+        <Header.Border />
+      </Header.Container>
       <ScrollContentStyle
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.scrollContainer]}>

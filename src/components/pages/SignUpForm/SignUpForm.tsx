@@ -76,7 +76,9 @@ const SignUpForm: React.FC = () => {
   const onNextStep = () => {
     setCurrentStep(curr => {
       if (curr + 1 > 2) {
-        Keyboard.dismiss();
+        if (Keyboard.isVisible()) {
+          Keyboard.dismiss();
+        }
       }
 
       return curr + 1;

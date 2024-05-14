@@ -1,5 +1,5 @@
 import {Typography} from '@/components/atoms';
-import {Colors, Fonts, Metrics} from '@/theme';
+import {Colors, Metrics} from '@/theme';
 import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 
@@ -10,6 +10,7 @@ export const ContainerStyle = styled.View`
   padding: 12px 18px;
   width: ${Metrics.screenWidth}px;
   position: relative;
+  z-index: 1;
 `;
 
 export const LogoContainerStyle = styled.View`
@@ -46,22 +47,24 @@ export const BackContainerStyle = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   gap: 4px;
+  padding-top: 8px;
 `;
 
 export const UserClickContainerStyled = styled.TouchableOpacity.attrs({
   activeOpacity: 0.6,
 })`
+  flex-direction: row;
+  gap: 12px;
   align-items: center;
   justify-content: center;
 `;
 
-export const UserImageStyle = styled.Image`
+export const UserImageStyle = styled.Image.attrs({
+  resizeMode: 'cover',
+})`
   width: 42px;
   height: 42px;
   border-radius: 50px;
 `;
 
-export const WelcomeTextStyle = styled(Typography)`
-  font-weight: ${Fonts.weights.medium};
-  font-family: ${Fonts.types.medium};
-`;
+export const WelcomeTextStyle = styled(Typography)``;

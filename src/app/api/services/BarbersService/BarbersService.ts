@@ -7,10 +7,15 @@ import {
 } from '@/app/models';
 import {AxiosResponse} from 'axios';
 import {default as ENDPOINTS} from '../../endpoints';
+import {queryBuilder} from '@/utils';
 
-const getBarbers = async (): Promise<AxiosResponse> => {
+const getBarbers = async (
+  search?: string,
+): Promise<AxiosResponse<IBarber[]>> => {
   try {
-    const data = await api.get(ENDPOINTS.BARBERS_LIST);
+    const url = queryBuilder(ENDPOINTS.BARBERS_LIST, {search});
+
+    const data = await api.get(url);
 
     return data;
   } catch (error: any) {

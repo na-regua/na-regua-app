@@ -11,6 +11,7 @@ export {default as BarberSettingsScreen} from './BarberSettings/BarberSettings';
 export {default as BarberSettingsProfileScreen} from './BarberSettingsProfile/BarberSettingsProfile';
 export {default as BarberSignUpScreen} from './BarberSignUp/BarberSignUp';
 export {default as BarberWorkersScreen} from './BarberWorkers/BarberWorkers';
+export {default as CustomerCutScreen} from './CustomerCut/CustomerCut';
 export {default as CustomerHomeScreen} from './CustomerHome/CustomerHome';
 export {default as CustomerLoginScreen} from './CustomerLogin/CustomerLogin';
 export {default as CustomerSettingsScreen} from './CustomerSettings/CustomerSettings';

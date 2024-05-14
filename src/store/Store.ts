@@ -2,6 +2,7 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {
   AuthReducer,
   ConfigReducer,
+  CutReducer,
   LoginReducer,
   NotifyReducer,
   QueueReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   login: LoginReducer,
   queue: QueueReducer,
   socket: SocketReducer,
+  cut: CutReducer,
 });
 
 export const store = configureStore({
