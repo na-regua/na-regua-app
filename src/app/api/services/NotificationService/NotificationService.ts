@@ -1,8 +1,13 @@
-import {GetNotificationResponse, IGetNotificationFilters} from '@/app/models';
+import {
+  GetNotificationResponse,
+  IGetNotificationFilters,
+  IPushNotification,
+} from '@/app/models';
 import {mapPathVariables, queryBuilder} from '@/utils';
 import {AxiosResponse} from 'axios';
 import api, {errToAxiosError} from '../../api';
 import ENDPOINTS from '../../endpoints';
+import PushNotification from 'react-native-push-notification';
 
 const getNotifications = async (
   filters: IGetNotificationFilters,
@@ -44,4 +49,15 @@ const markAllAsRead = async (): Promise<void> => {
   }
 };
 
-export default {getNotifications, markAsReadById, markAllAsRead};
+const pushNotification = (push: IPushNotification) => {
+  PushNotification.localNotification({
+    message: push.message,
+  });
+};
+
+export default {
+  getNotifications,
+  markAsReadById,
+  markAllAsRead,
+  pushNotification,
+};

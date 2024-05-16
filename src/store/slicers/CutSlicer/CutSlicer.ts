@@ -1,4 +1,3 @@
-import {ServicesService} from '@/app/api';
 import {
   IBarber,
   IBarberService,
@@ -10,24 +9,11 @@ import {GenericAction} from '@/store/Store';
 import {
   ActionCreatorWithPayload,
   SliceCaseReducers,
-  createAsyncThunk,
   createSlice,
 } from '@reduxjs/toolkit';
+import {fetchBarberServices, fetchTodayTickets} from './thunks';
 
 export const CutPersistedKey = 'cut';
-
-export const fetchBarberServices = createAsyncThunk(
-  'Cut/fetchBarberServices',
-  async (barberId: string, {rejectWithValue}) => {
-    try {
-      const response = await ServicesService.getServices({barberId});
-
-      return response;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  },
-);
 
 const CutSlicer = createSlice<ICutState, SliceCaseReducers<ICutState>, string>({
   name: 'Login',
@@ -51,6 +37,10 @@ const CutSlicer = createSlice<ICutState, SliceCaseReducers<ICutState>, string>({
   extraReducers: builder => {
     builder.addCase(fetchBarberServices.fulfilled, (state, action) => {
       state.services = action.payload.data;
+    });
+
+    builder.addCase(fetchTodayTickets.fulfilled, (state, action) => {
+      state.todayTickets = action.payload.data;
     });
   },
 });

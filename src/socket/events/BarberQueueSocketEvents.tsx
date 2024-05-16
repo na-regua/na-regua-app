@@ -11,7 +11,7 @@ const BarberQueueSocketEvents: React.FC = () => {
   const onQueueUpdate = useCallback(() => {
     if (!!socket && !subs.some(el => el === SocketUrls.GetQueue)) {
       socket.on(SocketUrls.GetQueue, (data: QueueUpdateEvent) => {
-        console.log('Queue update received');
+        console.log('QueueUpdateEvent');
         if (data.queue) {
           dispatch(updateQueueData(data.queue));
         }

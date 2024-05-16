@@ -1,4 +1,4 @@
-import {IQueue} from '@/app/models';
+import {IQueue, ITicket} from '@/app/models';
 import {AxiosResponse} from 'axios';
 import api, {errToAxiosError} from '../../api';
 import ENDPOINTS from '../../endpoints';
@@ -29,4 +29,21 @@ const startQueue = async (): Promise<AxiosResponse<{queue: IQueue}>> => {
   }
 };
 
-export default {getTodayQueue, startQueue};
+const userJoin = async (
+  code: string,
+  serviceId: string,
+): Promise<AxiosResponse<{ticket: ITicket}>> => {
+  try {
+    const res = await api.post(
+      ENDPOINTS.QUEUE_JOIN_USER,
+      {code, serviceId},
+      {withCredentials: true},
+    );
+
+    return res;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
+export default {getTodayQueue, startQueue, userJoin};

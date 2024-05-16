@@ -7,6 +7,7 @@ import {
   NotifyReducer,
   QueueReducer,
   SocketReducer,
+  TicketViewReducer,
 } from './slicers';
 
 export interface GenericAction<T = any> {
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   queue: QueueReducer,
   socket: SocketReducer,
   cut: CutReducer,
+  ticketView: TicketViewReducer,
 });
 
 export const store = configureStore({

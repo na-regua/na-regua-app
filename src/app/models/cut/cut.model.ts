@@ -1,5 +1,6 @@
 import {IBarber} from '../barber/barber.model';
 import {IBarberService} from '../service/service.model';
+import {IGetTodayTickets} from '../ticket/ticket.model';
 
 export type TCutSteps = 'select' | 'attendance';
 export type TAttendanceType = 'queue' | 'schedule';
@@ -14,4 +15,5 @@ export interface ICutState {
     time?: string;
   };
   services?: IBarberService[];
+  todayTickets?: IGetTodayTickets;
 }

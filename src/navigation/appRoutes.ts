@@ -1,3 +1,5 @@
+import {LinkingOptions} from '@react-navigation/native';
+
 export enum APP_ROUTES {
   BARBER_SIGN_UP = '/barber/sign-up',
   BARBER_PRE_SIGN_UP = '/barber/pre-sign-up',
@@ -44,6 +46,24 @@ export type TRootStackParamList = {
   '/customer/home'?: {};
   '/customer/settings'?: {};
   '/customer/cut'?: {};
+  '/customer/qr-scanner'?: {};
+  '/customer/on-ticket'?: {
+    hideBottomNav?: boolean;
+  };
 };
 
 export type TRouteName = keyof TRootStackParamList;
+
+export enum LinkingPrefixes {
+  Default = 'nareguaapp://',
+  Barber = 'nareguaapp://barber/{{code}}',
+}
+
+export const LinkingConfig: LinkingOptions<TRootStackParamList> = {
+  prefixes: [LinkingPrefixes.Default],
+  config: {
+    screens: {
+      '/generic/login/customer': 'login-customer',
+    },
+  },
+};

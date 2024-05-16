@@ -24,6 +24,7 @@ export type TButtonColorScheme =
   | 'warning';
 
 export type TButtonVariants = 'filled' | 'outlined' | 'ghost' | 'text';
+export type TButtonSizes = 'small' | 'medium' | 'large';
 
 export interface IButtonProps extends TouchableOpacityProps {
   colorScheme?: TButtonColorScheme;
@@ -35,6 +36,7 @@ export interface IButtonProps extends TouchableOpacityProps {
   translate?: boolean;
   customContent?: React.ReactNode;
   fillSpace?: boolean;
+  size?: TButtonSizes;
 }
 
 const Button: React.FC<IButtonProps> = ({
@@ -47,6 +49,7 @@ const Button: React.FC<IButtonProps> = ({
   translate = true,
   customContent,
   fillSpace,
+  size = 'medium',
   ...buttonProps
 }) => {
   const {t} = useTranslation();
@@ -84,6 +87,7 @@ const Button: React.FC<IButtonProps> = ({
       loading={loading}
       style={[buttonShadowStyle, customStyles]}
       hasSuffix={!!suffix}
+      size={size}
       {...buttonProps}>
       {!loading && !!customContent && customContent}
       {!loading && !customContent && (

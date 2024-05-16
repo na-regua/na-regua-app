@@ -26,7 +26,7 @@ export interface ITypographyProps extends PropsWithChildren {
   fonts?: FontsType;
   weight?: keyof typeof Fonts.weights;
   translate?: boolean;
-  translateProps?: Record<string, string>;
+  translateProps?: Record<string, any>;
 }
 
 const Typography: React.FC<ITypographyProps> = ({

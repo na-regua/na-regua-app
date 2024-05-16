@@ -1,9 +1,11 @@
+import {QueueService} from '@/app/api';
 import {IBarberService, TAttendanceType} from '@/app/models';
 import {Button, Icons, Typography} from '@/components/atoms';
+import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {CutActions} from '@/store/slicers';
+import {CutActions, TicketViewActions} from '@/store/slicers';
 import {generateAddress} from '@/utils';
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FadeInLeft} from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,11 +26,13 @@ import {
 } from '../../styles';
 
 const AttendanceFooter = () => {
-  const {t} = useTranslation();
   const {attendanceType, selectedBarber, selectedService} = useSelector(
     (state: RootState) => state.cut,
   );
   const dispatch = useDispatch<AppDispatch>();
+  const navigation = useAppNavigation();
+
+  const [joining, setJoining] = useState(false);
 
   const selectOtherBarber = () => {
     dispatch(CutActions.setCutStep('select'));
@@ -39,6 +43,31 @@ const AttendanceFooter = () => {
     () => !!selectedBarber && !!selectedService,
     [selectedBarber, selectedService],
   );
+
+  const joinQueue = async () => {
+    if (selectedBarber && selectedService) {
+      setJoining(true);
+
+      try {
+        const {data} = await QueueService.userJoin(
+          selectedBarber.code,
+          selectedService._id,
+        );
+
+        if (data.ticket) {
+          dispatch(TicketViewActions.setTicketView(data.ticket));
+
+          setJoining(false);
+
+          navigation.navigate('/customer/on-ticket');
+        }
+      } catch (error) {
+        setJoining(false);
+
+        console.log(error);
+      }
+    }
+  };
 
   return (
     <PageCardFooterStyled>
@@ -62,6 +91,8 @@ const AttendanceFooter = () => {
           colorScheme="main"
           title="customer.cut.buttons.join"
           disabled={!canJoinQueue}
+          onPress={joinQueue}
+          loading={joining}
         />
       )}
       {attendanceType === 'schedule' && (

@@ -47,7 +47,7 @@ export const MenuItemStyle = styled.TouchableOpacity`
   align-items: center;
   padding: 12px;
   background-color: ${Colors.bgLight};
-  border-radius: 8px;
+  border-radius: 12px;
   gap: 12px;
   border: 1px solid ${Colors.border};
 `;

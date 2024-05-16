@@ -2,7 +2,6 @@ import {IQueue} from '../queue/queue.model';
 
 export enum SocketUrls {
   WorkerJoinQueue = 'queue/worker/join',
-  UserJoinQueue = 'queue/user/join',
   WorkerLeaveQueue = 'queue/worker/leave',
   WorkerServeCustomer = 'queue/worker/serve',
   WorkerMissCustomer = 'queue/worker/miss',
@@ -11,6 +10,9 @@ export enum SocketUrls {
   WorkerFinishQueue = 'queue/worker/finish',
   WorkerPauseQueue = 'queue/worker/pause',
   WorkerResumeQueue = 'queue/worker/resume',
+
+  UserJoinTicketChannels = 'channel/user/join/ticket',
+  UserLeaveTicketChannels = 'channel/user/leave/ticket',
 
   GetQueue = 'queue/get',
   GetTicket = 'ticket/get',
@@ -25,6 +27,15 @@ export interface SocketQueueEvent {
 
 export interface QueueUpdateEvent {
   queue: IQueue;
+}
+
+export interface ISocketEvent {
+  event: ISocketEventType;
+  data: any;
+}
+
+export interface SocketQueueEvent {
+  queueId?: string;
 }
 
 export interface ISocketEvent {
@@ -54,4 +65,8 @@ export type ISocketEventType =
   | 'USER_IS_NOT_WORKER'
   | 'USER_DENIED'
   | 'USER_APPROVED'
-  | 'USER_JOINED';
+  | 'USER_JOINED'
+  | 'WORKER_APPROVED_YOU'
+  | 'WORKER_DENIED_YOU'
+  | 'USER_ALREADY_IN_QUEUE'
+  | 'USER_IN_OTHER_QUEUE';

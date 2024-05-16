@@ -35,11 +35,12 @@ const CustomerCut: React.FC<
   const scrollAnimatedValue = useSharedValue(0);
   const SPLASH_SIZE = 200;
   const ANIMATION_RATE_MULT = 0.5;
+  const GAP_LIMIT = 40;
 
   const gapStyle = useAnimatedStyle(() => {
-    if (scrollAnimatedValue.value * ANIMATION_RATE_MULT > 40) {
+    if (scrollAnimatedValue.value * ANIMATION_RATE_MULT > GAP_LIMIT) {
       return {
-        gap: -40,
+        gap: -GAP_LIMIT,
       };
     }
 
@@ -47,10 +48,10 @@ const CustomerCut: React.FC<
   });
 
   const splashProps = useAnimatedProps(() => {
-    if (scrollAnimatedValue.value * ANIMATION_RATE_MULT > 40) {
+    if (scrollAnimatedValue.value * ANIMATION_RATE_MULT > GAP_LIMIT) {
       return {
-        width: SPLASH_SIZE - 40,
-        height: SPLASH_SIZE - 40,
+        width: SPLASH_SIZE - GAP_LIMIT,
+        height: SPLASH_SIZE - GAP_LIMIT,
       };
     }
 
@@ -86,7 +87,7 @@ const CustomerCut: React.FC<
       </Header.Container>
       <CutContentStyled>
         <SplashWrapperStyled entering={SlideInDown.delay(150).duration(500)}>
-          <Splashs.BarberCutting animatedProps={splashProps} />
+          <Splashs.BarberCuttingSplash animatedProps={splashProps} />
         </SplashWrapperStyled>
         <PageCard
           scrollable

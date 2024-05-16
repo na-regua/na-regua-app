@@ -206,8 +206,8 @@ const ptBr = {
         off: 'Fila encerrada',
       },
       subtitles: {
-        total: 'Clientes na fila: {{total}}',
-        totalServed: 'Atendidos: {{total}}',
+        total: 'Clientes na fila: {{-total}}',
+        totalServed: 'Atendidos: {{-total}}',
       },
       buttons: {
         pause: 'Pausar',
@@ -217,6 +217,9 @@ const ptBr = {
       },
       filters: {
         oldTickets: 'Clientes anteriores da fila',
+      },
+      generic: {
+        askToJoin: '{{-name}} deseja entrar na fila.',
       },
     },
   },
@@ -270,7 +273,7 @@ const ptBr = {
         readQr: 'Ler QR Code',
       },
       tabs: {
-        attendance: 'Pra hoje',
+        attendance: 'Para hoje',
         history: 'Histórico',
       },
     },
@@ -294,9 +297,9 @@ const ptBr = {
         title: 'Atendimento',
         types: {
           queue: 'Fila',
-          queueDesc: '{{total}} clientes na fila.',
+          queueDesc: '{{-total}} clientes na fila.',
           schedule: 'Agendamento',
-          scheduleDesc: '+{{total}} horários livres.',
+          scheduleDesc: '+{{-total}} horários livres.',
         },
         select: {
           type: 'Selecione o atendimento',
@@ -312,6 +315,37 @@ const ptBr = {
         other: 'Outra',
         joinWait: 'Ficar em espera ...',
       },
+    },
+    qrScan: {
+      title: 'Ler QR Code',
+      subtitle: 'Aponte a câmera para o QR Code da barbearia.',
+      found: {
+        title: 'Barbearia encontrada!',
+        buttons: {
+          other: 'Outra',
+          continue: 'Continuar!!!',
+        },
+      },
+    },
+    onTicket: {
+      titles: {
+        pending: 'Aguarde',
+        queue: 'Na fila',
+        schedule: 'Agendamento',
+      },
+      subtitles: {
+        pending:
+          'Sua solicitação foi enviada ao barbeiro, aguarde a confirmação.',
+        lastUpdate: 'Última atualização: {{-time}}',
+      },
+      info: {
+        position: 'Posição',
+        date: 'Data',
+        time: 'Horário',
+        duration: '{{-minutes}} minutos',
+        prevision: 'Previsão',
+      },
+      buttons: {beLate: 'Vou atrasar!'},
     },
   },
   generic: {
@@ -445,7 +479,7 @@ const ptBr = {
     },
     deleteWorker: {
       title: 'Remover funcionário',
-      subtitle: 'Deseja realmente remover o funcionário - {{name}} ?',
+      subtitle: 'Deseja realmente remover o funcionário - {{-name}} ?',
       buttons: {
         no: 'Não',
         yes: 'Sim',
@@ -453,7 +487,7 @@ const ptBr = {
     },
     deleteService: {
       title: 'Remover serviço',
-      subtitle: 'Deseja realmente remover o serviço - {{name}} ?',
+      subtitle: 'Deseja realmente remover o serviço - {{-name}} ?',
       buttons: {
         no: 'Não',
         yes: 'Sim',
@@ -572,32 +606,34 @@ const ptBr = {
     },
   },
   notification: {
-    CUSTOMER_JOINED_QUEUE: 'Cliente {{data.customer.name}} entrou na fila.',
-    USER_ASK_TO_JOIN_QUEUE: '{{data.user.name}} pediu para entrar na fila.',
-    CUSTOMER_LEFT_QUEUE: 'Cliente {{data.customer.name}} saiu da fila.',
+    CUSTOMER_JOINED_QUEUE: 'Cliente {{-data.customer.name}} entrou na fila.',
+    USER_ASK_TO_JOIN_QUEUE: '{{-data.user.name}} pediu para entrar na fila.',
+    CUSTOMER_LEFT_QUEUE: 'Cliente {{-data.customer.name}} saiu da fila.',
     USER_ASK_TO_SCHEDULE:
-      '{{data.user.name}} pediu para agendar as {{time}} do dia {{day}}.',
+      '{{-data.user.name}} pediu para agendar as {{-time}} do dia {{-day}}.',
     USER_WILL_BE_LATE_TO_APPOINTMENT:
-      '{{data.user.name}} vai se atrasar para o agendamento das {{time}} do dia {{day}}.',
+      '{{-data.user.name}} vai se atrasar para o agendamento das {{-time}} do dia {{-day}}.',
     CUSTOMER_SCHEDULED_APPOINTMENT:
-      'Cliente {{data.customer.name}} agendou para as {{time}} do dia {{day}}.',
+      'Cliente {{-data.customer.name}} agendou para as {{-time}} do dia {{-day}}.',
     CUSTOMER_CANCELLED_APPOINTMENT:
-      'Cliente {{data.customer.name}} cancelou o agendamento das {{time}} do dia {{day}}.',
+      'Cliente {{-data.customer.name}} cancelou o agendamento das {{-time}} do dia {{-day}}.',
     USER_REJECTED_APPOINTMENT_RESCHEDULE:
-      '{{data.user.name}} rejeitou o reagendamento para as {{time}} do dia {{day}}.',
+      '{{-data.user.name}} rejeitou o reagendamento para as {{-time}} do dia {{-day}}.',
     GENERATED_STATEMENT:
       'Foi gerado um extrato financeiro para o dia {{-day}}.',
+    WORKER_ADD_USER_AS_CUSTOMER:
+      '{{-data.worker.user.name}} te adicionou como cliente da barbearia {{-data.worker.barber.name}}.',
   },
   socketEvent: {
-    WORKER_JOINED_QUEUE: 'Barbeiro {{worker.user.name}} entrou na fila.',
-    WORKER_NOT_OWNER: '{{worker.user.name}} não é o proprietário da fila.',
-    WORKER_IS_NOT_IN_QUEUE: '{{worker.user.name}} não está na fila.',
-    WORKER_IS_ALREADY_IN_QUEUE: '{{worker.user.name}} já está na fila.',
+    WORKER_JOINED_QUEUE: 'Barbeiro {{-worker.user.name}} entrou na fila.',
+    WORKER_NOT_OWNER: '{{-worker.user.name}} não é o proprietário da fila.',
+    WORKER_IS_NOT_IN_QUEUE: '{{-worker.user.name}} não está na fila.',
+    WORKER_IS_ALREADY_IN_QUEUE: '{{-worker.user.name}} já está na fila.',
     WORKER_NOT_FOUND: 'O Funcionário não foi encontrado.',
-    TICKET_SERVED: 'O cliente {{customer.name}} foi atendido.',
-    TICKET_MISSED: 'O cliente {{customer.name}} perdeu o atendimento.',
+    TICKET_SERVED: 'O cliente {{-customer.name}} foi atendido.',
+    TICKET_MISSED: 'O cliente {{-customer.name}} perdeu o atendimento.',
     TICKET_REMOVED:
-      'O ticket de atendimento do cliente {{customer.name}} foi removido.',
+      'O ticket de atendimento do cliente {{-customer.name}} foi removido.',
     TICKET_NOT_FOUND: 'O ticket de atendimento não encontrado.',
     TICKET_NOT_CREATED: 'O ticket de atendimento não foi criado.',
     TICKET_IS_NOT_IN_QUEUE: 'O ticket não está na fila.',
@@ -610,12 +646,17 @@ const ptBr = {
     BARBER_IS_CLOSED: 'A Barbearia está fechada.',
     USER_IS_NOT_WORKER: 'OPS! Você não é Funcionário da Barbearia.',
     USER_DENIED:
-      '{{worker.name}} negou o ticket de atendimento de {{customer.name}}.',
+      '{{-worker.user.name}} negou o ticket de atendimento de {{-customer.name}}.',
     USER_APPROVED:
-      '{{worker.name}} aprovou o ticket de atendimento de {{customer.name}}.',
-    USER_JOINED: '{{user.name}} entrou na fila.',
+      '{{-worker.user.nrame}} aprovou o ticket de atendimento de {{-customer.name}}.',
+    USER_JOINED: '{{-customer.name}} entrou na fila.',
+    WORKER_APPROVED_YOU:
+      '{{-worker.user.name}} aprovou seu ticket de atendimento na barbearia {{-worker.barber.name}}.',
+    WORKER_DENIED_YOU:
+      '{{-worker.user.name}} negou seu ticket de atendimento na barbearia {{-worker.barber.name}}.',
+    USER_ALREADY_IN_QUEUE: 'Ops! Você já está na fila.',
+    USER_IN_OTHER_QUEUE: 'Ops! Você já está em outra fila.',
   },
-
   errors: {
     INVALID_CEP: 'CEP inválido.',
     INVALID_PHONE_NUMBER: 'Número de telefone inválido.',
@@ -669,8 +710,27 @@ const ptBr = {
     '60202': 'Máximo de tentativas de verificação atingido.',
     '60203': 'Máximo de tentativas de envio atingido.',
     UNAVAILABLE_MESSAGE_SERVICE: 'Serviço de mensagens indisponível.',
+    BARBER_IS_CLOSED: 'Barbearia está fechada.',
+    USER_ALREADY_IN_QUEUE: 'Usuário já está na fila.',
   },
-  currency: {symbol: 'R$', format: 'R$ {{value}}'},
+  currency: {symbol: 'R$', format: 'R$ {{-value}}'},
+  buttons: {
+    approve: 'Aprovar',
+    deny: 'Negar',
+    cancel: 'Cancelar',
+    save: 'Salvar',
+    remove: 'Remover',
+    leave: 'Sair',
+    desmark: 'Desmarcar',
+    open: 'Abrir',
+    follow: 'Acompanhar',
+  },
+  tickets: {
+    types: {
+      queue: 'Fila',
+      schedule: 'Agendamento',
+    },
+  },
 };
 
 export default ptBr;

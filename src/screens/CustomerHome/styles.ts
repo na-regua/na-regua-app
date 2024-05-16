@@ -49,9 +49,9 @@ export const BigActionTextStyled = styled.View`
   gap: 2px;
 `;
 
-export const LineStyled = styled.View`
+export const LineStyled = styled.View<{customColor?: string}>`
   width: 100%;
-  background-color: ${Colors.border};
+  background-color: ${({customColor}) => customColor || Colors.border};
   height: 1px;
 `;
 
@@ -67,4 +67,25 @@ export const CHTabsStyled = styled.View`
   align-items: flex-end;
   justify-content: flex-start;
   gap: 12px;
+`;
+
+export const CHTabsContentStyled = styled.View`
+  gap: 18px;
+`;
+
+export const TicketStyled = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.8,
+})<{expanded?: boolean}>`
+  padding: 12px;
+  border-radius: 12px;
+  background-color: ${Colors.primary};
+  gap: 18px;
+`;
+
+export const TicketsBarberImageStyled = styled.Image.attrs({
+  resizeMode: 'cover',
+})`
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
 `;

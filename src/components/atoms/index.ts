@@ -1,9 +1,10 @@
 export {default as AppStatusBar} from './AppStatusBar/AppStatusBar';
 export {default as Avatar} from './Avatar/Avatar';
 export {default as AvoidKeyboard} from './AvoidKeyboard/AvoidKeyboard';
-export * from './Button/styles';
+export * from './Box/Box';
 export * from './Button/Button';
 export {default as Button} from './Button/Button';
+export * from './Button/styles';
 export * from './Calendar';
 export * from './Carousel/Carousel';
 export {default as Checkbox} from './Checkbox/Checkbox';

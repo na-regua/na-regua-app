@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 
 import {Button, Icons, QRCode, Typography} from '@/components/atoms';
+import {LinkingPrefixes} from '@/navigation';
 import {RootState} from '@/store/Store';
 import colors from '@/theme/colors';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
@@ -71,6 +72,7 @@ const ShareQRModal: React.FC<IShareQRModalProps> = ({modalRef}) => {
   if (!barber) {
     return null;
   }
+  const LinkingUrl = LinkingPrefixes.Barber.replace('{{code}}', barber.code);
 
   return (
     <ContainerStyle style={insetsStyles}>
@@ -88,7 +90,7 @@ const ShareQRModal: React.FC<IShareQRModalProps> = ({modalRef}) => {
               padding={12}
               size={152}
               qrCodeProps={{
-                value: 'https://www.google.com',
+                value: LinkingUrl,
                 color: colors.black3,
               }}
             />

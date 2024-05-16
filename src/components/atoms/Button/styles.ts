@@ -2,7 +2,7 @@ import {Colors} from '@/theme';
 import {ViewStyle} from 'react-native';
 import styled, {css} from 'styled-components/native';
 import {RuleSet} from 'styled-components/native/dist/types';
-import {TButtonColorScheme, TButtonVariants} from './Button';
+import {TButtonColorScheme, TButtonSizes, TButtonVariants} from './Button';
 import {hexPercentage} from '@/theme/colors';
 
 export const ButtonThemeColor: Record<TButtonColorScheme, string> = {
@@ -72,12 +72,28 @@ const VariantsButton: Record<TButtonVariants, RuleSet<any>> = {
   text: TextButtonStyle,
 };
 
+const SizesButton: Record<TButtonSizes, RuleSet<any>> = {
+  small: css`
+    min-height: 36px;
+    padding: 8px;
+  `,
+  medium: css`
+    min-height: 44px;
+    padding: 12px 16px;
+  `,
+  large: css`
+    min-height: 56px;
+    padding: 16px 20px;
+  `,
+};
+
 export const ButtonStyle = styled.TouchableOpacity<{
   variant: TButtonVariants;
   colorScheme: TButtonColorScheme;
   disabled?: boolean;
   loading?: boolean;
   hasSuffix?: boolean;
+  size: TButtonSizes;
 }>`
   min-height: 44px;
   padding: 12px;
@@ -92,6 +108,8 @@ export const ButtonStyle = styled.TouchableOpacity<{
   `}
 
   ${({variant}) => VariantsButton[variant]}
+
+  ${({size}) => SizesButton[size]}
 
   ${({disabled, variant, loading}) =>
     disabled &&

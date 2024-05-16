@@ -21,6 +21,7 @@ import {
   ScrollContentStyle,
   styles,
 } from './styles';
+import {FilesService} from '@/app/api';
 
 type TCustomerSettingsMenuType = 'profile' | 'history';
 
@@ -95,7 +96,7 @@ const CustomerSettings: React.FC<
     setChangingAvatar(true);
 
     try {
-      // await FilesService.updateBarberAvatarFile(barber.avatar._id, file);
+      await FilesService.updateUserAvatarFile(user.avatar._id, _file);
 
       await dispatch(getCurrentUser());
 

@@ -13,6 +13,7 @@ import {
   QRContentStyle,
   styles,
 } from './styles';
+import {LinkingConfig} from '@/navigation/AppNavigator/AppNavigator';
 
 const BarberShareQr: React.FC = () => {
   const {t} = useTranslation();
@@ -24,6 +25,10 @@ const BarberShareQr: React.FC = () => {
     paddingRight: insets.right,
   };
   const {barber} = useSelector((state: RootState) => state.auth);
+
+  if (!barber) {
+    return null;
+  }
 
   return (
     <ContainerStyle
@@ -49,15 +54,15 @@ const BarberShareQr: React.FC = () => {
             padding={12}
             size={152}
             qrCodeProps={{
-              value: 'https://www.google.com',
+              value: LinkingConfig.prefixes[0] + '/barber/' + barber.code,
               color: colors.black3,
             }}
           />
           <Typography variant="h1" color="white3">
-            {barber && barber.name}
+            {barber.name}
           </Typography>
           <Typography variant="h4" color="white3">
-            {barber && barber.code}
+            {barber.code}
           </Typography>
         </QRContentStyle>
         <ActionsStyle>

@@ -67,3 +67,7 @@ export interface GetNotificationResponse {
   total: number;
   hasUnread: boolean;
 }
+
+export interface IPushNotification {
+  message: string;
+}

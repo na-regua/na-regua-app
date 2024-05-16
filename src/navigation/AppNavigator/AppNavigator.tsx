@@ -1,11 +1,10 @@
 import React, {useMemo} from 'react';
 
-import {BarberOnQueue} from '@/components/pages';
 import {
   BarberBillingScreen,
   BarberCompletedQrScreen,
   BarberLoginScreen,
-  BarberPreSignUpScreen,
+  BarberOnQueueScreen,
   BarberQueueScreen,
   BarberScheduleScreen,
   BarberServicesConfigScreen,
@@ -16,6 +15,8 @@ import {
   CustomerCutScreen,
   CustomerHomeScreen,
   CustomerLoginScreen,
+  CustomerOnTicketScreen,
+  CustomerQrScannerScreen,
   CustomerSettingsScreen,
   CustomerSignUpScreen,
   CustomerSignUpVerifyScreen,
@@ -29,7 +30,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useSelector} from 'react-redux';
 import BottomNav from '../BottomNav/BottomNav';
-import {TRootStackParamList} from '../appRoutes';
+import {LinkingConfig, TRootStackParamList} from '../appRoutes';
 import {navigationRef} from '../useNavigationContainer/useNavigationContainer';
 
 const Stack = createNativeStackNavigator<TRootStackParamList>();
@@ -86,17 +87,13 @@ const AppNavigator: React.FC = () => {
   }
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer ref={navigationRef} linking={LinkingConfig}>
       <Stack.Navigator
         initialRouteName={initialRouteName as any}
         screenOptions={{
           headerShown: false,
         }}>
         <Stack.Screen name={'/barber/sign-up'} component={BarberSignUpScreen} />
-        <Stack.Screen
-          name={'/barber/pre-sign-up'}
-          component={BarberPreSignUpScreen}
-        />
 
         <Stack.Screen
           name={'/generic/login'}
@@ -150,6 +147,15 @@ const AppNavigator: React.FC = () => {
               name={'/customer/cut'}
               component={CustomerCutScreen}
             />
+            <Stack.Screen
+              name={'/customer/qr-scanner'}
+              component={CustomerQrScannerScreen}
+            />
+            <Stack.Screen
+              name={'/customer/on-ticket'}
+              component={CustomerOnTicketScreen}
+              initialParams={{hideBottomNav: true}}
+            />
           </>
         )}
 
@@ -160,7 +166,10 @@ const AppNavigator: React.FC = () => {
               component={BarberQueueScreen}
               options={{animation: 'none'}}
             />
-            <Stack.Screen name={'/barber/queue/fs'} component={BarberOnQueue} />
+            <Stack.Screen
+              name={'/barber/queue/fs'}
+              component={BarberOnQueueScreen}
+            />
             <Stack.Screen
               name={'/barber/schedule'}
               component={BarberScheduleScreen}

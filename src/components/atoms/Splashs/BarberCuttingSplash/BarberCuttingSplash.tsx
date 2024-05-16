@@ -5,7 +5,7 @@ import {ISplashProps} from '../Splashs';
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
-const BarberCutting: React.FC<ISplashProps> = ({
+const BarberCuttingSplash: React.FC<ISplashProps> = ({
   width = 200,
   height = 200,
   animatedProps,
@@ -662,4 +662,4 @@ const BarberCutting: React.FC<ISplashProps> = ({
   );
 };
 
-export {BarberCutting};
+export {BarberCuttingSplash};

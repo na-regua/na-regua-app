@@ -1,10 +1,9 @@
-import {API_ORIGIN} from '@/app/api';
-import {ISocketEvent, SocketUrls} from '@/app/models';
+import {API_ORIGIN, NotificationService} from '@/app/api';
+import {INotification, ISocketEvent, SocketUrls} from '@/app/models';
 import {AppDispatch, RootState} from '@/store/Store';
 import {connectSocket, disconnectSocket} from '@/store/slicers';
 import React, {PropsWithChildren, useCallback, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import PushNotification from 'react-native-push-notification';
 import {useDispatch, useSelector} from 'react-redux';
 import {Socket, io} from 'socket.io-client';
 
@@ -17,29 +16,39 @@ const SocketProvider: React.FC<PropsWithChildren> = ({children}) => {
 
   const {t} = useTranslation();
 
-  const notifyEvent = (socketEvent: ISocketEvent) => {
-    console.log('New event received ', socketEvent.event);
-
-    const {event, data} = socketEvent;
-
-    const translatedMessage = t(`socketEvent.${event}`, data).toString();
-    PushNotification.localNotification({
-      message: translatedMessage,
-    });
-  };
-
   const onNotification = (instance: Socket) => {
     if (!subs.some(sub => sub === SocketUrls.NewNotification)) {
-      instance.on(SocketUrls.NewNotification, () => {
-        console.log('New notification received');
-      });
+      instance.on(
+        SocketUrls.NewNotification,
+        ({notification}: {notification: INotification}) => {
+          if (notification) {
+            const {message, data} = notification;
+
+            console.log(data);
+
+            const translatedMessage = t(`notification.${message}`, {
+              data,
+            }).toString();
+
+            NotificationService.pushNotification({
+              message: translatedMessage,
+            });
+          }
+        },
+      );
     }
   };
 
   const onEvent = (instance: Socket) => {
     if (!subs.some(sub => sub === SocketUrls.Event)) {
       instance.on(SocketUrls.Event, (socketEvent: ISocketEvent) => {
-        notifyEvent(socketEvent);
+        const {event, data} = socketEvent;
+
+        const translatedMessage = t(`socketEvent.${event}`, data).toString();
+
+        NotificationService.pushNotification({
+          message: translatedMessage,
+        });
       });
     }
   };

@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 
 import {SocketUrls} from '@/app/models';
-import {AppStatusBar, Button, Loader, MenuItem} from '@/components/atoms';
+import {AppStatusBar, Button, Loader} from '@/components/atoms';
 import {Header, OnQueueHeader} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {BarberQueueSocketEvents} from '@/socket/events';
@@ -12,6 +12,7 @@ import {useRoute} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
+import {TicketHandler} from './components';
 import {
   OnQueueActionsRowStyled,
   OnQueueActionsStyled,
@@ -71,6 +72,16 @@ const BarberOnQueue: React.FC<
     }
   };
 
+  const goBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+
+    if (!navigation.canGoBack()) {
+      navigation.navigate('/barber/queue');
+    }
+  };
+
   if (!todayQueue) {
     if (navigation.canGoBack()) {
       navigation.goBack();
@@ -90,7 +101,7 @@ const BarberOnQueue: React.FC<
         <>
           <AppStatusBar />
           <Header.Container>
-            <Header.GoBack />
+            <Header.GoBack pressables={{back: goBack}} />
             <Header.Border />
           </Header.Container>
         </>
@@ -100,13 +111,7 @@ const BarberOnQueue: React.FC<
         <OnQueueScrollStyled showsVerticalScrollIndicator={false}>
           {!loadingTodayQueue &&
             todayQueue.tickets.map((ticket, index) => (
-              <MenuItem
-                key={index}
-                title={ticket.customer.name}
-                avatar={ticket.customer.avatar.url}
-                description={ticket.service?.name}
-                clickable
-              />
+              <TicketHandler key={index} {...ticket} />
             ))}
           {loadingTodayQueue && (
             <OnQueueLoaderWrapperStyled>
@@ -147,4 +152,4 @@ const BarberOnQueue: React.FC<
   );
 };
 
-export {BarberOnQueue};
+export default BarberOnQueue;

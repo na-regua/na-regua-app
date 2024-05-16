@@ -2,9 +2,10 @@ import {BarbersService} from '@/app/api';
 import {IBarber} from '@/app/models';
 import {Button, Icons, Typography} from '@/components/atoms';
 import SearchIcon from '@/components/atoms/Icons/SearchIcon/SearchIcon';
+import {useAppNavigation} from '@/navigation';
 import {AppDispatch} from '@/store/Store';
 import {CutActions, fetchBarberServices} from '@/store/slicers';
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Keyboard, TouchableWithoutFeedback} from 'react-native';
 import {FadeInDown} from 'react-native-reanimated';
@@ -36,9 +37,17 @@ const SelectBarber = () => {
   const [menuHeight, setMenuHeight] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const navigation = useAppNavigation();
+
   const dispatch = useDispatch<AppDispatch>();
 
+  const canSearch = useMemo(() => search.length > 0, [search]);
+
   const onSearch = async () => {
+    if (!canSearch) {
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -61,14 +70,18 @@ const SelectBarber = () => {
 
   const selectBarber = async (barber: IBarber, close?: boolean) => {
     dispatch(CutActions.setCutSelectedBarber(barber));
+    await dispatch(fetchBarberServices(barber._id));
+
     dispatch(CutActions.setCutStep('attendance'));
     dispatch(CutActions.setAttendanceType('queue'));
-
-    await dispatch(fetchBarberServices(barber._id));
 
     if (close) {
       closeDropdown();
     }
+  };
+
+  const goToQrScanner = () => {
+    navigation.navigate('/customer/qr-scanner');
   };
 
   return (
@@ -91,18 +104,25 @@ const SelectBarber = () => {
         </PageCardTitleStyled>
         <PageCardRowStyled>
           <CodeInputStyled
-            onChangeText={text => setSearch(text)}
+            onChangeText={text => {
+              setSearch(text);
+            }}
             value={search}
             label="customer.cut.fields.search"
             placeholder={t('customer.cut.fields.code')}
             blurOnSubmit
-            onSubmitEditing={onSearch}
-            returnKeyType="search"
+            onSubmitEditing={() => {
+              if (canSearch) {
+                onSearch();
+              }
+            }}
+            returnKeyType={'search'}
+            textContentType="none"
           />
           <SearchButtonStyled
             customContent={<SearchIcon color="primary" disabled />}
             onPress={onSearch}
-            disabled={search.length <= 3}
+            disabled={!canSearch}
             loading={loading}
           />
 
@@ -160,6 +180,7 @@ const SelectBarber = () => {
             </ShareQrButtonContentStyled>
           }
           variant="ghost"
+          onPress={goToQrScanner}
         />
         <LineStyled />
         {/* <SectionStyled>

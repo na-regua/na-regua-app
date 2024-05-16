@@ -58,3 +58,9 @@ export const OnQueueLoaderWrapperStyled = styled.View`
   align-items: center;
   justify-content: center;
 `;
+
+export const RoundedAvatarStyled = styled.Image.attrs({resizeMode: 'cover'})`
+  width: 42px;
+  height: 42px;
+  border-radius: 21px;
+`;

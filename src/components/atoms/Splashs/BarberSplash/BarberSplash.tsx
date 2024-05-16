@@ -1,9 +1,15 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import Svg, {G, Path} from 'react-native-svg';
+import {ISplashProps} from '../Splashs';
 
-const BarberSplash = () => {
+const proportion = 105 / 97;
+
+const BarberSplash: React.FC<ISplashProps> = ({size = 105}) => {
+  const widthProp = useMemo(() => size, [size]);
+  const heightProp = useMemo(() => size / proportion, [size]);
+
   return (
-    <Svg width="105" height="97" viewBox="0 0 105 97" fill="none">
+    <Svg width={widthProp} height={heightProp} viewBox="0 0 105 97" fill="none">
       <Path
         d="M63.6781 77.1888L71.9742 77.2266L74.2304 77.2541L74.8158 77.2678C74.883 77.2676 74.9501 77.2722 75.0167 77.2816C74.9502 77.2919 74.883 77.2959 74.8158 77.2936L74.2304 77.3039L71.9742 77.3125L63.6781 77.2799L54.2843 77.1957H51.9642H51.9985L67.1504 77.3537C77.835 77.4723 87.5122 77.5633 94.5159 77.5857C98.0194 77.5977 100.853 77.5857 102.814 77.5736H103.066V77.3589H102.814C100.855 77.3194 98.0209 77.2833 94.5175 77.2558C87.5107 77.2008 77.8366 77.1854 67.1519 77.1854L52.1028 77.175L54.2827 77.1957L63.6781 77.1888Z"
         fill="#F5F5F5"

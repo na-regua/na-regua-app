@@ -46,6 +46,29 @@ const updateBarberAvatarFile = async (
   }
 };
 
+const updateUserAvatarFile = async (
+  avatarId: string,
+  file: Asset,
+): Promise<AxiosResponse<IFile>> => {
+  try {
+    const url = queryBuilder(ENDPOINTS.FILES_UPDATE_USER_AVATAR, {}, avatarId);
+
+    const formData = new FormData();
+
+    const fileBuffer = assetToBuffer([file])[0];
+
+    formData.append('file', fileBuffer);
+
+    const data = await api.put(url, formData, {
+      withCredentials: true,
+    });
+
+    return data;
+  } catch (error: any) {
+    throw errToAxiosError(error);
+  }
+};
+
 const updateBarberThumbFile = async (
   thumbId: string,
   file: Asset,
@@ -117,4 +140,5 @@ export default {
   updateBarberThumbFile,
   uploadBarberThumbs,
   deleteBarberThumb,
+  updateUserAvatarFile,
 };
