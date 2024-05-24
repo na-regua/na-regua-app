@@ -11,7 +11,11 @@ import {
   SliceCaseReducers,
   createSlice,
 } from '@reduxjs/toolkit';
-import {fetchBarberServices, fetchTodayTickets} from './thunks';
+import {
+  fetchBarberServices,
+  fetchBarberTodayQueue,
+  fetchTodayTickets,
+} from './thunks';
 
 export const CutPersistedKey = 'cut';
 
@@ -41,6 +45,14 @@ const CutSlicer = createSlice<ICutState, SliceCaseReducers<ICutState>, string>({
 
     builder.addCase(fetchTodayTickets.fulfilled, (state, action) => {
       state.todayTickets = action.payload.data;
+
+      if (action.payload.data.queue) {
+        state.customerIsOnQueue = true;
+      }
+    });
+
+    builder.addCase(fetchBarberTodayQueue.fulfilled, (state, action) => {
+      state.barberTodayQueue = action.payload.data.queue;
     });
   },
 });

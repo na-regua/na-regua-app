@@ -56,6 +56,7 @@ const Typography: React.FC<ITypographyProps> = ({
           textAlign,
           color: textColor,
           ...(weight ? {fontWeight: Fonts.weights[weight]} : {}),
+          ...(weight ? {fontFamily: Fonts.types[weight]} : {}),
         },
         style,
       ]}>

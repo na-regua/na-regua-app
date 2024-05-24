@@ -54,22 +54,22 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
       const {data} = await AuthService.loginWithEmail({email, password});
 
       if (data) {
-        const {accessToken} = data;
+        const {access_token} = data;
 
-        await dispatch(setPersistedToken(accessToken));
+        await dispatch(setPersistedToken(access_token));
 
         if (data.barber) {
           dispatch(setUser(data.user));
           dispatch(setBarber(data.barber));
           setIsSending(false);
 
-          if (data.barber.profileStatus === 'pre') {
+          if (data.barber.profile_status === 'pre') {
             navigator.navigate('/barber/settings/workers', {
               showContinue: true,
             });
           }
 
-          if (data.barber.profileStatus === 'completed') {
+          if (data.barber.profile_status === 'completed') {
             navigator.navigate('/barber/queue');
           }
 
@@ -112,7 +112,7 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
         name="email"
         control={control}
         rules={{required: true}}
-        render={({field: {onChange, value}}) => (
+        render={({field: {onChange}}) => (
           <Input
             label="generic.login.barber.fields.email"
             autoCapitalize="none"
@@ -120,7 +120,6 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
             onChangeText={text => {
               onChange(text);
             }}
-            value={value}
             inputRef={fieldsRef.email}
             returnKeyType="next"
             onSubmitEditing={() => fieldsRef.password.current?.focus()}

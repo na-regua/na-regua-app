@@ -1,6 +1,6 @@
 import {QueueService} from '@/app/api';
 import {AppStatusBar, Button, Carousel, Modal} from '@/components/atoms';
-import {JoinQueueModal} from '@/components/modals';
+import {WorkerJoinQueueModal} from '@/components/modals';
 import {
   Header,
   QueueCarouselBillingItem,
@@ -9,12 +9,7 @@ import {
 } from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {
-  fetchIsOnQueue,
-  setLoadingTodayQueue,
-  updateQueueData,
-  workerJoinQueue,
-} from '@/store/slicers';
+import {QueueActions, fetchIsOnQueue} from '@/store/slicers';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useRef} from 'react';
@@ -52,17 +47,14 @@ const BarberQueue: React.FC<
 
   const startAndJoinQueue = async () => {
     try {
-      dispatch(setLoadingTodayQueue(true));
+      dispatch(QueueActions.setLoadingTodayQueue(true));
 
       const {data} = await QueueService.startQueue();
 
-      console.log(data);
-
       if (data.queue) {
-        dispatch(updateQueueData(data.queue));
-        dispatch(workerJoinQueue());
+        dispatch(QueueActions.updateQueueData(data.queue));
 
-        dispatch(setLoadingTodayQueue(false));
+        dispatch(QueueActions.setLoadingTodayQueue(false));
 
         navigation.navigate('/barber/queue/fs');
       }
@@ -113,7 +105,7 @@ const BarberQueue: React.FC<
         ref={joinQueueModalRef}
         title="modals.joinQueue.title"
         height={200}>
-        <JoinQueueModal
+        <WorkerJoinQueueModal
           dismiss={joinQueueModalRef.current?.dismiss}
           navigate={route => {
             navigation.navigate(route as any);

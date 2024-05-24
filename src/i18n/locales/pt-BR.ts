@@ -268,6 +268,12 @@ const ptBr = {
           title: 'Cortar',
           description: 'Procure a barbearia ideal para você.',
         },
+        queue: {
+          title: 'Na\nFila',
+        },
+        mySchedule: {
+          title: 'Agenda',
+        },
       },
       buttons: {
         readQr: 'Ler QR Code',
@@ -295,11 +301,12 @@ const ptBr = {
       },
       attendance: {
         title: 'Atendimento',
+        isCustomer: 'Você é cliente aqui!',
         types: {
           queue: 'Fila',
-          queueDesc: '{{-total}} clientes na fila.',
+          queueDesc: '{{-total}} cliente(s) na fila.',
           schedule: 'Agendamento',
-          scheduleDesc: '+{{-total}} horários livres.',
+          scheduleDesc: '+{{-total}} horário(s) livre(s).',
         },
         select: {
           type: 'Selecione o atendimento',
@@ -315,6 +322,7 @@ const ptBr = {
         other: 'Outra',
         joinWait: 'Ficar em espera ...',
       },
+      isRequired: '(Obrigatório)',
     },
     qrScan: {
       title: 'Ler QR Code',
@@ -520,6 +528,11 @@ const ptBr = {
         join: 'Entrar',
       },
     },
+    customerJoinTodayQueue: {
+      title: 'Na fila',
+      subtitle:
+        'Ao abrir o atendimento, você acompanha as atualizações em tempo real.',
+    },
   },
   units: {
     minutes: 'minutos',
@@ -724,6 +737,7 @@ const ptBr = {
     desmark: 'Desmarcar',
     open: 'Abrir',
     follow: 'Acompanhar',
+    goBack: 'Voltar',
   },
   tickets: {
     types: {

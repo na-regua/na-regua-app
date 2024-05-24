@@ -24,26 +24,22 @@ export interface IBarber extends IBarberServiceConfig {
   thumbs: IFile[];
   avatar: IFile;
   status: 'active' | 'inactive';
-  profileStatus: 'pre' | 'completed';
+  profile_status: 'pre' | 'completed';
   createdAt: string;
   updatedAt: string;
   config: IBarberServiceConfig;
+  customers: IUser[];
+  rating?: number;
 }
 
 export interface IBarberServiceConfig {
-  workDays: string[];
-  workTime: TWorkTime;
-  openBarberAuto: boolean;
-  openQueueAuto: boolean;
-  scheduleLimitDays: number;
-  schedulesByDay: number;
-  schedules: IBarberCreateSchedule[];
-}
-
-export interface IBarberCreateSchedule {
-  time: string;
-  recommended?: boolean;
-  active?: boolean;
+  workdays: string[];
+  worktime: TWorkTime;
+  open_barber_auto: boolean;
+  open_queue_auto: boolean;
+  schedule_limit_days: number;
+  schedules_by_day: number;
+  schedule_times: string[];
 }
 
 export type TWorkTime = {
@@ -66,4 +62,11 @@ export interface SignUpResponse {
   barber: IBarber;
   user: IUser;
   accessToken: string;
+}
+
+export interface IBarberServiceGeneralConfig {
+  workdays: string[];
+  schedule_limit_days: number;
+  open_barber_auto: boolean;
+  open_queue_auto: boolean;
 }

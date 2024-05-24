@@ -4,7 +4,11 @@ import {Button, Icons, Typography} from '@/components/atoms';
 import SearchIcon from '@/components/atoms/Icons/SearchIcon/SearchIcon';
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch} from '@/store/Store';
-import {CutActions, fetchBarberServices} from '@/store/slicers';
+import {
+  CutActions,
+  fetchBarberServices,
+  fetchBarberTodayQueue,
+} from '@/store/slicers';
 import React, {useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Keyboard, TouchableWithoutFeedback} from 'react-native';
@@ -71,6 +75,7 @@ const SelectBarber = () => {
   const selectBarber = async (barber: IBarber, close?: boolean) => {
     dispatch(CutActions.setCutSelectedBarber(barber));
     await dispatch(fetchBarberServices(barber._id));
+    await dispatch(fetchBarberTodayQueue(barber._id));
 
     dispatch(CutActions.setCutStep('attendance'));
     dispatch(CutActions.setAttendanceType('queue'));

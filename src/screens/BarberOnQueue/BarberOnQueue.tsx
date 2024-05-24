@@ -83,20 +83,16 @@ const BarberOnQueue: React.FC<
   };
 
   if (!todayQueue) {
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    }
-
-    if (!navigation.canGoBack()) {
-      navigation.navigate('/barber/queue');
-    }
+    goBack();
 
     return null;
   }
 
+  const SocketEvents = <>{socket && <BarberQueueSocketEvents />}</>;
+
   return (
     <OnQueueContainerStyled insets={insets}>
-      {socket && <BarberQueueSocketEvents />}
+      {SocketEvents}
       {!isFs && (
         <>
           <AppStatusBar />

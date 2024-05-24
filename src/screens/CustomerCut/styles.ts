@@ -1,4 +1,5 @@
 import {AvoidKeyboard, Button, Input} from '@/components/atoms';
+
 import {Colors} from '@/theme';
 import {TouchableHighlight, TouchableWithoutFeedback, View} from 'react-native';
 import Animated from 'react-native-reanimated';
@@ -110,94 +111,6 @@ export const BarberInfoStyled = styled.View`
 export const BarberItemTitleStyled = styled.View``;
 
 export const BarberItemLocationStyled = styled.View``;
-
-import {hexPercentage} from '@/theme/colors';
-import {ViewStyle} from 'react-native';
-
-export const AttendanceContentStyled = styled(AnimatedView)`
-  gap: 18px;
-`;
-
-export const AttendanceBarberItemStyled = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-`;
-
-export const AttendanceBarberInfoStyled = styled.View`
-  gap: 12px;
-`;
-
-export const AttendanceBarberInfoItemStyled = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 6px;
-`;
-
-export const AttendanceBarberItemTitleStyled = styled.View`
-  gap: 2px;
-`;
-export const AttendanceBarberItemImageStyled = styled.Image.attrs({
-  resizeMode: 'cover',
-})`
-  width: 48px;
-  height: 48px;
-  border-radius: 6px;
-  margin: 6px 0;
-`;
-
-export const AttendanceSectionStyled = styled.View`
-  gap: 12px;
-`;
-
-export const AttendanceSectionContentStyled = styled.View`
-  gap: 18px;
-`;
-
-export const AttendanceItemStyled = styled.TouchableOpacity.attrs({
-  activeOpacity: 0.6,
-})<{
-  justifyContent?: ViewStyle['justifyContent'];
-  active?: boolean;
-}>`
-  flex-direction: row;
-  align-items: center;
-  justify-content: ${({justifyContent}) => justifyContent || 'flex-start'};
-  padding: 12px;
-  gap: 12px;
-  border-radius: 12px;
-  border: 1px solid ${Colors.border};
-  background: ${Colors.border}${hexPercentage[10]};
-
-  ${({active}) =>
-    active &&
-    `
-    background: ${Colors.main}${hexPercentage[10]};
-    border-color: ${Colors.main};
-  `}
-`;
-
-export const AttendanceItemIconStyled = styled.View``;
-export const AttendanceItemGroupStyled = styled.View`
-  flex-direction: row;
-  gap: 12px;
-`;
-export const AttendanceItemSuffixStyled = styled.View``;
-
-export const PageCardFooterStyled = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-`;
-
-export const OtherButtonContentStyled = styled.View`
-  gap: 10px;
-  flex-direction: row;
-  align-items: center;
-`;
 
 export const AvoidKeyboardStyled = styled(AvoidKeyboard)`
   gap: 18px;

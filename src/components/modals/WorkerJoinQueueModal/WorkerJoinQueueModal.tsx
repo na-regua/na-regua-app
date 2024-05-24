@@ -1,7 +1,6 @@
 import {Typography} from '@/components/atoms';
 import {TRouteName} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {workerJoinQueue} from '@/store/slicers';
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -9,24 +8,33 @@ import {
   JoinQueueActionsStyled,
   JoinQueueContainerStyled,
 } from './styles';
+import {QueueService} from '@/app/api';
+import {QueueActions} from '@/store/slicers';
 
-interface JoinQueueModalProps {
+interface WorkerJoinQueueModalProps {
   dismiss?: () => void;
   navigate: (route: TRouteName) => void;
 }
 
-const JoinQueueModal: React.FC<JoinQueueModalProps> = ({dismiss, navigate}) => {
+const WorkerJoinQueueModal: React.FC<WorkerJoinQueueModalProps> = ({
+  dismiss,
+  navigate,
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const {workerOnQueue} = useSelector((state: RootState) => state.queue);
 
-  const join = () => {
-    dispatch(workerJoinQueue());
+  const join = async () => {
+    const {data} = await QueueService.workerJoin();
 
-    if (dismiss) {
-      dismiss();
+    if (data.queue) {
+      dispatch(QueueActions.updateQueueData(data.queue));
+
+      if (dismiss) {
+        dismiss();
+      }
+
+      navigate('/barber/queue/fs');
     }
-
-    navigate('/barber/queue/fs');
   };
 
   const cancelJoinQueue = () => {
@@ -64,4 +72,4 @@ const JoinQueueModal: React.FC<JoinQueueModalProps> = ({dismiss, navigate}) => {
   );
 };
 
-export default JoinQueueModal;
+export default WorkerJoinQueueModal;

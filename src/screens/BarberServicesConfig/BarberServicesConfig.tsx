@@ -1,13 +1,9 @@
 import React, {useMemo, useState} from 'react';
 
 import {BarbersService} from '@/app/api';
-import {IBarberServiceConfig} from '@/app/models';
+import {IBarberServiceConfig, IBarberServiceGeneralConfig} from '@/app/models';
 import {AppStatusBar, Button, Typography} from '@/components/atoms';
-import {
-  Header,
-  IBarberServiceGeneralConfig,
-  ServiceGeneralConfigCard,
-} from '@/components/molecules';
+import {Header, ServiceGeneralConfigCard} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
 import {createNotification, getCurrentUser} from '@/store/slicers';
@@ -126,10 +122,10 @@ const BarberServicesConfig: React.FC<
           contentContainerStyle={styles.scrollContentContainer}>
           <ServiceGeneralConfigCard
             config={{
-              workDays: barber.config.workDays,
-              scheduleLimitDays: barber.config.scheduleLimitDays,
-              openBarberAuto: barber.config.openBarberAuto,
-              openQueueAuto: barber.config.openQueueAuto,
+              workdays: barber.config.workdays,
+              schedule_limit_days: barber.config.schedule_limit_days,
+              open_barber_auto: barber.config.open_barber_auto,
+              open_queue_auto: barber.config.open_queue_auto,
             }}
             onChange={handleGeneralChange}
           />

@@ -39,22 +39,14 @@ const SocketSlicer = createSlice<
       state.socket = null;
       state.connected = false;
     },
-    workerJoinQueue: state => {
-      if (state.socket) {
-        state.socket?.emit(SocketUrls.WorkerJoinQueue);
-        state.workerJoinedQueue = true;
-      }
-    },
   },
 });
 
-export const {addSub, workerJoinQueue, connectSocket, disconnectSocket} =
-  SocketSlicer.actions as {
-    addSub: ActionCreatorWithPayload<SocketUrls>;
-    connectSocket: ActionCreatorWithPayload<Socket>;
-    disconnectSocket: ActionCreatorWithPayload<void>;
-    workerJoinQueue: ActionCreatorWithPayload<void>;
-  };
+export const SocketActions = SocketSlicer.actions as {
+  addSub: ActionCreatorWithPayload<SocketUrls>;
+  connectSocket: ActionCreatorWithPayload<Socket>;
+  disconnectSocket: ActionCreatorWithPayload<void>;
+};
 
 const SocketReducer = SocketSlicer.reducer;
 

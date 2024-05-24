@@ -7,11 +7,13 @@ import styled from 'styled-components/native';
 export const QrScannerContainerStyled = styled.View`
   flex: 1;
   background: ${Colors.border};
-  gap: ${Metrics.unitX10}px;
+  gap: ${Metrics.unitX3}px;
 `;
 
 export const QrCodeContentStyled = styled.View`
-  padding: ${Metrics.unitX3}px;
+  flex: 1;
+  padding-left: 18px;
+  padding-right: 18px;
 `;
 
 export const QrScannerCardStyled = styled.View`
@@ -22,20 +24,27 @@ export const QrScannerCardStyled = styled.View`
   flex-direction: column;
   overflow: hidden;
   gap: ${Metrics.unitX3}px;
-  position: relative;
+  flex: 1;
 `;
 
-export const QrScannerBorderStyled = styled.View<{
-  height: number;
-}>`
-  position: relative;
-
-  width: 100%;
-  height: ${({height}) => height}px;
-  border: 2px solid ${Colors.main};
+export const QrScannerBorderStyled = styled.View`
+  border: 4px solid ${Colors.main};
   border-radius: 12px;
   overflow: hidden;
+  flex: 1;
+  width: 100%;
 `;
+
+export const CameraStyle: ViewStyle = {
+  flex: 1,
+  width: '100%',
+};
+
+export const CameraStyles: ViewStyle = {
+  flex: 1,
+  marginTop: -2,
+  marginLeft: -2,
+};
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -53,6 +62,11 @@ export const CustomBottomSheetOverlayStyled = styled(AnimatedView)`
   justify-content: flex-end;
 `;
 
+export const CustomBottomSheetActionsStyled = styled.View`
+  flex-direction: row;
+  gap: ${Metrics.unitX3}px;
+`;
+
 export const CustomBottomSheetStyled = styled(AnimatedView)<{
   paddingBottom?: number;
 }>`
@@ -67,22 +81,4 @@ export const CustomBottomSheetStyled = styled(AnimatedView)<{
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-`;
-
-export const CameraStyle: ViewStyle = {
-  flex: 1,
-  width: '100%',
-};
-
-export const BarberInfoStyled = styled.View`
-  align-self: stretch;
-  padding: ${Metrics.unitX2}px;
-  border-radius: ${Metrics.unitX2}px;
-  gap: ${Metrics.unitX2}px;
-  background: ${Colors.border};
-`;
-
-export const CustomBottomSheetActionsStyled = styled.View`
-  flex-direction: row;
-  gap: ${Metrics.unitX3}px;
 `;

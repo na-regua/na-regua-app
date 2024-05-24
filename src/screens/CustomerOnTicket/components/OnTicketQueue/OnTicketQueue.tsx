@@ -16,6 +16,7 @@ import {
   TicketLineStyled,
 } from '../../styles';
 import {format} from 'date-fns';
+import {OnTicketServiceInfo} from '../OnTicketServiceInfo/OnTicketServiceInfo';
 
 const OnTicketQueue: React.FC<OnTicketGeneralProps> = ({ticket}) => {
   return (
@@ -49,9 +50,10 @@ const OnTicketQueue: React.FC<OnTicketGeneralProps> = ({ticket}) => {
                   <OnTicketIconWrapperStyled>
                     <Icons.UserIcon width={24} height={24} color="white3" />
                   </OnTicketIconWrapperStyled>
+                  <OnTicketServiceInfo service={ticket.service} />
                   <GappedColumnStyled>
-                    <Typography variant="body1">
-                      {ticket.queue?.position}
+                    <Typography variant="h5">
+                      {ticket.queue?.position} º
                     </Typography>
                     <Typography variant="caption" color="placeholder">
                       {'customer.onTicket.info.position'}
@@ -78,8 +80,12 @@ const OnTicketQueue: React.FC<OnTicketGeneralProps> = ({ticket}) => {
         </OnTicketCardGroupStyled>
       </OnTicketCardStyled>
       <OnTicketActionsStyled>
-        <Button title="buttons.leave" variant="ghost" colorScheme="danger" />
-        <Button title="customer.onTicket.buttons.beLate" />
+        <Button title="buttons.leave" colorScheme="danger" />
+        <Button
+          title="customer.onTicket.buttons.beLate"
+          colorScheme="primary"
+          fillSpace
+        />
       </OnTicketActionsStyled>
     </GappedColumnStyled>
   );

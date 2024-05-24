@@ -45,7 +45,7 @@ export const fetchIsOnQueue = createAsyncThunk(
   'Queue/fetchIsOnQueue',
   async (_, {rejectWithValue, dispatch, getState}) => {
     try {
-      dispatch(setLoadingTodayQueue(true));
+      dispatch(QueueActions.setLoadingTodayQueue(true));
 
       const user = (getState() as RootState).auth.user;
 
@@ -114,12 +114,11 @@ const QueueSlicer = createSlice<
   },
 });
 
-export const {setLoadingTodayQueue, setFilters, updateQueueData} =
-  QueueSlicer.actions as {
-    setLoadingTodayQueue: ActionCreatorWithPayload<boolean>;
-    setFilters: ActionCreatorWithPayload<QueueSlicerState['filters']>;
-    updateQueueData: ActionCreatorWithPayload<IQueue>;
-  };
+export const QueueActions = QueueSlicer.actions as {
+  setLoadingTodayQueue: ActionCreatorWithPayload<boolean>;
+  setFilters: ActionCreatorWithPayload<QueueSlicerState['filters']>;
+  updateQueueData: ActionCreatorWithPayload<IQueue>;
+};
 
 const QueueReducer = QueueSlicer.reducer;
 

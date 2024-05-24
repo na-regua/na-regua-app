@@ -25,6 +25,10 @@ const colors = {
   bgDark: '#3E3E42',
   bgLight: '#FFFFFF',
   bgContrast: '#FFFCF7',
+  sand: '#F0D5BB',
+  sandHover: '#D3BAA2',
+  accentBlue: '#A8BEEA',
+  accentBlueHover: '#8DA4D6',
 };
 
 const hexPercentage: Record<number, string> = {

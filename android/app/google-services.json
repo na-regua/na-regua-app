@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "138850498273",
+    "project_id": "naregua-94dfc",
+    "storage_bucket": "naregua-94dfc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138850498273:android:e0e59e0ca4e0e5b1aea9a0",
+        "android_client_info": {
+          "package_name": "com.naregua"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCykYO4g7XTJG6Qlesq2dLLtN1otmwi7I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

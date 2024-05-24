@@ -7,9 +7,11 @@ import {
   OnTicketInfoStyled,
 } from '../../styles';
 
-const OnTicketServiceInfo: React.FC<{service: IBarberService}> = ({
-  service,
-}) => {
+interface OnTicketServiceInfoProps {
+  service: IBarberService;
+}
+
+const OnTicketServiceInfo: React.FC<OnTicketServiceInfoProps> = ({service}) => {
   return (
     <OnTicketInfoStyled>
       <OnTicketIconWrapperStyled>

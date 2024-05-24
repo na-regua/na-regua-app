@@ -1,34 +1,40 @@
 import {BarbersService} from '@/app/api';
 import {IBarber} from '@/app/models';
-import {Button, Icons, Splashs, Typography} from '@/components/atoms';
+import {
+  BarberInfoCard,
+  Button,
+  Icons,
+  Splashs,
+  Typography,
+} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {LinkingPrefixes, TRootStackParamList} from '@/navigation';
 import {AppDispatch} from '@/store/Store';
-import {CutActions, fetchBarberServices} from '@/store/slicers';
-import {generateAddress} from '@/utils';
+import {
+  CutActions,
+  fetchBarberServices,
+  fetchBarberTodayQueue,
+} from '@/store/slicers';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Vibration} from 'react-native';
-import {BarCodeReadEvent, RNCamera} from 'react-native-camera';
 import {FadeIn, SlideInDown} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useDispatch} from 'react-redux';
 import {
-  AttendanceBarberInfoItemStyled,
-  AttendanceBarberInfoStyled,
-  AttendanceBarberItemImageStyled,
-  AttendanceBarberItemStyled,
-  AttendanceBarberItemTitleStyled,
-  OtherButtonContentStyled,
-} from '../CustomerCut/styles';
+  Camera,
+  Code,
+  useCameraDevice,
+  useCameraPermission,
+  useCodeScanner,
+} from 'react-native-vision-camera';
+import {useDispatch} from 'react-redux';
+import {OtherButtonContentStyled} from '../CustomerCut/components/CustomerAttendance/styles';
 import {
   AnimatedSplashViewStyled,
-  BarberInfoStyled,
-  CameraStyle,
+  CameraStyles,
   CustomBottomSheetActionsStyled,
   CustomBottomSheetOverlayStyled,
   CustomBottomSheetStyled,
-  QrCodeContentStyled,
   QrScannerBorderStyled,
   QrScannerCardStyled,
   QrScannerContainerStyled,
@@ -38,13 +44,27 @@ const CustomerQrScanner: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/customer/qr-scanner'>
 > = ({navigation}) => {
   const insets = useSafeAreaInsets();
-
-  const [isReading, setIsReading] = useState(true);
   const [barber, setBarber] = useState<IBarber | null>(null);
-
   const dispatch = useDispatch<AppDispatch>();
 
+  const [isReading, setIsReading] = useState(true);
   const [loadingBarber, setLoadingBarber] = useState(false);
+
+  const {hasPermission, requestPermission} = useCameraPermission();
+  const device = useCameraDevice('back');
+  const codeScanner = useCodeScanner({
+    codeTypes: ['qr', 'ean-13'],
+    onCodeScanned: codes => {
+      const naReguaCode = codes.find(
+        code =>
+          code.type === 'qr' && code.value?.includes(LinkingPrefixes.Default),
+      );
+
+      if (naReguaCode) {
+        onRead(naReguaCode);
+      }
+    },
+  });
 
   const insetsStyles = {
     paddingTop: insets.top,
@@ -52,8 +72,6 @@ const CustomerQrScanner: React.FC<
     paddingLeft: insets.left,
     paddingRight: insets.right,
   };
-
-  const CAM_HEIGHT = 320;
 
   const goBack = () => {
     if (navigation.canGoBack()) {
@@ -65,13 +83,23 @@ const CustomerQrScanner: React.FC<
     }
   };
 
-  const onRead = async (event: BarCodeReadEvent) => {
+  const requestPermissionFromUser = useCallback(async () => {
+    if (!hasPermission) {
+      await requestPermission();
+    }
+  }, [hasPermission, requestPermission]);
+
+  useEffect(() => {
+    requestPermissionFromUser();
+  }, [requestPermissionFromUser]);
+
+  const onRead = async (code: Code) => {
     Vibration.vibrate(400);
 
-    if (event.data.includes(LinkingPrefixes.Default)) {
-      const replaced = event.data
-        .replace(LinkingPrefixes.Default, '')
-        .split('/')[1];
+    const {value} = code;
+
+    if (value) {
+      const replaced = value.replace(LinkingPrefixes.Default, '').split('/')[1];
 
       const {data} = await BarbersService.getBarbers(replaced);
 
@@ -86,11 +114,12 @@ const CustomerQrScanner: React.FC<
     if (barber) {
       setLoadingBarber(true);
 
+      await dispatch(fetchBarberServices(barber._id));
+      await dispatch(fetchBarberTodayQueue(barber._id));
+
       dispatch(CutActions.setCutSelectedBarber(barber));
       dispatch(CutActions.setCutStep('attendance'));
       dispatch(CutActions.setAttendanceType('queue'));
-
-      await dispatch(fetchBarberServices(barber._id));
 
       navigation.navigate('/customer/cut');
 
@@ -103,28 +132,33 @@ const CustomerQrScanner: React.FC<
     setBarber(null);
   };
 
+  const CameraJSX =
+    device && hasPermission ? (
+      <Camera
+        device={device}
+        isActive={isReading}
+        audio={false}
+        style={CameraStyles}
+        codeScanner={codeScanner}
+      />
+    ) : (
+      <></>
+    );
+
   return (
     <QrScannerContainerStyled style={insetsStyles}>
       <Header.Container>
         <Header.GoBack pressables={{back: goBack}} />
       </Header.Container>
-      <QrCodeContentStyled>
-        <QrScannerCardStyled>
-          <Typography variant="h4" textAlign="center">
-            {'customer.qrScan.title'}
-          </Typography>
-          <Typography variant="caption" color="black1" textAlign="center">
-            {'customer.qrScan.subtitle'}
-          </Typography>
-          <QrScannerBorderStyled height={CAM_HEIGHT}>
-            <RNCamera
-              style={CameraStyle}
-              onBarCodeRead={event => isReading && onRead(event)}
-              captureAudio={false}
-            />
-          </QrScannerBorderStyled>
-        </QrScannerCardStyled>
-      </QrCodeContentStyled>
+      <QrScannerCardStyled>
+        <Typography variant="h4" textAlign="center">
+          {'customer.qrScan.title'}
+        </Typography>
+        <Typography variant="caption" color="black1" textAlign="center">
+          {'customer.qrScan.subtitle'}
+        </Typography>
+        <QrScannerBorderStyled>{CameraJSX}</QrScannerBorderStyled>
+      </QrScannerCardStyled>
       {!!barber && (
         <CustomBottomSheetOverlayStyled entering={FadeIn.duration(100)}>
           <AnimatedSplashViewStyled entering={SlideInDown.delay(400)}>
@@ -136,51 +170,7 @@ const CustomerQrScanner: React.FC<
             <Typography variant="h4">
               {'customer.qrScan.found.title'}
             </Typography>
-            <BarberInfoStyled>
-              <AttendanceBarberItemStyled>
-                <AttendanceBarberItemImageStyled
-                  source={{
-                    uri: barber.avatar.url,
-                  }}
-                />
-                <AttendanceBarberItemTitleStyled>
-                  <Typography variant="h6" color="black3">
-                    {barber.name}
-                  </Typography>
-                  <AttendanceBarberInfoItemStyled>
-                    <Icons.StarIcon />
-                    <Typography
-                      variant="caption"
-                      color="black3"
-                      translate={false}>
-                      {'4.5'}
-                    </Typography>
-                  </AttendanceBarberInfoItemStyled>
-                </AttendanceBarberItemTitleStyled>
-              </AttendanceBarberItemStyled>
-              <AttendanceBarberInfoStyled>
-                <AttendanceBarberInfoItemStyled>
-                  <Icons.TimeIcon width={16} height={16} color="main" />
-                  <Typography
-                    variant="caption"
-                    color="black2"
-                    translate={false}>
-                    {barber.config.workTime.start +
-                      ' - ' +
-                      barber.config.workTime.end}
-                  </Typography>
-                </AttendanceBarberInfoItemStyled>
-                <AttendanceBarberInfoItemStyled>
-                  <Icons.MarkerIcon color="main" />
-                  <Typography
-                    variant="caption"
-                    color="black2"
-                    translate={false}>
-                    {generateAddress(barber.address)}
-                  </Typography>
-                </AttendanceBarberInfoItemStyled>
-              </AttendanceBarberInfoStyled>
-            </BarberInfoStyled>
+            <BarberInfoCard barber={barber} asCard />
             <CustomBottomSheetActionsStyled>
               <Button
                 variant="ghost"

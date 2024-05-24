@@ -1,4 +1,5 @@
 import {IBarber} from '../barber/barber.model';
+import {IQueue} from '../queue/queue.model';
 import {IBarberService} from '../service/service.model';
 import {IGetTodayTickets} from '../ticket/ticket.model';
 
@@ -16,4 +17,6 @@ export interface ICutState {
   };
   services?: IBarberService[];
   todayTickets?: IGetTodayTickets;
+  customerIsOnQueue?: boolean;
+  barberTodayQueue?: IQueue;
 }

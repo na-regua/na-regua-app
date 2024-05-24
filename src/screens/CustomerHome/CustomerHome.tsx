@@ -1,28 +1,27 @@
-import {ITicket} from '@/app/models';
 import {Box, Button, Icons, Splashs, Typography} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {TicketViewActions, fetchTodayTickets} from '@/store/slicers';
+import {fetchTodayTickets} from '@/store/slicers';
 import {Colors} from '@/theme';
-import colors from '@/theme/colors';
+import {strongShadowStyle} from '@/utils';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
+import {FadeInDown} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   BigActionStyled,
-  BigActionTextStyled,
+  CHActionStyled,
   CHContainerStyled,
   CHContentStyled,
   CHTabsContentStyled,
   CHTabsStyled,
-  LineStyled,
   ShareQrButtonContentStyled,
-  TicketStyled,
-  TicketsBarberImageStyled,
+  SplashViewStyled,
 } from './styles';
+import {CustomerJoinTodayQueue} from '@/components/modals';
 
 const CustomerHome: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/customer/home'>
@@ -32,7 +31,7 @@ const CustomerHome: React.FC<
 
   const {todayTickets} = useSelector((state: RootState) => state.cut);
 
-  const [expandArr, setExpandArr] = useState<string[]>([]);
+  const [showJoinQueueModal, setShowJoinQueueModal] = useState(false);
 
   const insetsStyles = {
     paddingTop: insets.top,
@@ -57,31 +56,10 @@ const CustomerHome: React.FC<
     await dispatch(fetchTodayTickets());
   };
 
-  const openTicket = (ticket: ITicket) => {
-    dispatch(TicketViewActions.setTicketView(ticket));
-
-    navigation.navigate('/customer/on-ticket');
-  };
-
   useEffect(() => {
     getTodayTicketsData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const expandTicket = (id: string) => {
-    const isExpandedValue = isExpanded(id);
-    if (isExpandedValue) {
-      setExpandArr(expandArr.filter(item => item !== id));
-    }
-
-    if (!isExpandedValue) {
-      setExpandArr(curr => [...curr, id]);
-    }
-  };
-
-  const isExpanded = (id: string) => {
-    return expandArr.includes(id);
-  };
 
   return (
     <CHContainerStyled style={insetsStyles}>
@@ -91,31 +69,30 @@ const CustomerHome: React.FC<
       </Header.Container>
       <CHContentStyled>
         <View>
-          <Typography variant="h2" weight="regular" color="black3">
-            {'customer.home.titles.ask1'}
-          </Typography>
-          <Typography variant="h2" color="black3">
-            {'customer.home.titles.ask2'}
+          <Typography variant="h4" weight="medium" color="black3">
+            {'Menu'}
           </Typography>
         </View>
         <BigActionStyled
           direction="row"
           onPress={goToCut}
           backgroundColor="secondary"
-          underlayColor={Colors.secondaryHover}>
+          underlayColor={Colors.secondaryHover}
+          entering={FadeInDown}>
           <>
-            <Splashs.BarberSplash />
-            <BigActionTextStyled>
+            <Box viewProps={{entering: FadeInDown.delay(300)}}>
+              <Splashs.BarberSplash />
+            </Box>
+            <Box paddings={{bottom: 18}} gap={2} flex={1}>
               <Typography variant="h4" weight="medium" color="white3">
                 {'customer.home.actions.cut.title'}
               </Typography>
               <Typography variant="caption" color="white1" textAlign="left">
                 {'customer.home.actions.cut.description'}
               </Typography>
-            </BigActionTextStyled>
+            </Box>
           </>
         </BigActionStyled>
-        <LineStyled />
         <Button
           customContent={
             <ShareQrButtonContentStyled>
@@ -128,7 +105,6 @@ const CustomerHome: React.FC<
           variant="ghost"
           onPress={goToQrScanner}
         />
-        <LineStyled />
         <CHTabsStyled>
           <Typography variant="h4" color="black2">
             {'customer.home.tabs.attendance'}
@@ -137,56 +113,54 @@ const CustomerHome: React.FC<
             {'customer.home.tabs.history'}
           </Typography>
         </CHTabsStyled>
-        <CHTabsContentStyled>
-          {todayTickets?.queue && (
-            <TicketStyled
-              expanded={isExpanded(todayTickets.queue._id)}
-              onPress={() => expandTicket(todayTickets.queue._id)}>
-              <Box
-                direction="row"
-                alignItems="center"
-                justifyContent="space-between">
-                <Box direction="row" gap={12}>
-                  <TicketsBarberImageStyled
-                    source={{uri: todayTickets.queue.barber.avatar.url}}
-                  />
-                  <Box>
-                    <Typography variant="body1" color="white3">
-                      {todayTickets.queue.barber.name}
-                    </Typography>
-                    <Typography variant="caption" color="white1">
-                      {`tickets.types.${todayTickets.queue.type}`}
-                    </Typography>
-                  </Box>
-                </Box>
-                {isExpanded(todayTickets.queue._id) && (
-                  <Typography variant="h4" color="default" translate={false}>
-                    {todayTickets.queue.queue?.position} {'º'}
+        <Box flex={1}>
+          <CHTabsContentStyled>
+            {todayTickets?.queue && (
+              <CHActionStyled
+                underlayColor={Colors.accentBlueHover}
+                color="accentBlue"
+                height={100}
+                onPress={() => setShowJoinQueueModal(true)}
+                entering={FadeInDown}
+                style={[strongShadowStyle]}>
+                <>
+                  <Typography variant="body1" weight="semiBold">
+                    {'customer.home.actions.queue.title'}
                   </Typography>
-                )}
-              </Box>
-              {isExpanded(todayTickets.queue._id) && (
-                <LineStyled customColor={colors.default} />
-              )}
-              {isExpanded(todayTickets.queue._id) && (
-                <Box direction="row" gap={12}>
-                  <Button
-                    colorScheme="danger"
-                    title="buttons.leave"
-                    translate
-                  />
-                  <Button
-                    fillSpace
-                    colorScheme="white"
-                    title="buttons.open"
-                    onPress={() => openTicket(todayTickets.queue)}
-                  />
-                </Box>
-              )}
-            </TicketStyled>
-          )}
-        </CHTabsContentStyled>
+                  <SplashViewStyled right={-12} bottom={-12}>
+                    <Splashs.ClockSplash size={80} />
+                  </SplashViewStyled>
+                </>
+              </CHActionStyled>
+            )}
+
+            {/* {todayTickets?.schedules && todayTickets?.schedules.length > 0 && ( */}
+            <CHActionStyled
+              underlayColor={Colors.sandHover}
+              color="sand"
+              height={160}
+              onPress={() => {}}
+              entering={FadeInDown}>
+              <>
+                <Typography variant="body1" weight="semiBold">
+                  {'customer.home.actions.mySchedule.title'}
+                </Typography>
+                <SplashViewStyled right={0} bottom={0}>
+                  <Splashs.ScheduleSplash />
+                </SplashViewStyled>
+              </>
+            </CHActionStyled>
+            {/* )} */}
+          </CHTabsContentStyled>
+        </Box>
       </CHContentStyled>
+      {todayTickets?.queue && showJoinQueueModal && (
+        <CustomerJoinTodayQueue
+          onBack={() => setShowJoinQueueModal(false)}
+          onContinue={() => setShowJoinQueueModal(false)}
+          ticket={todayTickets?.queue}
+        />
+      )}
     </CHContainerStyled>
   );
 };

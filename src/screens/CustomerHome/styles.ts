@@ -1,6 +1,12 @@
 import {Colors, Metrics} from '@/theme';
 import {TColorsType} from '@/theme/colors';
+import {TouchableHighlight, View} from 'react-native';
+import Animated from 'react-native-reanimated';
 import styled, {css} from 'styled-components/native';
+
+const AnimatedTouchableHighlight =
+  Animated.createAnimatedComponent(TouchableHighlight);
+const AnimatedView = Animated.createAnimatedComponent(View);
 
 export const CHContainerStyled = styled.View`
   flex: 1;
@@ -31,7 +37,7 @@ const BigActionColumnCSS = css`
   gap: 18px;
 `;
 
-export const BigActionStyled = styled.TouchableHighlight<{
+export const BigActionStyled = styled(AnimatedTouchableHighlight)<{
   backgroundColor: TColorsType;
   direction: 'row' | 'column';
 }>`
@@ -42,6 +48,8 @@ export const BigActionStyled = styled.TouchableHighlight<{
   ${({direction}) => direction === 'row' && BigActionRowCSS}
   ${({direction}) => direction === 'column' && BigActionColumnCSS}
 `;
+
+export const SplashAnimatedViewStyled = styled(AnimatedView)``;
 
 export const BigActionTextStyled = styled.View`
   padding-bottom: 18px;
@@ -66,26 +74,36 @@ export const CHTabsStyled = styled.View`
   flex-direction: row;
   align-items: flex-end;
   justify-content: flex-start;
-  gap: 12px;
+  gap: 18px;
 `;
 
 export const CHTabsContentStyled = styled.View`
+  flex: 2;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 18px;
 `;
 
-export const TicketStyled = styled.TouchableOpacity.attrs({
-  activeOpacity: 0.8,
-})<{expanded?: boolean}>`
-  padding: 12px;
-  border-radius: 12px;
-  background-color: ${Colors.primary};
-  gap: 18px;
+export const CHActionStyled = styled(AnimatedTouchableHighlight)<{
+  color?: TColorsType;
+  height?: number;
+}>`
+  padding: 18px;
+  border-radius: 18px;
+  background: ${({color}) => Colors[color || 'white1']};
+  position: relative;
+  ${({height}) => height && `height: ${height}px;`}
+  max-width:${Metrics.smWidth / 2 - 12}px;
+  width: 100%;
+  flex: 1;
+  overflow: hidden;
 `;
 
-export const TicketsBarberImageStyled = styled.Image.attrs({
-  resizeMode: 'cover',
-})`
-  width: 42px;
-  height: 42px;
-  border-radius: 6px;
+export const SplashViewStyled = styled(AnimatedView)<{
+  bottom: number;
+  right: number;
+}>`
+  position: absolute;
+  bottom: ${({bottom}) => bottom}px;
+  right: ${({right}) => right}px;
 `;

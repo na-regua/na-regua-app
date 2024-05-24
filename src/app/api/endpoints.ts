@@ -27,6 +27,8 @@ enum ENDPOINTS {
   USERS_SEND_WHATSAPP_CODE = '/users/send/whatsapp-code',
   USERS_VERIFY_WHATSAPP_CODE = '/users/verify/whatsapp',
   USERS_DELETE = '/users/:id',
+  USERS_FAVORITE_BARBER = '/users/favorite/:barberId',
+
   /**
    * Files
    * */
@@ -62,7 +64,10 @@ enum ENDPOINTS {
   QUEUE_CREATE = '/queues/',
   QUEUE_LIST = '/queues/',
   QUEUE_GET_TODAY = '/queues/today',
-  QUEUE_JOIN_USER = '/queues/join',
+  QUEUE_BARBER_TODAY = '/queues/:barberId/today',
+  QUEUE_LAST_POSITION = '/queues/:queueId/last-position',
+  QUEUE_JOIN_USER = '/queues/join/user',
+  QUEUE_JOIN_WORKER = '/queues/join/worker',
   /**
    * Tickets
    * */

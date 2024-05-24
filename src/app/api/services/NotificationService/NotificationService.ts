@@ -5,9 +5,13 @@ import {
 } from '@/app/models';
 import {mapPathVariables, queryBuilder} from '@/utils';
 import {AxiosResponse} from 'axios';
+import {Platform} from 'react-native';
+import PushNotification, {
+  PushNotificationObject,
+} from 'react-native-push-notification';
 import api, {errToAxiosError} from '../../api';
 import ENDPOINTS from '../../endpoints';
-import PushNotification from 'react-native-push-notification';
+import {androidChannelId} from '@/App';
 
 const getNotifications = async (
   filters: IGetNotificationFilters,
@@ -49,10 +53,24 @@ const markAllAsRead = async (): Promise<void> => {
   }
 };
 
-const pushNotification = (push: IPushNotification) => {
-  PushNotification.localNotification({
-    message: push.message,
-  });
+const pushNotification = (
+  push: IPushNotification,
+  options?: PushNotificationObject,
+) => {
+  if (Platform.OS === 'ios') {
+    PushNotification.localNotification({
+      ...options,
+      message: push.message,
+    });
+  }
+
+  if (Platform.OS === 'android') {
+    PushNotification.localNotification({
+      ...options,
+      message: push.message,
+      channelId: androidChannelId,
+    });
+  }
 };
 
 export default {

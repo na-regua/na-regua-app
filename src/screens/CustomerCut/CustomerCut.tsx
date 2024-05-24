@@ -13,7 +13,7 @@ import {
 } from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
-import {Attendance, AttendanceFooter, SelectBarber} from './components';
+import {AttendanceFooter, CustomerAttendance, SelectBarber} from './components';
 import {
   CutContainerStyled,
   CutContentStyled,
@@ -82,7 +82,7 @@ const CustomerCut: React.FC<
 
   return (
     <CutContainerStyled style={[insetsStyles, gapStyle]}>
-      <Header.Container>
+      <Header.Container zIndex={2}>
         <Header.GoBack pressables={{back: goBack}} />
       </Header.Container>
       <CutContentStyled>
@@ -98,7 +98,7 @@ const CustomerCut: React.FC<
           }}
           footer={<>{steps === 'attendance' && <AttendanceFooter />}</>}>
           {steps === 'select' && <SelectBarber />}
-          {steps === 'attendance' && <Attendance />}
+          {steps === 'attendance' && <CustomerAttendance />}
         </PageCard>
       </CutContentStyled>
     </CutContainerStyled>

@@ -1,18 +1,12 @@
 import React, {useEffect, useMemo, useState} from 'react';
 
+import {IBarberServiceGeneralConfig} from '@/app/models';
 import {
   Collapse,
   SelectScheduleLimit,
   SelectWorkDays,
   SwitchButton,
 } from '@/components/atoms';
-
-export interface IBarberServiceGeneralConfig {
-  workDays: string[];
-  scheduleLimitDays: number;
-  openBarberAuto: boolean;
-  openQueueAuto: boolean;
-}
 
 interface IServiceGeneralConfigCardProps {
   config: IBarberServiceGeneralConfig;
@@ -23,15 +17,15 @@ const ServiceGeneralConfigCard: React.FC<IServiceGeneralConfigCardProps> = ({
   config,
   onChange,
 }) => {
-  const [workDays, setWorkDays] = useState(config.workDays);
+  const [workdays, setWorkdays] = useState(config.workdays);
   const [scheduleLimitDays, setScheduleLimitDays] = useState(
-    config.scheduleLimitDays,
+    config.schedule_limit_days,
   );
-  const [openBarberAuto, setOpenBarberAuto] = useState(config.openBarberAuto);
-  const [openQueueAuto, setOpenQueueAuto] = useState(config.openQueueAuto);
+  const [openBarberAuto, setOpenBarberAuto] = useState(config.open_barber_auto);
+  const [openQueueAuto, setOpenQueueAuto] = useState(config.open_queue_auto);
 
   const handleWorkDaysChange = (newWorkDays: string[]) => {
-    setWorkDays(newWorkDays);
+    setWorkdays(newWorkDays);
   };
 
   const handleScheduleLimitDaysChange = (newScheduleLimitDays: number) => {
@@ -47,65 +41,65 @@ const ServiceGeneralConfigCard: React.FC<IServiceGeneralConfigCardProps> = ({
   };
 
   const workDaysChanged = useMemo(() => {
-    if (workDays.length !== config.workDays.length) {
+    if (workdays.length !== config.workdays.length) {
       return true;
     }
 
     const [bigger, smaller] =
-      workDays.length > config.workDays.length
-        ? [workDays, config.workDays]
-        : [config.workDays, workDays];
+      workdays.length > config.workdays.length
+        ? [workdays, config.workdays]
+        : [config.workdays, workdays];
 
     const hasDiff = bigger
       .map(day => smaller.includes(day))
       .some(item => !item);
 
     return hasDiff;
-  }, [workDays, config.workDays]);
+  }, [workdays, config.workdays]);
 
   const scheduleLimitDaysChanged = useMemo(
-    () => scheduleLimitDays !== config.scheduleLimitDays,
-    [scheduleLimitDays, config.scheduleLimitDays],
+    () => scheduleLimitDays !== config.schedule_limit_days,
+    [scheduleLimitDays, config.schedule_limit_days],
   );
 
   const openBarberAutoChanged = useMemo(
-    () => openBarberAuto !== config.openBarberAuto,
-    [openBarberAuto, config.openBarberAuto],
+    () => openBarberAuto !== config.open_barber_auto,
+    [openBarberAuto, config.open_barber_auto],
   );
 
   const openQueueAutoChanged = useMemo(
-    () => openQueueAuto !== config.openQueueAuto,
-    [openQueueAuto, config.openQueueAuto],
+    () => openQueueAuto !== config.open_queue_auto,
+    [openQueueAuto, config.open_queue_auto],
   );
 
   useEffect(() => {
     const onChangePayload: Partial<IBarberServiceGeneralConfig> = {};
 
     if (workDaysChanged) {
-      onChangePayload.workDays = workDays;
+      onChangePayload.workdays = workdays;
     }
 
     if (scheduleLimitDaysChanged) {
-      onChangePayload.scheduleLimitDays = scheduleLimitDays;
+      onChangePayload.schedule_limit_days = scheduleLimitDays;
     }
 
     if (openBarberAutoChanged) {
-      onChangePayload.openBarberAuto = openBarberAuto;
+      onChangePayload.open_barber_auto = openBarberAuto;
     }
 
     if (openQueueAutoChanged) {
-      onChangePayload.openQueueAuto = openQueueAuto;
+      onChangePayload.open_queue_auto = openQueueAuto;
     }
 
     onChange(onChangePayload);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workDays, scheduleLimitDays, openBarberAuto, openQueueAuto]);
+  }, [workdays, scheduleLimitDays, openBarberAuto, openQueueAuto]);
 
   return (
     <Collapse
       title="barber.servicesConfig.sections.general.title"
       subtitle="barber.servicesConfig.sections.general.subtitle">
-      <SelectWorkDays workDays={workDays} onChange={handleWorkDaysChange} />
+      <SelectWorkDays workDays={workdays} onChange={handleWorkDaysChange} />
       <SelectScheduleLimit
         limit={scheduleLimitDays}
         onChange={handleScheduleLimitDaysChange}

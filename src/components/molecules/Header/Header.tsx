@@ -1,14 +1,14 @@
 import {PartialRecord} from '@/app/models';
-import {Icons, Typography} from '@/components/atoms';
+import {Box, IBoxProps, Icons, Typography} from '@/components/atoms';
 import {useAppNavigation} from '@/navigation';
 import {RootState} from '@/store/Store';
-import React, {PropsWithChildren, useMemo} from 'react';
+import {Metrics} from '@/theme';
+import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 import {
   BackContainerStyle,
   BorderContainerStyle,
-  ContainerStyle,
   LogoContainerStyle,
   LogoIconStyle,
   TitleContainerStyle,
@@ -16,8 +16,6 @@ import {
   UserImageStyle,
   WelcomeTextStyle,
 } from './styles';
-
-interface IHeaderProps extends PropsWithChildren {}
 
 type THeaderClicables = 'user' | 'logo' | 'back';
 
@@ -145,8 +143,16 @@ const Border: React.FC<IGenericHeaderProps> = () => {
   return <BorderContainerStyle />;
 };
 
-const Container: React.FC<IHeaderProps> = ({children}) => {
-  return <ContainerStyle>{children}</ContainerStyle>;
+const Container: React.FC<IBoxProps> = ({children, ...rest}) => {
+  return (
+    <Box
+      position="relative"
+      paddings={{vertical: 12, horizontal: 18}}
+      width={Metrics.screenWidth}
+      {...rest}>
+      {children}
+    </Box>
+  );
 };
 
 export default {Actions, Border, Container, GoBack, User, Welcome};

@@ -16,7 +16,7 @@ export interface IVerifyCode {
 }
 
 export interface ILoginResponse {
-  accessToken: string;
+  access_token: string;
   barber: IBarber;
   user: IUser;
 }

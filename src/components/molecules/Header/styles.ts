@@ -10,7 +10,6 @@ export const ContainerStyle = styled.View`
   padding: 12px 18px;
   width: ${Metrics.screenWidth}px;
   position: relative;
-  z-index: 1;
 `;
 
 export const LogoContainerStyle = styled.View`
@@ -18,6 +17,7 @@ export const LogoContainerStyle = styled.View`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
+  width: 100%;
 `;
 
 export const TitleContainerStyle = styled.View`

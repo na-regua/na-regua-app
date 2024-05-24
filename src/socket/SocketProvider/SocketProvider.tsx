@@ -1,7 +1,7 @@
 import {API_ORIGIN, NotificationService} from '@/app/api';
 import {INotification, ISocketEvent, SocketUrls} from '@/app/models';
 import {AppDispatch, RootState} from '@/store/Store';
-import {connectSocket, disconnectSocket} from '@/store/slicers';
+import {SocketActions} from '@/store/slicers';
 import React, {PropsWithChildren, useCallback, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useDispatch, useSelector} from 'react-redux';
@@ -66,14 +66,14 @@ const SocketProvider: React.FC<PropsWithChildren> = ({children}) => {
       instance.on('connect', () => {
         console.log('Connected to socket server');
 
-        dispatch(connectSocket(instance));
+        dispatch(SocketActions.connectSocket(instance));
       });
 
       onNotification(instance);
       onEvent(instance);
 
       instance.on('disconnect', () => {
-        dispatch(disconnectSocket());
+        dispatch(SocketActions.disconnectSocket());
       });
     } catch (error) {
       console.log(error);

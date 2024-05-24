@@ -180,9 +180,9 @@ const CustomerLogin: React.FC<
       const {data} = await AuthService.verifyOTPCode(code, phone);
 
       if (data) {
-        const {accessToken} = data;
+        const {access_token} = data;
 
-        await dispatch(setPersistedToken(accessToken));
+        await dispatch(setPersistedToken(access_token));
 
         if (data.user) {
           dispatch(setUser(data.user));
