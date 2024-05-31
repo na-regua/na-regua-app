@@ -16,7 +16,7 @@ export const QrCodeContentStyled = styled.View`
   padding-right: 18px;
 `;
 
-export const QrScannerCardStyled = styled.View`
+export const QrScannerCardStyled = styled.View<{paddingBottom: number}>`
   padding: ${Metrics.unitX3}px;
   align-items: center;
   background-color: ${Colors.bgLight};
@@ -25,6 +25,7 @@ export const QrScannerCardStyled = styled.View`
   overflow: hidden;
   gap: ${Metrics.unitX3}px;
   flex: 1;
+  ${({paddingBottom}) => `padding-bottom: ${paddingBottom}px;`}
 `;
 
 export const QrScannerBorderStyled = styled.View`

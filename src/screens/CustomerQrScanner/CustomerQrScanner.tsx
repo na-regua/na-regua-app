@@ -10,11 +10,7 @@ import {
 import {Header} from '@/components/molecules';
 import {LinkingPrefixes, TRootStackParamList} from '@/navigation';
 import {AppDispatch} from '@/store/Store';
-import {
-  CutActions,
-  fetchBarberServices,
-  fetchBarberTodayQueue,
-} from '@/store/slicers';
+import {CutActions, CutThunks} from '@/store/slicers';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Vibration} from 'react-native';
@@ -68,7 +64,6 @@ const CustomerQrScanner: React.FC<
 
   const insetsStyles = {
     paddingTop: insets.top,
-    paddingBottom: insets.bottom,
     paddingLeft: insets.left,
     paddingRight: insets.right,
   };
@@ -114,8 +109,8 @@ const CustomerQrScanner: React.FC<
     if (barber) {
       setLoadingBarber(true);
 
-      await dispatch(fetchBarberServices(barber._id));
-      await dispatch(fetchBarberTodayQueue(barber._id));
+      await dispatch(CutThunks.fetchBarberServicesByBarberId(barber._id));
+      await dispatch(CutThunks.fetchBarberTodayQueueByBarberId(barber._id));
 
       dispatch(CutActions.setCutSelectedBarber(barber));
       dispatch(CutActions.setCutStep('attendance'));
@@ -124,6 +119,8 @@ const CustomerQrScanner: React.FC<
       navigation.navigate('/customer/cut');
 
       setLoadingBarber(false);
+      setBarber(null);
+      setIsReading(true);
     }
   };
 
@@ -150,7 +147,7 @@ const CustomerQrScanner: React.FC<
       <Header.Container>
         <Header.GoBack pressables={{back: goBack}} />
       </Header.Container>
-      <QrScannerCardStyled>
+      <QrScannerCardStyled paddingBottom={insets.bottom + 18}>
         <Typography variant="h4" textAlign="center">
           {'customer.qrScan.title'}
         </Typography>
@@ -165,7 +162,7 @@ const CustomerQrScanner: React.FC<
             <Splashs.BarberSplash size={140} />
           </AnimatedSplashViewStyled>
           <CustomBottomSheetStyled
-            paddingBottom={insetsStyles.paddingBottom}
+            paddingBottom={insets.bottom}
             entering={SlideInDown.delay(100)}>
             <Typography variant="h4">
               {'customer.qrScan.found.title'}

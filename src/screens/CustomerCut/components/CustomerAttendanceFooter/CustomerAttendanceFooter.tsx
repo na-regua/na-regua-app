@@ -4,8 +4,9 @@ import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
 import {
   CutActions,
+  CutThunks,
   TicketViewActions,
-  fetchTodayTickets,
+  createNotification,
 } from '@/store/slicers';
 import React, {useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -13,11 +14,15 @@ import {
   OtherButtonContentStyled,
   PageCardFooterStyled,
 } from '../CustomerAttendance/styles';
+import {AxiosError} from 'axios';
 
-const AttendanceFooter = () => {
-  const {attendanceType, selectedBarber, selectedService} = useSelector(
-    (state: RootState) => state.cut,
-  );
+const CustomerAttendanceFooter = () => {
+  const {
+    attendanceType,
+    selectedBarber,
+    selectedService,
+    selectedAdditionalServices,
+  } = useSelector((state: RootState) => state.cut);
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useAppNavigation();
 
@@ -38,23 +43,42 @@ const AttendanceFooter = () => {
       setJoining(true);
 
       try {
+        const additionalServicesId =
+          selectedAdditionalServices?.map(s => s._id) || [];
+
         const {data} = await QueueService.userJoin(
           selectedBarber.code,
           selectedService._id,
+          additionalServicesId,
         );
 
         if (data.ticket) {
           dispatch(TicketViewActions.setTicketView(data.ticket));
-          dispatch(fetchTodayTickets());
 
           setJoining(false);
 
           navigation.navigate('/customer/on-ticket');
+
+          // dispatch(CutActions.resetCut());
+
+          await dispatch(CutThunks.fetchTodayTickets());
         }
       } catch (error) {
         setJoining(false);
 
-        console.log(error);
+        if (error instanceof AxiosError) {
+          const {message} = error.response?.data;
+
+          if (message) {
+            dispatch(
+              createNotification({
+                id: 'join_queue',
+                type: 'error',
+                message: `errors.${message}`,
+              }),
+            );
+          }
+        }
       }
     }
   };
@@ -96,4 +120,4 @@ const AttendanceFooter = () => {
   );
 };
 
-export {AttendanceFooter};
+export {CustomerAttendanceFooter};

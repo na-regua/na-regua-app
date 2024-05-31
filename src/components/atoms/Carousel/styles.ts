@@ -7,7 +7,7 @@ const AnimatedView = Animated.createAnimatedComponent(View);
 export const CarouselWrapperStyled = styled(AnimatedView)`
   flex: 1;
   background: ${Colors.border};
-  border-radius: 12px;
+  border-radius: 18px;
   overflow: hidden;
 `;
 

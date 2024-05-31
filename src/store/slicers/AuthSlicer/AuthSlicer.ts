@@ -40,8 +40,6 @@ const getCurrentUser = createAsyncThunk(
     try {
       const token = await AsyncStorage.getItem(ACCESS_TOKEN_KEY);
 
-      console.log('access_token', token);
-
       if (token) {
         const {data} = await AuthService.getCurrentUser(token);
 

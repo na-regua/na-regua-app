@@ -2,12 +2,13 @@ import {INotify} from '@/app/models';
 import {AppDispatch} from '@/store/Store';
 import {removeNotification} from '@/store/slicers';
 import React, {useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
+import {View} from 'react-native';
+import {FadeInUp, SlideOutUp} from 'react-native-reanimated';
 import {useDispatch} from 'react-redux';
+import Icons from '../Icons/Icons';
 import Typography from '../Typography/Typography';
 import {NotifyContainer} from './styles';
-import {View} from 'react-native';
-import Icons from '../Icons/Icons';
-import {useTranslation} from 'react-i18next';
 
 interface INotifyProps extends INotify {}
 
@@ -16,6 +17,7 @@ const Notify: React.FC<INotifyProps> = ({
   type,
   message,
   translate = true,
+  duration = 3000,
 }) => {
   const {t} = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
@@ -27,7 +29,7 @@ const Notify: React.FC<INotifyProps> = ({
   useEffect(() => {
     const timeout = setTimeout(() => {
       handleRemoveNotification();
-    }, 3000);
+    }, duration);
 
     return () => {
       clearTimeout(timeout);
@@ -39,7 +41,9 @@ const Notify: React.FC<INotifyProps> = ({
     <NotifyContainer
       type={type}
       activeOpacity={0.6}
-      onPress={handleRemoveNotification}>
+      onPress={handleRemoveNotification}
+      entering={FadeInUp.duration(300)}
+      exiting={SlideOutUp.duration(300)}>
       {type === 'error' && (
         <View>
           <Icons.DeleteIcon color="white3" />

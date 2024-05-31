@@ -17,7 +17,7 @@ import EditIcon from './EditIcon/EditIcon';
 import EyeIcon from './EyeIcon/EyeIcon';
 import FullscreenIcon from './FullscreenIcon/FullscreenIcon';
 import FullscreenOutIcon from './FullscreenOutIcon/FullscreenOutIcon';
-import GaleryIcon from './GaleryIcon/GaleryIcon';
+import GalleryIcon from './GalleryIcon/GalleryIcon';
 import {LeftIcon} from './Left/Left';
 import {LinesIcon} from './Lines/Lines';
 import LogoMiniIcon from './LogoMini/LogoMini';
@@ -47,6 +47,8 @@ import UserCheckIcon from './UserCheckIcon/UserCheckIcon';
 import UserIcon from './UserIcon/UserIcon';
 import UsersIcon from './UsersIcon/UsersIcon';
 import StarIcon from './StarIcon/StarIcon';
+import HeartIcon from './HeartIcon/HeartIcon';
+import MicIcon from './MicIcon/MicIcon';
 
 export interface IIconProps {
   width?: number;
@@ -96,7 +98,7 @@ export default {
   ScheduleTwotoneIcon,
   ReceiptIcon,
   SettingsTwotoneIcon,
-  GaleryIcon,
+  GalleryIcon,
   QRSquadIcon,
   ArrowRightIcon,
   ChevronRightIcon,
@@ -109,4 +111,6 @@ export default {
   SearchIcon,
   MarkerIcon,
   StarIcon,
+  HeartIcon,
+  MicIcon,
 };

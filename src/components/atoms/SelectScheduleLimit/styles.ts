@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
 
 export const ContainerStyle = styled.View`
   gap: 8px;
+  width: 100%;
 `;
 
 export const ScrollContentStyle = styled.ScrollView`

@@ -1,21 +1,29 @@
 import {QueueService, ServicesService, TicketsService} from '@/app/api';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
-export const fetchBarberServices = createAsyncThunk(
-  'Cut/fetchBarberServices',
+const fetchBarberServicesByBarberId = createAsyncThunk(
+  'Cut/fetchBarberServicesByBarberId',
   async (barberId: string, {rejectWithValue}) => {
     try {
-      const response = await ServicesService.getServices({barberId});
+      const {data: services} = await ServicesService.getServices({
+        barberId,
+        additional: false,
+      });
 
-      return response;
+      const {data: additionalServices} = await ServicesService.getServices({
+        barberId,
+        additional: true,
+      });
+
+      return {services, additionalServices};
     } catch (error) {
       return rejectWithValue(error);
     }
   },
 );
 
-export const fetchBarberTodayQueue = createAsyncThunk(
-  'Cut/fetchBarberTodayQueue',
+const fetchBarberTodayQueueByBarberId = createAsyncThunk(
+  'Cut/fetchBarberTodayQueueByBarberId',
   async (barberId: string, {rejectWithValue}) => {
     try {
       const response = await QueueService.getBarberTodayQueue(barberId);
@@ -27,7 +35,7 @@ export const fetchBarberTodayQueue = createAsyncThunk(
   },
 );
 
-export const fetchTodayTickets = createAsyncThunk(
+const fetchTodayTickets = createAsyncThunk(
   'Cut/fetchTodayTickets',
   async (_, {rejectWithValue}) => {
     try {
@@ -39,3 +47,9 @@ export const fetchTodayTickets = createAsyncThunk(
     }
   },
 );
+
+export default {
+  fetchBarberServicesByBarberId,
+  fetchBarberTodayQueueByBarberId,
+  fetchTodayTickets,
+};

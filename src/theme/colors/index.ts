@@ -29,6 +29,7 @@ const colors = {
   sandHover: '#D3BAA2',
   accentBlue: '#A8BEEA',
   accentBlueHover: '#8DA4D6',
+  transparent: 'transparent',
 };
 
 const hexPercentage: Record<number, string> = {

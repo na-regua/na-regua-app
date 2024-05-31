@@ -1,6 +1,8 @@
 import React, {PropsWithChildren, useState} from 'react';
 
 import {useTranslation} from 'react-i18next';
+import {FadeInUp} from 'react-native-reanimated';
+import {Box} from '../Box/Box';
 import Typography from '../Typography/Typography';
 import {
   CollapseStyle,
@@ -52,7 +54,7 @@ const Collapse: React.FC<PropsWithChildren<ICollapseProps>> = ({
         )}
       </HeaderStyle>
       {expand ? (
-        children
+        <Box entering={FadeInUp.duration(300)}>{children}</Box>
       ) : subtitle ? (
         <Typography variant="caption" color="placeholder">
           {t(subtitle)}

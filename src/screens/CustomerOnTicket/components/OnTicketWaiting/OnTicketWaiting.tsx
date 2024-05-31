@@ -1,22 +1,19 @@
 import {OnTicketGeneralProps} from '@/app/models';
-import {Button, Typography} from '@/components/atoms';
+import {BarberInfoCard, Box, Button, Typography} from '@/components/atoms';
+import {format} from 'date-fns';
 import React from 'react';
 import {
-  GappedColumnStyled,
   LineStyled,
   OnTicketActionsStyled,
-  OnTicketBarberImageStyled,
-  OnTicketBarberInfoStyled,
   OnTicketCardGroupStyled,
   OnTicketCardStyled,
 } from '../../styles';
 import {OnTicketServiceInfo} from '../OnTicketServiceInfo/OnTicketServiceInfo';
-import {format} from 'date-fns';
 
 const OnTicketWaiting: React.FC<OnTicketGeneralProps> = ({ticket}) => {
   return (
-    <GappedColumnStyled gap={18}>
-      <GappedColumnStyled gap={6}>
+    <Box gap={18}>
+      <Box gap={6}>
         <Typography variant="h4">
           {'customer.onTicket.titles.pending'}
         </Typography>
@@ -31,32 +28,20 @@ const OnTicketWaiting: React.FC<OnTicketGeneralProps> = ({ticket}) => {
           }}>
           {'customer.onTicket.subtitles.lastUpdate'}
         </Typography>
-      </GappedColumnStyled>
+      </Box>
       <OnTicketCardStyled>
         <OnTicketCardGroupStyled>
-          <GappedColumnStyled gap={18}>
-            <OnTicketBarberInfoStyled>
-              <OnTicketBarberImageStyled
-                source={{uri: ticket.barber.avatar.url}}
-              />
-
-              <Typography variant="body1">{ticket.barber.name}</Typography>
-            </OnTicketBarberInfoStyled>
+          <Box gap={18}>
+            <BarberInfoCard barber={ticket.barber} />
             <LineStyled />
             <OnTicketServiceInfo service={ticket.service} />
-          </GappedColumnStyled>
+          </Box>
         </OnTicketCardGroupStyled>
       </OnTicketCardStyled>
       <OnTicketActionsStyled>
-        <Button title="buttons.leave" variant="ghost" colorScheme="danger" />
-        <Button
-          title="customer.onTicket.buttons.beLate"
-          fillSpace
-          colorScheme="primary"
-          disabled
-        />
+        <Button title="buttons.leave" fillSpace colorScheme="danger" />
       </OnTicketActionsStyled>
-    </GappedColumnStyled>
+    </Box>
   );
 };
 

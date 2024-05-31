@@ -2,6 +2,7 @@ import {WorkersService} from '@/app/api';
 import {IWorker} from '@/app/models';
 import {
   AppStatusBar,
+  Box,
   Button,
   Icons,
   Loader,
@@ -56,6 +57,9 @@ const BarberWorkers: React.FC<
   );
   const [loadingWorkers, setLoadingWorkers] = useState(true);
   const [showSet, setShowSet] = useState<string[]>([]);
+
+  const [menuWith, setMenuWidth] = useState<number>(0);
+  const [actionsWidth, setActionsWidth] = useState<number>(0);
 
   const insetsStyles = {
     paddingTop: insets.top,
@@ -167,7 +171,10 @@ const BarberWorkers: React.FC<
               progressBackgroundColor="transparent"
             />
           }>
-          <MenuItemsWrapperStyle>
+          <MenuItemsWrapperStyle
+            onLayout={event => {
+              setMenuWidth(event.nativeEvent.layout.width);
+            }}>
             {!loadingWorkers ? (
               workers.map(worker => (
                 <MenuItemRowStyle key={worker._id}>
@@ -177,11 +184,17 @@ const BarberWorkers: React.FC<
                     avatar={worker.user.avatar.url}
                     clickable={worker.user.role === 'worker'}
                     onPress={() => handleShowSet(worker._id)}
-                    style={styles.menuItem}
+                    actionsWidth={actionsWidth}
+                    width={menuWith}
                   />
                   {showSet.includes(worker._id) &&
                     worker.user.role === 'worker' && (
-                      <>
+                      <Box
+                        direction="row"
+                        alignItems="center"
+                        onLayout={event => {
+                          setActionsWidth(event.nativeEvent.layout.width);
+                        }}>
                         <MenuItemAction
                           theme="primary"
                           onPress={() => handleEditWorker(worker)}>
@@ -192,7 +205,7 @@ const BarberWorkers: React.FC<
                           onPress={() => handleDeleteWorker(worker)}>
                           <Icons.DeleteIcon color="white3" />
                         </MenuItemAction>
-                      </>
+                      </Box>
                     )}
                 </MenuItemRowStyle>
               ))

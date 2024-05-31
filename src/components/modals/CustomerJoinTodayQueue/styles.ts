@@ -1,12 +1,17 @@
 import {Colors, Metrics} from '@/theme';
 import {hexPercentage} from '@/theme/colors';
-import {View} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import Animated from 'react-native-reanimated';
 import styled from 'styled-components/native';
 
-const AnimatedView = Animated.createAnimatedComponent(View);
+const AnimatedTouchableView =
+  Animated.createAnimatedComponent(TouchableOpacity);
 
-export const CustomBottomSheetOverlayStyled = styled(AnimatedView)`
+export const CustomBottomSheetOverlayStyled = styled(
+  AnimatedTouchableView,
+).attrs({
+  activeOpacity: 1,
+})`
   flex: 1;
   background-color: ${Colors.main}${hexPercentage[20]};
   position: absolute;
@@ -14,7 +19,7 @@ export const CustomBottomSheetOverlayStyled = styled(AnimatedView)`
   left: 0;
   width: ${Metrics.screenWidth}px;
   height: ${Metrics.screenHeight}px;
-  align-items: centerl;
+  align-items: center;
   justify-content: flex-end;
 `;
 
@@ -45,7 +50,9 @@ export const OnTicketIconWrapperStyled = styled.View`
   border-radius: 12px;
 `;
 
-export const CustomBottomSheetStyled = styled(AnimatedView)<{
+export const CustomBottomSheetStyled = styled(AnimatedTouchableView).attrs({
+  activeOpacity: 1,
+})<{
   paddingBottom?: number;
 }>`
   border-top-left-radius: 30px;

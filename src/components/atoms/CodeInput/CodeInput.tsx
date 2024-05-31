@@ -112,6 +112,12 @@ const CodeInput: React.FC<ICodeInputProps> = ({
     cb(text);
   };
 
+  useEffect(() => {
+    if (!disabled) {
+      inputValuesArray[0].ref.current?.focus();
+    }
+  }, []);
+
   return (
     <CodeWrapperStyle>
       {inputValuesArray.map(({isFocused, setIsFocused, ref}, index) => (

@@ -6,7 +6,7 @@ import {onUnauthorizedResponse} from './interceptors';
 export let API_ORIGIN = 'https://na-regua-api.onrender.com/';
 // API_ORIGIN = 'http://localhost:8080/';
 // API_ORIGIN = 'http://192.168.1.113:8080/';
-API_ORIGIN = 'http://192.168.0.3:8080/';
+API_ORIGIN = 'http://192.168.0.31:8080/';
 
 export function errToAxiosError(err: any): AxiosError {
   const {message, code, config, request, response} = err;

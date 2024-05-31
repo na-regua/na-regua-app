@@ -132,7 +132,7 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
   const hasDiff = useMemo(
     () =>
       formValues.name !== initialValues?.name ||
-      formValues.durationInMinutes !== initialValues?.durationInMinutes ||
+      formValues.duration_in_minutes !== initialValues?.duration_in_minutes ||
       formValues.price !== initialValues?.price ||
       formValues.icon !== initialValues?.icon,
     [formValues, initialValues],
@@ -194,7 +194,7 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
           )}
         />
         <Controller
-          name="durationInMinutes"
+          name="duration_in_minutes"
           rules={{required: true, min: 0}}
           control={control}
           render={({field: {onChange, value}}) => (

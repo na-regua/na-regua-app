@@ -9,6 +9,7 @@ export interface ITicket {
   barber: IBarber;
   customer: IUser;
   service: IBarberService;
+  additional_services?: IBarberService[];
   status: 'pending' | 'queue' | 'scheduled' | 'missed' | 'served';
   type: 'queue' | 'schedule';
   queue?: IQueueTicket;
@@ -39,6 +40,8 @@ export interface ITicketViewState {
 
 export interface OnTicketGeneralProps {
   ticket: ITicket;
+  hasAdditionalServices?: boolean;
+  totalPrice: number;
 }
 
 export interface IGetTodayTickets {

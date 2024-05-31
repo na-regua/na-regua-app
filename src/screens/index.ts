@@ -22,3 +22,7 @@ export {default as LoginScreen} from './Login/Login';
 export {default as NotificationsScreen} from './Notifications/Notifications';
 export {default as SplashScreen} from './SplashScreen/SplashScreen';
 export {default as CustomerOnTicketScreen} from './CustomerOnTicket/CustomerOnTicket';
+export {default as CustomerSettingsHistoryScreen} from './CustomerSettingsHistory/CustomerSettingsHistory';
+export {default as CustomerSettingsProfileScreen} from './CustomerSettingsProfile/CustomerSettingsProfile';
+export {default as CustomerSettingsFavoritesScreen} from './CustomerSettingsFavorites/CustomerSettingsFavorites';
+export {default as PermissionsScreen} from './Permissions/Permissions';

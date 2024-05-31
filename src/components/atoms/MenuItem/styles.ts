@@ -1,30 +1,15 @@
 import {Colors} from '@/theme';
-import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
+import {AnimatedTouchableOpacity} from '../AnimatedComponents';
 
-export const menuItemStyles = StyleSheet.create({
-  container: {},
-  avatar: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-  },
-});
-
-export const ContainerStyle = styled.TouchableOpacity<{pressed?: boolean}>`
+export const ContainerStyle = styled(AnimatedTouchableOpacity)`
   padding: 8px;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  border-radius: 8px;
-  gap: 8px;
+  border-radius: 12px;
+  gap: 12px;
   background-color: ${Colors.border};
-
-  ${({pressed}) =>
-    pressed &&
-    `
-    background-color: ${Colors.borderHover};
-  `}
 
   ${({disabled}) =>
     disabled &&
@@ -37,7 +22,13 @@ export const IconWrapperStyle = styled.View`
   width: 42px;
   height: 42px;
   border-radius: ${42 / 2}px;
-  background-color: ${Colors.default};
+  background-color: ${Colors.primary};
   align-items: center;
   justify-content: center;
+`;
+
+export const AvatarStyled = styled.Image`
+  width: 42px;
+  height: 42px;
+  border-radius: ${Math.round(42 / 2)}px;
 `;

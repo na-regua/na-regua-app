@@ -20,7 +20,7 @@ export const ContainerStyle = styled.ScrollView`
 `;
 
 export const ContentStyle = styled.View`
-  flex: 1;
+  flex-grow: 1;
   gap: ${Metrics.unitX4}px;
   padding-bottom: 0;
   justify-content: space-between;

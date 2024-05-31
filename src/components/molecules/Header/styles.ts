@@ -46,8 +46,10 @@ export const BackContainerStyle = styled.TouchableOpacity`
   align-self: flex-start;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-start;
   gap: 4px;
   padding-top: 8px;
+  padding-bottom: 4px;
 `;
 
 export const UserClickContainerStyled = styled.TouchableOpacity.attrs({

@@ -3,9 +3,6 @@ import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 
 export const styles = StyleSheet.create({
-  menuItem: {
-    flex: 1,
-  },
   refreshControl: {
     backgroundColor: 'transparent',
   },

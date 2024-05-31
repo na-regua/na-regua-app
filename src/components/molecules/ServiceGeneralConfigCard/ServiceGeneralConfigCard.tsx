@@ -2,6 +2,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 
 import {IBarberServiceGeneralConfig} from '@/app/models';
 import {
+  Box,
   Collapse,
   SelectScheduleLimit,
   SelectWorkDays,
@@ -99,29 +100,31 @@ const ServiceGeneralConfigCard: React.FC<IServiceGeneralConfigCardProps> = ({
     <Collapse
       title="barber.servicesConfig.sections.general.title"
       subtitle="barber.servicesConfig.sections.general.subtitle">
-      <SelectWorkDays workDays={workdays} onChange={handleWorkDaysChange} />
-      <SelectScheduleLimit
-        limit={scheduleLimitDays}
-        onChange={handleScheduleLimitDaysChange}
-      />
-      <SwitchButton<boolean>
-        value={openBarberAuto}
-        onChange={handleOpenBarberAutoChange}
-        label="barber.servicesConfig.fields.openBarberAuto"
-        buttons={[
-          {label: 'barber.servicesConfig.buttons.yes', value: true},
-          {label: 'barber.servicesConfig.buttons.no', value: false},
-        ]}
-      />
-      <SwitchButton<boolean>
-        value={openQueueAuto}
-        onChange={handleOpenQueueAutoChange}
-        label="barber.servicesConfig.fields.openQueueAuto"
-        buttons={[
-          {label: 'barber.servicesConfig.buttons.yes', value: true},
-          {label: 'barber.servicesConfig.buttons.no', value: false},
-        ]}
-      />
+      <Box width={'100%'} gap={12}>
+        <SelectWorkDays workDays={workdays} onChange={handleWorkDaysChange} />
+        <SelectScheduleLimit
+          limit={scheduleLimitDays}
+          onChange={handleScheduleLimitDaysChange}
+        />
+        <SwitchButton<boolean>
+          value={openBarberAuto}
+          onChange={handleOpenBarberAutoChange}
+          label="barber.servicesConfig.fields.openBarberAuto"
+          buttons={[
+            {label: 'barber.servicesConfig.buttons.yes', value: true},
+            {label: 'barber.servicesConfig.buttons.no', value: false},
+          ]}
+        />
+        <SwitchButton<boolean>
+          value={openQueueAuto}
+          onChange={handleOpenQueueAutoChange}
+          label="barber.servicesConfig.fields.openQueueAuto"
+          buttons={[
+            {label: 'barber.servicesConfig.buttons.yes', value: true},
+            {label: 'barber.servicesConfig.buttons.no', value: false},
+          ]}
+        />
+      </Box>
     </Collapse>
   );
 };

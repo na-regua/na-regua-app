@@ -1,11 +1,11 @@
 import React, {PropsWithChildren} from 'react';
-import {TouchableOpacity} from 'react-native';
-import {menuItemActionStyles, menuItemActionThemeStyles} from './styles';
+import {MenuItemActionStyled} from './styles';
+import {SlideInRight} from 'react-native-reanimated';
 
 export type IMenuItemActionTheme = 'primary' | 'danger';
 
 interface IMenuItemActionProps extends PropsWithChildren {
-  theme: 'primary' | 'danger';
+  theme: IMenuItemActionTheme;
   onPress?: () => void;
 }
 
@@ -15,12 +15,13 @@ const MenuItemAction: React.FC<IMenuItemActionProps> = ({
   onPress,
 }) => {
   return (
-    <TouchableOpacity
-      style={[menuItemActionStyles.container, menuItemActionThemeStyles[theme]]}
-      activeOpacity={0.6}
+    <MenuItemActionStyled
+      entering={SlideInRight}
+      colorScheme={theme}
+      activeOpacity={0.8}
       onPress={onPress}>
       {children}
-    </TouchableOpacity>
+    </MenuItemActionStyled>
   );
 };
 

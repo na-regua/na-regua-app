@@ -1,8 +1,8 @@
 import {Colors} from '@/theme';
 import React, {useMemo} from 'react';
-import {StyleSheet, View} from 'react-native';
 import {Path, Svg} from 'react-native-svg';
 import {IIconProps} from '../Icons';
+import {IconTouchableViewStyle} from '../styles';
 
 interface ICameraIconProps extends IIconProps {}
 
@@ -12,6 +12,8 @@ const CameraIcon: React.FC<ICameraIconProps> = ({
   strokeWidth = 1.5,
   color = 'default',
   customColor,
+  disabled,
+  onPress,
 }) => {
   const getColor = useMemo(
     () => Colors[color] || customColor,
@@ -19,7 +21,7 @@ const CameraIcon: React.FC<ICameraIconProps> = ({
   );
 
   return (
-    <View style={styles.iconWrapper}>
+    <IconTouchableViewStyle disabled={disabled} onPress={onPress}>
       <Svg width={width} height={height} viewBox="0 0 24 25" fill="none">
         <Path
           d="M23 19.7062C23 20.2367 22.7893 20.7454 22.4142 21.1205C22.0391 21.4955 21.5304 21.7062 21 21.7062H3C2.46957 21.7062 1.96086 21.4955 1.58579 21.1205C1.21071 20.7454 1 20.2367 1 19.7062V8.70624C1 8.1758 1.21071 7.6671 1.58579 7.29202C1.96086 6.91695 2.46957 6.70624 3 6.70624H7L9 3.70624H15L17 6.70624H21C21.5304 6.70624 22.0391 6.91695 22.4142 7.29202C22.7893 7.6671 23 8.1758 23 8.70624V19.7062Z"
@@ -36,15 +38,8 @@ const CameraIcon: React.FC<ICameraIconProps> = ({
           strokeLinejoin="round"
         />
       </Svg>
-    </View>
+    </IconTouchableViewStyle>
   );
 };
-
-const styles = StyleSheet.create({
-  iconWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default CameraIcon;

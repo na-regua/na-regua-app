@@ -11,6 +11,8 @@ enum ENDPOINTS {
   BARBERS_BY_TOKEN = '/barbers/token',
   BARBERS_UPDATE = '/barbers/',
   BARBERS_COMPLETE_PROFILE = '/barbers/complete-profile',
+  BARBERS_OPEN = '/barbers/open',
+  BARBERS_CUSTOMERS = '/barbers/customers',
   /**
    * Workers
    * */
@@ -66,8 +68,11 @@ enum ENDPOINTS {
   QUEUE_GET_TODAY = '/queues/today',
   QUEUE_BARBER_TODAY = '/queues/:barberId/today',
   QUEUE_LAST_POSITION = '/queues/:queueId/last-position',
-  QUEUE_JOIN_USER = '/queues/join/user',
-  QUEUE_JOIN_WORKER = '/queues/join/worker',
+  QUEUE_USER_JOIN = '/queues/join/user',
+  QUEUE_WORKER_JOIN = '/queues/join/worker',
+  QUEUE_WORKER_APPROVE_TICKET = '/queues/worker/approve/:ticketId',
+  QUEUE_USER_LEAVE = '/queues/leave/:ticketId',
+  QUEUE_WORKER_REJECT_TICKET = '/queues/worker/reject/:ticketId',
   /**
    * Tickets
    * */

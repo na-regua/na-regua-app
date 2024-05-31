@@ -38,7 +38,7 @@ export const QRWrapperStyle = styled.View`
 `;
 
 export const MenuWrapperStyle = styled.View`
-  gap: 12px;
+  gap: 18px;
   flex: 1;
 `;
 

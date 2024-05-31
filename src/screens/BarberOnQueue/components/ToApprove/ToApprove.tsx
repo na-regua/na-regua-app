@@ -1,9 +1,13 @@
 import React = require('react');
-import {ITicket, SocketUrls} from '@/app/models';
+import {QueueService} from '@/app/api';
+import {ITicket} from '@/app/models';
 import {Button, Typography} from '@/components/atoms';
-import {RootState} from '@/store/Store';
+import {AppDispatch} from '@/store/Store';
+import {createNotification} from '@/store/slicers';
+import {AxiosError} from 'axios';
+import {useState} from 'react';
 import {View} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {RoundedAvatarStyled} from '../../styles';
 import {
   ToApproveActionStyled,
@@ -14,18 +18,62 @@ import {
 interface ToApproveProps extends ITicket {}
 
 const ToApprove: React.FC<ToApproveProps> = ({_id, customer, service}) => {
-  const {socket} = useSelector((state: RootState) => state.socket);
+  const [approving, setApproving] = useState(false);
+  const [rejecting, setRejecting] = useState(false);
+
+  const dispatch = useDispatch<AppDispatch>();
+
   const {name, avatar} = customer;
 
-  const onApprove = () => {
-    if (socket) {
-      socket.emit(SocketUrls.WorkerApproveCustomerRequest, {ticketId: _id});
+  const onApprove = async () => {
+    try {
+      setApproving(true);
+
+      await QueueService.approveTicket(_id);
+
+      setApproving(false);
+    } catch (error) {
+      setApproving(false);
+
+      if (error instanceof AxiosError) {
+        const {message} = error.response?.data;
+
+        if (message) {
+          dispatch(
+            createNotification({
+              id: 'approve_ticket',
+              message: `errors.${message}`,
+              type: 'error',
+            }),
+          );
+        }
+      }
     }
   };
 
-  const onDeny = () => {
-    if (socket) {
-      socket.emit(SocketUrls.WorkerDenyCustomerRequest, {ticketId: _id});
+  const onDeny = async () => {
+    try {
+      setRejecting(true);
+
+      await QueueService.rejectTicket(_id);
+
+      setRejecting(false);
+    } catch (error) {
+      setRejecting(false);
+
+      if (error instanceof AxiosError) {
+        const {message} = error.response?.data;
+
+        if (message) {
+          dispatch(
+            createNotification({
+              id: 'reject_ticket',
+              message: `errors.${message}`,
+              type: 'error',
+            }),
+          );
+        }
+      }
     }
   };
 
@@ -55,6 +103,8 @@ const ToApprove: React.FC<ToApproveProps> = ({_id, customer, service}) => {
           variant="ghost"
           onPress={onDeny}
           size="small"
+          loading={rejecting}
+          disabled={approving}
         />
         <Button
           title="buttons.approve"
@@ -62,6 +112,8 @@ const ToApprove: React.FC<ToApproveProps> = ({_id, customer, service}) => {
           colorScheme="success"
           onPress={onApprove}
           size="small"
+          loading={approving}
+          disabled={rejecting}
         />
       </ToApproveActionStyled>
     </ToApproveContainerStyled>

@@ -8,14 +8,18 @@ export type TAttendanceType = 'queue' | 'schedule';
 
 export interface ICutState {
   steps: TCutSteps;
+
   attendanceType?: TAttendanceType;
   selectedService?: IBarberService;
+  selectedAdditionalServices?: IBarberService[];
   selectedBarber?: IBarber;
   scheduleConfig?: {
     date?: string;
     time?: string;
   };
+
   services?: IBarberService[];
+  additionalServices?: IBarberService[];
   todayTickets?: IGetTodayTickets;
   customerIsOnQueue?: boolean;
   barberTodayQueue?: IQueue;

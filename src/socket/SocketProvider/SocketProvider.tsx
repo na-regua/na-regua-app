@@ -24,8 +24,6 @@ const SocketProvider: React.FC<PropsWithChildren> = ({children}) => {
           if (notification) {
             const {message, data} = notification;
 
-            console.log(data);
-
             const translatedMessage = t(`notification.${message}`, {
               data,
             }).toString();
@@ -43,6 +41,8 @@ const SocketProvider: React.FC<PropsWithChildren> = ({children}) => {
     if (!subs.some(sub => sub === SocketUrls.Event)) {
       instance.on(SocketUrls.Event, (socketEvent: ISocketEvent) => {
         const {event, data} = socketEvent;
+
+        console.log('Event:', event, data);
 
         const translatedMessage = t(`socketEvent.${event}`, data).toString();
 

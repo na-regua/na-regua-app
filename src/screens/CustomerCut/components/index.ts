@@ -1,3 +1,3 @@
 export * from './CustomerAttendance/CustomerAttendance';
 export * from './SelectBarber/SelectBarber';
-export * from './AttendanceFooter/AttendanceFooter';
+export * from './CustomerAttendanceFooter/CustomerAttendanceFooter';

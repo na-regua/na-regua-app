@@ -16,7 +16,7 @@ import {phoneMask, phoneRegex} from '@/utils';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AxiosError} from 'axios';
 import {intervalToDuration} from 'date-fns';
-import React, {useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {Keyboard, TextInput, TouchableWithoutFeedback} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -42,7 +42,8 @@ const CustomerLogin: React.FC<
   const [isSending, setIsSending] = useState(false);
   const [code, setCode] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
-  const [timer, setTimer] = useState(60);
+
+  const [timer, setTimer] = useState(5);
   const [sended, setSended] = useState(false);
 
   const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
@@ -64,6 +65,7 @@ const CustomerLogin: React.FC<
     control,
     formState: {isValid},
     getValues,
+    reset: resetForm,
   } = useForm<ILoginPhone>({mode: 'all'});
 
   const fieldsRef = {
@@ -89,25 +91,42 @@ const CustomerLogin: React.FC<
     }
   };
 
-  const initTimer = () => {
-    const interval = setInterval(() => {
-      setTimer(curr => {
-        if (curr - 1 === 0) {
+  const reset = () => {
+    dispatch(setCustomerMethod('phone'));
+    setCode('');
+    clearTimer();
+    resetForm();
+  };
+
+  // Timer FN
+  useEffect(() => {
+    if (sended) {
+      const interval = setTimeout(() => {
+        setTimerId(interval);
+
+        if (timer === 0) {
           clearTimer();
         }
 
-        return curr - 1;
-      });
-    }, 1000);
+        if (timer > 0) {
+          setTimer(timer - 1);
+        }
+      }, 1000);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sended, timer]);
 
-    setTimerId(interval);
+  const initTimer = () => {
+    setTimer(60);
+    setTimerId(null);
+    setSended(true);
   };
 
   const clearTimer = () => {
     if (timerId) {
-      clearInterval(timerId);
       setSended(false);
       setTimerId(null);
+      clearTimeout(timerId);
     }
   };
 
@@ -128,12 +147,10 @@ const CustomerLogin: React.FC<
 
         dispatch(setCustomerMethod('verify-code'));
 
-        setSended(true);
         initTimer();
       }
     } catch (error) {
       setIsSending(false);
-      clearTimer();
 
       if (error instanceof AxiosError) {
         const {message} = error.response?.data;
@@ -152,12 +169,12 @@ const CustomerLogin: React.FC<
 
   const sendAgain = async () => {
     try {
-      await AuthService.sendOTPCode(getValues().phone);
+      const {phone} = getValues();
 
-      setSended(true);
+      await AuthService.sendOTPCode(phone);
+
       initTimer();
     } catch (error) {
-      clearTimer();
       if (error instanceof AxiosError) {
         const {message} = error.response?.data;
         if (message) {
@@ -191,8 +208,9 @@ const CustomerLogin: React.FC<
         }
       }
 
-      clearTimer();
       setIsVerifying(false);
+
+      reset();
     } catch (error) {
       setIsVerifying(false);
 

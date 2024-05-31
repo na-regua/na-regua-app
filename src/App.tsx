@@ -6,10 +6,17 @@ import {CombinedProviders} from './providers';
 
 PushNotification.configure({
   onRegister: function (token) {
-    console.log('TOKEN:', token);
+    console.log('notif token:', token);
   },
   onNotification: function (notification) {
     notification.finish(PushNotificationIOS.FetchResult.NoData);
+  },
+  onAction: function (notification) {
+    console.log('ACTION:', notification.action);
+    console.log('NOTIFICATION:', notification);
+  },
+  onRemoteFetch: function (notification) {
+    console.log('REMOTE FETCH', notification);
   },
   popInitialNotification: true,
   permissions: {

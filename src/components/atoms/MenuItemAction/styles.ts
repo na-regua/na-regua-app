@@ -1,29 +1,19 @@
-import {StyleSheet, ViewStyle} from 'react-native';
-import {IMenuItemActionTheme} from './MenuItemAction';
 import {Colors} from '@/theme';
+import {TouchableOpacity} from 'react-native';
+import Animated from 'react-native-reanimated';
+import styled from 'styled-components/native';
+import {IMenuItemActionTheme} from './MenuItemAction';
 
-export const menuItemActionStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    paddingHorizontal: 16,
-    minWidth: 42,
-    maxWidth: 42,
-    minHeight: 40,
-    borderRadius: 8,
-  },
-});
+const AnimatedTouchableOpacity =
+  Animated.createAnimatedComponent(TouchableOpacity);
 
-export const menuItemActionThemeStyles: Record<
-  IMenuItemActionTheme,
-  ViewStyle
-> = {
-  danger: {
-    backgroundColor: Colors.danger,
-  },
-  primary: {
-    backgroundColor: Colors.primary,
-  },
-};
+export const MenuItemActionStyled = styled(AnimatedTouchableOpacity)<{
+  colorScheme: IMenuItemActionTheme;
+}>`
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 42px;
+  border-radius: 12px;
+  background-color: ${({colorScheme}) => Colors[colorScheme]};
+`;

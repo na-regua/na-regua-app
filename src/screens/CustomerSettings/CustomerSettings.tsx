@@ -1,3 +1,4 @@
+import {FilesService} from '@/app/api';
 import {AppStatusBar, Avatar, Icons, Typography} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
@@ -21,9 +22,13 @@ import {
   ScrollContentStyle,
   styles,
 } from './styles';
-import {FilesService} from '@/app/api';
 
-type TCustomerSettingsMenuType = 'profile' | 'history';
+type TCustomerSettingsMenuType =
+  | 'profile'
+  | 'history'
+  | 'notifications'
+  | 'permissions'
+  | 'favorites';
 
 interface ICustomerSettingsMenuItem {
   icon: ReactNode;
@@ -59,13 +64,29 @@ const CustomerSettings: React.FC<
           color="default"
           width={24}
           height={24}
-          strokeWidth={2}
+          strokeWidth={2.3}
         />
       ),
       title: 'customer.settings.menus.profile.title',
       subtitle: 'customer.settings.menus.profile.subtitle',
       onPress: () => {
-        navigation.navigate('/barber/settings/profile');
+        navigation.navigate('/customer/settings/history');
+      },
+    },
+    {
+      type: 'favorites',
+      icon: (
+        <Icons.HeartIcon
+          color="default"
+          width={24}
+          height={24}
+          strokeWidth={1.2}
+        />
+      ),
+      title: 'customer.settings.menus.favorites.title',
+      subtitle: 'customer.settings.menus.favorites.subtitle',
+      onPress: () => {
+        navigation.navigate('/customer/settings/favorites');
       },
     },
     {
@@ -75,13 +96,45 @@ const CustomerSettings: React.FC<
           color="default"
           width={24}
           height={24}
-          strokeWidth={2}
+          strokeWidth={1.5}
         />
       ),
       title: 'customer.settings.menus.history.title',
       subtitle: 'customer.settings.menus.history.subtitle',
       onPress: () => {
-        // navigation.navigate('/barber/settings/profile');
+        navigation.navigate('/customer/settings/history');
+      },
+    },
+    {
+      type: 'notifications',
+      icon: (
+        <Icons.BellIcon
+          color="default"
+          width={24}
+          height={24}
+          strokeWidth={1.5}
+        />
+      ),
+      title: 'customer.settings.menus.notifications.title',
+      subtitle: 'customer.settings.menus.notifications.subtitle',
+      onPress: () => {
+        navigation.navigate('/user/notifications');
+      },
+    },
+    {
+      type: 'permissions',
+      icon: (
+        <Icons.SettingsIcon
+          color="default"
+          width={24}
+          height={24}
+          strokeWidth={1.3}
+        />
+      ),
+      title: 'customer.settings.menus.permissions.title',
+      subtitle: 'customer.settings.menus.permissions.subtitle',
+      onPress: () => {
+        navigation.navigate('/user/permissions');
       },
     },
   ];

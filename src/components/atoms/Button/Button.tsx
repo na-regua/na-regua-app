@@ -102,7 +102,7 @@ const Button: React.FC<IButtonProps> = ({
           {suffix && <SuffixStyle>{suffix}</SuffixStyle>}
         </>
       )}
-      {loading && <Loader size="64" color={loaderColor} strokeWidth={3} />}
+      {loading && <Loader size="64" color={loaderColor} strokeWidth={2.5} />}
     </ButtonStyle>
   );
 };

@@ -1,8 +1,9 @@
-import {FilesService} from '@/app/api';
+import {BarbersService, FilesService} from '@/app/api';
 import {
   AppStatusBar,
   Avatar,
   Icons,
+  Loader,
   Modal,
   Typography,
 } from '@/components/atoms';
@@ -11,17 +12,24 @@ import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {StatusBarContext} from '@/providers';
 import {AppDispatch, RootState} from '@/store/Store';
-import {ACCESS_TOKEN_KEY, getCurrentUser, logout} from '@/store/slicers';
+import {
+  ACCESS_TOKEN_KEY,
+  createNotification,
+  getCurrentUser,
+  logout,
+} from '@/store/slicers';
 import colors from '@/theme/colors';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AxiosError} from 'axios';
 import React, {ReactNode, useContext, useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Asset} from 'react-native-image-picker';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  BarberButtonStyled,
   BarberProfileInfoStyle,
   BarberProfileStyle,
   ContainerStyle,
@@ -35,6 +43,7 @@ import {
   ScrollContentStyle,
   styles,
 } from './styles';
+import {Colors} from '@/theme';
 
 type TSettingsMenuType =
   | 'profile'
@@ -72,6 +81,8 @@ const BarberSettings: React.FC<
 
   const shareQRModalRef = useRef<BottomSheetModal>(null);
   const {setStatusbarStyle} = useContext(StatusBarContext);
+
+  const [opening, setOpening] = useState(false);
 
   const adminMenus: ISettingsMenuItem[] = [
     {
@@ -201,6 +212,33 @@ const BarberSettings: React.FC<
     }
   };
 
+  const handleOpenBarber = async () => {
+    try {
+      setOpening(true);
+
+      await BarbersService.setOpen(!barber.open);
+      await dispatch(getCurrentUser());
+
+      setOpening(false);
+    } catch (error) {
+      setOpening(false);
+
+      if (error instanceof AxiosError) {
+        const {message} = error.response?.data;
+
+        if (message) {
+          dispatch(
+            createNotification({
+              id: 'set_open',
+              message,
+              type: 'error',
+            }),
+          );
+        }
+      }
+    }
+  };
+
   return (
     <ContainerStyle style={insetsStyles}>
       <AppStatusBar />
@@ -208,9 +246,7 @@ const BarberSettings: React.FC<
         <Header.Actions />
         <Header.Border />
       </Header.Container>
-      <ScrollContentStyle
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.scrollContainer]}>
+      <ScrollContentStyle showsVerticalScrollIndicator={false}>
         <HeaderStyle>
           <Typography variant="h5" color="black3">
             {t('barber.settings.title')}
@@ -264,6 +300,37 @@ const BarberSettings: React.FC<
             <Icons.QRIcon color="main" clickable onPress={openShareQRModal} />
           </QRWrapperStyle>
         </BarberProfileStyle>
+        <BarberButtonStyled onPress={handleOpenBarber} open={barber.open}>
+          {!opening ? (
+            <>
+              {barber.open ? (
+                <Icons.DeleteIcon
+                  width={18}
+                  height={18}
+                  color="danger"
+                  strokeWidth={2}
+                />
+              ) : (
+                <Icons.TimeIcon
+                  width={18}
+                  height={18}
+                  color="success"
+                  strokeWidth={2}
+                />
+              )}
+              <Typography variant="button" color="black3">
+                {barber.open ? 'buttons.close' : 'buttons.open'}
+              </Typography>
+            </>
+          ) : (
+            <Loader
+              size="64"
+              strokeWidth={3}
+              color={barber.open ? Colors.danger : Colors.success}
+            />
+          )}
+        </BarberButtonStyled>
+
         <MenuWrapperStyle>
           {menus.map((item, index) => (
             <MenuItemStyle

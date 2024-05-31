@@ -2,6 +2,7 @@ import {BarbersService, ServicesService} from '@/app/api';
 import {IBarberService, IBarberServiceIcon} from '@/app/models';
 import {
   AppStatusBar,
+  Box,
   Button,
   Icons,
   Loader,
@@ -55,6 +56,9 @@ const BarberServices: React.FC<
   const [loadingServices, setLoadingServices] = useState<boolean>(true);
   const [savingProfile, setSavingProfile] = useState<boolean>(false);
   const [showSet, setShowSet] = useState<string[]>([]);
+
+  const [menuWith, setMenuWidth] = useState<number>(0);
+  const [actionsWidth, setActionsWidth] = useState<number>(0);
 
   const insetsStyles = {
     paddingTop: insets.top,
@@ -138,9 +142,9 @@ const BarberServices: React.FC<
   }, [getServices]);
 
   const getIcon: Record<IBarberServiceIcon, React.ReactNode> = {
-    maquina: <Icons.MaquinaIcon width={18} height={20} color="black2" />,
-    pente: <Icons.PenteIcon width={20} height={20} color="black2" />,
-    navalha: <Icons.NavalhaIcon width={24} height={15} color="black2" />,
+    maquina: <Icons.MaquinaIcon width={18} height={20} color="white3" />,
+    pente: <Icons.PenteIcon width={20} height={20} color="white3" />,
+    navalha: <Icons.NavalhaIcon width={24} height={15} color="white3" />,
   };
 
   return (
@@ -173,7 +177,8 @@ const BarberServices: React.FC<
               progressBackgroundColor="transparent"
             />
           }>
-          <MenuItemsWrapperStyle>
+          <MenuItemsWrapperStyle
+            onLayout={event => setMenuWidth(event.nativeEvent.layout.width)}>
             {!loadingServices ? (
               services.map(service => (
                 <MenuItemRowStyle key={service._id}>
@@ -183,10 +188,18 @@ const BarberServices: React.FC<
                     icon={getIcon[service.icon]}
                     clickable
                     onPress={() => handleShowSet(service._id)}
-                    style={styles.menuItem}
+                    collapsed={showSet.includes(service._id)}
+                    actionsWidth={actionsWidth}
+                    width={menuWith}
                   />
                   {showSet.includes(service._id) && (
-                    <>
+                    <Box
+                      direction="row"
+                      alignItems="center"
+                      gap={12}
+                      onLayout={event => {
+                        setActionsWidth(event.nativeEvent.layout.width);
+                      }}>
                       <MenuItemAction
                         theme="primary"
                         onPress={() => openEditServiceModal(service)}>
@@ -197,7 +210,7 @@ const BarberServices: React.FC<
                         onPress={() => openDeleteServiceModal(service)}>
                         <Icons.DeleteIcon color="white3" />
                       </MenuItemAction>
-                    </>
+                    </Box>
                   )}
                 </MenuItemRowStyle>
               ))
@@ -249,7 +262,8 @@ const BarberServices: React.FC<
               initialValues={{
                 name: selectedToEdit.name,
                 icon: selectedToEdit.icon,
-                durationInMinutes: selectedToEdit.durationInMinutes.toString(),
+                duration_in_minutes:
+                  selectedToEdit.duration_in_minutes.toString(),
                 price: selectedToEdit.price.toString(),
               }}
               serviceID={selectedToEdit._id}

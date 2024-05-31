@@ -1,13 +1,14 @@
 import {IBarber} from '@/app/models';
 import {Colors, Fonts} from '@/theme';
+import {hexPercentage} from '@/theme/colors';
 import {generateAddress} from '@/utils';
 import React, {useMemo} from 'react';
 import {ViewStyle} from 'react-native';
+import {Grayscale} from 'react-native-color-matrix-image-filters';
 import {Box, IBoxProps} from '../Box/Box';
 import Icons from '../Icons/Icons';
 import Typography from '../Typography/Typography';
 import {BarberInfoCardImageStyled, DotSeparatorStyled} from './styles';
-import {hexPercentage} from '@/theme/colors';
 
 interface IBarberInfoCardProps {
   barber: IBarber;
@@ -21,9 +22,10 @@ interface IBarberInfoCardProps {
 const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
   barber,
   titleWeight = 'medium',
-  titleVariant = 'h5',
+  titleVariant = 'body1',
   wrapperStyles,
   asCard,
+  isOpen = true,
 }) => {
   const cardStyles: ViewStyle = useMemo<ViewStyle>(() => {
     if (asCard) {
@@ -40,15 +42,27 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
     };
   }, [asCard]);
 
+  const ImageTSX = isOpen ? (
+    <BarberInfoCardImageStyled
+      source={{
+        uri: barber.avatar.url,
+      }}
+    />
+  ) : (
+    <Grayscale>
+      <BarberInfoCardImageStyled
+        source={{
+          uri: barber.avatar.url,
+        }}
+      />
+    </Grayscale>
+  );
+
   return (
     <Box gap={12} style={cardStyles} {...wrapperStyles}>
       <Box gap={12} direction="row" alignItems="center">
-        <BarberInfoCardImageStyled
-          source={{
-            uri: barber.avatar.url,
-          }}
-        />
-        <Box gap={2}>
+        {ImageTSX}
+        <Box gap={3}>
           <Typography
             variant={titleVariant}
             weight={titleWeight}
@@ -56,8 +70,8 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
             {barber.name}
           </Typography>
           <Box gap={6} direction="row" alignItems="center">
-            <Icons.StarIcon />
-            <Typography variant="caption" color="black2" translate={false}>
+            <Icons.StarIcon color={isOpen ? 'warning' : 'placeholder'} />
+            <Typography variant="caption" color="black3" translate={false}>
               {barber.rating || 0}
             </Typography>
             <DotSeparatorStyled />
@@ -69,7 +83,11 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
       </Box>
       <Box gap={12}>
         <Box gap={6} direction="row" alignItems="center">
-          <Icons.TimeIcon width={14} height={14} color="main" />
+          <Icons.TimeIcon
+            width={14}
+            height={14}
+            color={isOpen ? 'main' : 'black2'}
+          />
           <Typography variant="caption" color="black2" translate={false}>
             {barber.config.worktime.start + ' - ' + barber.config.worktime.end}
           </Typography>
@@ -80,12 +98,14 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
               width={14}
               height={14}
               strokeWidth={1.2}
-              color="main"
+              color={isOpen ? 'main' : 'black2'}
             />
           </Box>
-          <Typography variant="caption" color="black2" translate={false}>
-            {generateAddress(barber.address)}
-          </Typography>
+          <Box flex={1}>
+            <Typography variant="caption" color="black2" translate={false}>
+              {generateAddress(barber.address)}
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>

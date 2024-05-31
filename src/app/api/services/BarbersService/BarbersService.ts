@@ -84,9 +84,24 @@ const completeProfile = async (): Promise<AxiosResponse<IBarber>> => {
   }
 };
 
+const setOpen = async (open: boolean): Promise<AxiosResponse<null>> => {
+  try {
+    const response = await api.put(
+      ENDPOINTS.BARBERS_OPEN,
+      {open},
+      {withCredentials: true},
+    );
+
+    return response;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
 export default {
   completeProfile,
   getBarbers,
   signUpBarber,
   update,
+  setOpen,
 };

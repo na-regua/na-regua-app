@@ -1,7 +1,12 @@
-import React, {useState} from 'react';
-import {Image, View, ViewStyle} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, ViewStyle} from 'react-native';
+import {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import Typography from '../Typography/Typography';
-import {ContainerStyle, IconWrapperStyle, menuItemStyles} from './styles';
+import {AvatarStyled, ContainerStyle, IconWrapperStyle} from './styles';
 
 interface IMenuItemProps {
   avatar?: string;
@@ -12,6 +17,9 @@ interface IMenuItemProps {
   onPress?: () => void;
   onLongPress?: () => void;
   style?: ViewStyle;
+  collapsed?: boolean;
+  actionsWidth?: number;
+  width?: number;
 }
 
 const MenuItem: React.FC<IMenuItemProps> = ({
@@ -23,34 +31,44 @@ const MenuItem: React.FC<IMenuItemProps> = ({
   onLongPress,
   style,
   icon,
+  collapsed,
+  actionsWidth,
+  width = 0,
 }) => {
-  const [pressed, setPressed] = useState(false);
+  const originalWidth = width;
+  const gap = 12;
 
-  const onPressIn = () => {
-    setPressed(true);
-  };
+  const sharedValue = useSharedValue(originalWidth);
 
-  const onPressOut = () => {
-    setPressed(false);
-  };
+  const widthStyle = useAnimatedStyle(() => {
+    return {
+      width: sharedValue.value,
+    };
+  });
+
+  useEffect(() => {
+    if (actionsWidth) {
+      if (collapsed) {
+        sharedValue.value = withTiming(originalWidth - (actionsWidth + gap));
+      }
+    }
+
+    if (!collapsed) {
+      sharedValue.value = withTiming(originalWidth);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collapsed]);
 
   return (
     <ContainerStyle
-      style={style}
-      pressed={pressed}
-      activeOpacity={1}
+      style={[style, widthStyle]}
+      activeOpacity={0.8}
       disabled={!clickable}
-      onLongPress={onLongPress}
-      onPress={onPress}
-      onPressOut={onPressOut}
-      onPressIn={onPressIn}>
-      {avatar && <Image source={{uri: avatar}} style={menuItemStyles.avatar} />}
+      onLongPress={() => onLongPress && onLongPress()}
+      onPress={() => onPress && onPress()}>
+      {avatar && <AvatarStyled source={{uri: avatar}} />}
 
-      {icon && (
-        <IconWrapperStyle style={menuItemStyles.avatar}>
-          {icon}
-        </IconWrapperStyle>
-      )}
+      {icon && <IconWrapperStyle>{icon}</IconWrapperStyle>}
 
       {(title || description) && (
         <View>

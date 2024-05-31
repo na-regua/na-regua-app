@@ -1,8 +1,7 @@
 import {OnTicketGeneralProps} from '@/app/models';
-import {Button, Icons, Typography} from '@/components/atoms';
+import {Box, Button, Icons, Typography} from '@/components/atoms';
 import React from 'react';
 import {
-  GappedColumnStyled,
   LineStyled,
   OnTicketActionsStyled,
   OnTicketBarberImageStyled,
@@ -22,7 +21,7 @@ const OnTicketSchedule: React.FC<OnTicketGeneralProps> = ({ticket}) => {
         {'customer.onTicket.subtitles.lastUpdate'}
       </Typography>
       <OnTicketCardStyled>
-        <GappedColumnStyled gap={18}>
+        <Box gap={18}>
           <OnTicketBarberInfoStyled>
             <OnTicketBarberImageStyled
               source={{uri: ticket.barber.avatar.url}}
@@ -31,23 +30,23 @@ const OnTicketSchedule: React.FC<OnTicketGeneralProps> = ({ticket}) => {
           </OnTicketBarberInfoStyled>
           <LineStyled />
           {ticket.schedule && (
-            <GappedColumnStyled gap={18}>
+            <Box gap={18}>
               <OnTicketInfoStyled>
                 <OnTicketIconWrapperStyled>
                   <Icons.UserIcon width={24} height={24} color="white3" />
                 </OnTicketIconWrapperStyled>
-                <GappedColumnStyled>
+                <Box>
                   <Typography variant="body1">
                     {ticket.queue?.position}
                   </Typography>
                   <Typography variant="caption" color="placeholder">
                     {'customer.onTicket.info.position'}
                   </Typography>
-                </GappedColumnStyled>
+                </Box>
               </OnTicketInfoStyled>
-            </GappedColumnStyled>
+            </Box>
           )}
-        </GappedColumnStyled>
+        </Box>
       </OnTicketCardStyled>
       <OnTicketActionsStyled>
         <Button title="buttons.leave" variant="ghost" colorScheme="danger" />

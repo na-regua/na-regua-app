@@ -3,6 +3,7 @@ import {Box, IBoxProps, Icons, Typography} from '@/components/atoms';
 import {useAppNavigation} from '@/navigation';
 import {RootState} from '@/store/Store';
 import {Metrics} from '@/theme';
+import {TColorsType} from '@/theme/colors';
 import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
@@ -55,7 +56,7 @@ const User: React.FC<IGenericHeaderProps> = ({lightContent, pressables}) => {
       <Icons.BellIcon
         width={24}
         height={24}
-        strokeWidth={1.5}
+        strokeWidth={2}
         color={mainColor}
         onPress={navigateToNotifications}
       />
@@ -88,7 +89,7 @@ const Actions: React.FC<IGenericHeaderProps> = ({lightContent, pressables}) => {
         width={24}
         height={24}
         color={mainColor}
-        strokeWidth={1.5}
+        strokeWidth={2}
         onPress={navigateToNotifications}
       />
     </LogoContainerStyle>
@@ -123,18 +124,18 @@ const Welcome: React.FC<IGenericHeaderProps> = ({lightContent}) => {
   );
 };
 
-const GoBack: React.FC<{backText?: string} & IGenericHeaderProps> = ({
-  pressables,
-  backText = 'nav.back',
-}) => {
+const GoBack: React.FC<
+  {backText?: string; iconColor?: TColorsType} & IGenericHeaderProps
+> = ({pressables, backText = 'nav.back', iconColor}) => {
   const {t} = useTranslation();
 
   return (
     <BackContainerStyle activeOpacity={0.6} onPress={pressables?.back}>
-      <Icons.LeftIcon width={16} height={16} color="primary" />
-      <Typography variant="body1" color="primary">
-        {t(backText)}
-      </Typography>
+      <Icons.ChevronLeftIcon
+        width={24}
+        height={24}
+        color={iconColor || 'primary'}
+      />
     </BackContainerStyle>
   );
 };

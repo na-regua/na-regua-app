@@ -1,6 +1,5 @@
 import {Colors} from '@/theme';
 import React, {useMemo} from 'react';
-import {StyleSheet, View} from 'react-native';
 import {Path, Svg} from 'react-native-svg';
 import {IIconProps} from '../Icons';
 import {IconTouchableViewStyle} from '../styles';
@@ -18,6 +17,7 @@ const BellIcon: React.FC<IBellIconProps> = ({
   fill,
   disabled,
   onPress,
+  clickable = true,
 }) => {
   const getColor = useMemo(
     () => Colors[color] || customColor,
@@ -27,7 +27,7 @@ const BellIcon: React.FC<IBellIconProps> = ({
   return (
     <IconTouchableViewStyle
       activeOpacity={0.6}
-      disabled={disabled}
+      disabled={disabled || !clickable}
       onPress={onPress}>
       <Svg
         width={width}

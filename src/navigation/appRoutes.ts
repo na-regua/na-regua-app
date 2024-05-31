@@ -39,12 +39,17 @@ export type TRootStackParamList = {
   '/generic/login/barber'?: {};
 
   '/user/notifications'?: {hideBottomNav: boolean};
+  '/user/permissions'?: {hideBottomNav: boolean};
+
   '/customer/sign-up'?: {};
   '/customer/sign-up/verify'?: {
     phone?: number;
   };
   '/customer/home'?: {};
   '/customer/settings'?: {};
+  '/customer/settings/profile'?: {};
+  '/customer/settings/history'?: {};
+  '/customer/settings/favorites'?: {};
   '/customer/cut'?: {};
   '/customer/qr-scanner'?: {};
   '/customer/on-ticket'?: {

@@ -1,13 +1,10 @@
-import {QueueService} from '@/app/api';
-import {IQueue, ON_QUEUE_VIEW_MODE_KEY, TOnQueueViewModes} from '@/app/models';
-import {RootState} from '@/store/Store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {IQueue} from '@/app/models';
 import {
   ActionCreatorWithPayload,
   SliceCaseReducers,
-  createAsyncThunk,
   createSlice,
 } from '@reduxjs/toolkit';
+import QueueThunks from './QueueThunks';
 
 interface QueueSlicerState {
   todayQueue?: IQueue;
@@ -18,45 +15,6 @@ interface QueueSlicerState {
   };
   viewMode: 'fs' | 'fs-out';
 }
-
-export const fetchPersistedViewMode = createAsyncThunk<TOnQueueViewModes>(
-  'Queue/getPersistedViewMode',
-  async () => {
-    const viewMode = await AsyncStorage.getItem(ON_QUEUE_VIEW_MODE_KEY);
-
-    if (!viewMode) {
-      return 'fs-out';
-    }
-
-    return viewMode as TOnQueueViewModes;
-  },
-);
-
-export const persistViewMode = createAsyncThunk<
-  TOnQueueViewModes,
-  TOnQueueViewModes
->('Queue/persistViewMode', async viewMode => {
-  await AsyncStorage.setItem(ON_QUEUE_VIEW_MODE_KEY, viewMode);
-
-  return viewMode;
-});
-
-export const fetchIsOnQueue = createAsyncThunk(
-  'Queue/fetchIsOnQueue',
-  async (_, {rejectWithValue, dispatch, getState}) => {
-    try {
-      dispatch(QueueActions.setLoadingTodayQueue(true));
-
-      const user = (getState() as RootState).auth.user;
-
-      const {data} = await QueueService.getTodayQueue();
-
-      return {user, data};
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  },
-);
 
 const QueueSlicer = createSlice<
   QueueSlicerState,
@@ -84,32 +42,37 @@ const QueueSlicer = createSlice<
     },
   },
   extraReducers(builder) {
-    builder.addCase(fetchPersistedViewMode.fulfilled, (state, action) => {
+    builder.addCase(
+      QueueThunks.fetchPersistedViewMode.fulfilled,
+      (state, action) => {
+        state.viewMode = action.payload;
+      },
+    );
+
+    builder.addCase(QueueThunks.persistViewMode.fulfilled, (state, action) => {
       state.viewMode = action.payload;
     });
 
-    builder.addCase(persistViewMode.fulfilled, (state, action) => {
-      state.viewMode = action.payload;
-    });
+    builder.addCase(
+      QueueThunks.fetchBarberTodayQueue.fulfilled,
+      (state, action) => {
+        state.loadingTodayQueue = false;
 
-    builder.addCase(fetchIsOnQueue.fulfilled, (state, action) => {
+        if (!action.payload.data.queue) {
+          return;
+        }
+        state.todayQueue = action.payload.data.queue;
+
+        state.workerOnQueue = action.payload.data.queue.workers.some(
+          worker =>
+            worker.user._id ===
+            (action.payload.user && action.payload.user?._id),
+        );
+      },
+    );
+
+    builder.addCase(QueueThunks.fetchBarberTodayQueue.rejected, state => {
       state.loadingTodayQueue = false;
-
-      if (!action.payload.data.queue) {
-        return;
-      }
-      state.todayQueue = action.payload.data.queue;
-
-      state.workerOnQueue = action.payload.data.queue.workers.some(
-        worker =>
-          worker.user._id === (action.payload.user && action.payload.user?._id),
-      );
-    });
-
-    builder.addCase(fetchIsOnQueue.rejected, (state, action) => {
-      state.loadingTodayQueue = false;
-
-      console.log('error queue state', state, action);
     });
   },
 });

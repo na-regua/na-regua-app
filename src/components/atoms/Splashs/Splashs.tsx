@@ -11,6 +11,12 @@ export interface ISplashProps {
   color?: string;
   animatedProps?: any;
   style?: SvgProps['style'];
+  grayscale?: boolean;
 }
 
-export default {BarberSplash, BarberCuttingSplash, ClockSplash, ScheduleSplash};
+export default {
+  BarberSplash,
+  BarberCuttingSplash,
+  ClockSplash,
+  ScheduleSplash,
+};

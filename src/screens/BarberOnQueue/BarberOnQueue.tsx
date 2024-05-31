@@ -6,7 +6,7 @@ import {Header, OnQueueHeader} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {BarberQueueSocketEvents} from '@/socket/events';
 import {AppDispatch, RootState} from '@/store/Store';
-import {fetchPersistedViewMode} from '@/store/slicers';
+import {QueueThunks} from '@/store/slicers';
 import {Colors} from '@/theme';
 import {useRoute} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -44,7 +44,7 @@ const BarberOnQueue: React.FC<
   );
 
   const getPersistedViewMode = useCallback(async () => {
-    await dispatch(fetchPersistedViewMode());
+    await dispatch(QueueThunks.fetchPersistedViewMode());
   }, [dispatch]);
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import {TOnQueueViewModes} from '@/app/models';
 import {Icons, Typography} from '@/components/atoms';
 import {AppDispatch, RootState} from '@/store/Store';
-import {fetchIsOnQueue, persistViewMode, setFilters} from '@/store/slicers';
+import {QueueActions, QueueThunks} from '@/store/slicers';
 import {TColorsType} from '@/theme/colors';
 import React, {useEffect, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -66,17 +66,19 @@ const OnQueueHeader = () => {
   }, [todayQueue]);
 
   const applyOldTicketsFilter = () => {
-    dispatch(setFilters({showServedTickets: !filters?.showServedTickets}));
+    dispatch(
+      QueueActions.setFilters({showServedTickets: !filters?.showServedTickets}),
+    );
   };
 
-  const setFullscreenViewMode = () => {
+  const setFullscreenViewMode = async () => {
     const newViewMode: TOnQueueViewModes = viewMode === 'fs' ? 'fs-out' : 'fs';
 
-    dispatch(persistViewMode(newViewMode));
+    await dispatch(QueueThunks.persistViewMode(newViewMode));
   };
 
-  const onRefresh = () => {
-    dispatch(fetchIsOnQueue());
+  const onRefresh = async () => {
+    await dispatch(QueueThunks.fetchBarberTodayQueue());
   };
 
   if (!todayQueue) {

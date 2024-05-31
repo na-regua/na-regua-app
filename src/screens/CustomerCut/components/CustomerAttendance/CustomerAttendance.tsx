@@ -1,5 +1,5 @@
 import {IBarberService, SocketUrls, TAttendanceType} from '@/app/models';
-import {BarberInfoCard, Icons, Typography} from '@/components/atoms';
+import {BarberInfoCard, Box, Icons, Typography} from '@/components/atoms';
 import {AppDispatch, RootState} from '@/store/Store';
 import {CutActions} from '@/store/slicers';
 import React, {useCallback, useEffect, useMemo} from 'react';
@@ -18,7 +18,11 @@ import {
   AttendanceSectionStyled,
 } from './styles';
 
-const CustomerAttendance = () => {
+interface ICustomerAttendanceProps {
+  isOpen?: boolean;
+}
+
+const CustomerAttendance: React.FC<ICustomerAttendanceProps> = ({isOpen}) => {
   const {t} = useTranslation();
   const {user} = useSelector((state: RootState) => state.auth);
   const {
@@ -26,7 +30,9 @@ const CustomerAttendance = () => {
     barberTodayQueue,
     selectedBarber,
     selectedService,
+    selectedAdditionalServices,
     services,
+    additionalServices,
   } = useSelector((state: RootState) => state.cut);
   const {socket, connected} = useSelector((state: RootState) => state.socket);
   const dispatch = useDispatch<AppDispatch>();
@@ -35,7 +41,8 @@ const CustomerAttendance = () => {
     () =>
       selectedBarber &&
       selectedBarber.customers.some(customer => customer._id === user?._id),
-    [selectedBarber, user],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [selectedBarber],
   );
 
   const queueStatus = useMemo(() => {
@@ -54,24 +61,24 @@ const CustomerAttendance = () => {
   }, [barberTodayQueue]);
 
   const getBarberLiveUpdates = useCallback(() => {
-    console.log('Joining socket sub');
     if (!!socket && connected && selectedBarber) {
+      console.log('Subscribing to barber updates');
       const url = SocketUrls.BarberInfo.replace(
         '{{barberId}}',
         selectedBarber._id.toString(),
       );
+      console.log(url);
       socket.on(url, data => {
         if (data.barber) {
-          console.log('Barber updated', data.barber);
+          console.log('Barber updated');
           dispatch(CutActions.setCutSelectedBarber(data.barber));
         }
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [selectedBarber]);
 
-  const cleanSocketSub = () => {
-    console.log('Cleaning socket sub');
+  const cleanSocketSubscriptions = () => {
     if (socket && connected && selectedBarber) {
       const url = SocketUrls.BarberInfo.replace(
         '{{barberId}}',
@@ -84,9 +91,9 @@ const CustomerAttendance = () => {
   useEffect(() => {
     getBarberLiveUpdates();
 
-    return cleanSocketSub;
+    return cleanSocketSubscriptions;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getBarberLiveUpdates]);
+  }, [selectedBarber]);
 
   if (!selectedBarber) {
     return null;
@@ -100,10 +107,26 @@ const CustomerAttendance = () => {
     dispatch(CutActions.setCutSelectedService(service));
   };
 
+  const onSelectAdditionalService = (service: IBarberService) => {
+    if (
+      selectedAdditionalServices &&
+      selectedAdditionalServices.some(el => el._id === service._id)
+    ) {
+      dispatch(CutActions.removeCutSelectedAdditionalService(service));
+    }
+
+    if (
+      (selectedAdditionalServices &&
+        !selectedAdditionalServices.some(el => el._id === service._id)) ||
+      !selectedAdditionalServices
+    ) {
+      dispatch(CutActions.addCutSelectedAdditionalService(service));
+    }
+  };
+
   return (
     <AttendanceContentStyled entering={FadeInLeft}>
-      {/* <Typography variant="h4">{'customer.cut.attendance.title'}</Typography> */}
-      <BarberInfoCard barber={selectedBarber} />
+      <BarberInfoCard barber={selectedBarber} isOpen={isOpen} />
       {isCustomer && (
         <AttendanceIsCustomerStyled>
           <Icons.UserCheckIcon
@@ -142,13 +165,22 @@ const CustomerAttendance = () => {
                     translate={false}>
                     {t('customer.cut.attendance.types.queue')} {queueStatus}
                   </Typography>
-                  <Typography
-                    variant="tip"
-                    weight="medium"
-                    translateProps={{total: barberTodayQueue.tickets.length}}
-                    color={attendanceType === 'queue' ? 'main' : 'black1'}>
-                    {'customer.cut.attendance.types.queueDesc'}
-                  </Typography>
+                  {barberTodayQueue.tickets.length === 0 ? (
+                    <Typography
+                      variant="tip"
+                      weight="medium"
+                      color={attendanceType === 'queue' ? 'main' : 'black1'}>
+                      {'customer.cut.attendance.types.noTicketsOnQueue'}
+                    </Typography>
+                  ) : (
+                    <Typography
+                      variant="tip"
+                      weight="medium"
+                      translateProps={{total: barberTodayQueue.tickets.length}}
+                      color={attendanceType === 'queue' ? 'main' : 'black1'}>
+                      {'customer.cut.attendance.types.queueDesc'}
+                    </Typography>
+                  )}
                 </AttendanceBarberItemTitleStyled>
               </>
             </AttendanceItemStyled>
@@ -199,7 +231,7 @@ const CustomerAttendance = () => {
                 key={service._id}>
                 <>
                   <AttendanceItemGroupStyled>
-                    <AttendanceItemIconStyled>
+                    <Box alignItems="center" justifyContent="center">
                       {service.icon === 'maquina' && (
                         <Icons.MaquinaIcon
                           width={18}
@@ -221,7 +253,7 @@ const CustomerAttendance = () => {
                           color={isActive ? 'main' : 'black2'}
                         />
                       )}
-                    </AttendanceItemIconStyled>
+                    </Box>
                     <AttendanceBarberItemTitleStyled>
                       <Typography
                         variant="body1"
@@ -236,7 +268,76 @@ const CustomerAttendance = () => {
                       variant="body1"
                       translate={false}
                       color={isActive ? 'main' : 'default'}>
-                      {t('currency.symbol')} {service.price}
+                      {`+ ${t('currency.symbol')} ${service.price}`}
+                    </Typography>
+                  </AttendanceItemGroupStyled>
+                </>
+              </AttendanceItemStyled>
+            );
+          })}
+      </AttendanceSectionStyled>
+      <AttendanceSectionStyled>
+        <Box direction="row" alignItems="flex-end" gap={6}>
+          <Typography variant="body1" translate={false}>
+            {t('customer.cut.attendance.select.additionalServices')}
+          </Typography>
+          <Typography variant="caption" color="placeholder">
+            {t('customer.cut.attendance.select.optional')}
+          </Typography>
+        </Box>
+
+        {!!additionalServices &&
+          additionalServices.map(service => {
+            const isActive =
+              !!selectedAdditionalServices &&
+              selectedAdditionalServices?.some(el => el._id === service._id);
+
+            return (
+              <AttendanceItemStyled
+                active={isActive}
+                onPress={() => onSelectAdditionalService(service)}
+                justifyContent="space-between"
+                key={service._id}>
+                <>
+                  <AttendanceItemGroupStyled>
+                    <Box alignItems="center" justifyContent="center">
+                      {service.icon === 'maquina' && (
+                        <Icons.MaquinaIcon
+                          width={18}
+                          height={20}
+                          color={isActive ? 'main' : 'black2'}
+                        />
+                      )}
+                      {service.icon === 'pente' && (
+                        <Icons.PenteIcon
+                          width={20}
+                          height={20}
+                          color={isActive ? 'main' : 'black2'}
+                        />
+                      )}
+                      {service.icon === 'navalha' && (
+                        <Icons.NavalhaIcon
+                          width={24}
+                          height={15}
+                          color={isActive ? 'main' : 'black2'}
+                        />
+                      )}
+                    </Box>
+                    <AttendanceBarberItemTitleStyled>
+                      <Typography
+                        variant="body1"
+                        color={isActive ? 'main' : 'black2'}
+                        translate={false}>
+                        {service.name}
+                      </Typography>
+                    </AttendanceBarberItemTitleStyled>
+                  </AttendanceItemGroupStyled>
+                  <AttendanceItemGroupStyled>
+                    <Typography
+                      variant="body1"
+                      translate={false}
+                      color={isActive ? 'main' : 'default'}>
+                      {`+ ${t('currency.symbol')} ${service.price}`}
                     </Typography>
                   </AttendanceItemGroupStyled>
                 </>

@@ -24,6 +24,7 @@ import {
   OnTicketIconWrapperStyled,
   QueueInfoStyled,
 } from './styles';
+import {OnTicketServiceInfo} from '@/screens/CustomerOnTicket/components';
 
 interface ICustomerJoinTodayQueueProps {
   onBack: () => void;
@@ -48,11 +49,11 @@ const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
 
       dispatch(TicketViewActions.setTicketView(ticket));
 
-      setJoining(false);
-
       if (onContinue) {
         onContinue();
       }
+
+      setJoining(false);
 
       navigation.navigate('/customer/on-ticket');
     } catch (error) {
@@ -62,9 +63,15 @@ const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
 
   return (
     <CustomBottomSheetOverlayStyled
+      onPress={() => {
+        onBack();
+      }}
       entering={FadeIn.duration(100)}
       exiting={FadeOut.duration(300)}>
       <CustomBottomSheetStyled
+        onPress={event => {
+          event.stopPropagation();
+        }}
         paddingBottom={insets.bottom - 18}
         entering={SlideInDown.delay(100)}
         exiting={SlideOutDown.duration(300)}>
@@ -83,37 +90,19 @@ const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
             <OnTicketIconWrapperStyled>
               <Icons.UserIcon width={24} height={24} color="white3" />
             </OnTicketIconWrapperStyled>
-            <Box gap={2}>
-              <Typography variant="h5">{ticket.queue?.position} º</Typography>
+            <Box gap={3}>
+              <Typography variant="body1">
+                {ticket.queue?.position} º
+              </Typography>
               <Typography variant="caption" color="placeholder">
                 {'customer.onTicket.info.position'}
               </Typography>
             </Box>
           </Box>
-          <Box direction="row" alignItems="center" gap={12}>
-            <OnTicketIconWrapperStyled>
-              {ticket.service.icon === 'maquina' && (
-                <Icons.MaquinaIcon width={24} height={24} color="white3" />
-              )}
-              {ticket.service.icon === 'navalha' && (
-                <Icons.NavalhaIcon width={24} height={24} color="white3" />
-              )}
-              {ticket.service.icon === 'pente' && (
-                <Icons.PenteIcon width={24} height={24} color="white3" />
-              )}
-            </OnTicketIconWrapperStyled>
-            <Box gap={6}>
-              <Typography variant="body1">{ticket.service.name}</Typography>
-              <Typography
-                variant="caption"
-                color="placeholder"
-                translateProps={{
-                  minutes: ticket.service.durationInMinutes,
-                }}>
-                {'customer.onTicket.info.duration'}
-              </Typography>
-            </Box>
-          </Box>
+          <OnTicketServiceInfo
+            service={ticket.service}
+            additionalServices={ticket.additional_services}
+          />
         </QueueInfoStyled>
 
         <Box gap={18} direction="row">

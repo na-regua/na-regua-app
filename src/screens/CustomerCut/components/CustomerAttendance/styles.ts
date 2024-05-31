@@ -60,7 +60,7 @@ export const AttendanceSectionContentStyled = styled.View`
 `;
 
 export const AttendanceItemStyled = styled.TouchableOpacity.attrs({
-  activeOpacity: 0.6,
+  activeOpacity: 0.8,
 })<{
   justifyContent?: ViewStyle['justifyContent'];
   active?: boolean;

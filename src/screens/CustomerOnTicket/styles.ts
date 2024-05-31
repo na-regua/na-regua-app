@@ -1,16 +1,24 @@
-import {Colors} from '@/theme';
+import {Colors, Metrics} from '@/theme';
 import styled from 'styled-components/native';
 
 export const OnTicketContainerStyled = styled.View`
   flex: 1;
   background: ${Colors.border};
 `;
-export const OnTicketContentStyled = styled.View`
-  padding: 18px;
+
+export const OnTicketContentStyled = styled.ScrollView.attrs({
+  contentContainerStyle: {
+    flexGrow: 1,
+    padding: Metrics.unitX3,
+    paddingTop: 0,
+  },
+})`
+  flex: 1;
 `;
 export const OnTicketCardStyled = styled.View`
   background: ${Colors.bgLight};
-  border-radius: 30px;
+  border-radius: 24px;
+  align-self: stretch;
 `;
 
 export const OnTicketCardGroupStyled = styled.View`
@@ -34,11 +42,7 @@ export const OnTicketBarberImageStyled = styled.Image.attrs({
 })`
   width: 48px;
   height: 48px;
-  border-radius: 18px;
-`;
-
-export const GappedColumnStyled = styled.View<{gap?: number}>`
-  gap: ${({gap}) => gap || 0}px;
+  border-radius: 12px;
 `;
 
 export const LineStyled = styled.View`
@@ -47,7 +51,7 @@ export const LineStyled = styled.View`
   height: 1px;
 `;
 
-export const TicketLineStyled = styled.View`
+export const OnTicketLineStyled = styled.View`
   flex-direction: row;
   align-items: center;
   width: 100%;
@@ -55,19 +59,19 @@ export const TicketLineStyled = styled.View`
   margin: 18px 0;
 `;
 
-export const TicketLineStrokeStyled = styled.View`
+export const OnTicketLineStrokeStyled = styled.View`
   background-color: ${Colors.border};
   height: 1px;
   flex: 1;
 `;
 
-export const TicketLineCornerStyled = styled.View<{
+export const OnTicketLineCornerStyled = styled.View<{
   left?: boolean;
   right?: boolean;
 }>`
   background-color: ${Colors.border};
   height: 24px;
-  width: 12px;
+  width: 16px;
 
   ${({left}) =>
     left &&
@@ -97,7 +101,7 @@ export const OnTicketIconWrapperStyled = styled.View`
   align-items: center;
   justify-content: center;
   background: ${Colors.secondary};
-  width: 48px;
-  height: 48px;
-  border-radius: 18px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
 `;

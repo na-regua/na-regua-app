@@ -1,5 +1,10 @@
 import {ICreateCustomerUser, IUpdateUser, IUser} from '@/app/models';
-import {assetToBuffer, numberMask, queryBuilder} from '@/utils';
+import {
+  assetToBuffer,
+  mapPathVariables,
+  numberMask,
+  queryBuilder,
+} from '@/utils';
 import {Asset} from 'react-native-image-picker';
 import api, {errToAxiosError} from '../../api';
 import ENDPOINTS from '../../endpoints';
@@ -47,4 +52,15 @@ const createCustomerUser = async (
   }
 };
 
-export default {updateUser, createCustomerUser};
+const favoriteBarber = async (barberId: string) => {
+  try {
+    const url = mapPathVariables(ENDPOINTS.USERS_FAVORITE_BARBER, {barberId});
+    const response = await api.put(url, {}, {withCredentials: true});
+
+    return response;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
+export default {updateUser, createCustomerUser, favoriteBarber};

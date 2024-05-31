@@ -1,43 +1,56 @@
 import {IBarberService} from '@/app/models';
-import {Icons, Typography} from '@/components/atoms';
+import {Box, Icons, Typography} from '@/components/atoms';
 import React from 'react';
-import {
-  GappedColumnStyled,
-  OnTicketIconWrapperStyled,
-  OnTicketInfoStyled,
-} from '../../styles';
+import {OnTicketIconWrapperStyled, OnTicketInfoStyled} from '../../styles';
+import {AdditionalServiceBadgeStyled} from './styles';
 
 interface OnTicketServiceInfoProps {
   service: IBarberService;
+  additionalServices?: IBarberService[];
 }
 
-const OnTicketServiceInfo: React.FC<OnTicketServiceInfoProps> = ({service}) => {
+const OnTicketServiceInfo: React.FC<OnTicketServiceInfoProps> = ({
+  service,
+  additionalServices,
+}) => {
   return (
     <OnTicketInfoStyled>
       <OnTicketIconWrapperStyled>
         {service.icon === 'maquina' && (
-          <Icons.MaquinaIcon width={24} height={24} color="white3" />
+          <Icons.MaquinaIcon width={22} height={22} color="white3" />
         )}
         {service.icon === 'navalha' && (
-          <Icons.NavalhaIcon width={24} height={24} color="white3" />
+          <Icons.NavalhaIcon
+            width={22}
+            strokeWidth={1}
+            height={22}
+            color="white3"
+          />
         )}
         {service.icon === 'pente' && (
-          <Icons.PenteIcon width={24} height={24} color="white3" />
+          <Icons.PenteIcon width={22} height={22} color="white3" />
         )}
       </OnTicketIconWrapperStyled>
-      <GappedColumnStyled>
+      <Box gap={3}>
         <Typography variant="body1" color="black2">
           {service.name}
         </Typography>
-        <Typography
-          variant="caption"
-          color="placeholder"
-          translateProps={{
-            minutes: service.durationInMinutes,
-          }}>
-          {'customer.onTicket.info.duration'}
-        </Typography>
-      </GappedColumnStyled>
+        <Box direction="row" alignItems="center" justifyContent="flex-start">
+          {additionalServices && additionalServices.length > 0 ? (
+            additionalServices.map((addService, index) => (
+              <AdditionalServiceBadgeStyled key={index}>
+                <Typography variant="tip" weight="medium" color="white3">
+                  + {addService.name}
+                </Typography>
+              </AdditionalServiceBadgeStyled>
+            ))
+          ) : (
+            <Typography variant="caption" color="placeholder">
+              {'Nenhum serviço adicional.'}
+            </Typography>
+          )}
+        </Box>
+      </Box>
     </OnTicketInfoStyled>
   );
 };

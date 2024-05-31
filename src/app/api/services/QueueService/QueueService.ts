@@ -51,7 +51,7 @@ const startQueue = async (): Promise<AxiosResponse<{queue: IQueue}>> => {
 const workerJoin = async (): Promise<AxiosResponse<{queue: IQueue}>> => {
   try {
     const res = await api.post(
-      ENDPOINTS.QUEUE_JOIN_WORKER,
+      ENDPOINTS.QUEUE_WORKER_JOIN,
       {},
       {withCredentials: true},
     );
@@ -65,13 +65,56 @@ const workerJoin = async (): Promise<AxiosResponse<{queue: IQueue}>> => {
 const userJoin = async (
   code: string,
   serviceId: string,
+  additionalServicesId?: string[],
 ): Promise<AxiosResponse<{ticket: ITicket}>> => {
   try {
     const res = await api.post(
-      ENDPOINTS.QUEUE_JOIN_USER,
-      {code, serviceId},
+      ENDPOINTS.QUEUE_USER_JOIN,
+      {code, serviceId, additionalServicesId},
       {withCredentials: true},
     );
+
+    return res;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
+const approveTicket = async (
+  ticketId: string,
+): Promise<AxiosResponse<null>> => {
+  try {
+    const mappedUrl = mapPathVariables(ENDPOINTS.QUEUE_WORKER_APPROVE_TICKET, {
+      ticketId,
+    });
+
+    const res = await api.put(mappedUrl, {}, {withCredentials: true});
+
+    return res;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
+const rejectTicket = async (ticketId: string): Promise<AxiosResponse<null>> => {
+  try {
+    const mappedUrl = mapPathVariables(ENDPOINTS.QUEUE_WORKER_REJECT_TICKET, {
+      ticketId,
+    });
+
+    const res = await api.put(mappedUrl, {}, {withCredentials: true});
+
+    return res;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
+const userLeave = async (ticketId: string): Promise<AxiosResponse<null>> => {
+  try {
+    const mappedUrl = mapPathVariables(ENDPOINTS.QUEUE_USER_LEAVE, {ticketId});
+
+    const res = await api.post(mappedUrl, {}, {withCredentials: true});
 
     return res;
   } catch (error) {
@@ -85,4 +128,7 @@ export default {
   userJoin,
   getBarberTodayQueue,
   workerJoin,
+  approveTicket,
+  rejectTicket,
+  userLeave,
 };

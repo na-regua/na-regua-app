@@ -3,9 +3,6 @@ import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 
 export const styles = StyleSheet.create({
-  menuItem: {
-    flex: 1,
-  },
   refreshControl: {
     backgroundColor: 'transparent',
   },
@@ -47,7 +44,6 @@ export const ContentActionsStyle = styled.View`
 export const MenuItemRowStyle = styled.View`
   flex: 1;
   flex-direction: row;
-  gap: 12px;
   justify-content: space-between;
 `;
 

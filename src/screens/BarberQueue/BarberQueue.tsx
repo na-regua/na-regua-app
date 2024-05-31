@@ -9,9 +9,10 @@ import {
 } from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {QueueActions, fetchIsOnQueue} from '@/store/slicers';
+import {QueueActions, QueueThunks, createNotification} from '@/store/slicers';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AxiosError} from 'axios';
 import React, {useEffect, useRef} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -59,7 +60,21 @@ const BarberQueue: React.FC<
         navigation.navigate('/barber/queue/fs');
       }
     } catch (error) {
-      console.log(error);
+      dispatch(QueueActions.setLoadingTodayQueue(false));
+
+      if (error instanceof AxiosError) {
+        const {message} = error.response?.data;
+
+        if (message) {
+          dispatch(
+            createNotification({
+              id: 'create_queue',
+              message: `errors.${message}`,
+              type: 'error',
+            }),
+          );
+        }
+      }
     }
   };
 
@@ -68,7 +83,7 @@ const BarberQueue: React.FC<
   };
 
   useEffect(() => {
-    dispatch(fetchIsOnQueue());
+    dispatch(QueueThunks.fetchBarberTodayQueue());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

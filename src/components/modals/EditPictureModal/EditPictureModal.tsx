@@ -76,7 +76,7 @@ const EditPictureModal: React.FC<IEditPictureModalProps> = ({
               onPress={chooseFromGallery}
               loading={loaders?.chooseFromGallery}
               suffix={
-                <Icons.GaleryIcon width={18} height={18} color="black2" />
+                <Icons.GalleryIcon width={18} height={18} color="black2" />
               }
             />
           )}

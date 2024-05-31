@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 
 export const WorkDaysContainerStyle = styled.View`
   gap: 8px;
+  width: 100%;
 `;
 
 export const SelectDaysContainerStyle = styled.ScrollView.attrs({
@@ -12,9 +13,7 @@ export const SelectDaysContainerStyle = styled.ScrollView.attrs({
     justifyContent: 'space-between',
     flexGrow: 1,
   },
-})`
-  flex-grow: 1;
-`;
+})``;
 
 export const SelectDayStyle = styled.TouchableOpacity<{active?: boolean}>`
   border-radius: 4px;

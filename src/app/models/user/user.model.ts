@@ -1,3 +1,4 @@
+import {IBarber} from '../barber/barber.model';
 import {IFile} from '../file/file.model';
 
 export type TUserRoles = 'admin' | 'worker' | 'customer';
@@ -13,6 +14,7 @@ export interface IUser {
   phoneConfirmed: boolean;
   createdAt: string;
   updatedAt: string;
+  favorites?: string[] | IBarber[];
 }
 
 export interface ICreateUser {

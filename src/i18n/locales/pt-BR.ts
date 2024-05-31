@@ -256,6 +256,18 @@ const ptBr = {
           title: 'Histórico',
           subtitle: 'Ver histórico de atendimentos.',
         },
+        favorites: {
+          title: 'Favoritos',
+          subtitle: 'Ver barbearias favoritas.',
+        },
+        notifications: {
+          title: 'Notificações',
+          subtitle: 'Acompanhar notificações.',
+        },
+        permissions: {
+          title: 'Permissões',
+          subtitle: 'Ajustar permissões do aplicativo.',
+        },
       },
     },
     home: {
@@ -305,12 +317,16 @@ const ptBr = {
         types: {
           queue: 'Fila',
           queueDesc: '{{-total}} cliente(s) na fila.',
+          noTicketsOnQueue: 'Nenhum cliente na fila, seja o primeiro!',
           schedule: 'Agendamento',
           scheduleDesc: '+{{-total}} horário(s) livre(s).',
+          noSchedules: 'Nenhum horário disponível no momento.',
         },
         select: {
           type: 'Selecione o atendimento',
           service: 'Selecione o serviço',
+          additionalServices: 'Serviços adicionais',
+          optional: '(opcional)',
           day: 'Dia',
           time: '',
         },
@@ -337,7 +353,7 @@ const ptBr = {
     },
     onTicket: {
       titles: {
-        pending: 'Aguarde',
+        pending: 'Aguarde...',
         queue: 'Na fila',
         schedule: 'Agendamento',
       },
@@ -345,6 +361,8 @@ const ptBr = {
         pending:
           'Sua solicitação foi enviada ao barbeiro, aguarde a confirmação.',
         lastUpdate: 'Última atualização: {{-time}}',
+        attendanceInfo: 'Informações do atendimento',
+        additionalServices: '+Serviços adicionais',
       },
       info: {
         position: 'Posição',
@@ -352,6 +370,8 @@ const ptBr = {
         time: 'Horário',
         duration: '{{-minutes}} minutos',
         prevision: 'Previsão',
+        price: 'Preço',
+        total: 'Total',
       },
       buttons: {beLate: 'Vou atrasar!'},
     },
@@ -451,6 +471,33 @@ const ptBr = {
         all: 'Todas',
         unread: 'Não lidas',
       },
+    },
+    permissions: {
+      title: 'Permissões',
+      subtitle: 'Ajustar permissões do aplicativo.',
+      buttons: {
+        openConfig: 'Permissões do dispositivo',
+      },
+      items: {
+        notifications: {
+          title: 'Notificações',
+          subtitle: 'Atualizações em tempo real.',
+        },
+        cam: {
+          title: 'Câmera',
+          subtitle: 'Leitura de QR Code.',
+        },
+        mic: {
+          title: 'Microfone',
+          subtitle: 'Leitura de QR Code.',
+        },
+        gallery: {
+          title: 'Fotos e imagens',
+          subtitle: 'Foto de perfil.',
+        },
+      },
+      alert:
+        'Para remover as permissões, acesse as configurações do dispositivo.',
     },
     header: {
       hello: 'Olá, ',
@@ -636,6 +683,8 @@ const ptBr = {
       'Foi gerado um extrato financeiro para o dia {{-day}}.',
     WORKER_ADD_USER_AS_CUSTOMER:
       '{{-data.worker.user.name}} te adicionou como cliente da barbearia {{-data.worker.barber.name}}.',
+    BARBER_IS_ON: '{{-data.barber.name}} está aberto para atendimento.',
+    BARBER_QUEUE_IS_ON: '{{-data.barber.name}} abriu a fila para atendimento.',
   },
   socketEvent: {
     WORKER_JOINED_QUEUE: 'Barbeiro {{-worker.user.name}} entrou na fila.',
@@ -647,8 +696,6 @@ const ptBr = {
     TICKET_MISSED: 'O cliente {{-customer.name}} perdeu o atendimento.',
     TICKET_REMOVED:
       'O ticket de atendimento do cliente {{-customer.name}} foi removido.',
-    TICKET_NOT_FOUND: 'O ticket de atendimento não encontrado.',
-    TICKET_NOT_CREATED: 'O ticket de atendimento não foi criado.',
     TICKET_IS_NOT_IN_QUEUE: 'O ticket não está na fila.',
     QUEUE_FINISHED: 'A fila foi finalizada.',
     QUEUE_PAUSED: 'A fila foi pausada.',
@@ -658,17 +705,18 @@ const ptBr = {
     BARBER_NOT_FOUND: 'Não foi possível encontrar a Barbearia.',
     BARBER_IS_CLOSED: 'A Barbearia está fechada.',
     USER_IS_NOT_WORKER: 'OPS! Você não é Funcionário da Barbearia.',
-    USER_DENIED:
-      '{{-worker.user.name}} negou o ticket de atendimento de {{-customer.name}}.',
+    USER_REJECTED:
+      '{{-worker.user.name}} rejeitou o ticket de atendimento de {{-customer.name}}.',
     USER_APPROVED:
-      '{{-worker.user.nrame}} aprovou o ticket de atendimento de {{-customer.name}}.',
+      '{{-worker.user.name}} aprovou o ticket de atendimento de {{-customer.name}}.',
     USER_JOINED: '{{-customer.name}} entrou na fila.',
-    WORKER_APPROVED_YOU:
+    USER_LEAVE: '{{-customer.name}} saiu da fila.',
+    WORKER_APPROVED_TICKET:
       '{{-worker.user.name}} aprovou seu ticket de atendimento na barbearia {{-worker.barber.name}}.',
-    WORKER_DENIED_YOU:
-      '{{-worker.user.name}} negou seu ticket de atendimento na barbearia {{-worker.barber.name}}.',
+    WORKER_REJECTED_TICKET:
+      '{{-worker.user.name}} rejeitou seu ticket de atendimento na barbearia {{-worker.barber.name}}.',
     USER_ALREADY_IN_QUEUE: 'Ops! Você já está na fila.',
-    USER_IN_OTHER_QUEUE: 'Ops! Você já está em outra fila.',
+    USER_ALREADY_IN_OTHER_QUEUE: 'Ops! Você está em outra fila.',
   },
   errors: {
     INVALID_CEP: 'CEP inválido.',
@@ -683,9 +731,10 @@ const ptBr = {
 
     TOKEN_NOT_FOUND: 'Token não encontrado.',
 
-    BARBER_NOT_CREATED: 'Barbeiro não foi criado.',
-    BARBER_NOT_COMPLETED: 'Barbeiro não foi completado.',
+    BARBER_NOT_CREATED: 'A Barbearia não foi criada.',
+    BARBER_NOT_COMPLETED: 'Ops! A Barbeiro ainda não completou o perfil.',
     BARBER_NOT_FOUND: 'Barbeiro não encontrado.',
+    BARBER_IS_CLOSED: 'Ops! A Barbearia está fechada.',
 
     QUEUE_NOT_FOUND: 'Fila não encontrada.',
     QUEUE_CAN_CREATE_ONLY_ONE_PER_DAY:
@@ -723,8 +772,8 @@ const ptBr = {
     '60202': 'Máximo de tentativas de verificação atingido.',
     '60203': 'Máximo de tentativas de envio atingido.',
     UNAVAILABLE_MESSAGE_SERVICE: 'Serviço de mensagens indisponível.',
-    BARBER_IS_CLOSED: 'Barbearia está fechada.',
-    USER_ALREADY_IN_QUEUE: 'Usuário já está na fila.',
+    USER_ALREADY_IN_QUEUE: 'Ops! Você já está nessa fila.',
+    USER_ALREADY_IN_OTHER_QUEUE: 'Ops! Você está em outra fila.',
   },
   currency: {symbol: 'R$', format: 'R$ {{-value}}'},
   buttons: {
@@ -738,6 +787,7 @@ const ptBr = {
     open: 'Abrir',
     follow: 'Acompanhar',
     goBack: 'Voltar',
+    close: 'Fechar',
   },
   tickets: {
     types: {

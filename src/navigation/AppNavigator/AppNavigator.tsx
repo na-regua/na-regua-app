@@ -17,11 +17,15 @@ import {
   CustomerLoginScreen,
   CustomerOnTicketScreen,
   CustomerQrScannerScreen,
+  CustomerSettingsFavoritesScreen,
+  CustomerSettingsHistoryScreen,
+  CustomerSettingsProfileScreen,
   CustomerSettingsScreen,
   CustomerSignUpScreen,
   CustomerSignUpVerifyScreen,
   LoginScreen,
   NotificationsScreen,
+  PermissionsScreen,
   SplashScreen,
 } from '@/screens';
 import BarberWorkers from '@/screens/BarberWorkers/BarberWorkers';
@@ -130,6 +134,10 @@ const AppNavigator: React.FC = () => {
               }}
               initialParams={{hideBottomNav: true}}
             />
+            <Stack.Screen
+              name={'/user/permissions'}
+              component={PermissionsScreen}
+            />
           </>
         )}
 
@@ -143,6 +151,19 @@ const AppNavigator: React.FC = () => {
               name={'/customer/settings'}
               component={CustomerSettingsScreen}
             />
+            <Stack.Screen
+              name={'/customer/settings/profile'}
+              component={CustomerSettingsProfileScreen}
+            />
+            <Stack.Screen
+              name={'/customer/settings/history'}
+              component={CustomerSettingsHistoryScreen}
+            />
+            <Stack.Screen
+              name={'/customer/settings/favorites'}
+              component={CustomerSettingsFavoritesScreen}
+            />
+
             <Stack.Screen
               name={'/customer/cut'}
               component={CustomerCutScreen}

@@ -6,8 +6,7 @@ import {ChevronDownIcon} from '../Icons/ChevronDownIcon/ChevronDownIcon';
 
 export const CollapseStyle = styled.View`
   border: 1px solid ${Colors.border};
-  border-radius: 8px;
-
+  border-radius: 12px;
   padding: 12px;
   gap: 12px;
 `;

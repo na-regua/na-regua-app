@@ -30,6 +30,7 @@ export interface IBarber extends IBarberServiceConfig {
   config: IBarberServiceConfig;
   customers: IUser[];
   rating?: number;
+  open: boolean;
 }
 
 export interface IBarberServiceConfig {

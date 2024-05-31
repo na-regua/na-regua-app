@@ -1,8 +1,8 @@
 import {Box, Button, Icons, Splashs, Typography} from '@/components/atoms';
+import {CustomerJoinTodayQueue} from '@/components/modals';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {fetchTodayTickets} from '@/store/slicers';
 import {Colors} from '@/theme';
 import {strongShadowStyle} from '@/utils';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -21,7 +21,7 @@ import {
   ShareQrButtonContentStyled,
   SplashViewStyled,
 } from './styles';
-import {CustomerJoinTodayQueue} from '@/components/modals';
+import {CutThunks} from '@/store/slicers';
 
 const CustomerHome: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/customer/home'>
@@ -53,7 +53,7 @@ const CustomerHome: React.FC<
   };
 
   const getTodayTicketsData = async () => {
-    await dispatch(fetchTodayTickets());
+    await dispatch(CutThunks.fetchTodayTickets());
   };
 
   useEffect(() => {
@@ -80,7 +80,10 @@ const CustomerHome: React.FC<
           underlayColor={Colors.secondaryHover}
           entering={FadeInDown}>
           <>
-            <Box viewProps={{entering: FadeInDown.delay(300)}}>
+            <Box
+              entering={FadeInDown.delay(300)}
+              alignItems="center"
+              justifyContent="center">
               <Splashs.BarberSplash />
             </Box>
             <Box paddings={{bottom: 18}} gap={2} flex={1}>
