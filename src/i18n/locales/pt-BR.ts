@@ -518,6 +518,9 @@ const ptBr = {
         save: 'Salvar',
       },
     },
+    customerSelectedBarber: {
+      title: 'Barbearia selecionada',
+    },
     barberService: {
       titles: {add: 'Adicionar serviço', edit: 'Editar serviço'},
       fields: {

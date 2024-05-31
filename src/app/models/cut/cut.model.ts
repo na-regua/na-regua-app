@@ -23,4 +23,6 @@ export interface ICutState {
   todayTickets?: IGetTodayTickets;
   customerIsOnQueue?: boolean;
   barberTodayQueue?: IQueue;
+
+  showSelectedModal?: boolean;
 }

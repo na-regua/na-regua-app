@@ -3,13 +3,11 @@ import {IBarber} from '@/app/models';
 import {Button, Icons, Typography} from '@/components/atoms';
 import SearchIcon from '@/components/atoms/Icons/SearchIcon/SearchIcon';
 import {useAppNavigation} from '@/navigation';
-import {AppDispatch} from '@/store/Store';
-import {CutActions, CutThunks} from '@/store/slicers';
+import {CutActions} from '@/store/slicers';
 import React, {useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Keyboard, TouchableWithoutFeedback} from 'react-native';
 import {FadeInDown} from 'react-native-reanimated';
-import {useDispatch} from 'react-redux';
 import {
   AvoidKeyboardStyled,
   CodeInputStyled,
@@ -26,20 +24,21 @@ import {
   ShareQrButtonContentStyled,
   menuShadow,
 } from '../../styles';
+import {useDispatch} from 'react-redux';
 
-const SelectBarber = () => {
+const CustomerSelectBarber = () => {
   const {t} = useTranslation();
   const [search, setSearch] = useState('');
 
   const [loading, setLoading] = useState(false);
+
   const [barbers, setBarbers] = useState<IBarber[]>([]);
 
   const [menuHeight, setMenuHeight] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const navigation = useAppNavigation();
-
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch();
 
   const canSearch = useMemo(() => search.length > 0, [search]);
 
@@ -68,17 +67,9 @@ const SelectBarber = () => {
     setShowDropdown(false);
   };
 
-  const selectBarber = async (barber: IBarber, close?: boolean) => {
-    await dispatch(CutThunks.fetchBarberServicesByBarberId(barber._id));
-    await dispatch(CutThunks.fetchBarberTodayQueueByBarberId(barber._id));
-
-    dispatch(CutActions.setCutStep('attendance'));
-    dispatch(CutActions.setAttendanceType('queue'));
+  const openShowSelectedModal = (barber: IBarber) => {
     dispatch(CutActions.setCutSelectedBarber(barber));
-
-    if (close) {
-      closeDropdown();
-    }
+    dispatch(CutActions.setShowSelectedModal(true));
   };
 
   const goToQrScanner = () => {
@@ -149,7 +140,7 @@ const SelectBarber = () => {
                       first={isFirst}
                       last={isLast}
                       onPress={() => {
-                        selectBarber(barber, true);
+                        openShowSelectedModal(barber);
                       }}
                       key={index}>
                       <DropdownItemContentStyled>
@@ -184,74 +175,9 @@ const SelectBarber = () => {
           onPress={goToQrScanner}
         />
         <LineStyled />
-        {/* <SectionStyled>
-        <SectionTitleStyled>
-          <Typography variant="body1" color="black2">
-            {'customer.cut.select.recents.title'}
-          </Typography>
-        </SectionTitleStyled>
-        <HorizontalScrollStyled>
-          {[1, 2, 3, 4].map(el => (
-            <BarberItemStyled key={el}>
-              <>
-                <BarberImageStyled
-                  source={{
-                    uri: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?q=80&w=2240&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                  }}
-                />
-                <BarberInfoStyled>
-                  <BarberItemTitleStyled>
-                    <Typography variant="body1">{'Barbeiro josé'}</Typography>
-                    <Typography variant="tip">{'4.8'}</Typography>
-                  </BarberItemTitleStyled>
-                  <BarberItemLocationStyled>
-                    <Typography variant="caption" color="black1">
-                      {'Rua josé da silva'}
-                    </Typography>
-                  </BarberItemLocationStyled>
-                </BarberInfoStyled>
-              </>
-            </BarberItemStyled>
-          ))}
-        </HorizontalScrollStyled>
-      </SectionStyled>
-      <SectionStyled>
-        <SectionTitleStyled>
-          <Typography variant="body1" color="black2">
-            {'customer.cut.select.near.title'}
-          </Typography>
-          <Typography variant="caption" color="black1">
-            {'customer.cut.select.near.subtitle'}
-          </Typography>
-        </SectionTitleStyled>
-        <HorizontalScrollStyled>
-          {[1, 2, 3, 4].map(el => (
-            <BarberItemStyled key={el}>
-              <>
-                <BarberImageStyled
-                  source={{
-                    uri: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?q=80&w=2240&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                  }}
-                />
-                <BarberInfoStyled>
-                  <BarberItemTitleStyled>
-                    <Typography variant="body1">{'Barbeiro josé'}</Typography>
-                    <Typography variant="tip">{'4.8'}</Typography>
-                  </BarberItemTitleStyled>
-                  <BarberItemLocationStyled>
-                    <Typography variant="caption" color="black1">
-                      {'Rua josé da silva'}
-                    </Typography>
-                  </BarberItemLocationStyled>
-                </BarberInfoStyled>
-              </>
-            </BarberItemStyled>
-          ))}
-        </HorizontalScrollStyled>
-      </SectionStyled> */}
       </AvoidKeyboardStyled>
     </TouchableWithoutFeedback>
   );
 };
 
-export {SelectBarber};
+export {CustomerSelectBarber};

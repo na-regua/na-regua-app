@@ -85,7 +85,7 @@ const Notifications: React.FC<
     try {
       await NotificationService.markAllAsRead();
 
-      await dispatch(fetchUserNotifications());
+      await dispatch(fetchUserNotifications({reload: false}));
     } catch (error) {
       if (error instanceof AxiosError) {
       }

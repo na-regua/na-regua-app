@@ -53,20 +53,20 @@ const NotificationCenterItem: React.FC<NotificationCenterItemProps> = ({
 
       await NotificationService.markAsReadById(notificationId);
 
-      await dispatch(fetchUserNotifications());
+      await dispatch(fetchUserNotifications({reload: false}));
 
       setReading(false);
     } catch (error) {
       setReading(false);
 
       if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-        if (message) {
+        const {message: errorMessage} = error.response?.data;
+        if (errorMessage) {
           dispatch(
             createNotification({
               id: 'mark-as-read',
               type: 'error',
-              message: `error.${message}`,
+              message: `error.${errorMessage}`,
             }),
           );
         }

@@ -8,7 +8,6 @@ export const NotificationsContainerStyled = styled.View`
 
 export const NotificationContentStyle = styled.View`
   flex: 1;
-  padding: ${Metrics.unitX3}px;
   gap: ${Metrics.unitX3}px;
 `;
 
@@ -21,6 +20,8 @@ export const TouchableLinkStyled = styled.TouchableOpacity`
 
 export const NotificationHeaderStyled = styled.View`
   align-self: stretch;
+  padding: ${Metrics.unitX3}px;
+  padding-bottom: 0;
 `;
 
 export const NotificationHeaderRowStyled = styled.View`

@@ -60,6 +60,11 @@ const CutSlicer = createSlice<ICutState, SliceCaseReducers<ICutState>, string>({
       state.selectedService = undefined;
       state.selectedBarber = undefined;
     },
+    setShowSelectedModal: (state, action: GenericAction<boolean>) => {
+      state.showSelectedModal = action.payload;
+
+      console.log('state.showSelectedModal', state.showSelectedModal);
+    },
   },
   extraReducers: builder => {
     builder.addCase(
@@ -97,6 +102,7 @@ export const CutActions = CutSlicer.actions as {
   resetCut: ActionCreatorWithoutPayload;
   addCutSelectedAdditionalService: ActionCreatorWithPayload<IBarberService>;
   removeCutSelectedAdditionalService: ActionCreatorWithPayload<IBarberService>;
+  setShowSelectedModal: ActionCreatorWithPayload<boolean>;
 };
 
 export {CutReducer, CutSlicer};

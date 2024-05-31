@@ -5,6 +5,7 @@ import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
 import {createNotification, getCurrentUser} from '@/store/slicers';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AxiosError} from 'axios';
 import React, {useEffect, useMemo, useRef} from 'react';
 import {ScrollView} from 'react-native';
 import {
@@ -20,21 +21,23 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   CustomerAttendance,
   CustomerAttendanceFooter,
-  SelectBarber,
+  CustomerSelectBarber,
+  CustomerSelectedBarberModal,
 } from './components';
 import {
   CutContainerStyled,
   CutContentStyled,
   SplashWrapperStyled,
 } from './styles';
-import {AxiosError} from 'axios';
 
 const CustomerCut: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/customer/cut'>
 > = ({navigation}) => {
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
-  const {steps, selectedBarber} = useSelector((state: RootState) => state.cut);
+  const {steps, selectedBarber, showSelectedModal} = useSelector(
+    (state: RootState) => state.cut,
+  );
   const {user} = useSelector((state: RootState) => state.auth);
 
   const insetsStyles = {
@@ -184,10 +187,11 @@ const CustomerCut: React.FC<
           footer={
             <>{steps === 'attendance' && <CustomerAttendanceFooter />}</>
           }>
-          {steps === 'select' && <SelectBarber />}
+          {steps === 'select' && <CustomerSelectBarber />}
           {steps === 'attendance' && <CustomerAttendance isOpen={isOpen} />}
         </PageCard>
       </CutContentStyled>
+      {showSelectedModal && !!selectedBarber && <CustomerSelectedBarberModal />}
     </CutContainerStyled>
   );
 };
