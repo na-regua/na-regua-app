@@ -24,6 +24,7 @@ enum ENDPOINTS {
    * Users
    * */
   USERS_LIST = '/users/',
+  USERS_LIST_FAVORITES = '/users/favorites',
   USERS_CREATE = '/users/',
   USERS_UPDATE = '/users/:id',
   USERS_SEND_WHATSAPP_CODE = '/users/send/whatsapp-code',
@@ -65,14 +66,16 @@ enum ENDPOINTS {
    * */
   QUEUE_CREATE = '/queues/',
   QUEUE_LIST = '/queues/',
-  QUEUE_GET_TODAY = '/queues/today',
-  QUEUE_BARBER_TODAY = '/queues/:barberId/today',
+  QUEUE_BARBER_TODAY = '/queues/today',
+  QUEUE_BARBER_TODAY_BY_ID = '/queues/:barberId/today',
   QUEUE_LAST_POSITION = '/queues/:queueId/last-position',
   QUEUE_USER_JOIN = '/queues/join/user',
   QUEUE_WORKER_JOIN = '/queues/join/worker',
   QUEUE_WORKER_APPROVE_TICKET = '/queues/worker/approve/:ticketId',
   QUEUE_USER_LEAVE = '/queues/leave/:ticketId',
   QUEUE_WORKER_REJECT_TICKET = '/queues/worker/reject/:ticketId',
+  QUEUE_WORKER_GO_NEXT = '/queues/worker/go-next',
+
   /**
    * Tickets
    * */

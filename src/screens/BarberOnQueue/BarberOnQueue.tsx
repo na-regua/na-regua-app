@@ -1,12 +1,17 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {SocketUrls} from '@/app/models';
-import {AppStatusBar, Button, Loader} from '@/components/atoms';
+import {
+  AppStatusBar,
+  Loader,
+  SwipeButton,
+  SwipeButtonState,
+} from '@/components/atoms';
 import {Header, OnQueueHeader} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {BarberQueueSocketEvents} from '@/socket/events';
 import {AppDispatch, RootState} from '@/store/Store';
-import {QueueThunks} from '@/store/slicers';
+import {QueueThunks, createNotification} from '@/store/slicers';
 import {Colors} from '@/theme';
 import {useRoute} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -22,6 +27,8 @@ import {
   OnQueueLoaderWrapperStyled,
   OnQueueScrollStyled,
 } from './styles';
+import {QueueService} from '@/app/api';
+import {AxiosError} from 'axios';
 
 const BarberOnQueue: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/barber/queue/fs'>
@@ -36,6 +43,8 @@ const BarberOnQueue: React.FC<
   );
   const dispatch = useDispatch<AppDispatch>();
   const {viewMode} = useSelector((state: RootState) => state.queue);
+
+  const [swiping, setSwiping] = useState<SwipeButtonState>('wait');
 
   const isFs = useMemo(
     () => viewMode === 'fs' && route.name === '/barber/queue/fs',
@@ -88,6 +97,42 @@ const BarberOnQueue: React.FC<
     return null;
   }
 
+  const onNext = async (toggled: boolean) => {
+    if (toggled) {
+      try {
+        setSwiping('on');
+
+        await QueueService.goNextTicket();
+
+        setSwiping('off');
+
+        setTimeout(() => {
+          setSwiping('wait');
+        });
+      } catch (error) {
+        setSwiping('off');
+
+        setTimeout(() => {
+          setSwiping('wait');
+        });
+
+        if (error instanceof AxiosError) {
+          const {message} = error.response?.data;
+
+          if (message) {
+            dispatch(
+              createNotification({
+                id: 'go_next',
+                type: 'error',
+                message: `errors.${message}`,
+              }),
+            );
+          }
+        }
+      }
+    }
+  };
+
   const SocketEvents = <>{socket && <BarberQueueSocketEvents />}</>;
 
   return (
@@ -137,10 +182,13 @@ const BarberOnQueue: React.FC<
               colorScheme="danger"
             />
           </OnQueueActionsRowStyled>
-          <Button
-            title="barber.onQueue.buttons.next"
-            colorScheme="primary"
-            disabled={todayQueue.status === 'paused'}
+          <SwipeButton
+            onToggle={value => {
+              onNext(value);
+            }}
+            resetAfterLoading
+            state={swiping}
+            title="buttons.next"
           />
         </OnQueueActionsStyled>
       </OnQueueContentStyled>

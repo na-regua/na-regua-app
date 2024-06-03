@@ -1,4 +1,4 @@
-import {AvoidKeyboard, Button, Input} from '@/components/atoms';
+import {AvoidKeyboard, Box, Button, Input} from '@/components/atoms';
 
 import {Colors} from '@/theme';
 import {TouchableHighlight, TouchableWithoutFeedback, View} from 'react-native';
@@ -39,6 +39,8 @@ export const PageCardRowStyled = styled.View`
   position: relative;
   z-index: 2;
 `;
+
+export const PageCardGroupStyled = styled(Box)``;
 
 export const CodeInputStyled = styled(Input).attrs({
   wrapperStyle: {

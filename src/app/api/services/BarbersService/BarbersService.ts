@@ -5,9 +5,9 @@ import {
   ICreateBarber,
   SignUpResponse,
 } from '@/app/models';
+import {queryBuilder} from '@/utils';
 import {AxiosResponse} from 'axios';
 import {default as ENDPOINTS} from '../../endpoints';
-import {queryBuilder} from '@/utils';
 
 const getBarbers = async (
   search?: string,

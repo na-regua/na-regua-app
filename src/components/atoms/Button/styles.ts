@@ -74,15 +74,15 @@ const VariantsButton: Record<TButtonVariants, RuleSet<any>> = {
 
 const SizesButton: Record<TButtonSizes, RuleSet<any>> = {
   small: css`
-    min-height: 36px;
+    max-height: 38px;
     padding: 8px;
   `,
   medium: css`
-    min-height: 44px;
+    max-height: 44px;
     padding: 12px 16px;
   `,
   large: css`
-    min-height: 56px;
+    max-height: 56px;
     padding: 16px 20px;
   `,
 };
@@ -95,7 +95,6 @@ export const ButtonStyle = styled.TouchableOpacity<{
   hasSuffix?: boolean;
   size: TButtonSizes;
 }>`
-  min-height: 44px;
   padding: 12px;
   align-items: center;
   justify-content: center;

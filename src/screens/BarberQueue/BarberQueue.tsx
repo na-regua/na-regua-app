@@ -36,7 +36,9 @@ const BarberQueue: React.FC<
 
   const joinQueueModalRef = useRef<BottomSheetModal>(null);
 
-  const handleStartQueue = () => {
+  const handleStartQueue = async () => {
+    await dispatch(QueueThunks.fetchBarberTodayQueue());
+
     if (todayQueue) {
       showJoinQueueModal();
     }

@@ -1,4 +1,3 @@
-import {BOTTOM_NAV_HEIGHT} from '@/navigation/BottomNav/styles';
 import {Colors, Metrics} from '@/theme';
 import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
@@ -21,7 +20,6 @@ export const ContainerStyle = styled.View`
 
 export const ScrollContentStyle = styled.ScrollView`
   flex: 1;
-  margin-bottom: ${`${BOTTOM_NAV_HEIGHT}px`};
   padding-top: ${Metrics.unitX3}px;
 `;
 

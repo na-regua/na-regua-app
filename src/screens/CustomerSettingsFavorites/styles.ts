@@ -1,4 +1,3 @@
-import {BOTTOM_NAV_HEIGHT} from '@/navigation/BottomNav/styles';
 import {Colors, Metrics} from '@/theme';
 import styled from 'styled-components/native';
 
@@ -15,6 +14,4 @@ export const ScrollContentStyle = styled.ScrollView.attrs({
   },
 })`
   flex: 1;
-  margin-bottom: ${`${BOTTOM_NAV_HEIGHT}px`};
-  padding-top: ${Metrics.unitX3}px;
 `;

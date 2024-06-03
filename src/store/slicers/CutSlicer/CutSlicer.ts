@@ -59,11 +59,10 @@ const CutSlicer = createSlice<ICutState, SliceCaseReducers<ICutState>, string>({
       state.attendanceType = 'queue';
       state.selectedService = undefined;
       state.selectedBarber = undefined;
+      state.selectedAdditionalServices = [];
     },
     setShowSelectedModal: (state, action: GenericAction<boolean>) => {
       state.showSelectedModal = action.payload;
-
-      console.log('state.showSelectedModal', state.showSelectedModal);
     },
   },
   extraReducers: builder => {

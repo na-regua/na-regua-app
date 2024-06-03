@@ -70,7 +70,7 @@ const CustomerSettings: React.FC<
       title: 'customer.settings.menus.profile.title',
       subtitle: 'customer.settings.menus.profile.subtitle',
       onPress: () => {
-        navigation.navigate('/customer/settings/history');
+        navigation.navigate('/customer/settings/profile');
       },
     },
     {

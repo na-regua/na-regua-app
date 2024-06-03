@@ -3,13 +3,13 @@ import {Box, Button, Icons, Modal, Typography} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {TicketViewActions} from '@/store/slicers';
+import {CutThunks, TicketViewActions} from '@/store/slicers';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useMemo, useRef} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
-import {OnTicketQueue, OnTicketWaiting} from './components';
+import {OnTicketFinished, OnTicketQueue, OnTicketWaiting} from './components';
 import {OnTicketContainerStyled, OnTicketContentStyled} from './styles';
 
 export const OnTicketNotifyNotificationKey = 'onTicketNotify';
@@ -70,6 +70,7 @@ const CustomerOnTicket: React.FC<
       socket.on(SocketUrls.GetTicket, data => {
         if (data.ticket) {
           dispatch(TicketViewActions.setTicketView(data.ticket));
+          dispatch(CutThunks.fetchTodayTickets());
         }
       });
     }
@@ -115,6 +116,9 @@ const CustomerOnTicket: React.FC<
         )}
         {ticket.status === 'queue' && (
           <OnTicketQueue ticket={ticket} totalPrice={totalPrice} />
+        )}
+        {ticket.status === 'served' && (
+          <OnTicketFinished ticket={ticket} totalPrice={totalPrice} />
         )}
         {/* {ticket.status === 'scheduled' && <OnTicketSchedule ticket={ticket} />} */}
       </OnTicketContentStyled>

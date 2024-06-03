@@ -42,8 +42,6 @@ const SocketProvider: React.FC<PropsWithChildren> = ({children}) => {
       instance.on(SocketUrls.Event, (socketEvent: ISocketEvent) => {
         const {event, data} = socketEvent;
 
-        console.log('Event:', event, data);
-
         const translatedMessage = t(`socketEvent.${event}`, data).toString();
 
         NotificationService.pushNotification({
@@ -76,7 +74,7 @@ const SocketProvider: React.FC<PropsWithChildren> = ({children}) => {
         dispatch(SocketActions.disconnectSocket());
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);

@@ -310,6 +310,7 @@ const ptBr = {
         recents: {
           title: 'Recentes',
         },
+        favorites: 'Suas favoritas!',
       },
       attendance: {
         title: 'Atendimento',
@@ -356,6 +357,7 @@ const ptBr = {
         pending: 'Aguarde...',
         queue: 'Na fila',
         schedule: 'Agendamento',
+        finished: 'Finalizado',
       },
       subtitles: {
         pending:
@@ -373,7 +375,7 @@ const ptBr = {
         price: 'Preço',
         total: 'Total',
       },
-      buttons: {beLate: 'Vou atrasar!'},
+      buttons: {beLate: 'Vou atrasar!', rate: 'Avaliar'},
     },
   },
   generic: {
@@ -695,6 +697,12 @@ const ptBr = {
     WORKER_IS_NOT_IN_QUEUE: '{{-worker.user.name}} não está na fila.',
     WORKER_IS_ALREADY_IN_QUEUE: '{{-worker.user.name}} já está na fila.',
     WORKER_NOT_FOUND: 'O Funcionário não foi encontrado.',
+    WORKER_APPROVED_TICKET:
+      '{{-worker.user.name}} aprovou seu ticket de atendimento na barbearia {{-worker.barber.name}}.',
+    WORKER_REJECTED_TICKET:
+      '{{-worker.user.name}} rejeitou seu ticket de atendimento na barbearia {{-worker.barber.name}}.',
+    WORKER_SERVED_TICKET:
+      '{{-worker.user.name}} finalizou seu ticket de atendimento na barbearia {{-worker.barber.name}}.',
     TICKET_SERVED: 'O cliente {{-customer.name}} foi atendido.',
     TICKET_MISSED: 'O cliente {{-customer.name}} perdeu o atendimento.',
     TICKET_REMOVED:
@@ -714,10 +722,7 @@ const ptBr = {
       '{{-worker.user.name}} aprovou o ticket de atendimento de {{-customer.name}}.',
     USER_JOINED: '{{-customer.name}} entrou na fila.',
     USER_LEAVE: '{{-customer.name}} saiu da fila.',
-    WORKER_APPROVED_TICKET:
-      '{{-worker.user.name}} aprovou seu ticket de atendimento na barbearia {{-worker.barber.name}}.',
-    WORKER_REJECTED_TICKET:
-      '{{-worker.user.name}} rejeitou seu ticket de atendimento na barbearia {{-worker.barber.name}}.',
+
     USER_ALREADY_IN_QUEUE: 'Ops! Você já está na fila.',
     USER_ALREADY_IN_OTHER_QUEUE: 'Ops! Você está em outra fila.',
   },
@@ -790,6 +795,7 @@ const ptBr = {
     open: 'Abrir',
     follow: 'Acompanhar',
     goBack: 'Voltar',
+    next: 'Próximo',
     close: 'Fechar',
   },
   tickets: {

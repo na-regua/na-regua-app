@@ -1,30 +1,29 @@
-import {BarbersService} from '@/app/api';
+import {BarbersService, UserService} from '@/app/api';
 import {IBarber} from '@/app/models';
-import {Button, Icons, Typography} from '@/components/atoms';
+import {BarberInfoCard, Button, Icons, Typography} from '@/components/atoms';
 import SearchIcon from '@/components/atoms/Icons/SearchIcon/SearchIcon';
 import {useAppNavigation} from '@/navigation';
-import {CutActions} from '@/store/slicers';
-import React, {useMemo, useState} from 'react';
+import {CutActions, createNotification} from '@/store/slicers';
+import {AxiosError} from 'axios';
+import React, {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Keyboard, TouchableWithoutFeedback} from 'react-native';
 import {FadeInDown} from 'react-native-reanimated';
+import {useDispatch} from 'react-redux';
 import {
   AvoidKeyboardStyled,
   CodeInputStyled,
-  DropdownItemContentStyled,
-  DropdownItemImageStyled,
-  DropdownItemInfoStyled,
   DropdownItemStyled,
   DropdownMenuStyled,
   DropdownWrapperStyled,
-  LineStyled,
+  PageCardGroupStyled,
   PageCardRowStyled,
   PageCardTitleStyled,
   SearchButtonStyled,
   ShareQrButtonContentStyled,
   menuShadow,
 } from '../../styles';
-import {useDispatch} from 'react-redux';
+import {FavoriteItemStyled, FavoritesScrollStyled} from './styles';
 
 const CustomerSelectBarber = () => {
   const {t} = useTranslation();
@@ -33,6 +32,7 @@ const CustomerSelectBarber = () => {
   const [loading, setLoading] = useState(false);
 
   const [barbers, setBarbers] = useState<IBarber[]>([]);
+  const [favorites, setFavorites] = useState<IBarber[]>([]);
 
   const [menuHeight, setMenuHeight] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -67,7 +67,7 @@ const CustomerSelectBarber = () => {
     setShowDropdown(false);
   };
 
-  const openShowSelectedModal = (barber: IBarber) => {
+  const showSelectedModal = (barber: IBarber) => {
     dispatch(CutActions.setCutSelectedBarber(barber));
     dispatch(CutActions.setShowSelectedModal(true));
   };
@@ -75,6 +75,35 @@ const CustomerSelectBarber = () => {
   const goToQrScanner = () => {
     navigation.navigate('/customer/qr-scanner');
   };
+
+  const fetchFavorites = async () => {
+    try {
+      const {data} = await UserService.getFavoriteBarbers();
+
+      if (data) {
+        setFavorites(data);
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const {message} = error.response?.data;
+
+        if (message) {
+          dispatch(
+            createNotification({
+              id: 'get_user_favorites',
+              message: `errors.${message}`,
+              type: 'error',
+            }),
+          );
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchFavorites();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <TouchableWithoutFeedback
@@ -140,20 +169,14 @@ const CustomerSelectBarber = () => {
                       first={isFirst}
                       last={isLast}
                       onPress={() => {
-                        openShowSelectedModal(barber);
+                        showSelectedModal(barber);
                       }}
                       key={index}>
-                      <DropdownItemContentStyled>
-                        <DropdownItemImageStyled
-                          source={{uri: barber.avatar.url}}
-                        />
-                        <DropdownItemInfoStyled>
-                          <Typography variant="body1">{barber.name}</Typography>
-                          <Typography variant="caption" color="black1">
-                            {barber.code}
-                          </Typography>
-                        </DropdownItemInfoStyled>
-                      </DropdownItemContentStyled>
+                      <BarberInfoCard
+                        barber={barber}
+                        showInfo={false}
+                        avatarRadius={6}
+                      />
                     </DropdownItemStyled>
                   );
                 })}
@@ -161,7 +184,7 @@ const CustomerSelectBarber = () => {
             </DropdownWrapperStyled>
           )}
         </PageCardRowStyled>
-        <LineStyled />
+
         <Button
           customContent={
             <ShareQrButtonContentStyled>
@@ -174,7 +197,24 @@ const CustomerSelectBarber = () => {
           variant="ghost"
           onPress={goToQrScanner}
         />
-        <LineStyled />
+        <PageCardGroupStyled gap={12}>
+          <Typography variant="body1">
+            {'customer.cut.select.favorites'}
+          </Typography>
+          <FavoritesScrollStyled>
+            {favorites.map((fav, index) => (
+              <FavoriteItemStyled
+                key={index}
+                onPress={() => showSelectedModal(fav)}>
+                <BarberInfoCard
+                  barber={fav}
+                  showInfo={false}
+                  avatarRadius={6}
+                />
+              </FavoriteItemStyled>
+            ))}
+          </FavoritesScrollStyled>
+        </PageCardGroupStyled>
       </AvoidKeyboardStyled>
     </TouchableWithoutFeedback>
   );

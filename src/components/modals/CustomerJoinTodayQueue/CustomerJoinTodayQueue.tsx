@@ -84,7 +84,7 @@ const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
           </Typography>
         </Box>
 
-        <BarberInfoCard asCard barber={ticket.barber} />
+        <BarberInfoCard asCard barber={ticket.barber} avatarRadius={6} />
         <QueueInfoStyled>
           <Box direction="row" alignItems="center" gap={12}>
             <OnTicketIconWrapperStyled>

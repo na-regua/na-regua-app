@@ -116,6 +116,7 @@ const CodeInput: React.FC<ICodeInputProps> = ({
     if (!disabled) {
       inputValuesArray[0].ref.current?.focus();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

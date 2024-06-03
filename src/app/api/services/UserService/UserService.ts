@@ -1,4 +1,4 @@
-import {ICreateCustomerUser, IUpdateUser, IUser} from '@/app/models';
+import {IBarber, ICreateCustomerUser, IUpdateUser, IUser} from '@/app/models';
 import {
   assetToBuffer,
   mapPathVariables,
@@ -63,4 +63,21 @@ const favoriteBarber = async (barberId: string) => {
   }
 };
 
-export default {updateUser, createCustomerUser, favoriteBarber};
+const getFavoriteBarbers = async (): Promise<AxiosResponse<IBarber[]>> => {
+  try {
+    const response = await api.get(ENDPOINTS.USERS_LIST_FAVORITES, {
+      withCredentials: true,
+    });
+
+    return response;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
+export default {
+  updateUser,
+  createCustomerUser,
+  favoriteBarber,
+  getFavoriteBarbers,
+};

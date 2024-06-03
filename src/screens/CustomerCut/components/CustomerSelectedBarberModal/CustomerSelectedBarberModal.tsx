@@ -77,7 +77,7 @@ const CustomerSelectedBarberModal: React.FC<
           </Typography>
         </Box>
 
-        <BarberInfoCard asCard barber={selectedBarber} />
+        <BarberInfoCard asCard barber={selectedBarber} avatarRadius={6} />
         <Box gap={18} direction="row">
           <Button
             variant="ghost"

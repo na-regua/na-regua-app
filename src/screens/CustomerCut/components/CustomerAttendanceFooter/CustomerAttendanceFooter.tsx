@@ -59,7 +59,7 @@ const CustomerAttendanceFooter = () => {
 
           navigation.navigate('/customer/on-ticket');
 
-          // dispatch(CutActions.resetCut());
+          dispatch(CutActions.resetCut());
 
           await dispatch(CutThunks.fetchTodayTickets());
         }

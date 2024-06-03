@@ -62,15 +62,12 @@ const CustomerAttendance: React.FC<ICustomerAttendanceProps> = ({isOpen}) => {
 
   const getBarberLiveUpdates = useCallback(() => {
     if (!!socket && connected && selectedBarber) {
-      console.log('Subscribing to barber updates');
       const url = SocketUrls.BarberInfo.replace(
         '{{barberId}}',
         selectedBarber._id.toString(),
       );
-      console.log(url);
       socket.on(url, data => {
         if (data.barber) {
-          console.log('Barber updated');
           dispatch(CutActions.setCutSelectedBarber(data.barber));
         }
       });

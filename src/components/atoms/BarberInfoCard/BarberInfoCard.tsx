@@ -17,6 +17,8 @@ interface IBarberInfoCardProps {
   wrapperStyles?: IBoxProps;
   asCard?: boolean;
   isOpen?: boolean;
+  showInfo?: boolean;
+  avatarRadius?: number;
 }
 
 const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
@@ -26,6 +28,8 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
   wrapperStyles,
   asCard,
   isOpen = true,
+  showInfo = true,
+  avatarRadius = 12,
 }) => {
   const cardStyles: ViewStyle = useMemo<ViewStyle>(() => {
     if (asCard) {
@@ -44,6 +48,7 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
 
   const ImageTSX = isOpen ? (
     <BarberInfoCardImageStyled
+      radius={avatarRadius}
       source={{
         uri: barber.avatar.url,
       }}
@@ -51,6 +56,7 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
   ) : (
     <Grayscale>
       <BarberInfoCardImageStyled
+        radius={avatarRadius}
         source={{
           uri: barber.avatar.url,
         }}
@@ -81,33 +87,37 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
           </Box>
         </Box>
       </Box>
-      <Box gap={12}>
-        <Box gap={6} direction="row" alignItems="center">
-          <Icons.TimeIcon
-            width={14}
-            height={14}
-            color={isOpen ? 'main' : 'black2'}
-          />
-          <Typography variant="caption" color="black2" translate={false}>
-            {barber.config.worktime.start + ' - ' + barber.config.worktime.end}
-          </Typography>
-        </Box>
-        <Box gap={6} direction="row" alignItems="flex-start">
-          <Box paddings={{top: 3, bottom: 3}}>
-            <Icons.MarkerIcon
+      {showInfo && (
+        <Box gap={12}>
+          <Box gap={6} direction="row" alignItems="center">
+            <Icons.TimeIcon
               width={14}
               height={14}
-              strokeWidth={1.2}
               color={isOpen ? 'main' : 'black2'}
             />
-          </Box>
-          <Box flex={1}>
             <Typography variant="caption" color="black2" translate={false}>
-              {generateAddress(barber.address)}
+              {barber.config.worktime.start +
+                ' - ' +
+                barber.config.worktime.end}
             </Typography>
           </Box>
+          <Box gap={6} direction="row" alignItems="flex-start">
+            <Box paddings={{top: 3, bottom: 3}}>
+              <Icons.MarkerIcon
+                width={14}
+                height={14}
+                strokeWidth={1.2}
+                color={isOpen ? 'main' : 'black2'}
+              />
+            </Box>
+            <Box flex={1}>
+              <Typography variant="caption" color="black2" translate={false}>
+                {generateAddress(barber.address)}
+              </Typography>
+            </Box>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 };

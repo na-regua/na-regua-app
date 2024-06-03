@@ -6,7 +6,7 @@ import {mapPathVariables} from '@/utils';
 
 const getTodayQueue = async (): Promise<AxiosResponse<{queue: IQueue}>> => {
   try {
-    const res = await api.get(ENDPOINTS.QUEUE_GET_TODAY, {
+    const res = await api.get(ENDPOINTS.QUEUE_BARBER_TODAY, {
       withCredentials: true,
     });
 
@@ -20,7 +20,7 @@ const getBarberTodayQueue = async (
   barberId: string,
 ): Promise<AxiosResponse<{queue: IQueue}>> => {
   try {
-    const mappedUrl = mapPathVariables(ENDPOINTS.QUEUE_BARBER_TODAY, {
+    const mappedUrl = mapPathVariables(ENDPOINTS.QUEUE_BARBER_TODAY_BY_ID, {
       barberId,
     });
 
@@ -122,6 +122,20 @@ const userLeave = async (ticketId: string): Promise<AxiosResponse<null>> => {
   }
 };
 
+const goNextTicket = async (): Promise<AxiosResponse<null>> => {
+  try {
+    const res = await api.put(
+      ENDPOINTS.QUEUE_WORKER_GO_NEXT,
+      {},
+      {withCredentials: true},
+    );
+
+    return res;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
 export default {
   getTodayQueue,
   startQueue,
@@ -131,4 +145,5 @@ export default {
   approveTicket,
   rejectTicket,
   userLeave,
+  goNextTicket,
 };

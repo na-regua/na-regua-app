@@ -1,10 +1,17 @@
-import {AppStatusBar} from '@/components/atoms';
+import {UserService} from '@/app/api';
+import {IBarber} from '@/app/models';
+import {
+  AppStatusBar,
+  BarberInfoCard,
+  Box,
+  Typography,
+} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React from 'react';
-import {useTranslation} from 'react-i18next';
+import {AxiosError} from 'axios';
+import React, {useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {ContainerStyle, ScrollContentStyle} from './styles';
@@ -12,7 +19,6 @@ import {ContainerStyle, ScrollContentStyle} from './styles';
 const CustomerSettingsFavorites: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/customer/settings/favorites'>
 > = ({navigation}) => {
-  const {t} = useTranslation();
   const insets = useSafeAreaInsets();
   const insetsStyles = {
     paddingTop: insets.top,
@@ -21,13 +27,11 @@ const CustomerSettingsFavorites: React.FC<
     paddingRight: insets.right,
   };
 
+  const [favorites, setFavorites] = useState<IBarber[]>([]);
+
   const {user} = useSelector((state: RootState) => state.auth);
 
   const dispatch = useDispatch<AppDispatch>();
-
-  if (!user) {
-    return null;
-  }
 
   const goBack = () => {
     if (navigation.canGoBack()) {
@@ -39,6 +43,27 @@ const CustomerSettingsFavorites: React.FC<
     }
   };
 
+  const fetchBarberFavorites = async () => {
+    try {
+      const {data} = await UserService.getFavoriteBarbers();
+
+      if (data) {
+        setFavorites(data);
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchBarberFavorites();
+  }, []);
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <ContainerStyle style={insetsStyles}>
       <AppStatusBar />
@@ -46,8 +71,26 @@ const CustomerSettingsFavorites: React.FC<
         <Header.GoBack pressables={{back: goBack}} />
         <Header.Border />
       </Header.Container>
-      <ScrollContentStyle
-        showsVerticalScrollIndicator={false}></ScrollContentStyle>
+      <ScrollContentStyle showsVerticalScrollIndicator={false}>
+        <Box gap={6}>
+          <Typography variant="h5">
+            {'customer.settings.menus.favorites.title'}
+          </Typography>
+          <Typography variant="body2" color="black1">
+            {'customer.settings.menus.favorites.subtitle'}
+          </Typography>
+        </Box>
+        <Box gap={18}>
+          {favorites.map(barber => (
+            <BarberInfoCard
+              barber={barber}
+              asCard
+              key={barber._id}
+              showInfo={false}
+            />
+          ))}
+        </Box>
+      </ScrollContentStyle>
     </ContainerStyle>
   );
 };

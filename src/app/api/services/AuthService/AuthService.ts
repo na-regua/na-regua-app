@@ -53,6 +53,8 @@ const getCurrentUser = async (
   token: string,
 ): Promise<AxiosResponse<IGetUserResponse>> => {
   try {
+    console.log('token', token);
+
     const data = await api.get(ENDPOINTS.AUTH_GET_CURRENT_USER, {
       headers: {
         Authorization: `Bearer ${token}`,
