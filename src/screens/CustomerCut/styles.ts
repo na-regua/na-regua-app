@@ -45,8 +45,11 @@ export const PageCardGroupStyled = styled(Box)``;
 export const CodeInputStyled = styled(Input).attrs({
   wrapperStyle: {
     flex: 1,
+    width: '100%',
   },
-})``;
+})`
+  width: 100%;
+`;
 
 export const SearchButtonStyled = styled(Button).attrs({
   variant: 'ghost',

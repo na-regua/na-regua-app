@@ -39,7 +39,7 @@ const Collapse: React.FC<PropsWithChildren<ICollapseProps>> = ({
           <UpIconStyled
             width={24}
             height={24}
-            clickable
+            disabled={false}
             onPress={handleExpand}
             color="default"
           />
@@ -47,7 +47,7 @@ const Collapse: React.FC<PropsWithChildren<ICollapseProps>> = ({
           <DownIconStyled
             width={24}
             height={24}
-            clickable
+            disabled={false}
             onPress={handleExpand}
             color="default"
           />

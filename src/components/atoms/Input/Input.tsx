@@ -44,7 +44,9 @@ const Input: React.FC<IInputProps> = ({
   const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setIsFocused(false);
 
-    onBlur?.(e);
+    if (onBlur) {
+      onBlur(e);
+    }
   };
 
   const active: boolean = useMemo(

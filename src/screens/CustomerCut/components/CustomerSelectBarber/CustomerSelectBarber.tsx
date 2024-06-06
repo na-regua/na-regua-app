@@ -1,70 +1,46 @@
-import {BarbersService, UserService} from '@/app/api';
+import {UserService} from '@/app/api';
 import {IBarber} from '@/app/models';
-import {BarberInfoCard, Button, Icons, Typography} from '@/components/atoms';
-import SearchIcon from '@/components/atoms/Icons/SearchIcon/SearchIcon';
+import {
+  BarberInfoCard,
+  Button,
+  Icons,
+  Modal,
+  Typography,
+} from '@/components/atoms';
 import {useAppNavigation} from '@/navigation';
 import {CutActions, createNotification} from '@/store/slicers';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {AxiosError} from 'axios';
-import React, {useEffect, useMemo, useState} from 'react';
-import {useTranslation} from 'react-i18next';
+import React, {useEffect, useRef, useState} from 'react';
 import {Keyboard, TouchableWithoutFeedback} from 'react-native';
-import {FadeInDown} from 'react-native-reanimated';
 import {useDispatch} from 'react-redux';
 import {
-  AvoidKeyboardStyled,
-  CodeInputStyled,
-  DropdownItemStyled,
-  DropdownMenuStyled,
-  DropdownWrapperStyled,
   PageCardGroupStyled,
   PageCardRowStyled,
   PageCardTitleStyled,
-  SearchButtonStyled,
   ShareQrButtonContentStyled,
-  menuShadow,
 } from '../../styles';
-import {FavoriteItemStyled, FavoritesScrollStyled} from './styles';
+import {CustomerSearchBarber} from '../CustomerSearchBarber/CustomerSearchBarber';
+import {
+  FavoriteItemStyled,
+  FavoritesScrollStyled,
+  SearchBarberButtonStyled,
+} from './styles';
 
-const CustomerSelectBarber = () => {
-  const {t} = useTranslation();
-  const [search, setSearch] = useState('');
+const CustomerSelectBarber: React.FC = () => {
+  const searchBarberModalRef = useRef<BottomSheetModal>(null);
 
-  const [loading, setLoading] = useState(false);
-
-  const [barbers, setBarbers] = useState<IBarber[]>([]);
   const [favorites, setFavorites] = useState<IBarber[]>([]);
-
-  const [menuHeight, setMenuHeight] = useState(0);
-  const [showDropdown, setShowDropdown] = useState(false);
 
   const navigation = useAppNavigation();
   const dispatch = useDispatch();
 
-  const canSearch = useMemo(() => search.length > 0, [search]);
-
-  const onSearch = async () => {
-    if (!canSearch) {
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const {data} = await BarbersService.getBarbers(search);
-
-      if (data) {
-        setBarbers(data);
-        setShowDropdown(true);
-      }
-
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
+  const showSearchBarberModal = () => {
+    searchBarberModalRef.current?.present();
   };
 
-  const closeDropdown = () => {
-    setShowDropdown(false);
+  const closeSearchBarberModal = () => {
+    searchBarberModalRef.current?.dismiss();
   };
 
   const showSelectedModal = (barber: IBarber) => {
@@ -111,80 +87,29 @@ const CustomerSelectBarber = () => {
         if (Keyboard.isVisible()) {
           Keyboard.dismiss();
         }
-
-        if (showDropdown) {
-          closeDropdown();
-        }
       }}>
-      <AvoidKeyboardStyled>
+      <>
         <PageCardTitleStyled>
           <Typography variant="h4">{'customer.cut.select.title'}</Typography>
           <Typography variant="body2" color="black2">
             {'customer.cut.select.subtitle'}
           </Typography>
         </PageCardTitleStyled>
+        {/* Search */}
         <PageCardRowStyled>
-          <CodeInputStyled
-            onChangeText={text => {
-              setSearch(text);
-            }}
-            value={search}
-            label="customer.cut.fields.search"
-            placeholder={t('customer.cut.fields.code')}
-            blurOnSubmit
-            onSubmitEditing={() => {
-              if (canSearch) {
-                onSearch();
-              }
-            }}
-            returnKeyType={'search'}
-            textContentType="none"
-          />
-          <SearchButtonStyled
-            customContent={<SearchIcon color="primary" disabled />}
-            onPress={onSearch}
-            disabled={!canSearch}
-            loading={loading}
-          />
-
-          {showDropdown && barbers.length > 0 && (
-            <DropdownWrapperStyled
-              style={menuShadow}
-              gap={menuHeight}
-              entering={FadeInDown}>
-              <DropdownMenuStyled
-                onScroll={event => {
-                  event.stopPropagation();
-                }}
-                onLayout={event => {
-                  setMenuHeight(event.nativeEvent.layout.height);
-                }}
-                scrollEventThrottle={16}>
-                {barbers.map((barber, index) => {
-                  const isFirst = index === 0;
-                  const isLast = index === barbers.length - 1;
-
-                  return (
-                    <DropdownItemStyled
-                      first={isFirst}
-                      last={isLast}
-                      onPress={() => {
-                        showSelectedModal(barber);
-                      }}
-                      key={index}>
-                      <BarberInfoCard
-                        barber={barber}
-                        showInfo={false}
-                        avatarRadius={6}
-                      />
-                    </DropdownItemStyled>
-                  );
-                })}
-              </DropdownMenuStyled>
-            </DropdownWrapperStyled>
-          )}
+          <SearchBarberButtonStyled onPress={showSearchBarberModal}>
+            <Typography variant="caption" color="placeholder" weight="medium">
+              {'customer.cut.fields.code'}
+            </Typography>
+          </SearchBarberButtonStyled>
         </PageCardRowStyled>
-
+        <Modal
+          ref={searchBarberModalRef}
+          snapPoints={['100%']}
+          enablePanDownToClose={false}>
+          <CustomerSearchBarber dismiss={closeSearchBarberModal} />
+        </Modal>
+        {/* QR Scan */}
         <Button
           customContent={
             <ShareQrButtonContentStyled>
@@ -197,6 +122,7 @@ const CustomerSelectBarber = () => {
           variant="ghost"
           onPress={goToQrScanner}
         />
+        {/* Favorites */}
         <PageCardGroupStyled gap={12}>
           <Typography variant="body1">
             {'customer.cut.select.favorites'}
@@ -215,7 +141,7 @@ const CustomerSelectBarber = () => {
             ))}
           </FavoritesScrollStyled>
         </PageCardGroupStyled>
-      </AvoidKeyboardStyled>
+      </>
     </TouchableWithoutFeedback>
   );
 };

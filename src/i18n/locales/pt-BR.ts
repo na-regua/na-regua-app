@@ -365,6 +365,7 @@ const ptBr = {
         lastUpdate: 'Última atualização: {{-time}}',
         attendanceInfo: 'Informações do atendimento',
         additionalServices: '+Serviços adicionais',
+        rate: 'Sua avaliação.',
       },
       info: {
         position: 'Posição',
@@ -374,6 +375,7 @@ const ptBr = {
         prevision: 'Previsão',
         price: 'Preço',
         total: 'Total',
+        noComment: 'Sem comentários.',
       },
       buttons: {beLate: 'Vou atrasar!', rate: 'Avaliar'},
     },
@@ -584,6 +586,18 @@ const ptBr = {
       title: 'Na fila',
       subtitle:
         'Ao abrir o atendimento, você acompanha as atualizações em tempo real.',
+    },
+    rate: {
+      title: 'Avaliar',
+      question: 'E aí, o que achou do atendimento ?',
+      labels: {
+        good: 'Bom',
+        bad: 'Ruim',
+      },
+      comment: 'Deixe aqui seu comentário...',
+      buttons: {
+        send: 'Enviar',
+      },
     },
   },
   units: {

@@ -83,13 +83,17 @@ const CustomerOnTicket: React.FC<
   };
 
   useEffect(() => {
-    subscribeToSocketEvents();
+    if (connected) {
+      subscribeToSocketEvents();
+    }
 
     return () => {
-      cleaningSocketEvents();
+      if (!connected) {
+        cleaningSocketEvents();
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [connected]);
 
   if (!ticket) {
     return null;
@@ -107,7 +111,7 @@ const CustomerOnTicket: React.FC<
           height={24}
           color="black2"
           strokeWidth={2}
-          clickable
+          disabled={false}
         />
       </Header.Container>
       <OnTicketContentStyled>
@@ -122,6 +126,7 @@ const CustomerOnTicket: React.FC<
         )}
         {/* {ticket.status === 'scheduled' && <OnTicketSchedule ticket={ticket} />} */}
       </OnTicketContentStyled>
+      {/* Mute modal */}
       <Modal ref={shouldNotifyModalRef} height={120}>
         <Box gap={18}>
           <Typography variant="body2" color="black2">

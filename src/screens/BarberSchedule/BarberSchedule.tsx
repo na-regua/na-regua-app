@@ -80,8 +80,8 @@ const BarberSchedule: React.FC<
             <Icons.PlusIcon
               width={20}
               height={20}
-              clickable
               strokeWidth={2}
+              disabled={false}
               color="primary"
               onPress={showAddManuallyModal}
             />

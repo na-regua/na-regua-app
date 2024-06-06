@@ -81,6 +81,7 @@ enum ENDPOINTS {
    * */
   TICKETS_BY_USER_TODAY = '/tickets/user/today',
   TICKETS_BY_USER = '/tickets/user',
+  TICKETS_RATE = '/tickets/:ticketId/rate',
 }
 
 export type TEndpoints = typeof ENDPOINTS;

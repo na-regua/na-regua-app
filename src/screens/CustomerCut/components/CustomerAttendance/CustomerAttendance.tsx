@@ -1,7 +1,7 @@
 import {IBarberService, SocketUrls, TAttendanceType} from '@/app/models';
 import {BarberInfoCard, Box, Icons, Typography} from '@/components/atoms';
 import {AppDispatch, RootState} from '@/store/Store';
-import {CutActions} from '@/store/slicers';
+import {CutActions, CutThunks} from '@/store/slicers';
 import React, {useCallback, useEffect, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FadeInLeft} from 'react-native-reanimated';
@@ -45,21 +45,6 @@ const CustomerAttendance: React.FC<ICustomerAttendanceProps> = ({isOpen}) => {
     [selectedBarber],
   );
 
-  const queueStatus = useMemo(() => {
-    if (barberTodayQueue) {
-      if (barberTodayQueue.status === 'off') {
-        return t('customer.cut.attendance.types.queueOff');
-      }
-
-      if (barberTodayQueue.status === 'paused') {
-        return t('customer.cut.attendance.types.queuePaused');
-      }
-    }
-
-    return '';
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [barberTodayQueue]);
-
   const getBarberLiveUpdates = useCallback(() => {
     if (!!socket && connected && selectedBarber) {
       const url = SocketUrls.BarberInfo.replace(
@@ -69,6 +54,12 @@ const CustomerAttendance: React.FC<ICustomerAttendanceProps> = ({isOpen}) => {
       socket.on(url, data => {
         if (data.barber) {
           dispatch(CutActions.setCutSelectedBarber(data.barber));
+
+          if (data.queue) {
+            dispatch(
+              CutThunks.fetchBarberTodayQueueByBarberId(data.barber._id),
+            );
+          }
         }
       });
     }
@@ -160,7 +151,7 @@ const CustomerAttendance: React.FC<ICustomerAttendanceProps> = ({isOpen}) => {
                     variant="body1"
                     color={attendanceType === 'queue' ? 'main' : 'black2'}
                     translate={false}>
-                    {t('customer.cut.attendance.types.queue')} {queueStatus}
+                    {t('customer.cut.attendance.types.queue')}
                   </Typography>
                   {barberTodayQueue.tickets.length === 0 ? (
                     <Typography

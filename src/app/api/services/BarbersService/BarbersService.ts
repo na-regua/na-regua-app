@@ -3,6 +3,8 @@ import {
   IBarber,
   IBarberUpdate,
   ICreateBarber,
+  PaginatedFilter,
+  PaginatedResponse,
   SignUpResponse,
 } from '@/app/models';
 import {queryBuilder} from '@/utils';
@@ -11,15 +13,16 @@ import {default as ENDPOINTS} from '../../endpoints';
 
 const getBarbers = async (
   search?: string,
-): Promise<AxiosResponse<IBarber[]>> => {
+  pagination?: PaginatedFilter,
+): Promise<AxiosResponse<PaginatedResponse<IBarber>>> => {
   try {
-    const url = queryBuilder(ENDPOINTS.BARBERS_LIST, {search});
+    const url = queryBuilder(ENDPOINTS.BARBERS_LIST, {search, ...pagination});
 
     const data = await api.get(url);
 
     return data;
   } catch (error: any) {
-    throw new Error(error);
+    throw errToAxiosError(error);
   }
 };
 

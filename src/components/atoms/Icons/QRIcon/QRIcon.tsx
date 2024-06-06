@@ -11,7 +11,6 @@ const QRIcon: React.FC<IQRIconProps> = ({
   height = 24,
   color = 'default',
   customColor,
-  clickable,
   onPress,
   disabled,
 }) => {
@@ -24,7 +23,7 @@ const QRIcon: React.FC<IQRIconProps> = ({
     <TouchableOpacity
       activeOpacity={0.6}
       style={styles.iconWrapper}
-      disabled={!clickable || disabled}
+      disabled={disabled}
       onPress={onPress}>
       <Svg width={width} height={height} viewBox="0 0 24 24" fill="none">
         <Path

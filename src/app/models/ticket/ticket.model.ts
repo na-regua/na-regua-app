@@ -21,6 +21,12 @@ export interface ITicket {
   missedAt?: string;
   createdAt: string;
   updatedAt: string;
+  rate?: ITicketRate;
+}
+
+export interface ITicketRate {
+  rating: number;
+  comment?: string;
 }
 
 export interface IScheduleTicket {

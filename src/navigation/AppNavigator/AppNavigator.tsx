@@ -36,6 +36,7 @@ import {useSelector} from 'react-redux';
 import BottomNav from '../BottomNav/BottomNav';
 import {LinkingConfig, TRootStackParamList} from '../appRoutes';
 import {navigationRef} from '../useNavigationContainer/useNavigationContainer';
+import {Host} from 'react-native-portalize';
 
 const Stack = createNativeStackNavigator<TRootStackParamList>();
 
@@ -92,155 +93,160 @@ const AppNavigator: React.FC = () => {
 
   return (
     <NavigationContainer ref={navigationRef} linking={LinkingConfig}>
-      <Stack.Navigator
-        initialRouteName={initialRouteName as any}
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen name={'/barber/sign-up'} component={BarberSignUpScreen} />
+      <Host>
+        <Stack.Navigator
+          initialRouteName={initialRouteName as any}
+          screenOptions={{
+            headerShown: false,
+          }}>
+          <Stack.Screen
+            name={'/barber/sign-up'}
+            component={BarberSignUpScreen}
+          />
 
-        <Stack.Screen
-          name={'/generic/login'}
-          component={LoginScreen}
-          options={{animation: 'none'}}
-        />
-        <Stack.Screen
-          name={'/generic/login/barber'}
-          component={BarberLoginScreen}
-          options={{animation: 'none'}}
-        />
-        <Stack.Screen
-          name={'/generic/login/customer'}
-          component={CustomerLoginScreen}
-          options={{animation: 'none'}}
-        />
-        <Stack.Screen
-          name={'/customer/sign-up'}
-          component={CustomerSignUpScreen}
-        />
-        <Stack.Screen
-          name={'/customer/sign-up/verify'}
-          component={CustomerSignUpVerifyScreen}
-        />
+          <Stack.Screen
+            name={'/generic/login'}
+            component={LoginScreen}
+            options={{animation: 'none'}}
+          />
+          <Stack.Screen
+            name={'/generic/login/barber'}
+            component={BarberLoginScreen}
+            options={{animation: 'none'}}
+          />
+          <Stack.Screen
+            name={'/generic/login/customer'}
+            component={CustomerLoginScreen}
+            options={{animation: 'none'}}
+          />
+          <Stack.Screen
+            name={'/customer/sign-up'}
+            component={CustomerSignUpScreen}
+          />
+          <Stack.Screen
+            name={'/customer/sign-up/verify'}
+            component={CustomerSignUpVerifyScreen}
+          />
 
-        {isAuthenticated && (
-          <>
-            <Stack.Screen
-              name={'/user/notifications'}
-              component={NotificationsScreen}
-              options={{
-                animation: 'simple_push',
-                animationDuration: 200,
-              }}
-              initialParams={{hideBottomNav: true}}
-            />
-            <Stack.Screen
-              name={'/user/permissions'}
-              component={PermissionsScreen}
-            />
-          </>
-        )}
+          {isAuthenticated && (
+            <>
+              <Stack.Screen
+                name={'/user/notifications'}
+                component={NotificationsScreen}
+                options={{
+                  animation: 'simple_push',
+                  animationDuration: 200,
+                }}
+                initialParams={{hideBottomNav: true}}
+              />
+              <Stack.Screen
+                name={'/user/permissions'}
+                component={PermissionsScreen}
+              />
+            </>
+          )}
 
-        {CustomerAuth && (
-          <>
-            <Stack.Screen
-              name={'/customer/home'}
-              component={CustomerHomeScreen}
-            />
-            <Stack.Screen
-              name={'/customer/settings'}
-              component={CustomerSettingsScreen}
-            />
-            <Stack.Screen
-              name={'/customer/settings/profile'}
-              component={CustomerSettingsProfileScreen}
-            />
-            <Stack.Screen
-              name={'/customer/settings/history'}
-              component={CustomerSettingsHistoryScreen}
-            />
-            <Stack.Screen
-              name={'/customer/settings/favorites'}
-              component={CustomerSettingsFavoritesScreen}
-            />
+          {CustomerAuth && (
+            <>
+              <Stack.Screen
+                name={'/customer/home'}
+                component={CustomerHomeScreen}
+              />
+              <Stack.Screen
+                name={'/customer/settings'}
+                component={CustomerSettingsScreen}
+              />
+              <Stack.Screen
+                name={'/customer/settings/profile'}
+                component={CustomerSettingsProfileScreen}
+              />
+              <Stack.Screen
+                name={'/customer/settings/history'}
+                component={CustomerSettingsHistoryScreen}
+              />
+              <Stack.Screen
+                name={'/customer/settings/favorites'}
+                component={CustomerSettingsFavoritesScreen}
+              />
 
-            <Stack.Screen
-              name={'/customer/cut'}
-              component={CustomerCutScreen}
-            />
-            <Stack.Screen
-              name={'/customer/qr-scanner'}
-              component={CustomerQrScannerScreen}
-            />
-            <Stack.Screen
-              name={'/customer/on-ticket'}
-              component={CustomerOnTicketScreen}
-              initialParams={{hideBottomNav: true}}
-            />
-          </>
-        )}
+              <Stack.Screen
+                name={'/customer/cut'}
+                component={CustomerCutScreen}
+              />
+              <Stack.Screen
+                name={'/customer/qr-scanner'}
+                component={CustomerQrScannerScreen}
+              />
+              <Stack.Screen
+                name={'/customer/on-ticket'}
+                component={CustomerOnTicketScreen}
+                initialParams={{hideBottomNav: true}}
+              />
+            </>
+          )}
 
-        {WorkerAuth && (
-          <>
-            <Stack.Screen
-              name={'/barber/queue'}
-              component={BarberQueueScreen}
-              options={{animation: 'none'}}
-            />
-            <Stack.Screen
-              name={'/barber/queue/fs'}
-              component={BarberOnQueueScreen}
-            />
-            <Stack.Screen
-              name={'/barber/schedule'}
-              component={BarberScheduleScreen}
-              options={{animation: 'none'}}
-            />
-            <Stack.Screen
-              name={'/barber/billing'}
-              component={BarberBillingScreen}
-              options={{animation: 'none'}}
-            />
-            <Stack.Screen
-              name={'/barber/settings'}
-              component={BarberSettingsScreen}
-              options={{animation: 'none'}}
-            />
-            <Stack.Screen
-              name={'/barber/settings/profile'}
-              component={BarberSettingsProfileScreen}
-              initialParams={{hideBottomNav: true}}
-            />
-          </>
-        )}
+          {WorkerAuth && (
+            <>
+              <Stack.Screen
+                name={'/barber/queue'}
+                component={BarberQueueScreen}
+                options={{animation: 'none'}}
+              />
+              <Stack.Screen
+                name={'/barber/queue/fs'}
+                component={BarberOnQueueScreen}
+              />
+              <Stack.Screen
+                name={'/barber/schedule'}
+                component={BarberScheduleScreen}
+                options={{animation: 'none'}}
+              />
+              <Stack.Screen
+                name={'/barber/billing'}
+                component={BarberBillingScreen}
+                options={{animation: 'none'}}
+              />
+              <Stack.Screen
+                name={'/barber/settings'}
+                component={BarberSettingsScreen}
+                options={{animation: 'none'}}
+              />
+              <Stack.Screen
+                name={'/barber/settings/profile'}
+                component={BarberSettingsProfileScreen}
+                initialParams={{hideBottomNav: true}}
+              />
+            </>
+          )}
 
-        {AdminAuth && (
-          <>
-            <Stack.Screen
-              name={'/barber/settings/workers'}
-              component={BarberWorkers}
-              initialParams={{showContinue: true, hideBottomNav: true}}
-            />
-            <Stack.Screen
-              name={'/barber/settings/services'}
-              component={BarberServicesScreen}
-              initialParams={{showContinue: true, hideBottomNav: true}}
-            />
-            <Stack.Screen
-              name={'/barber/complete-qr'}
-              component={BarberCompletedQrScreen}
-              initialParams={{hideBottomNav: true}}
-            />
-            <Stack.Screen
-              name={'/barber/settings/services/config'}
-              component={BarberServicesConfigScreen}
-              initialParams={{hideBottomNav: true}}
-            />
-          </>
-        )}
-      </Stack.Navigator>
+          {AdminAuth && (
+            <>
+              <Stack.Screen
+                name={'/barber/settings/workers'}
+                component={BarberWorkers}
+                initialParams={{showContinue: true, hideBottomNav: true}}
+              />
+              <Stack.Screen
+                name={'/barber/settings/services'}
+                component={BarberServicesScreen}
+                initialParams={{showContinue: true, hideBottomNav: true}}
+              />
+              <Stack.Screen
+                name={'/barber/complete-qr'}
+                component={BarberCompletedQrScreen}
+                initialParams={{hideBottomNav: true}}
+              />
+              <Stack.Screen
+                name={'/barber/settings/services/config'}
+                component={BarberServicesConfigScreen}
+                initialParams={{hideBottomNav: true}}
+              />
+            </>
+          )}
+        </Stack.Navigator>
 
-      <BottomNav />
+        <BottomNav />
+      </Host>
     </NavigationContainer>
   );
 };

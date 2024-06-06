@@ -49,6 +49,7 @@ import UsersIcon from './UsersIcon/UsersIcon';
 import StarIcon from './StarIcon/StarIcon';
 import HeartIcon from './HeartIcon/HeartIcon';
 import MicIcon from './MicIcon/MicIcon';
+import CloseIcon from './CloseIcon/CloseIcon';
 
 export interface IIconProps {
   width?: number;
@@ -56,7 +57,6 @@ export interface IIconProps {
   color?: TColorsType;
   customColor?: string;
   strokeWidth?: number;
-  clickable?: boolean;
   onPress?: () => void;
   disabled?: boolean;
   wrapperStyle?: ViewStyle;
@@ -113,4 +113,5 @@ export default {
   StarIcon,
   HeartIcon,
   MicIcon,
+  CloseIcon,
 };

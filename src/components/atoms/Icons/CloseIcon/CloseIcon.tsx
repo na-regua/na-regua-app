@@ -1,20 +1,19 @@
 import {Colors} from '@/theme';
 import React, {useMemo} from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Path, Svg} from 'react-native-svg';
 import {IIconProps} from '../Icons';
+import {IconTouchableViewStyle} from '../styles';
 
-interface IPlusIconProps extends IIconProps {}
+interface ICloseIconProps extends IIconProps {}
 
-const PlusIcon: React.FC<IPlusIconProps> = ({
+const CloseIcon: React.FC<ICloseIconProps> = ({
   width = 20,
   height = 20,
+  strokeWidth = 2,
   color = 'default',
-  strokeWidth = 1.5,
   customColor,
-  onPress,
   disabled,
-  wrapperStyle,
+  onPress,
 }) => {
   const getColor = useMemo(
     () => Colors[color] || customColor,
@@ -22,36 +21,26 @@ const PlusIcon: React.FC<IPlusIconProps> = ({
   );
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.6}
-      style={[styles.iconWrapper, wrapperStyle]}
-      onPress={onPress}
-      disabled={disabled}>
+    <IconTouchableViewStyle disabled={disabled} onPress={onPress}>
       <Svg width={width} height={height} viewBox="0 0 20 20" fill="none">
         <Path
-          d="M10 4.16699V15.8337"
+          d="M15 5L5 15"
           stroke={getColor}
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeLinejoin="round"
         />
+
         <Path
-          d="M4.16699 10H15.8337"
+          d="M5 5L15 15"
           stroke={getColor}
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeLinejoin="round"
         />
       </Svg>
-    </TouchableOpacity>
+    </IconTouchableViewStyle>
   );
 };
 
-const styles = StyleSheet.create({
-  iconWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
-export default PlusIcon;
+export default CloseIcon;

@@ -12,8 +12,8 @@ const SunIcon: React.FC<ISunIconProps> = ({
   color = 'default',
   strokeWidth = 1.5,
   customColor,
-  clickable,
   onPress,
+  disabled,
 }) => {
   const getColor = useMemo(
     () => Colors[color] || customColor,
@@ -25,7 +25,7 @@ const SunIcon: React.FC<ISunIconProps> = ({
       activeOpacity={0.6}
       style={styles.iconWrapper}
       onPress={onPress}
-      disabled={!clickable}>
+      disabled={disabled}>
       <Svg width={width} height={height} viewBox="0 0 20 20" fill="none">
         <Path
           d="M9.99967 14.1668C12.3009 14.1668 14.1663 12.3013 14.1663 10.0002C14.1663 7.69898 12.3009 5.8335 9.99967 5.8335C7.69849 5.8335 5.83301 7.69898 5.83301 10.0002C5.83301 12.3013 7.69849 14.1668 9.99967 14.1668Z"

@@ -27,6 +27,7 @@ export {default as SelectSchedulesByDay} from './SelectSchedulesByDay/SelectSche
 export {default as SelectWorkDays} from './SelectWorkDays/SelectWorkDays';
 export {default as SelectWorkTime} from './SelectWorkTime/SelectWorkTime';
 export {default as Splashs} from './Splashs/Splashs';
+export * from './StarRate/StarRate';
 export {default as Step} from './Step/Step';
 export * from './Stepper/Stepper';
 export {default as Stepper} from './Stepper/Stepper';
@@ -35,3 +36,4 @@ export * from './Switch/Switch';
 export * from './SwitchButton/SwitchButton';
 export * from './Typography/Typography';
 export {default as Typography} from './Typography/Typography';
+export * from './TextArea/TextArea';

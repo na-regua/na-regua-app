@@ -88,7 +88,7 @@ const SelectWorkTime: React.FC<ISelectWorkTimeProps> = ({
       </Typography>
       <SelectTimeContainerStyle>
         <Icons.SunIcon
-          clickable
+          disabled={false}
           onPress={setSelectToStart}
           color={selectWorkTime === 'start' ? 'warning' : 'default'}
         />
@@ -122,7 +122,7 @@ const SelectWorkTime: React.FC<ISelectWorkTimeProps> = ({
           </SelectTimeWrapperStyle>
         </SelectTimeScrollStyle>
         <Icons.MoonIcon
-          clickable
+          disabled={false}
           onPress={setSelectToEnd}
           color={selectWorkTime === 'end' ? 'main' : 'default'}
         />

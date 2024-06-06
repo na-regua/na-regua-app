@@ -98,8 +98,8 @@ const CustomerQrScanner: React.FC<
 
       const {data} = await BarbersService.getBarbers(replaced);
 
-      if (data && data.length > 0) {
-        setBarber(data[0]);
+      if (data && data.content.length > 0) {
+        setBarber(data.content[0]);
         setIsReading(false);
       }
     }

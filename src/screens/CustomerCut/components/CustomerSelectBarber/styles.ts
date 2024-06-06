@@ -21,3 +21,13 @@ export const FavoriteItemStyled = styled.TouchableOpacity.attrs({
   background: ${Colors.border};
   padding: 12px;
 `;
+
+export const SearchBarberButtonStyled = styled.TouchableOpacity.attrs({
+  activeOpacity: 1,
+})`
+  border-radius: 12px;
+  height: 44px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid ${Colors.border};
+`;

@@ -1,10 +1,17 @@
 import {OnTicketGeneralProps} from '@/app/models';
-import {BarberInfoCard, Box, Button, Typography} from '@/components/atoms';
-import {useAppNavigation} from '@/navigation';
-import {AppDispatch, RootState} from '@/store/Store';
+import {
+  BarberInfoCard,
+  Box,
+  Button,
+  Modal,
+  StarRate,
+  Typography,
+} from '@/components/atoms';
+import {CustomerRateTicketModal} from '@/components/modals';
+import {Colors} from '@/theme';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {format} from 'date-fns';
-import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, {useRef} from 'react';
 import {
   LineStyled,
   OnTicketActionsStyled,
@@ -20,9 +27,12 @@ const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({
   ticket,
   totalPrice,
 }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const navigation = useAppNavigation();
-  const {socket, connected} = useSelector((state: RootState) => state.socket);
+  const rateModalRef = useRef<BottomSheetModal>(null);
+
+  const showRateModal = () => {
+    console.log('showRateModal');
+    rateModalRef.current?.present();
+  };
 
   return (
     <Box gap={18}>
@@ -36,7 +46,7 @@ const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({
       <OnTicketCardStyled>
         {/* Attendance info */}
         <OnTicketCardGroupStyled>
-          <Box gap={18}>
+          <Box gap={18} alignSelf="stretch" width={'100%'}>
             <BarberInfoCard barber={ticket.barber} titleVariant="h6" />
             <LineStyled />
             <Box gap={12}>
@@ -50,8 +60,33 @@ const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({
                 />
               </Box>
             </Box>
+            {/* Rate preview*/}
+            {ticket.rate && (
+              <Box gap={18} alignSelf="stretch">
+                <Typography variant="body1" color="black2">
+                  {'customer.onTicket.subtitles.rate'}
+                </Typography>
+                <Box
+                  gap={6}
+                  alignItems="center"
+                  justifyContent="center"
+                  alignSelf="stretch">
+                  <StarRate disabled initialRate={ticket.rate.rating} />
+                  <Typography
+                    variant="caption"
+                    color="black1"
+                    style={{fontStyle: 'italic'}}>
+                    {ticket.rate.comment
+                      ? `"${ticket.rate.comment}"`
+                      : 'customer.onTicket.info.noComment'}
+                  </Typography>
+                </Box>
+              </Box>
+            )}
           </Box>
         </OnTicketCardGroupStyled>
+
+        {/* Line */}
         <OnTicketLineStyled>
           <OnTicketLineCornerStyled left />
           <OnTicketLineStrokeStyled />
@@ -138,8 +173,18 @@ const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({
           title="customer.onTicket.buttons.rate"
           colorScheme="primary"
           fillSpace
+          onPress={showRateModal}
         />
       </OnTicketActionsStyled>
+      <Modal
+        ref={rateModalRef}
+        height={420}
+        backdropBackgroundColor={Colors.main}>
+        <CustomerRateTicketModal
+          ticket={ticket}
+          dismiss={() => rateModalRef.current?.dismiss()}
+        />
+      </Modal>
     </Box>
   );
 };

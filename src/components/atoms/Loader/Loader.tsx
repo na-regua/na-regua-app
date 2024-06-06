@@ -17,7 +17,7 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 interface ILoaderProps {
   wrapperStyle?: ViewStyle;
   color: string;
-  size?: '24' | '32' | '48' | '64' | '128' | '256' | '512';
+  size?: string;
   strokeWidth?: number;
 }
 

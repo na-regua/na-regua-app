@@ -6,3 +6,4 @@ export {default as EditPictureModal} from './EditPictureModal/EditPictureModal';
 export {default as ShareQRModal} from './ShareQRModal/ShareQRModal';
 export {default as WorkerJoinQueueModal} from './WorkerJoinQueueModal/WorkerJoinQueueModal';
 export {default as WorkerModal} from './WorkerModal/WorkerModal';
+export {default as CustomerRateTicketModal} from './CustomerRateTicket/CustomerRateTicket';

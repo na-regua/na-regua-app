@@ -15,6 +15,7 @@ import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {ThemeProvider} from 'styled-components/native';
 import NotifyProvider from '../NotifyProvider/NotifyProvider';
 import {StatusBarProvider} from '../StatusBarProvider/StatusBarProvider';
+import {Host} from 'react-native-portalize';
 
 const CombinedProviders: React.FC = () => {
   return (
@@ -27,15 +28,17 @@ const CombinedProviders: React.FC = () => {
             <SocketProvider>
               {/* StatusBar provider */}
               <StatusBarProvider>
-                <BottomSheetModalProvider>
-                  {/* Get persisted data E.g Token */}
-                  <PersistedData />
-                  {/* App routes */}
+                <Host>
+                  <BottomSheetModalProvider>
+                    {/* Get persisted data E.g Token */}
+                    <PersistedData />
+                    {/* App routes */}
 
-                  <AppNavigator />
-                  {/* App notifier */}
-                  <NotifyProvider />
-                </BottomSheetModalProvider>
+                    <AppNavigator />
+                    {/* App notifier */}
+                    <NotifyProvider />
+                  </BottomSheetModalProvider>
+                </Host>
               </StatusBarProvider>
             </SocketProvider>
           </StoreProvider>

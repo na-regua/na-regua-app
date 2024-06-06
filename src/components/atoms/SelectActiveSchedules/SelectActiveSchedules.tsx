@@ -145,7 +145,7 @@ const SelectActiveSchedules: React.FC<ISelectActiveSchedulesProps> = ({
         </Typography>
         <PlusIconStyle
           onPress={openAddScheduleModal}
-          clickable
+          disabled={false}
           width={22}
           height={22}
           color="primary"

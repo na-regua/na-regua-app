@@ -33,7 +33,6 @@ const SelectSchedulesByDay: React.FC<ISelectSchedulesByDayProps> = ({
       </Typography>
       <InputWrapperContainerStyle>
         <MinusIconStyle
-          clickable
           onPress={() => handleChangeSchedule(schedulesByDay - 1)}
           disabled={schedulesByDay === schedulesLength}
           color={schedulesByDay === schedulesLength ? 'black3' : 'white3'}
@@ -42,7 +41,7 @@ const SelectSchedulesByDay: React.FC<ISelectSchedulesByDayProps> = ({
           <Typography variant="button">{schedulesByDay}</Typography>
         </InputTextWrapperStyle>
         <PlusIconStyle
-          clickable
+          disabled={false}
           color="white3"
           onPress={() => handleChangeSchedule(schedulesByDay + 1)}
         />

@@ -297,7 +297,11 @@ const BarberSettings: React.FC<
             </Typography>
           </BarberProfileInfoStyle>
           <QRWrapperStyle>
-            <Icons.QRIcon color="main" clickable onPress={openShareQRModal} />
+            <Icons.QRIcon
+              color="main"
+              disabled={false}
+              onPress={openShareQRModal}
+            />
           </QRWrapperStyle>
         </BarberProfileStyle>
         <BarberButtonStyled onPress={handleOpenBarber} open={barber.open}>

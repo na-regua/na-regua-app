@@ -17,7 +17,6 @@ const BellIcon: React.FC<IBellIconProps> = ({
   fill,
   disabled,
   onPress,
-  clickable = true,
 }) => {
   const getColor = useMemo(
     () => Colors[color] || customColor,
@@ -27,7 +26,7 @@ const BellIcon: React.FC<IBellIconProps> = ({
   return (
     <IconTouchableViewStyle
       activeOpacity={0.6}
-      disabled={disabled || !clickable}
+      disabled={disabled}
       onPress={onPress}>
       <Svg
         width={width}

@@ -23,6 +23,9 @@ export const OnTicketCardStyled = styled.View`
 
 export const OnTicketCardGroupStyled = styled.View`
   padding: 18px;
+  padding-bottom: 0;
+  width: 100%;
+  align-self: stretch;
 `;
 
 export const OnTicketActionsStyled = styled.View`

@@ -1,7 +1,8 @@
 import {AxiosResponse} from 'axios';
 import api, {errToAxiosError} from '../../api';
 import ENDPOINTS from '../../endpoints';
-import {IGetTodayTickets} from '@/app/models';
+import {IGetTodayTickets, ITicketRate} from '@/app/models';
+import {mapPathVariables} from '@/utils';
 
 const getToday = async (): Promise<AxiosResponse<IGetTodayTickets>> => {
   try {
@@ -14,4 +15,25 @@ const getToday = async (): Promise<AxiosResponse<IGetTodayTickets>> => {
     throw errToAxiosError(error);
   }
 };
-export default {getToday};
+
+const rateById = async (
+  ticketId: string,
+  rate: ITicketRate,
+  on_queue: boolean = false,
+): Promise<AxiosResponse<null>> => {
+  try {
+    const url = mapPathVariables(ENDPOINTS.TICKETS_RATE, {ticketId});
+
+    const response = await api.put(
+      url,
+      {...rate, on_queue},
+      {withCredentials: true},
+    );
+
+    return response;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
+export default {getToday, rateById};

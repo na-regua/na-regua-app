@@ -17,7 +17,10 @@ interface IModalProps extends PropsWithChildren {
   autoSize?: boolean;
   height?: number;
   backgroundColor?: string;
+  backdropBackgroundColor?: string;
   onClose?: () => void;
+  closable?: boolean;
+  enablePanDownToClose?: boolean;
 }
 
 export const getModalSnapPointWithKeyboard = (
@@ -37,7 +40,9 @@ const Modal = forwardRef<BottomSheetModal, IModalProps>(
       children,
       height = 0,
       backgroundColor,
+      backdropBackgroundColor,
       onClose,
+      enablePanDownToClose = true,
     },
     ref,
   ) => {
@@ -64,14 +69,27 @@ const Modal = forwardRef<BottomSheetModal, IModalProps>(
     return (
       <BottomSheetModal
         ref={ref}
+        enablePanDownToClose={enablePanDownToClose}
         backgroundComponent={props => (
           <View
             {...props}
-            style={[props.style, modalStyles.background, modalBackgroundColor]}
+            style={[
+              props.style,
+              modalStyles.background,
+              modalBackgroundColor,
+              {zIndex: 4},
+            ]}
           />
         )}
         backdropComponent={props => (
-          <View {...props} style={[props.style, modalStyles.backdrop]} />
+          <View
+            {...props}
+            style={[
+              props.style,
+              modalStyles.backdrop,
+              {backgroundColor: backdropBackgroundColor},
+            ]}
+          />
         )}
         snapPoints={height > 0 ? modalHeight : snapPoints}
         onDismiss={onClose}>
