@@ -11,7 +11,7 @@ import PushNotification, {
 } from 'react-native-push-notification';
 import api, {errToAxiosError} from '../../api';
 import ENDPOINTS from '../../endpoints';
-import {androidChannelId} from '@/App';
+import {androidChannelId} from '../../../../App';
 
 const getNotifications = async (
   filters: IGetNotificationFilters,
