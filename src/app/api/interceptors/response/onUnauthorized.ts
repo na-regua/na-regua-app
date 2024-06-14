@@ -6,7 +6,7 @@ import {navigationRef} from '@/navigation';
 
 export async function onUnauthorizedResponse(error: any) {
   if (error instanceof AxiosError && error.response?.status === 401) {
-    await AsyncStorage.removeItem(ACCESS_TOKEN_KEY);
+    await AsyncStorage.removeItem(ACCESS_TOKEN_KEY.toString());
 
     store.dispatch(
       createNotification({

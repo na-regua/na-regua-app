@@ -26,7 +26,7 @@ export const InputLabelStyle = styled.Text<{
   position: absolute;
   background-color: ${Colors.bgLight};
   z-index: 2;
-  top: -8px;
+  top: -10px;
   left: 12px;
   padding: 0 2px;
   color: ${({focused}) => (focused ? Colors.main : Colors.placeholder)};
@@ -42,15 +42,17 @@ export const InputStyle = styled.TextInput<{
   borderColor?: ColorValue | string;
 }>`
   min-height: 44px;
+  max-height: 44px;
   font-weight: ${Fonts.weights.semiBold};
   font-family: ${Fonts.types.semiBold};
   border-width: 1px;
   border-color: ${({borderColor}) =>
     (borderColor && borderColor?.toString()) || Colors.border};
   border-radius: 8px;
-  padding: 12px 12px;
+  padding: 4px 12px;
   color: ${Colors.black3};
   font-size: 14px;
+  z-index: 1;
 
   ${({active}) =>
     active &&

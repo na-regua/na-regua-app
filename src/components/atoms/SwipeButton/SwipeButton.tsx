@@ -7,15 +7,14 @@ import {
   FadeIn,
   FadeOut,
   interpolate,
-  interpolateColor,
   runOnJS,
   useAnimatedGestureHandler,
-  useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
 import Icons from '../Icons/Icons';
+import Loader from '../Loader/Loader';
 import {
   SwipeButtonColorWaveStyled,
   SwipeButtonDotStyled,
@@ -23,7 +22,6 @@ import {
   SwipeButtonTextStyled,
   SwipeButtonWrapperStyled,
 } from './styles';
-import Loader from '../Loader/Loader';
 
 export type SwipeButtonState = 'off' | 'on' | 'wait';
 
@@ -104,23 +102,9 @@ const SwipeButton: React.FC<SwipeButtonProps> = ({
 
   const InterpolateXValue = [0, SWIPE_RANGE];
   const AnimatedStyles = {
-    icon: useAnimatedProps(() => {
-      return {
-        stroke: interpolateColor(
-          X.value,
-          [0, width - SWIPEABLE_DIMENSIONS - PADDING],
-          [Colors.white3, Colors.primary],
-        ),
-      };
-    }),
     dot: useAnimatedStyle(() => {
       return {
         transform: [{translateX: X.value}],
-        backgroundColor: interpolateColor(
-          X.value,
-          [0, width - SWIPEABLE_DIMENSIONS - PADDING],
-          [Colors.primary, Colors.white3],
-        ),
       };
     }),
     colorWave: useAnimatedStyle(() => {
@@ -174,21 +158,18 @@ const SwipeButton: React.FC<SwipeButtonProps> = ({
         style={AnimatedStyles.colorWave}
         height={HEIGHT}
       />
+
       <PanGestureHandler onGestureEvent={animatedGestureHandler}>
         <SwipeButtonDotStyled
           size={SWIPEABLE_DIMENSIONS}
           padding={PADDING}
           style={AnimatedStyles.dot}>
           {state !== 'on' && (
-            <Icons.ChevronDoubleRightIcon
-              animatedPathProps={AnimatedStyles.icon}
-              strokeWidth={2}
-              color="white3"
-            />
+            <Icons.ChevronDoubleRightIcon strokeWidth={2} color="primary" />
           )}
           {state === 'on' && (
             <SwipeButtonLoaderWrapper entering={FadeIn} exiting={FadeOut}>
-              <Loader color={Colors.primary} size="48" strokeWidth={2} />
+              <Loader color={Colors.white3} size="48" strokeWidth={2} />
             </SwipeButtonLoaderWrapper>
           )}
         </SwipeButtonDotStyled>

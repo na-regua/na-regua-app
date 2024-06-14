@@ -52,6 +52,7 @@ export const LineStyled = styled.View`
   width: 100%;
   background-color: ${Colors.border};
   height: 1px;
+  margin: 2px 0;
 `;
 
 export const OnTicketLineStyled = styled.View`

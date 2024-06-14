@@ -6,6 +6,8 @@ import {Metrics} from '@/theme';
 import {TColorsType} from '@/theme/colors';
 import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
+import {Platform, ViewStyle} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {
   BackContainerStyle,
@@ -145,12 +147,16 @@ const Border: React.FC<IGenericHeaderProps> = () => {
 };
 
 const Container: React.FC<IBoxProps> = ({children, ...rest}) => {
+  const androidStyles: ViewStyle =
+    Platform.OS === 'android' ? {paddingTop: 18} : {};
+
   return (
     <Box
       position="relative"
       paddings={{vertical: 12, horizontal: 18}}
       width={Metrics.screenWidth}
-      {...rest}>
+      {...rest}
+      style={[rest.style, androidStyles]}>
       {children}
     </Box>
   );

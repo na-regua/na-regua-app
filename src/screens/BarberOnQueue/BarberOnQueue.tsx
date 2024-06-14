@@ -12,7 +12,7 @@ import {TRootStackParamList} from '@/navigation';
 import {BarberQueueSocketEvents} from '@/socket/events';
 import {AppDispatch, RootState} from '@/store/Store';
 import {QueueThunks, createNotification} from '@/store/slicers';
-import {Colors} from '@/theme';
+import {Colors, Metrics} from '@/theme';
 import {useRoute} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -45,6 +45,9 @@ const BarberOnQueue: React.FC<
   const {viewMode} = useSelector((state: RootState) => state.queue);
 
   const [swiping, setSwiping] = useState<SwipeButtonState>('wait');
+  const [scrollViewWidth, setScrollViewWidth] = useState<number>(
+    Metrics.smWidth,
+  );
 
   const isFs = useMemo(
     () => viewMode === 'fs' && route.name === '/barber/queue/fs',
@@ -149,10 +152,19 @@ const BarberOnQueue: React.FC<
       )}
       <OnQueueContentStyled fs={isFs}>
         <OnQueueHeader />
-        <OnQueueScrollStyled showsVerticalScrollIndicator={false}>
+        <OnQueueScrollStyled
+          showsVerticalScrollIndicator={false}
+          onLayout={e => {
+            console.log(e.nativeEvent.layout.width);
+            setScrollViewWidth(e.nativeEvent.layout.width);
+          }}>
           {!loadingTodayQueue &&
             todayQueue.tickets.map((ticket, index) => (
-              <TicketHandler key={index} {...ticket} />
+              <TicketHandler
+                scrollViewWidth={scrollViewWidth}
+                key={index}
+                {...ticket}
+              />
             ))}
           {loadingTodayQueue && (
             <OnQueueLoaderWrapperStyled>

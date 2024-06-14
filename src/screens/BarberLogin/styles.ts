@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 
 export const barberLoginStyles = StyleSheet.create({
   scrollContainer: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },

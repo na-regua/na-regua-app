@@ -17,6 +17,7 @@ import React, {useEffect, useRef} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {QueueContainerStyled, QueueScrollContentStyled} from './styles';
+import {Metrics} from '@/theme';
 
 const BarberQueue: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/barber/queue'>
@@ -121,7 +122,7 @@ const BarberQueue: React.FC<
       <Modal
         ref={joinQueueModalRef}
         title="modals.joinQueue.title"
-        height={200}>
+        height={194 + Metrics.unitX3}>
         <WorkerJoinQueueModal
           dismiss={joinQueueModalRef.current?.dismiss}
           navigate={route => {

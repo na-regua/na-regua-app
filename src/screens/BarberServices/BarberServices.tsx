@@ -11,15 +11,16 @@ import {
   Modal,
   Typography,
 } from '@/components/atoms';
+import {BarberServiceModal, DeleteServiceModal} from '@/components/modals';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {RootState} from '@/store/Store';
-import {Colors} from '@/theme';
+import {Colors, Metrics} from '@/theme';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {RefreshControl} from 'react-native';
+import {Platform, RefreshControl} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {
@@ -32,7 +33,6 @@ import {
   MenuItemsWrapperStyle,
   styles,
 } from './styles';
-import {BarberServiceModal, DeleteServiceModal} from '@/components/modals';
 
 const BarberServices: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/barber/settings/services'>
@@ -57,8 +57,8 @@ const BarberServices: React.FC<
   const [savingProfile, setSavingProfile] = useState<boolean>(false);
   const [showSet, setShowSet] = useState<string[]>([]);
 
-  const [menuWith, setMenuWidth] = useState<number>(0);
-  const [actionsWidth, setActionsWidth] = useState<number>(0);
+  const [menuWith, setMenuWidth] = useState<number>(Metrics.smWidth);
+  const [actionsWidth, setActionsWidth] = useState<number>(100);
 
   const insetsStyles = {
     paddingTop: insets.top,
@@ -116,6 +116,8 @@ const BarberServices: React.FC<
     } else {
       setShowSet(curr => [...curr, id]);
     }
+
+    console.log({id});
   };
 
   const getServices = useCallback(async () => {
@@ -167,14 +169,16 @@ const BarberServices: React.FC<
           refreshControl={
             <RefreshControl
               refreshing={loadingServices}
-              size={14}
+              size={Platform.OS !== 'android' ? 14 : undefined}
               onRefresh={() => {
                 getServices();
               }}
               tintColor="transparent"
               colors={['transparent']}
               style={styles.refreshControl}
-              progressBackgroundColor="transparent"
+              progressBackgroundColor={
+                Platform.OS !== 'android' ? 'transparent' : Colors.bgLight
+              }
             />
           }>
           <MenuItemsWrapperStyle
@@ -187,7 +191,7 @@ const BarberServices: React.FC<
                     description={`${t('units.money')} ${service.price}`}
                     icon={getIcon[service.icon]}
                     clickable
-                    onPress={() => handleShowSet(service._id)}
+                    onPress={() => handleShowSet(service._id.toString())}
                     collapsed={showSet.includes(service._id)}
                     actionsWidth={actionsWidth}
                     width={menuWith}
@@ -238,7 +242,7 @@ const BarberServices: React.FC<
         <Modal
           ref={addServiceModalRef}
           title={t('modals.barberService.titles.add')}
-          height={414}>
+          height={448}>
           <BarberServiceModal
             modalRef={addServiceModalRef}
             mode="add"
@@ -248,7 +252,7 @@ const BarberServices: React.FC<
         <Modal
           ref={editServiceModalRef}
           title={t('modals.barberService.titles.edit')}
-          height={414}
+          height={448}
           onClose={() => {
             if (selectedToEdit) {
               handleShowSet(selectedToEdit._id);
@@ -274,7 +278,7 @@ const BarberServices: React.FC<
         <Modal
           ref={deleteServiceModalRef}
           title={t('modals.deleteService.title')}
-          height={194}
+          height={200}
           onClose={() => {
             if (selectedToDelete) {
               handleShowSet(selectedToDelete._id);

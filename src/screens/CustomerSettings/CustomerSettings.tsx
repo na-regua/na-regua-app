@@ -160,7 +160,7 @@ const CustomerSettings: React.FC<
   };
 
   const handleLogout = async () => {
-    await AsyncStorage.removeItem(ACCESS_TOKEN_KEY);
+    await AsyncStorage.removeItem(ACCESS_TOKEN_KEY.toString());
 
     dispatch(logout());
 

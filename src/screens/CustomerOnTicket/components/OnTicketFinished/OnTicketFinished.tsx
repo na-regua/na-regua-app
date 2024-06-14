@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@/components/atoms';
 import {CustomerRateTicketModal} from '@/components/modals';
-import {Colors} from '@/theme';
+import {Colors, Metrics} from '@/theme';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {format} from 'date-fns';
 import React, {useRef} from 'react';
@@ -142,6 +142,7 @@ const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({
             </>
           </Box>
           <LineStyled />
+
           <Box
             gap={6}
             direction="row"
@@ -178,7 +179,7 @@ const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({
       </OnTicketActionsStyled>
       <Modal
         ref={rateModalRef}
-        height={420}
+        height={415 + Metrics.unitX3}
         backdropBackgroundColor={Colors.main}>
         <CustomerRateTicketModal
           ticket={ticket}

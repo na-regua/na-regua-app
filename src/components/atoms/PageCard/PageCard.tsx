@@ -1,7 +1,11 @@
-import {isCloseToBottom} from '@/utils';
-import React, {PropsWithChildren, useMemo, useState} from 'react';
-import {NativeScrollEvent, NativeSyntheticEvent, ViewProps} from 'react-native';
-import {FadeInDown} from 'react-native-reanimated';
+import {CLOSE_TO_BOTTOM_OFFSET} from '@/utils';
+import React, {PropsWithChildren, useMemo} from 'react';
+import {NativeScrollEvent, ViewProps} from 'react-native';
+import {
+  FadeInDown,
+  runOnJS,
+  useAnimatedScrollHandler,
+} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   PageCardContainer,
@@ -17,7 +21,7 @@ interface PageCardProps extends PropsWithChildren {
     contentOffsetY: number,
     isScrolling: boolean,
     closeToBottom: boolean,
-    event?: NativeSyntheticEvent<NativeScrollEvent>,
+    event?: NativeScrollEvent,
   ) => void;
   onScrollEnds?: (
     contentOffsetY: number,
@@ -40,9 +44,9 @@ const PageCard: React.FC<PageCardProps> = ({
   scrollProps,
 }) => {
   const insets = useSafeAreaInsets();
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [closeToBottom, setCloseToBottom] = useState(false);
-  const [_contentOffsetY, setContentOffsetY] = useState(0);
+  // const [isScrolling, setIsScrolling] = useState(false);
+  // const [closeToBottom, setCloseToBottom] = useState(false);
+  // const [_contentOffsetY, setContentOffsetY] = useState(0);
 
   const insetsStyles = {
     paddingBottom: insets.bottom,
@@ -66,19 +70,28 @@ const PageCard: React.FC<PageCardProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasFooter]);
 
-  const handleOnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const {contentOffset} = event.nativeEvent;
-    const _isScrolling = contentOffset.y !== 0;
-    const _closeToBottom = isCloseToBottom(event.nativeEvent);
+  const handleOnScrolAnimated = useAnimatedScrollHandler({
+    onScroll: (event: NativeScrollEvent) => {
+      const {contentOffset} = event;
+      const _isScrolling = contentOffset.y !== 0;
+      const _isCloseToBottom =
+        event.layoutMeasurement.height + contentOffset.y >=
+        event.contentSize.height - CLOSE_TO_BOTTOM_OFFSET;
 
-    setIsScrolling(isScrolling);
-    setCloseToBottom(closeToBottom);
-    setContentOffsetY(contentOffset.y);
+      // runOnJS(setIsScrolling)(_isScrolling);
+      // runOnJS(setCloseToBottom)(_closeToBottom);
+      // runOnJS(setContentOffsetY)(contentOffset.y);
 
-    if (onScroll) {
-      onScroll(contentOffset.y, _isScrolling, _closeToBottom, event);
-    }
-  };
+      if (onScroll) {
+        runOnJS(onScroll)(
+          contentOffset.y,
+          _isScrolling,
+          _isCloseToBottom,
+          event,
+        );
+      }
+    },
+  });
 
   return (
     <PageCardContainer
@@ -89,8 +102,7 @@ const PageCard: React.FC<PageCardProps> = ({
         <PageCardScrollStyled
           bounces={bounce}
           alwaysBounceVertical={bounce}
-          onScroll={handleOnScroll}
-          scrollEventThrottle={16}
+          onScroll={handleOnScrolAnimated}
           showsVerticalScrollIndicator={false}
           {...scrollProps}>
           {children}

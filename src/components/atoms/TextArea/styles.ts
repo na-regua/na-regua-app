@@ -11,6 +11,7 @@ export const TextAreaStyled = styled.TextInput<{
   font-weight: ${Fonts.weights.semiBold};
   color: ${Colors.black1};
   padding: 12px;
+  text-align-vertical: top;
 
   ${({isFocused}) =>
     isFocused &&

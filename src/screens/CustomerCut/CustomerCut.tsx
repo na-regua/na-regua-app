@@ -1,20 +1,20 @@
 import {UserService} from '@/app/api';
-import {Box, Icons, PageCard, Splashs} from '@/components/atoms';
+import {AppStatusBar, Box, Icons, PageCard, Splashs} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
 import {createNotification, getCurrentUser} from '@/store/slicers';
+import {Colors} from '@/theme';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AxiosError} from 'axios';
 import React, {useEffect, useMemo, useRef} from 'react';
-import {ScrollView} from 'react-native';
+import {Platform, ScrollView} from 'react-native';
 import {
   SlideInDown,
   useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-  withTiming,
 } from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -44,6 +44,7 @@ const CustomerCut: React.FC<
     paddingTop: insets.top,
     paddingLeft: insets.left,
     paddingRight: insets.right,
+    paddingBottom: insets.bottom,
   };
 
   const scrollAnimatedValue = useSharedValue(0);
@@ -67,6 +68,13 @@ const CustomerCut: React.FC<
   );
 
   const splashProps = useAnimatedProps(() => {
+    if (Platform.OS === 'android') {
+      return {
+        width: SPLASH_SIZE,
+        height: SPLASH_SIZE,
+      };
+    }
+
     if (scrollAnimatedValue.value * ANIMATION_RATE_MULT > GAP_LIMIT) {
       return {
         width: SPLASH_SIZE - GAP_LIMIT,
@@ -95,7 +103,7 @@ const CustomerCut: React.FC<
 
   const onPageCardScroll = (contentOffsetY: number) => {
     if (contentOffsetY > 0) {
-      scrollAnimatedValue.value = withTiming(contentOffsetY, {duration: 30});
+      scrollAnimatedValue.value = contentOffsetY;
     }
   };
 
@@ -143,6 +151,7 @@ const CustomerCut: React.FC<
 
   return (
     <CutContainerStyled style={[insetsStyles, gapStyle]}>
+      <AppStatusBar color={Colors.border} />
       <Header.Container
         zIndex={2}
         direction="row"
@@ -184,6 +193,7 @@ const CustomerCut: React.FC<
               ref: scrollRef,
             } as any
           }
+          bounce={false}
           footer={
             <>{steps === 'attendance' && <CustomerAttendanceFooter />}</>
           }>

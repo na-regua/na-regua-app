@@ -72,7 +72,7 @@ const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
         onPress={event => {
           event.stopPropagation();
         }}
-        paddingBottom={insets.bottom - 18}
+        paddingBottom={insets.bottom + 18}
         entering={SlideInDown.delay(100)}
         exiting={SlideOutDown.duration(300)}>
         <Box gap={6}>

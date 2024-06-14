@@ -241,11 +241,7 @@ const CustomerLogin: React.FC<
           Keyboard.dismiss();
         }
       }}>
-      <ContainerStyle
-        contentContainerStyle={[
-          insetsStyles,
-          customerLoginStyles.scrollContainer,
-        ]}>
+      <ContainerStyle contentContainerStyle={[insetsStyles]}>
         <ContentStyle>
           <ContentFormStyle>
             <LogoContainerStyle>

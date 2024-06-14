@@ -6,14 +6,13 @@ export const customerLoginStyles = StyleSheet.create({
   flex1: {
     flex: 1,
   },
-  scrollContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
 });
 
-export const ContainerStyle = styled.ScrollView`
+export const ContainerStyle = styled.ScrollView.attrs({
+  contentContainerStyle: {
+    flexGrow: 1,
+  },
+})`
   flex: 1;
   background: ${Colors.bgContrast};
   padding: 42px;

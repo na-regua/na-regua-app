@@ -3,14 +3,9 @@ import {Icons, Typography} from '@/components/atoms';
 import {AppDispatch, RootState} from '@/store/Store';
 import {QueueActions, QueueThunks} from '@/store/slicers';
 import {TColorsType} from '@/theme/colors';
-import React, {useEffect, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   OnQueueFilterOldTicketsStyled,
@@ -29,23 +24,6 @@ const OnQueueHeader = () => {
   const {todayQueue, filters, viewMode} = useSelector(
     (state: RootState) => state.queue,
   );
-
-  const sv = useSharedValue<number>(1);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: sv.value,
-  }));
-
-  useEffect(() => {
-    if (todayQueue?.status === 'on') {
-      sv.value = withRepeat(withTiming(0, {duration: 1000}), -1);
-    }
-
-    if (todayQueue?.status === 'paused') {
-      sv.value = 1;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [todayQueue]);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -90,11 +68,7 @@ const OnQueueHeader = () => {
       <OnQueueHeaderStyled>
         <OnQueueHeaderRowStyled>
           <OnqueueTitleGroupStyled>
-            <OnQueueTitleDotStyled
-              as={Animated.View}
-              style={[animatedStyle]}
-              color={titleColor}
-            />
+            <OnQueueTitleDotStyled as={Animated.View} color={titleColor} />
             <OnQueueTitleStyled color={titleColor} variant="h5">
               {`barber.onQueue.titles.${todayQueue.status}`}
             </OnQueueTitleStyled>

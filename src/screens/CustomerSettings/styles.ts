@@ -35,8 +35,13 @@ export const QRWrapperStyle = styled.View`
   right: 0;
 `;
 
-export const MenuWrapperStyle = styled.View`
-  gap: 18px;
+export const MenuWrapperStyle = styled.ScrollView.attrs({
+  contentContainerStyle: {
+    flexGrow: 1,
+    gap: Metrics.unitX3,
+    alignSelf: 'stretch',
+  },
+})`
   flex: 1;
 `;
 

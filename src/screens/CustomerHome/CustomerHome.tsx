@@ -1,4 +1,11 @@
-import {Box, Button, Icons, Splashs, Typography} from '@/components/atoms';
+import {
+  AppStatusBar,
+  Box,
+  Button,
+  Icons,
+  Splashs,
+  Typography,
+} from '@/components/atoms';
 import {CustomerJoinTodayQueue} from '@/components/modals';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
@@ -63,6 +70,7 @@ const CustomerHome: React.FC<
 
   return (
     <CHContainerStyled style={insetsStyles}>
+      <AppStatusBar />
       <Header.Container>
         <Header.User pressables={{user: goToSettings}} />
         <Header.Border />

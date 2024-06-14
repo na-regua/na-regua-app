@@ -17,6 +17,7 @@ export const SwipeButtonTextStyled = styled(Animated.Text)`
   font-family: ${Fonts.types.semiBold};
   font-weight: ${Fonts.weights.semiBold};
   z-index: 2;
+  color: ${Colors.primary};
 `;
 
 export const SwipeButtonColorWaveStyled = styled(Animated.View)<{
@@ -43,7 +44,6 @@ export const SwipeButtonDotStyled = styled(Animated.View)<{
   width: ${({size}) => size}px;
   height: ${({size}) => size}px;
   border-radius: 8px;
-  background-color: ${Colors.primary};
   align-items: center;
   justify-content: center;
   position: absolute;

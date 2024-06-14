@@ -40,7 +40,7 @@ const colorsGrayScaled = {
 const BarberCuttingSplash: React.FC<ISplashProps> = ({
   width = 200,
   height = 200,
-  animatedProps,
+  animatedProps = {},
   grayscale,
 }) => {
   const palette = useMemo(

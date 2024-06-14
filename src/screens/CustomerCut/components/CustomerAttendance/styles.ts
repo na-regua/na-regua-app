@@ -78,7 +78,7 @@ export const AttendanceItemStyled = styled.TouchableOpacity.attrs({
     active &&
     `
     background: ${Colors.main}${hexPercentage[10]};
-    border-color: ${Colors.main};
+    border: 1px solid ${Colors.main};
   `}
 `;
 
@@ -94,6 +94,7 @@ export const PageCardFooterStyled = styled.View`
   align-items: center;
   justify-content: space-between;
   gap: 18px;
+  padding-bottom: 18px;
 `;
 
 export const OtherButtonContentStyled = styled.View`

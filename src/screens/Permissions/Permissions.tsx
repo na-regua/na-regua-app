@@ -135,7 +135,7 @@ const Permissions: React.FC<
       emitGrantedAlert();
     }
 
-    const status = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+    const status = await request(GALLERY_PERMISSONS);
     const isGranted = status === 'granted';
     setHasGalleryPermission(isGranted);
   };

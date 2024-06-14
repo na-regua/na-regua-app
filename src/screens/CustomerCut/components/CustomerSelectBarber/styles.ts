@@ -28,6 +28,9 @@ export const SearchBarberButtonStyled = styled.TouchableOpacity.attrs({
   border-radius: 12px;
   height: 44px;
   width: 100%;
-  padding: 12px;
+  padding: 0 12px;
   border: 1px solid ${Colors.border};
+  overflow: visible;
+  align-items: flex-start;
+  justify-content: center;
 `;

@@ -1,15 +1,15 @@
 import React, {PropsWithChildren, useState} from 'react';
 
 import {useTranslation} from 'react-i18next';
-import {FadeInUp} from 'react-native-reanimated';
+import {
+  FadeInUp,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import {Box} from '../Box/Box';
 import Typography from '../Typography/Typography';
-import {
-  CollapseStyle,
-  DownIconStyled,
-  HeaderStyle,
-  UpIconStyled,
-} from './styles';
+import {CollapseStyle, DownIconStyled, HeaderStyle} from './styles';
 
 interface ICollapseProps {
   title?: string;
@@ -26,7 +26,15 @@ const Collapse: React.FC<PropsWithChildren<ICollapseProps>> = ({
 
   const handleExpand = () => {
     setExpand(curr => !curr);
+
+    flipValue.value = withSpring(expand ? 0 : 180);
   };
+
+  const flipValue = useSharedValue(0);
+
+  const flipStyle = useAnimatedStyle(() => ({
+    transform: [{rotateX: `${flipValue.value}deg`}],
+  }));
 
   return (
     <CollapseStyle>
@@ -35,15 +43,7 @@ const Collapse: React.FC<PropsWithChildren<ICollapseProps>> = ({
           {title && t(title)}
         </Typography>
 
-        {expand ? (
-          <UpIconStyled
-            width={24}
-            height={24}
-            disabled={false}
-            onPress={handleExpand}
-            color="default"
-          />
-        ) : (
+        <Box entering={FadeInUp} style={flipStyle}>
           <DownIconStyled
             width={24}
             height={24}
@@ -51,7 +51,7 @@ const Collapse: React.FC<PropsWithChildren<ICollapseProps>> = ({
             onPress={handleExpand}
             color="default"
           />
-        )}
+        </Box>
       </HeaderStyle>
       {expand ? (
         <Box entering={FadeInUp.duration(300)}>{children}</Box>

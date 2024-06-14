@@ -51,7 +51,8 @@ type TSettingsMenuType =
   | 'custommers'
   | 'workers'
   | 'serviceConfig'
-  | 'services';
+  | 'services'
+  | 'permissions';
 
 interface ISettingsMenuItem {
   icon: ReactNode;
@@ -146,6 +147,22 @@ const BarberSettings: React.FC<
         navigation.navigate('/barber/settings/services/config');
       },
     },
+    {
+      type: 'permissions',
+      icon: (
+        <Icons.SettingsIcon
+          color="default"
+          width={24}
+          height={24}
+          strokeWidth={1.3}
+        />
+      ),
+      title: 'customer.settings.menus.permissions.title',
+      subtitle: 'customer.settings.menus.permissions.subtitle',
+      onPress: () => {
+        navigation.navigate('/user/permissions');
+      },
+    },
   ];
 
   const workerMenus: ISettingsMenuItem[] = [
@@ -199,7 +216,7 @@ const BarberSettings: React.FC<
   };
 
   const handleLogout = async () => {
-    await AsyncStorage.removeItem(ACCESS_TOKEN_KEY);
+    await AsyncStorage.removeItem(ACCESS_TOKEN_KEY.toString());
 
     dispatch(logout());
 

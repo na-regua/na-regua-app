@@ -8,7 +8,9 @@ import {QueueService} from '@/app/api';
 const fetchPersistedViewMode = createAsyncThunk<TOnQueueViewModes>(
   'Queue/getPersistedViewMode',
   async () => {
-    const viewMode = await AsyncStorage.getItem(ON_QUEUE_VIEW_MODE_KEY);
+    const viewMode = await AsyncStorage.getItem(
+      ON_QUEUE_VIEW_MODE_KEY.toString(),
+    );
 
     if (!viewMode) {
       return 'fs-out';
@@ -21,7 +23,7 @@ const fetchPersistedViewMode = createAsyncThunk<TOnQueueViewModes>(
 const persistViewMode = createAsyncThunk<TOnQueueViewModes, TOnQueueViewModes>(
   'Queue/persistViewMode',
   async viewMode => {
-    await AsyncStorage.setItem(ON_QUEUE_VIEW_MODE_KEY, viewMode);
+    await AsyncStorage.setItem(ON_QUEUE_VIEW_MODE_KEY.toString(), viewMode);
 
     return viewMode;
   },

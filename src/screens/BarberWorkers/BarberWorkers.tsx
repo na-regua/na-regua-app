@@ -15,13 +15,13 @@ import {DeleteWorkerModal, WorkerModal} from '@/components/modals';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {RootState} from '@/store/Store';
-import {Colors} from '@/theme';
+import {Colors, Metrics} from '@/theme';
 import {phoneMask} from '@/utils';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {RefreshControl} from 'react-native';
+import {Platform, RefreshControl} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {
@@ -58,8 +58,8 @@ const BarberWorkers: React.FC<
   const [loadingWorkers, setLoadingWorkers] = useState(true);
   const [showSet, setShowSet] = useState<string[]>([]);
 
-  const [menuWith, setMenuWidth] = useState<number>(0);
-  const [actionsWidth, setActionsWidth] = useState<number>(0);
+  const [menuWith, setMenuWidth] = useState<number>(Metrics.smWidth);
+  const [actionsWidth, setActionsWidth] = useState<number>(100);
 
   const insetsStyles = {
     paddingTop: insets.top,
@@ -161,14 +161,16 @@ const BarberWorkers: React.FC<
           refreshControl={
             <RefreshControl
               refreshing={loadingWorkers}
-              size={14}
+              size={Platform.OS !== 'android' ? 14 : undefined}
               onRefresh={() => {
                 getWorkers();
               }}
               tintColor="transparent"
               colors={['transparent']}
               style={styles.refreshControl}
-              progressBackgroundColor="transparent"
+              progressBackgroundColor={
+                Platform.OS !== 'android' ? 'transparent' : Colors.bgLight
+              }
             />
           }>
           <MenuItemsWrapperStyle
@@ -183,7 +185,7 @@ const BarberWorkers: React.FC<
                     description={t(`roles.${worker.user.role}`)}
                     avatar={worker.user.avatar.url}
                     clickable={worker.user.role === 'worker'}
-                    onPress={() => handleShowSet(worker._id)}
+                    onPress={() => handleShowSet(worker._id.toString())}
                     actionsWidth={actionsWidth}
                     width={menuWith}
                   />
@@ -232,7 +234,7 @@ const BarberWorkers: React.FC<
         <Modal
           ref={addWorkerModalRef}
           title={t('modals.worker.titles.add')}
-          height={468}>
+          snapPoints={[508, '100%']}>
           <WorkerModal
             mode="add"
             modalRef={addWorkerModalRef}
@@ -245,7 +247,7 @@ const BarberWorkers: React.FC<
         </Modal>
         <Modal
           ref={editWorkerModalRef}
-          height={410}
+          snapPoints={[508, '100%']}
           title={t('modals.worker.titles.edit')}
           onClose={() => {
             if (selectedToEdit) {
@@ -275,7 +277,7 @@ const BarberWorkers: React.FC<
         <Modal
           ref={deleteWorkerModalRef}
           title={t('modals.deleteWorker.title')}
-          height={198}
+          snapPoints={[220, '100%']}
           onClose={() => {
             if (selectedToDelete) {
               removeFromShowSet(selectedToDelete._id);

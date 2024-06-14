@@ -40,7 +40,7 @@ const Modal = forwardRef<BottomSheetModal, IModalProps>(
       children,
       height = 0,
       backgroundColor,
-      backdropBackgroundColor,
+      backdropBackgroundColor = Colors.black3,
       onClose,
       enablePanDownToClose = true,
     },
@@ -73,12 +73,7 @@ const Modal = forwardRef<BottomSheetModal, IModalProps>(
         backgroundComponent={props => (
           <View
             {...props}
-            style={[
-              props.style,
-              modalStyles.background,
-              modalBackgroundColor,
-              {zIndex: 4},
-            ]}
+            style={[props.style, modalStyles.background, modalBackgroundColor]}
           />
         )}
         backdropComponent={props => (

@@ -1,15 +1,9 @@
 import {BarbersService} from '@/app/api';
 import {IBarber, PaginatedFilter} from '@/app/models';
-import {
-  BarberInfoCard,
-  Box,
-  Button,
-  Icons,
-  Loader,
-  Typography,
-} from '@/components/atoms';
+import {BarberInfoCard, Box, Button, Icons, Loader} from '@/components/atoms';
 import {AppDispatch} from '@/store/Store';
 import {CutActions, createNotification} from '@/store/slicers';
+import {Colors} from '@/theme';
 import {AxiosError} from 'axios';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -28,7 +22,6 @@ import {useDispatch} from 'react-redux';
 import {CodeInputStyled} from '../../styles';
 import {FavoriteItemStyled} from '../CustomerSelectBarber/styles';
 import {FlatListStyled} from './styles';
-import {Colors} from '@/theme';
 
 interface CustomerSearchBarberProps {
   dismiss: () => void;
@@ -39,7 +32,7 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
 }) => {
   const insets = useSafeAreaInsets();
   const insetsStyle: ViewStyle = {
-    paddingTop: insets.top,
+    paddingTop: insets.top + 18,
     paddingBottom: insets.bottom,
   };
   const {t} = useTranslation();
@@ -71,7 +64,7 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
 
     setTimeout(() => {
       dismiss();
-    }, 100);
+    }, 200);
   };
 
   const searchRef = useRef<TextInput>(null);
@@ -200,6 +193,7 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
               }}
             />
           </Box>
+
           <FlatListStyled
             data={barbers}
             renderItem={item =>

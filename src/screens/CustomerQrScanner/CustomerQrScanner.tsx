@@ -1,6 +1,7 @@
 import {BarbersService} from '@/app/api';
 import {IBarber} from '@/app/models';
 import {
+  AppStatusBar,
   BarberInfoCard,
   Button,
   Icons,
@@ -35,6 +36,7 @@ import {
   QrScannerCardStyled,
   QrScannerContainerStyled,
 } from './styles';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const CustomerQrScanner: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/customer/qr-scanner'>
@@ -144,6 +146,7 @@ const CustomerQrScanner: React.FC<
 
   return (
     <QrScannerContainerStyled style={insetsStyles}>
+      <AppStatusBar color={Colors.border} />
       <Header.Container>
         <Header.GoBack pressables={{back: goBack}} />
       </Header.Container>

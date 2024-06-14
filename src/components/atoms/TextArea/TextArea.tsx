@@ -1,8 +1,8 @@
-import React, {useMemo, useRef, useState} from 'react';
-import {Text, TextInput, ViewStyle} from 'react-native';
-import {TextAreaStyled} from './styles';
-import {useTranslation} from 'react-i18next';
 import {Colors} from '@/theme';
+import React, {useMemo, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {TextInput, ViewStyle} from 'react-native';
+import {TextAreaStyled} from './styles';
 
 interface TextAreaProps {
   value: string;

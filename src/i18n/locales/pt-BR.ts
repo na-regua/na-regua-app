@@ -596,7 +596,7 @@ const ptBr = {
       },
       comment: 'Deixe aqui seu comentário...',
       buttons: {
-        send: 'Enviar',
+        rate: 'Enviar',
       },
     },
   },
@@ -796,6 +796,7 @@ const ptBr = {
     UNAVAILABLE_MESSAGE_SERVICE: 'Serviço de mensagens indisponível.',
     USER_ALREADY_IN_QUEUE: 'Ops! Você já está nessa fila.',
     USER_ALREADY_IN_OTHER_QUEUE: 'Ops! Você está em outra fila.',
+    TICKET_NOT_FOUND: 'Ticket não encontrado.',
   },
   currency: {symbol: 'R$', format: 'R$ {{-value}}'},
   buttons: {

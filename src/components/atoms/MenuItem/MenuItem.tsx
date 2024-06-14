@@ -33,7 +33,7 @@ const MenuItem: React.FC<IMenuItemProps> = ({
   icon,
   collapsed,
   actionsWidth,
-  width = 0,
+  width = 300,
 }) => {
   const originalWidth = width;
   const gap = 12;
@@ -47,14 +47,23 @@ const MenuItem: React.FC<IMenuItemProps> = ({
   });
 
   useEffect(() => {
+    if (width !== originalWidth) {
+      sharedValue.value = width;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [width]);
+
+  useEffect(() => {
     if (actionsWidth) {
       if (collapsed) {
-        sharedValue.value = withTiming(originalWidth - (actionsWidth + gap));
+        sharedValue.value = withTiming(originalWidth - (actionsWidth + gap), {
+          duration: 100,
+        });
       }
     }
 
     if (!collapsed) {
-      sharedValue.value = withTiming(originalWidth);
+      sharedValue.value = withTiming(originalWidth, {duration: 100});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collapsed]);
