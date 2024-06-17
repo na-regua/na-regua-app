@@ -3,7 +3,8 @@ import {TColorsType} from '@/theme/colors';
 import {FontsType} from '@/theme/fonts';
 import React, {PropsWithChildren, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StyleSheet, Text, TextStyle} from 'react-native';
+import {StyleSheet, TextStyle} from 'react-native';
+import Animated, {AnimatedStyle} from 'react-native-reanimated';
 
 type ITypographyVariants =
   | 'h1'
@@ -27,6 +28,7 @@ export interface ITypographyProps extends PropsWithChildren {
   weight?: keyof typeof Fonts.weights;
   translate?: boolean;
   translateProps?: Record<string, any>;
+  animatedStyles?: AnimatedStyle<TextStyle>;
 }
 
 const Typography: React.FC<ITypographyProps> = ({
@@ -38,6 +40,7 @@ const Typography: React.FC<ITypographyProps> = ({
   weight,
   translate = true,
   translateProps,
+  animatedStyles,
 }) => {
   const {t} = useTranslation();
 
@@ -49,7 +52,7 @@ const Typography: React.FC<ITypographyProps> = ({
   );
 
   return (
-    <Text
+    <Animated.Text
       style={[
         stylesByVariant,
         {
@@ -59,11 +62,12 @@ const Typography: React.FC<ITypographyProps> = ({
           ...(weight ? {fontFamily: Fonts.types[weight]} : {}),
         },
         style,
+        animatedStyles,
       ]}>
       {typeof children === 'string' && translate
         ? t(children, translateProps)
         : children}
-    </Text>
+    </Animated.Text>
   );
 };
 

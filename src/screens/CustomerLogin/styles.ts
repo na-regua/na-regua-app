@@ -11,6 +11,9 @@ export const customerLoginStyles = StyleSheet.create({
 export const ContainerStyle = styled.ScrollView.attrs({
   contentContainerStyle: {
     flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
 })`
   flex: 1;
@@ -23,13 +26,13 @@ export const ContentStyle = styled.View`
   gap: ${Metrics.unitX4}px;
   padding-bottom: 0;
   justify-content: space-between;
+  padding-top: 80px;
   max-width: 360px;
   min-width: 240px;
   width: 100%;
 `;
 
 export const ContentFormStyle = styled.View`
-  flex: 1;
   gap: ${Metrics.unitX3}px;
 `;
 

@@ -87,7 +87,7 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
             createNotification({
               id: 'login-email',
               type: 'error',
-              message: `error.${message}`,
+              message: `errors.${message}`,
             }),
           );
         }

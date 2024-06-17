@@ -13,7 +13,7 @@ const colors = {
   default: '#9A8877',
   defaultHover: '#B3B9C6',
   border: '#EAEDF3',
-  borderHover: '#D8DCE8',
+  borderHover: '#CFD4E3',
   disabled: '#CFCFCF',
   white1: '#B8AEAA',
   white2: '#E5E5E5',

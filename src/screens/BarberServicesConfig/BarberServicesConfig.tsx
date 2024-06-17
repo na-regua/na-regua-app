@@ -93,7 +93,7 @@ const BarberServicesConfig: React.FC<
               createNotification({
                 id: 'service-update',
                 type: 'error',
-                message: `error.${message}`,
+                message: `errors.${message}`,
               }),
             );
           }

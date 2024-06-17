@@ -117,7 +117,7 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
               createNotification({
                 id: 'add-service',
                 type: 'error',
-                message: `error.${message}`,
+                message: `errors.${message}`,
               }),
             );
           }
@@ -165,7 +165,7 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
               createNotification({
                 id: 'update-service',
                 type: 'error',
-                message: `error.${message}`,
+                message: `errors.${message}`,
               }),
             );
           }

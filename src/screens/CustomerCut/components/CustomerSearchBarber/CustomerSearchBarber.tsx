@@ -45,7 +45,7 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
   // infinite scroll
   const [totalItems, setTotalItems] = useState(0);
   const [pagination, setPagination] = useState<PaginatedFilter>({
-    limit: 10,
+    limit: 1,
     offset: 0,
   });
 
@@ -69,20 +69,25 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
 
   const searchRef = useRef<TextInput>(null);
 
-  const onSearch = async () => {
+  const fetchBarbers = async () => {
     try {
       setLoading(true);
 
-      const {data} = await BarbersService.getBarbers(debouncedInputValue);
+      const {data} = await BarbersService.getBarbers(
+        debouncedInputValue,
+        pagination,
+      );
 
-      const {content, total, limit, offset} = data;
-
-      console.log({limit, offset, total});
+      const {content, total} = data;
 
       setTotalItems(total);
 
-      if (content) {
-        setBarbers(content);
+      if (content.length > 0) {
+        setBarbers(curr => [...curr, ...content]);
+      }
+
+      if (content.length === 0) {
+        setBarbers([]);
       }
 
       setLoading(false);
@@ -105,6 +110,15 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
     }
   };
 
+  const fetchNextList = () => {
+    if (hasNext) {
+      setPagination(curr => ({
+        ...curr,
+        offset: curr.offset + curr.limit,
+      }));
+    }
+  };
+
   const showSelectedModal = (barber: IBarber) => {
     handleDismiss();
 
@@ -122,7 +136,7 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
   }, [search]);
 
   useEffect(() => {
-    onSearch();
+    fetchBarbers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedInputValue]);
 
@@ -195,11 +209,11 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
           </Box>
 
           <FlatListStyled
+            as={FlatList<IBarber>}
             data={barbers}
-            renderItem={item =>
-              renderFavorite(item as ListRenderItemInfo<IBarber>)
-            }
-            as={FlatList}
+            renderItem={renderFavorite}
+            onEndReached={fetchNextList}
+            onEndReachedThreshold={0.8}
             ListFooterComponent={
               <Box alignItems="center">
                 {loading && <Loader size="100" color={Colors.main} />}

@@ -9,6 +9,7 @@ import {
   SocketReducer,
   TicketViewReducer,
 } from './slicers';
+import {TicketHistoryReducer} from './slicers/TicketHistorySlicer';
 
 export interface GenericAction<T = any> {
   type: string;
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   socket: SocketReducer,
   cut: CutReducer,
   ticketView: TicketViewReducer,
+  ticketHistory: TicketHistoryReducer,
 });
 
 export const store = configureStore({

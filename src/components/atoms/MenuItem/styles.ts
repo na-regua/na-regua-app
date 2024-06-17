@@ -6,7 +6,7 @@ export const ContainerStyle = styled(AnimatedTouchableOpacity)`
   padding: 8px;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   border-radius: 12px;
   gap: 12px;
   background-color: ${Colors.border};

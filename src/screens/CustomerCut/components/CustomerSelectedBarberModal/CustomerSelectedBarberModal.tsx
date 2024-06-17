@@ -20,6 +20,7 @@ import {
   CustomBottomSheetOverlayStyled,
   CustomBottomSheetStyled,
 } from './styles';
+import {Metrics} from '@/theme';
 
 interface ICustomerJoinTodayQueueProps {}
 
@@ -68,7 +69,7 @@ const CustomerSelectedBarberModal: React.FC<
         onPress={event => {
           event.stopPropagation();
         }}
-        paddingBottom={insets.bottom + 18}
+        paddingBottom={insets.bottom + Metrics.platformPaddingBottom}
         entering={SlideInDown.delay(100)}
         exiting={SlideOutDown.duration(300)}>
         <Box gap={6}>

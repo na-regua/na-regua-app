@@ -116,8 +116,6 @@ const BarberServices: React.FC<
     } else {
       setShowSet(curr => [...curr, id]);
     }
-
-    console.log({id});
   };
 
   const getServices = useCallback(async () => {
@@ -169,10 +167,10 @@ const BarberServices: React.FC<
           refreshControl={
             <RefreshControl
               refreshing={loadingServices}
-              size={Platform.OS !== 'android' ? 14 : undefined}
               onRefresh={() => {
                 getServices();
               }}
+              size={Platform.OS !== 'android' ? 14 : undefined}
               tintColor="transparent"
               colors={['transparent']}
               style={styles.refreshControl}

@@ -53,7 +53,10 @@ const CustomerAttendanceFooter = () => {
         );
 
         if (data.ticket) {
-          dispatch(TicketViewActions.setTicketView(data.ticket));
+          dispatch(TicketViewActions.setTicket(data.ticket));
+          if (data.ticket.queue) {
+            dispatch(TicketViewActions.setQueue(data.ticket.queue.queue_dto));
+          }
 
           setJoining(false);
 

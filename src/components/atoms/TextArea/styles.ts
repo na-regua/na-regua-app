@@ -9,7 +9,7 @@ export const TextAreaStyled = styled.TextInput<{
   border: 1px solid ${Colors.border};
   font-family: ${Fonts.types.semiBold};
   font-weight: ${Fonts.weights.semiBold};
-  color: ${Colors.black1};
+  color: ${Colors.black2};
   padding: 12px;
   text-align-vertical: top;
 

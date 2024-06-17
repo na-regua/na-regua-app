@@ -115,7 +115,7 @@ const BarberSettingsProfile: React.FC<
               createNotification({
                 id: 'search-cep',
                 type: 'error',
-                message: `error.${message}`,
+                message: `errors.${message}`,
               }),
             );
           }

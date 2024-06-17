@@ -99,7 +99,7 @@ const CustomerSignUp: React.FC<
             createNotification({
               id: 'customer-signup',
               type: 'error',
-              message: `error.${message}`,
+              message: `errors.${message}`,
             }),
           );
         }
@@ -142,8 +142,11 @@ const CustomerSignUp: React.FC<
             <Avatar
               preview={preview}
               onAvatarChange={onAvatarChange}
-              size={96}
+              size={90}
             />
+            <Typography variant="body2" color="black1">
+              {'customer.signUp.fields.avatar'}
+            </Typography>
           </CSUAvatarWrapperStyled>
           <CSUContentFormStyled>
             <Controller

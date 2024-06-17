@@ -14,6 +14,7 @@ export interface IQueue {
   tickets: ITicket[];
   createdAt: string;
   updatedAt: string;
+  current_position: number;
 }
 
 export type TOnQueueViewModes = 'fs' | 'fs-out';

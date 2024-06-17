@@ -13,6 +13,7 @@ export const CSUHeaderStyled = styled.View`
 
 export const CSUAvatarWrapperStyled = styled.View`
   align-items: center;
+  gap: 6px;
 `;
 
 export const CSUContentStyled = styled.View`

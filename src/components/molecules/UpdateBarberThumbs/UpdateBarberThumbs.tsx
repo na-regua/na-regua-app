@@ -64,7 +64,7 @@ const UpdateBarberThumbs = () => {
               createNotification({
                 id: 'send-whatsapp-code-error',
                 type: 'error',
-                message: `error.${message}`,
+                message: `errors.${message}`,
               }),
             );
           }
@@ -126,7 +126,7 @@ const UpdateBarberThumbs = () => {
               createNotification({
                 id: 'send-whatsapp-code-error',
                 type: 'error',
-                message: `error.${message}`,
+                message: `errors.${message}`,
               }),
             );
           }

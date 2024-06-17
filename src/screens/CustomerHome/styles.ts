@@ -77,8 +77,8 @@ export const CHTabsStyled = styled.View`
   gap: 18px;
 `;
 
-export const CHTabsContentStyled = styled.View`
-  flex: 2;
+export const CHTabsContentStyled = styled(AnimatedView)`
+  flex: 1;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 18px;

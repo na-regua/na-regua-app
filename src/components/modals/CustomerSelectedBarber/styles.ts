@@ -41,15 +41,6 @@ export const QueueInfoStyled = styled.View`
   gap: 12px;
 `;
 
-export const OnTicketIconWrapperStyled = styled.View`
-  align-items: center;
-  justify-content: center;
-  background: ${Colors.secondary};
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-`;
-
 export const CustomBottomSheetStyled = styled(AnimatedTouchableView).attrs({
   activeOpacity: 1,
 })<{

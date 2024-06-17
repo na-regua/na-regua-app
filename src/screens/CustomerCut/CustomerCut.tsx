@@ -4,7 +4,7 @@ import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
 import {createNotification, getCurrentUser} from '@/store/slicers';
-import {Colors} from '@/theme';
+import {Colors, Metrics} from '@/theme';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AxiosError} from 'axios';
 import React, {useEffect, useMemo, useRef} from 'react';
@@ -44,7 +44,6 @@ const CustomerCut: React.FC<
     paddingTop: insets.top,
     paddingLeft: insets.left,
     paddingRight: insets.right,
-    paddingBottom: insets.bottom,
   };
 
   const scrollAnimatedValue = useSharedValue(0);
@@ -140,7 +139,7 @@ const CustomerCut: React.FC<
           dispatch(
             createNotification({
               id: 'favorite_barber',
-              message: `error.${message}`,
+              message: `errors.${message}`,
               type: 'error',
             }),
           );
@@ -194,6 +193,11 @@ const CustomerCut: React.FC<
             } as any
           }
           bounce={false}
+          wrapperProps={{
+            style: {
+              paddingBottom: Metrics.platformPaddingBottom,
+            },
+          }}
           footer={
             <>{steps === 'attendance' && <CustomerAttendanceFooter />}</>
           }>

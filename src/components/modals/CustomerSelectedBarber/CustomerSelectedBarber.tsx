@@ -6,6 +6,7 @@ import {
   Icons,
   Typography,
 } from '@/components/atoms';
+import {Metrics} from '@/theme';
 import React from 'react';
 import {
   FadeIn,
@@ -45,7 +46,7 @@ const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
         onPress={event => {
           event.stopPropagation();
         }}
-        paddingBottom={insets.bottom + 18}
+        paddingBottom={insets.bottom + Metrics.platformPaddingBottom}
         entering={SlideInDown.delay(100)}
         exiting={SlideOutDown.duration(300)}>
         <Box gap={6}>

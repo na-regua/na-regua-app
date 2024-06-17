@@ -7,9 +7,12 @@ import {
   Typography,
 } from '@/components/atoms';
 import {useAppNavigation} from '@/navigation';
+import {OnTicketServiceInfo} from '@/screens/CustomerOnTicket/components';
+import {OnTicketIconWrapperStyled} from '@/screens/CustomerOnTicket/styles';
 import {AppDispatch} from '@/store/Store';
 import {TicketViewActions} from '@/store/slicers';
-import React, {useState} from 'react';
+import {Metrics} from '@/theme';
+import React, {useMemo, useState} from 'react';
 import {
   FadeIn,
   FadeOut,
@@ -21,10 +24,8 @@ import {useDispatch} from 'react-redux';
 import {
   CustomBottomSheetOverlayStyled,
   CustomBottomSheetStyled,
-  OnTicketIconWrapperStyled,
   QueueInfoStyled,
 } from './styles';
-import {OnTicketServiceInfo} from '@/screens/CustomerOnTicket/components';
 
 interface ICustomerJoinTodayQueueProps {
   onBack: () => void;
@@ -47,7 +48,10 @@ const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
     try {
       setJoining(true);
 
-      dispatch(TicketViewActions.setTicketView(ticket));
+      dispatch(TicketViewActions.setTicket(ticket));
+      if (ticket.queue) {
+        dispatch(TicketViewActions.setQueue(ticket.queue.queue_dto));
+      }
 
       if (onContinue) {
         onContinue();
@@ -61,6 +65,14 @@ const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
     }
   };
 
+  const ticketPosition = useMemo(() => {
+    const ticketPositionValue = ticket.queue?.position || 0;
+    const queueCurrentPositionValue =
+      ticket.queue?.queue_dto.current_position || 0;
+
+    return ticketPositionValue + 1 - queueCurrentPositionValue;
+  }, [ticket]);
+
   return (
     <CustomBottomSheetOverlayStyled
       onPress={() => {
@@ -72,7 +84,7 @@ const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
         onPress={event => {
           event.stopPropagation();
         }}
-        paddingBottom={insets.bottom + 18}
+        paddingBottom={insets.bottom + Metrics.platformPaddingBottom}
         entering={SlideInDown.delay(100)}
         exiting={SlideOutDown.duration(300)}>
         <Box gap={6}>
@@ -91,9 +103,7 @@ const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
               <Icons.UserIcon width={24} height={24} color="white3" />
             </OnTicketIconWrapperStyled>
             <Box gap={3}>
-              <Typography variant="body1">
-                {ticket.queue?.position} º
-              </Typography>
+              <Typography variant="body1">{ticketPosition}º</Typography>
               <Typography variant="caption" color="placeholder">
                 {'customer.onTicket.info.position'}
               </Typography>

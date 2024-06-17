@@ -10,14 +10,31 @@ import {CustomerJoinTodayQueue} from '@/components/modals';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {Colors} from '@/theme';
+import {
+  CutThunks,
+  TicketHistoryActions,
+  TicketHistoryThunks,
+} from '@/store/slicers';
+import {Colors, Fonts} from '@/theme';
 import {strongShadowStyle} from '@/utils';
+import {useIsFocused} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
-import {FadeInDown} from 'react-native-reanimated';
+import {TouchableOpacity, View} from 'react-native';
+import {
+  FadeInDown,
+  SlideInLeft,
+  SlideInRight,
+  SlideOutLeft,
+  SlideOutRight,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
+import {CustomerHomeHistory} from './components';
 import {
   BigActionStyled,
   CHActionStyled,
@@ -28,17 +45,43 @@ import {
   ShareQrButtonContentStyled,
   SplashViewStyled,
 } from './styles';
-import {CutThunks} from '@/store/slicers';
+
+const TABS = {
+  ATTENDANCE: 0,
+  HISTORY: 1,
+};
 
 const CustomerHome: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/customer/home'>
 > = ({navigation}) => {
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
+  const isScreenFocused = useIsFocused();
+
+  const homeTabSV = useSharedValue(1);
+  const historyTabSV = useSharedValue(0);
+  const AnimatedStyles = {
+    home: useAnimatedStyle(() => ({
+      fontSize: interpolate(
+        homeTabSV.value,
+        [0, 1],
+        [Fonts.sizes.h6, Fonts.sizes.h4],
+      ),
+    })),
+    history: useAnimatedStyle(() => ({
+      fontSize: interpolate(
+        historyTabSV.value,
+        [0, 1],
+        [Fonts.sizes.h6, Fonts.sizes.h4],
+      ),
+    })),
+  };
 
   const {todayTickets} = useSelector((state: RootState) => state.cut);
 
   const [showJoinQueueModal, setShowJoinQueueModal] = useState(false);
+
+  const [selectedTab, setSelectedTab] = useState(TABS.ATTENDANCE);
 
   const insetsStyles = {
     paddingTop: insets.top,
@@ -63,10 +106,26 @@ const CustomerHome: React.FC<
     await dispatch(CutThunks.fetchTodayTickets());
   };
 
+  const selectTab = async (tab: number) => {
+    setSelectedTab(tab);
+
+    if (tab === TABS.ATTENDANCE) {
+      homeTabSV.value = withSpring(1);
+      historyTabSV.value = withSpring(0);
+    }
+
+    if (tab === TABS.HISTORY) {
+      historyTabSV.value = withSpring(1);
+      homeTabSV.value = withSpring(0);
+      dispatch(TicketHistoryActions.clear());
+      await dispatch(TicketHistoryThunks.fetchTicketHistory());
+    }
+  };
+
   useEffect(() => {
     getTodayTicketsData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isScreenFocused]);
 
   return (
     <CHContainerStyled style={insetsStyles}>
@@ -117,52 +176,74 @@ const CustomerHome: React.FC<
           onPress={goToQrScanner}
         />
         <CHTabsStyled>
-          <Typography variant="h4" color="black2">
-            {'customer.home.tabs.attendance'}
-          </Typography>
-          <Typography variant="h6" color="default">
-            {'customer.home.tabs.history'}
-          </Typography>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => selectTab(TABS.ATTENDANCE)}>
+            <Typography
+              color={selectedTab === TABS.ATTENDANCE ? 'black2' : 'default'}
+              animatedStyles={AnimatedStyles.home}>
+              {'customer.home.tabs.attendance'}
+            </Typography>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => selectTab(TABS.HISTORY)}>
+            {/* variant={selectedTab === TABS.HISTORY ? 'h4' : 'h6'} */}
+            <Typography
+              color={selectedTab === TABS.HISTORY ? 'black2' : 'default'}
+              animatedStyles={AnimatedStyles.history}>
+              {'customer.home.tabs.history'}
+            </Typography>
+          </TouchableOpacity>
         </CHTabsStyled>
         <Box flex={1}>
-          <CHTabsContentStyled>
-            {todayTickets?.queue && (
+          {selectedTab === TABS.ATTENDANCE && (
+            <CHTabsContentStyled entering={SlideInLeft} exiting={SlideOutLeft}>
+              {todayTickets?.queue && (
+                <CHActionStyled
+                  underlayColor={Colors.accentBlueHover}
+                  color="accentBlue"
+                  height={100}
+                  onPress={() => setShowJoinQueueModal(true)}
+                  entering={FadeInDown}
+                  style={[strongShadowStyle]}>
+                  <>
+                    <Typography variant="body1" weight="semiBold">
+                      {'customer.home.actions.queue.title'}
+                    </Typography>
+                    <SplashViewStyled right={-12} bottom={-12}>
+                      <Splashs.ClockSplash size={80} />
+                    </SplashViewStyled>
+                  </>
+                </CHActionStyled>
+              )}
+
+              {/* {todayTickets?.schedules && todayTickets?.schedules.length > 0 && ( */}
               <CHActionStyled
-                underlayColor={Colors.accentBlueHover}
-                color="accentBlue"
-                height={100}
-                onPress={() => setShowJoinQueueModal(true)}
-                entering={FadeInDown}
-                style={[strongShadowStyle]}>
+                underlayColor={Colors.sandHover}
+                color="sand"
+                height={160}
+                onPress={() => {}}
+                entering={FadeInDown}>
                 <>
                   <Typography variant="body1" weight="semiBold">
-                    {'customer.home.actions.queue.title'}
+                    {'customer.home.actions.mySchedule.title'}
                   </Typography>
-                  <SplashViewStyled right={-12} bottom={-12}>
-                    <Splashs.ClockSplash size={80} />
+                  <SplashViewStyled right={0} bottom={0}>
+                    <Splashs.ScheduleSplash />
                   </SplashViewStyled>
                 </>
               </CHActionStyled>
-            )}
-
-            {/* {todayTickets?.schedules && todayTickets?.schedules.length > 0 && ( */}
-            <CHActionStyled
-              underlayColor={Colors.sandHover}
-              color="sand"
-              height={160}
-              onPress={() => {}}
-              entering={FadeInDown}>
-              <>
-                <Typography variant="body1" weight="semiBold">
-                  {'customer.home.actions.mySchedule.title'}
-                </Typography>
-                <SplashViewStyled right={0} bottom={0}>
-                  <Splashs.ScheduleSplash />
-                </SplashViewStyled>
-              </>
-            </CHActionStyled>
-            {/* )} */}
-          </CHTabsContentStyled>
+              {/* )} */}
+            </CHTabsContentStyled>
+          )}
+          {selectedTab === TABS.HISTORY && (
+            <CHTabsContentStyled
+              entering={SlideInRight}
+              exiting={SlideOutRight}>
+              <CustomerHomeHistory isScreenFocused={isScreenFocused} />
+            </CHTabsContentStyled>
+          )}
         </Box>
       </CHContentStyled>
       {todayTickets?.queue && showJoinQueueModal && (

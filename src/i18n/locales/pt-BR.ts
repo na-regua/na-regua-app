@@ -216,7 +216,7 @@ const ptBr = {
         next: 'Próximo',
       },
       filters: {
-        oldTickets: 'Clientes anteriores da fila',
+        oldTickets: 'Ver antigos',
       },
       generic: {
         askToJoin: '{{-name}} deseja entrar na fila.',
@@ -233,6 +233,7 @@ const ptBr = {
       fields: {
         name: 'Nome',
         phone: 'Telefone',
+        avatar: 'Selecione uma foto',
       },
     },
     verify: {
@@ -269,6 +270,9 @@ const ptBr = {
           subtitle: 'Ajustar permissões do aplicativo.',
         },
       },
+      buttons: {
+        rate: 'Avaliar',
+      },
     },
     home: {
       titles: {
@@ -289,6 +293,7 @@ const ptBr = {
       },
       buttons: {
         readQr: 'Ler QR Code',
+        seeMore: 'Ver mais...',
       },
       tabs: {
         attendance: 'Para hoje',
@@ -739,6 +744,8 @@ const ptBr = {
 
     USER_ALREADY_IN_QUEUE: 'Ops! Você já está na fila.',
     USER_ALREADY_IN_OTHER_QUEUE: 'Ops! Você está em outra fila.',
+    USER_IS_NEXT:
+      'Chegou sua vez de ser atendido, compareça ao local de atendimento o mais rápido!.',
   },
   errors: {
     INVALID_CEP: 'CEP inválido.',
@@ -799,6 +806,10 @@ const ptBr = {
     TICKET_NOT_FOUND: 'Ticket não encontrado.',
   },
   currency: {symbol: 'R$', format: 'R$ {{-value}}'},
+  dates: {
+    full: 'dd/MM/yyyy HH:mm',
+    fullWHalfYear: 'dd/MM/yy HH:mm',
+  },
   buttons: {
     approve: 'Aprovar',
     deny: 'Negar',
@@ -818,6 +829,9 @@ const ptBr = {
       queue: 'Fila',
       schedule: 'Agendamento',
     },
+  },
+  empty: {
+    rate: 'Sem avaliação.',
   },
 };
 

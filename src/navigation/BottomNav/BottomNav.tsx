@@ -3,6 +3,7 @@ import {Icons, Typography} from '@/components/atoms';
 import {RootState} from '@/store/Store';
 import React, {ReactNode, useEffect, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
+import {SlideInDown, SlideOutDown} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {APP_ROUTES} from '../appRoutes';
@@ -157,7 +158,10 @@ const BottomNav: React.FC<IBottomNavProps> = () => {
   return (
     <>
       {user && !hideBottomNav && (
-        <FloatingContainerStyle style={[insetsStyles, shadowStyle]}>
+        <FloatingContainerStyle
+          entering={SlideInDown}
+          exiting={SlideOutDown}
+          style={[insetsStyles, shadowStyle]}>
           {routesByRole[user.role].map(routeName => (
             <React.Fragment key={routeName}>
               {ALL_ROUTES[routeName]}

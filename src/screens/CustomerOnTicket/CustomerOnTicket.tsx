@@ -26,7 +26,7 @@ const CustomerOnTicket: React.FC<
     paddingRight: insets.right,
   };
 
-  const {ticket} = useSelector((state: RootState) => state.ticketView);
+  const {ticket, queue} = useSelector((state: RootState) => state.ticketView);
   const {socket, connected} = useSelector((state: RootState) => state.socket);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -50,6 +50,10 @@ const CustomerOnTicket: React.FC<
   }, [ticket]);
 
   const goBack = () => {
+    if (ticket?.status === 'served') {
+      navigation.navigate('/customer/home');
+    }
+
     if (navigation.canGoBack()) {
       navigation.goBack();
     }
@@ -69,8 +73,15 @@ const CustomerOnTicket: React.FC<
 
       socket.on(SocketUrls.GetTicket, data => {
         if (data.ticket) {
-          dispatch(TicketViewActions.setTicketView(data.ticket));
+          dispatch(TicketViewActions.setTicket(data.ticket));
+          dispatch(TicketViewActions.setQueue(data.ticket.queue.queue_dto));
           dispatch(CutThunks.fetchTodayTickets());
+        }
+      });
+
+      socket.on(SocketUrls.GetQueue, data => {
+        if (data.queue) {
+          dispatch(TicketViewActions.setQueue(data.queue));
         }
       });
     }
@@ -79,6 +90,7 @@ const CustomerOnTicket: React.FC<
   const cleaningSocketEvents = () => {
     if (connected && !!socket) {
       socket.off(SocketUrls.GetTicket);
+      socket.off(SocketUrls.GetQueue);
     }
   };
 
@@ -118,8 +130,12 @@ const CustomerOnTicket: React.FC<
         {ticket.status === 'pending' && (
           <OnTicketWaiting ticket={ticket} totalPrice={totalPrice} />
         )}
-        {ticket.status === 'queue' && (
-          <OnTicketQueue ticket={ticket} totalPrice={totalPrice} />
+        {ticket.status === 'queue' && queue && (
+          <OnTicketQueue
+            ticket={ticket}
+            queue={queue}
+            totalPrice={totalPrice}
+          />
         )}
         {ticket.status === 'served' && (
           <OnTicketFinished ticket={ticket} totalPrice={totalPrice} />

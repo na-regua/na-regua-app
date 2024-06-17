@@ -19,7 +19,7 @@ export const OnQueueTitleDotStyled = styled(AnimatedView)<{
   background: ${({color}) => Colors[color]};
 `;
 
-export const OnqueueTitleGroupStyled = styled.View`
+export const OnQueueTitleGroupStyled = styled.View`
   flex-direction: row;
   gap: 6px;
   align-items: center;
@@ -49,7 +49,7 @@ export const OnQueueTitleStyled = styled(Typography)``;
 export const OnQueueFiltersStyled = styled.View`
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 export const OnQueueFilterOldTicketsStyled = styled.TouchableOpacity.attrs({

@@ -26,3 +26,5 @@ export {default as CustomerSettingsHistoryScreen} from './CustomerSettingsHistor
 export {default as CustomerSettingsProfileScreen} from './CustomerSettingsProfile/CustomerSettingsProfile';
 export {default as CustomerSettingsFavoritesScreen} from './CustomerSettingsFavorites/CustomerSettingsFavorites';
 export {default as PermissionsScreen} from './Permissions/Permissions';
+
+export * from './CustomerOnTicket/components';

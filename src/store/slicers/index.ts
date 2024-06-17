@@ -6,3 +6,4 @@ export * from './NotifySlicer/NotifySlicer';
 export * from './SocketSlicer/SocketSlicer';
 export * from './TicketViewSlicer/TicketViewSlicer';
 export * from './QueueSlicer';
+export * from './TicketHistorySlicer';

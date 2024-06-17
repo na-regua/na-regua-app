@@ -15,9 +15,13 @@ import {
   ToApproveUserStyled,
 } from './styles';
 
-interface ToApproveProps extends ITicket {}
+interface ItemToApproveProps extends ITicket {}
 
-const ToApprove: React.FC<ToApproveProps> = ({_id, customer, service}) => {
+const ItemToApprove: React.FC<ItemToApproveProps> = ({
+  _id,
+  customer,
+  service,
+}) => {
   const [approving, setApproving] = useState(false);
   const [rejecting, setRejecting] = useState(false);
 
@@ -120,4 +124,4 @@ const ToApprove: React.FC<ToApproveProps> = ({_id, customer, service}) => {
   );
 };
 
-export {ToApprove};
+export {ItemToApprove};

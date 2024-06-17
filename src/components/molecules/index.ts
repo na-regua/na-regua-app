@@ -5,7 +5,7 @@ export * from './BarberLoginMailForm/BarberLoginMailForm';
 export * from './BarberLoginPhoneForm/BarberLoginPhoneForm';
 export {default as Header} from './Header/Header';
 export * from './NotificationCenterItem/NotificationCenterItem';
-export * from './OnQueueHeader/OnQueueHeader';
+export * from './BarberOnQueueHeader/BarberOnQueueHeader';
 export {default as PicturesStep} from './PicturesStep/PicturesStep';
 export * from './ProfileStep/ProfileStep';
 export {default as ProfileStep} from './ProfileStep/ProfileStep';

@@ -1,3 +1,4 @@
+import {Metrics} from '@/theme';
 import React, {useEffect} from 'react';
 import {View, ViewStyle} from 'react-native';
 import {
@@ -7,6 +8,7 @@ import {
 } from 'react-native-reanimated';
 import Typography from '../Typography/Typography';
 import {AvatarStyled, ContainerStyle, IconWrapperStyle} from './styles';
+import {Box} from '../Box/Box';
 
 interface IMenuItemProps {
   avatar?: string;
@@ -20,6 +22,8 @@ interface IMenuItemProps {
   collapsed?: boolean;
   actionsWidth?: number;
   width?: number;
+
+  suffix?: React.ReactNode;
 }
 
 const MenuItem: React.FC<IMenuItemProps> = ({
@@ -33,7 +37,8 @@ const MenuItem: React.FC<IMenuItemProps> = ({
   icon,
   collapsed,
   actionsWidth,
-  width = 300,
+  width = Metrics.smPadding,
+  suffix,
 }) => {
   const originalWidth = width;
   const gap = 12;
@@ -75,24 +80,32 @@ const MenuItem: React.FC<IMenuItemProps> = ({
       disabled={!clickable}
       onLongPress={() => onLongPress && onLongPress()}
       onPress={() => onPress && onPress()}>
-      {avatar && <AvatarStyled source={{uri: avatar}} />}
+      <Box
+        direction="row"
+        alignItems="center"
+        justifyContent="flex-start"
+        gap={Metrics.unitX2}>
+        {avatar && <AvatarStyled source={{uri: avatar}} />}
 
-      {icon && <IconWrapperStyle>{icon}</IconWrapperStyle>}
+        {icon && <IconWrapperStyle>{icon}</IconWrapperStyle>}
 
-      {(title || description) && (
-        <View>
-          {title && (
-            <Typography variant="body1" color="black3">
-              {title}
-            </Typography>
-          )}
-          {description && (
-            <Typography variant="caption" color="black1">
-              {description}
-            </Typography>
-          )}
-        </View>
-      )}
+        {(title || description) && (
+          <View>
+            {title && (
+              <Typography variant="body1" color="black3">
+                {title}
+              </Typography>
+            )}
+            {description && (
+              <Typography variant="caption" color="black1">
+                {description}
+              </Typography>
+            )}
+          </View>
+        )}
+      </Box>
+
+      <>{!!suffix && suffix}</>
     </ContainerStyle>
   );
 };

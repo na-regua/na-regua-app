@@ -1,4 +1,5 @@
 import {Colors, Metrics} from '@/theme';
+import {TColorsType} from '@/theme/colors';
 import styled from 'styled-components/native';
 
 export const OnTicketContainerStyled = styled.View`
@@ -48,9 +49,12 @@ export const OnTicketBarberImageStyled = styled.Image.attrs({
   border-radius: 12px;
 `;
 
-export const LineStyled = styled.View`
+export const LineStyled = styled.View<{
+  backgroundColor?: TColorsType;
+}>`
   width: 100%;
-  background-color: ${Colors.border};
+  background-color: ${({backgroundColor}) =>
+    Colors[backgroundColor || 'border']};
   height: 1px;
   margin: 2px 0;
 `;

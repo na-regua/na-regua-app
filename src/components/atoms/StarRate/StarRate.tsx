@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import {TColorsType} from '@/theme/colors';
+import React, {useEffect, useState} from 'react';
 import {Box} from '../Box/Box';
 import StarIcon from '../Icons/StarIcon/StarIcon';
 import Typography from '../Typography/Typography';
@@ -7,16 +8,23 @@ interface StarRateProps {
   initialRate?: number;
   onPress?: (rate: number) => void;
   disabled?: boolean;
-  showComment?: boolean;
   length?: number;
+  showTip?: boolean;
+  gap?: number;
+  starSize?: number;
+  fillColor?: TColorsType;
+  emptyColor?: TColorsType;
 }
 
 const StarRate: React.FC<StarRateProps> = ({
   initialRate,
   onPress,
   disabled,
-  showComment,
   length = 5,
+  gap = 18,
+  starSize = 24,
+  fillColor = 'warning',
+  emptyColor = 'border',
 }) => {
   const [rate, setRate] = useState(initialRate || 0);
 
@@ -36,19 +44,25 @@ const StarRate: React.FC<StarRateProps> = ({
     setRate(n);
   };
 
+  useEffect(() => {
+    if (disabled && initialRate) {
+      setRate(initialRate);
+    }
+  }, [disabled, initialRate]);
+
   return (
     <Box gap={12}>
       <Box
-        gap={18}
+        gap={gap}
         direction="row"
         alignItems="center"
         justifyContent="flex-start">
         {Array.from({length}).map((_, index) => (
           <StarIcon
             key={index}
-            color={shouldFillN(index + 1) ? 'warning' : 'border'}
-            width={24}
-            height={24}
+            color={shouldFillN(index + 1) ? fillColor : emptyColor}
+            width={starSize}
+            height={starSize}
             disabled={disabled}
             onPress={() => setRateN(index + 1)}
           />

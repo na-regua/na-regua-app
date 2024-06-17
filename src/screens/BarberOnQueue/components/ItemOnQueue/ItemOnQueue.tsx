@@ -1,16 +1,32 @@
 import {ITicket} from '@/app/models';
-import {Box, Icons, MenuItem, MenuItemAction} from '@/components/atoms';
-import React, {useEffect, useMemo, useState} from 'react';
+import {
+  Box,
+  Icons,
+  MenuItem,
+  MenuItemAction,
+  Typography,
+} from '@/components/atoms';
+import {RootState} from '@/store/Store';
+import React, {useMemo, useState} from 'react';
 import {FadeInRight} from 'react-native-reanimated';
+import {useSelector} from 'react-redux';
 
-const TicketOnQueue: React.FC<
+const ItemTicketOnQueue: React.FC<
   ITicket & {
     scrollViewWidth: number;
   }
-> = ({_id, customer, service, additional_services, scrollViewWidth}) => {
+> = ({
+  _id,
+  customer,
+  service,
+  additional_services,
+  scrollViewWidth,
+  queue: ticketQueue,
+}) => {
   const [expand, setExpand] = useState<boolean>(false);
   const [actionsWidth, setActionsWidth] = useState<number>(42);
   const [actionsHeight, setActionsHeight] = useState<number>(58);
+  const {todayQueue} = useSelector((state: RootState) => state.queue);
 
   const services = useMemo(
     () =>
@@ -20,9 +36,24 @@ const TicketOnQueue: React.FC<
     [service, additional_services],
   );
 
-  useEffect(() => {
-    console.log('scrollViewWidth', scrollViewWidth);
-  }, [scrollViewWidth]);
+  const ticketPosition = useMemo(() => {
+    const ticketPositionValue = ticketQueue?.position || 0;
+    const queuePositionValue = todayQueue?.current_position || 0;
+
+    if (queuePositionValue > ticketPositionValue) {
+      return ticketPositionValue;
+    }
+
+    return ticketPositionValue + 1 - queuePositionValue;
+  }, [ticketQueue, todayQueue]);
+
+  const PositionJSX = (
+    <Box paddings={{right: 6}}>
+      <Typography variant="h4" color="black2">
+        {ticketPosition}º
+      </Typography>
+    </Box>
+  );
 
   return (
     <Box
@@ -42,13 +73,13 @@ const TicketOnQueue: React.FC<
         clickable
         onPress={() => setExpand(curr => !curr)}
         collapsed={expand}
+        suffix={PositionJSX}
       />
       {expand && (
         <Box
           alignItems="center"
           justifyContent="center"
           onLayout={e => {
-            console.log('actionsWidth', e.nativeEvent.layout.width);
             setActionsWidth(e.nativeEvent.layout.width);
           }}
           height={actionsHeight}
@@ -62,4 +93,4 @@ const TicketOnQueue: React.FC<
   );
 };
 
-export {TicketOnQueue};
+export {ItemTicketOnQueue};

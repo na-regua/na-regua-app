@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
+import {QueueService} from '@/app/api';
 import {SocketUrls} from '@/app/models';
 import {
   AppStatusBar,
@@ -7,7 +8,7 @@ import {
   SwipeButton,
   SwipeButtonState,
 } from '@/components/atoms';
-import {Header, OnQueueHeader} from '@/components/molecules';
+import {BarberOnQueueHeader, Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {BarberQueueSocketEvents} from '@/socket/events';
 import {AppDispatch, RootState} from '@/store/Store';
@@ -15,6 +16,8 @@ import {QueueThunks, createNotification} from '@/store/slicers';
 import {Colors, Metrics} from '@/theme';
 import {useRoute} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AxiosError} from 'axios';
+import {SlideOutUp} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {TicketHandler} from './components';
@@ -27,8 +30,6 @@ import {
   OnQueueLoaderWrapperStyled,
   OnQueueScrollStyled,
 } from './styles';
-import {QueueService} from '@/app/api';
-import {AxiosError} from 'axios';
 
 const BarberOnQueue: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/barber/queue/fs'>
@@ -144,18 +145,17 @@ const BarberOnQueue: React.FC<
       {!isFs && (
         <>
           <AppStatusBar />
-          <Header.Container>
+          <Header.Container exiting={SlideOutUp}>
             <Header.GoBack pressables={{back: goBack}} />
             <Header.Border />
           </Header.Container>
         </>
       )}
       <OnQueueContentStyled fs={isFs}>
-        <OnQueueHeader />
+        <BarberOnQueueHeader />
         <OnQueueScrollStyled
           showsVerticalScrollIndicator={false}
           onLayout={e => {
-            console.log(e.nativeEvent.layout.width);
             setScrollViewWidth(e.nativeEvent.layout.width);
           }}>
           {!loadingTodayQueue &&

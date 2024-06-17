@@ -1,5 +1,6 @@
 import {Colors, Fonts, Metrics} from '@/theme';
 import {TextStyle, ViewStyle} from 'react-native';
+import Animated from 'react-native-reanimated';
 import styled from 'styled-components/native';
 
 export const BOTTOM_NAV_HEIGHT = 66;
@@ -19,7 +20,7 @@ export const shadowStyle: ViewStyle = {
   elevation: 2,
 };
 
-export const FloatingContainerStyle = styled.View`
+export const FloatingContainerStyle = styled(Animated.View)`
   background-color: ${Colors.bgLight};
   position: absolute;
   bottom: 0;

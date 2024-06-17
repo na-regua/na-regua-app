@@ -55,7 +55,9 @@ const PageCard: React.FC<PageCardProps> = ({
   const hasFooter = useMemo(() => !!footer, [footer]);
 
   const pageFooterStyles = useMemo(() => {
-    if (hasFooter) return {};
+    if (hasFooter) {
+      return {};
+    }
 
     return insetsStyles;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +72,7 @@ const PageCard: React.FC<PageCardProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasFooter]);
 
-  const handleOnScrolAnimated = useAnimatedScrollHandler({
+  const handleOnScrollAnimated = useAnimatedScrollHandler({
     onScroll: (event: NativeScrollEvent) => {
       const {contentOffset} = event;
       const _isScrolling = contentOffset.y !== 0;
@@ -95,14 +97,15 @@ const PageCard: React.FC<PageCardProps> = ({
 
   return (
     <PageCardContainer
-      style={[pageFooterStyles]}
       {...wrapperProps}
+      style={[pageFooterStyles, wrapperProps?.style]}
       entering={FadeInDown.delay(100).duration(300)}>
       {scrollable ? (
         <PageCardScrollStyled
           bounces={bounce}
           alwaysBounceVertical={bounce}
-          onScroll={handleOnScrolAnimated}
+          onScroll={handleOnScrollAnimated}
+          scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
           {...scrollProps}>
           {children}

@@ -1,4 +1,5 @@
 import {IBarber} from '../barber/barber.model';
+import {PaginatedFilter} from '../generic';
 import {IQueue} from '../queue/queue.model';
 import {IBarberService} from '../service/service.model';
 import {IUser} from '../user/user.model';
@@ -36,12 +37,13 @@ export interface IScheduleTicket {
 
 export interface IQueueTicket {
   position: number;
-  queueDTO: IQueue;
+  queue_dto: IQueue;
 }
 
 export interface ITicketViewState {
   ticket: ITicket | null;
   loading: boolean;
+  queue: IQueue | null;
 }
 
 export interface OnTicketGeneralProps {
@@ -53,4 +55,19 @@ export interface OnTicketGeneralProps {
 export interface IGetTodayTickets {
   queue: ITicket;
   schedules: ITicket[];
+}
+
+export interface IGetTicketsHistory {
+  tickets: ITicket[];
+  total: number;
+  limit: number;
+  offset: number;
+  next: boolean;
+}
+
+export interface ITicketHistoryState {
+  tickets: ITicket[];
+  loading?: boolean;
+  refreshing?: boolean;
+  filters: PaginatedFilter;
 }

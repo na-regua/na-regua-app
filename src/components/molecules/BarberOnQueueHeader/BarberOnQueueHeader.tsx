@@ -5,7 +5,11 @@ import {QueueActions, QueueThunks} from '@/store/slicers';
 import {TColorsType} from '@/theme/colors';
 import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import Animated from 'react-native-reanimated';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   OnQueueFilterOldTicketsStyled,
@@ -15,17 +19,24 @@ import {
   OnQueueHeaderRowStyled,
   OnQueueHeaderStyled,
   OnQueueTitleDotStyled,
+  OnQueueTitleGroupStyled,
   OnQueueTitleStyled,
-  OnqueueTitleGroupStyled,
 } from './styles';
 
-const OnQueueHeader = () => {
+const BarberOnQueueHeader = () => {
   const {t} = useTranslation();
   const {todayQueue, filters, viewMode} = useSelector(
     (state: RootState) => state.queue,
   );
 
   const dispatch = useDispatch<AppDispatch>();
+  const iconFlipValue = useSharedValue(0);
+
+  const flipStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{rotateX: `${iconFlipValue.value * 180}deg`}],
+    };
+  });
 
   const titleColor: TColorsType = useMemo(() => {
     if (!todayQueue) {
@@ -44,6 +55,10 @@ const OnQueueHeader = () => {
   }, [todayQueue]);
 
   const applyOldTicketsFilter = () => {
+    const applyFilter = !filters?.showServedTickets;
+
+    iconFlipValue.value = withSpring(applyFilter ? 1 : 0);
+
     dispatch(
       QueueActions.setFilters({showServedTickets: !filters?.showServedTickets}),
     );
@@ -67,12 +82,12 @@ const OnQueueHeader = () => {
     <OnQueueHeaderContainerStyled as={Animated.View}>
       <OnQueueHeaderStyled>
         <OnQueueHeaderRowStyled>
-          <OnqueueTitleGroupStyled>
+          <OnQueueTitleGroupStyled>
             <OnQueueTitleDotStyled as={Animated.View} color={titleColor} />
             <OnQueueTitleStyled color={titleColor} variant="h5">
               {`barber.onQueue.titles.${todayQueue.status}`}
             </OnQueueTitleStyled>
-          </OnqueueTitleGroupStyled>
+          </OnQueueTitleGroupStyled>
 
           <OnQueueHeaderActionsStyled>
             <Icons.RefreshIcon onPress={onRefresh} />
@@ -103,36 +118,28 @@ const OnQueueHeader = () => {
       </OnQueueHeaderStyled>
       {filters && (
         <OnQueueFiltersStyled>
-          {
-            <OnQueueFilterOldTicketsStyled
-              active={filters.showServedTickets}
-              onPress={applyOldTicketsFilter}>
-              {filters.showServedTickets ? (
-                <Icons.ChevronDownIcon
-                  width={12}
-                  height={12}
-                  color={filters.showServedTickets ? 'white3' : 'primary'}
-                  disabled
-                />
-              ) : (
-                <Icons.ChevronUpIcon
-                  width={12}
-                  height={12}
-                  color={filters.showServedTickets ? 'white3' : 'primary'}
-                  disabled
-                />
-              )}
-              <Typography
-                variant="tip"
-                color={filters.showServedTickets ? 'white3' : 'primary'}>
-                {'barber.onQueue.filters.oldTickets'}
-              </Typography>
-            </OnQueueFilterOldTicketsStyled>
-          }
+          <OnQueueFilterOldTicketsStyled
+            active={filters.showServedTickets}
+            onPress={applyOldTicketsFilter}>
+            <Icons.ChevronDownIcon
+              width={14}
+              height={14}
+              strokeWidth={2.5}
+              color={filters.showServedTickets ? 'white3' : 'black2'}
+              disabled
+              wrapperStyle={flipStyle}
+            />
+            <Typography
+              variant="caption"
+              weight="medium"
+              color={filters.showServedTickets ? 'white3' : 'black2'}>
+              {'barber.onQueue.filters.oldTickets'}
+            </Typography>
+          </OnQueueFilterOldTicketsStyled>
         </OnQueueFiltersStyled>
       )}
     </OnQueueHeaderContainerStyled>
   );
 };
 
-export {OnQueueHeader};
+export {BarberOnQueueHeader};

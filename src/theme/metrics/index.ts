@@ -1,4 +1,4 @@
-import {Dimensions} from 'react-native';
+import {Dimensions, Platform} from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 const unit = 6;
@@ -31,6 +31,8 @@ const metrics = {
   mdWidth: width < height ? width - 48 : height - 48,
 
   lineHeight: baseLineHeight,
+  // Android padding bottom fix
+  platformPaddingBottom: Platform.OS === 'android' ? 18 : 0,
 };
 
 export function gtDeviceHeight(compareHeight: number) {

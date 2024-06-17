@@ -30,7 +30,6 @@ const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({
   const rateModalRef = useRef<BottomSheetModal>(null);
 
   const showRateModal = () => {
-    console.log('showRateModal');
     rateModalRef.current?.present();
   };
 

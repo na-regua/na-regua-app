@@ -12,24 +12,34 @@ import {
 import {AppDispatch} from '@/store/Store';
 import {createNotification} from '@/store/slicers';
 import {AxiosError} from 'axios';
-import React, {useState} from 'react';
+import {format} from 'date-fns';
+import React, {useMemo, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
+import {DotStyled} from './styles';
 
 interface CustomerRateTicketModalProps {
   ticket: ITicket;
   dismiss: () => void;
+  showServedAt?: boolean;
+  closeText?: string;
 }
 
 const CustomerRateTicketModal: React.FC<CustomerRateTicketModalProps> = ({
   ticket,
   dismiss,
+  showServedAt = true,
+  closeText = 'buttons.goBack',
 }) => {
+  const {t} = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const [ticketRating, setTicketRating] = useState<ITicketRate>({
-    rating: 0,
-    comment: '',
+    rating: ticket.rate?.rating || 0,
+    comment: ticket.rate?.comment || '',
   });
   const [isSendingRate, setIsSendingRate] = useState(false);
+
+  const commentMaxLength = 124;
 
   const onDismiss = () => {
     if (!isSendingRate) {
@@ -65,12 +75,44 @@ const CustomerRateTicketModal: React.FC<CustomerRateTicketModalProps> = ({
     }
   };
 
+  const services = useMemo(
+    () =>
+      `${ticket.service.name}${
+        ticket.additional_services
+          ? ticket.additional_services.map(s => ' + ' + s.name)
+          : ''
+      }`,
+    [ticket],
+  );
+
   return (
     <Box gap={18}>
       <Typography variant="h4" color="black3">
         {'modals.rate.title'}
       </Typography>
-      <BarberInfoCard barber={ticket.barber} showInfo={false} />
+      <BarberInfoCard
+        barber={ticket.barber}
+        showInfo={false}
+        customSubtitle={
+          <Box
+            direction="row"
+            gap={6}
+            alignItems="center"
+            justifyContent="flex-start">
+            <Typography variant="caption" color="placeholder">
+              {services}
+            </Typography>
+            {showServedAt && ticket.servedAt && (
+              <>
+                <DotStyled />
+                <Typography variant="caption" color="placeholder">
+                  {format(new Date(ticket.servedAt), t('dates.fullWHalfYear'))}
+                </Typography>
+              </>
+            )}
+          </Box>
+        }
+      />
       <Typography variant="body2" color="black2">
         {'modals.rate.question'}
       </Typography>
@@ -79,11 +121,24 @@ const CustomerRateTicketModal: React.FC<CustomerRateTicketModalProps> = ({
         onPress={rating => setTicketRating(curr => ({...curr, rating}))}
       />
       {/* TextArea component */}
-      <TextArea
-        value={ticketRating?.comment || ''}
-        onChange={comment => setTicketRating(curr => ({...curr, comment}))}
-        placeholder="modals.rate.comment"
-      />
+      <Box
+        gap={6}
+        alignItems="flex-end"
+        justifyContent="flex-end"
+        alignSelf="stretch">
+        <TextArea
+          value={ticketRating?.comment || ''}
+          onChange={comment => {
+            setTicketRating(curr => ({...curr, comment}));
+          }}
+          maxLength={commentMaxLength}
+          placeholder="modals.rate.comment"
+        />
+        <Typography variant="caption" translate={false} color="placeholder">
+          {ticketRating.comment ? ticketRating.comment.length : 0}/
+          {commentMaxLength}
+        </Typography>
+      </Box>
       <Box
         gap={18}
         justifyContent="space-between"
@@ -101,7 +156,7 @@ const CustomerRateTicketModal: React.FC<CustomerRateTicketModalProps> = ({
               justifyContent="center">
               <Icons.ArrowLeftIcon color="primary" disabled />
               <Typography variant="button" color="primary">
-                {'customer.cut.buttons.other'}
+                {closeText}
               </Typography>
             </Box>
           }

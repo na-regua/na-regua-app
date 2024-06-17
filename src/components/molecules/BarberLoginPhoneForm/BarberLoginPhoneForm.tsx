@@ -69,7 +69,7 @@ const BarberLoginPhoneForm = () => {
             createNotification({
               id: 'send-whatsapp-code-error',
               type: 'error',
-              message: `error.${message}`,
+              message: `errors.${message}`,
             }),
           );
         }
@@ -122,7 +122,7 @@ const BarberLoginPhoneForm = () => {
               createNotification({
                 id: 'send-whatsapp-code-error',
                 type: 'error',
-                message: `error.${message}`,
+                message: `errors.${message}`,
               }),
             );
           }

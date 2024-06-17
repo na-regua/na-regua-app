@@ -1,8 +1,13 @@
+import {
+  IGetTicketsHistory,
+  IGetTodayTickets,
+  ITicketRate,
+  PaginatedFilter,
+} from '@/app/models';
+import {mapPathVariables, queryBuilder} from '@/utils';
 import {AxiosResponse} from 'axios';
 import api, {errToAxiosError} from '../../api';
 import ENDPOINTS from '../../endpoints';
-import {IGetTodayTickets, ITicketRate} from '@/app/models';
-import {mapPathVariables} from '@/utils';
 
 const getToday = async (): Promise<AxiosResponse<IGetTodayTickets>> => {
   try {
@@ -36,4 +41,20 @@ const rateById = async (
   }
 };
 
-export default {getToday, rateById};
+const getHistory = async (
+  filters?: PaginatedFilter,
+): Promise<AxiosResponse<IGetTicketsHistory>> => {
+  try {
+    const url = queryBuilder(ENDPOINTS.TICKETS_HISTORY, {...filters});
+
+    const response = await api.get(url, {
+      withCredentials: true,
+    });
+
+    return response;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
+export default {getToday, rateById, getHistory};

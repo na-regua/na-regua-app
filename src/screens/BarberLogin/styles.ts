@@ -10,7 +10,11 @@ export const barberLoginStyles = StyleSheet.create({
   },
 });
 
-export const ContainerStyle = styled.ScrollView`
+export const ContainerStyle = styled.ScrollView.attrs({
+  contentContainerStyle: {
+    flexGrow: 1,
+  },
+})`
   flex: 1;
   background: ${Colors.bgContrast};
   padding: 42px;
@@ -20,6 +24,7 @@ export const ContentStyle = styled.View`
   flex: 1;
   width: 100%;
   gap: ${Metrics.unitX4}px;
+  padding-top: 80px;
   align-items: center;
   justify-content: space-between;
   width: 100%;

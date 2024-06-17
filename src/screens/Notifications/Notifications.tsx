@@ -1,3 +1,4 @@
+import {NotificationService} from '@/app/api';
 import {Button, Loader, Typography} from '@/components/atoms';
 import {Header, NotificationCenterItem} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
@@ -7,7 +8,9 @@ import {
   fetchUserNotifications,
 } from '@/store/slicers';
 import {Colors} from '@/theme';
+import {useIsFocused} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AxiosError} from 'axios';
 import React, {useCallback, useEffect, useState} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -22,8 +25,6 @@ import {
   TabItemStyled,
   TabsContainerStyled,
 } from './styles';
-import {AxiosError} from 'axios';
-import {NotificationService} from '@/app/api';
 
 const Notifications: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/user/notifications'>
@@ -47,6 +48,7 @@ const Notifications: React.FC<
     hasUnread,
   } = useSelector((state: RootState) => state.notify);
   const {user} = useSelector((state: RootState) => state.auth);
+  const isScreenFocused = useIsFocused();
 
   const getUserNotifications = useCallback(() => {
     dispatch(fetchUserNotifications());
@@ -54,7 +56,7 @@ const Notifications: React.FC<
 
   useEffect(() => {
     getUserNotifications();
-  }, [getUserNotifications]);
+  }, [getUserNotifications, isScreenFocused]);
 
   const goBack = () => {
     if (navigation.canGoBack()) {
@@ -146,7 +148,7 @@ const Notifications: React.FC<
               ))
             ) : (
               <LoaderContainerStyled>
-                <Loader size="128" color={Colors.main} />
+                <Loader color={Colors.main} />
               </LoaderContainerStyled>
             )}
           </NotificationListStyle>

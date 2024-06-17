@@ -19,6 +19,7 @@ interface IBarberInfoCardProps {
   isOpen?: boolean;
   showInfo?: boolean;
   avatarRadius?: number;
+  customSubtitle?: React.ReactNode;
 }
 
 const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
@@ -30,6 +31,7 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
   isOpen = true,
   showInfo = true,
   avatarRadius = 12,
+  customSubtitle,
 }) => {
   const cardStyles: ViewStyle = useMemo<ViewStyle>(() => {
     if (asCard) {
@@ -68,6 +70,7 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
     <Box gap={12} style={cardStyles} {...wrapperStyles}>
       <Box gap={12} direction="row" alignItems="center">
         {ImageTSX}
+
         <Box gap={3}>
           <Typography
             variant={titleVariant}
@@ -75,16 +78,18 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
             color="black3">
             {barber.name}
           </Typography>
-          <Box gap={6} direction="row" alignItems="center">
-            <Icons.StarIcon color={isOpen ? 'warning' : 'placeholder'} />
-            <Typography variant="caption" color="black3" translate={false}>
-              {barber.rating || 0}
-            </Typography>
-            <DotSeparatorStyled />
-            <Typography variant="caption" color="black1">
-              {barber.code}
-            </Typography>
-          </Box>
+          {customSubtitle || (
+            <Box gap={6} direction="row" alignItems="center">
+              <Icons.StarIcon color={isOpen ? 'warning' : 'placeholder'} />
+              <Typography variant="caption" color="black3" translate={false}>
+                {barber.rating || 0}
+              </Typography>
+              <DotSeparatorStyled />
+              <Typography variant="caption" color="black1">
+                {barber.code}
+              </Typography>
+            </Box>
+          )}
         </Box>
       </Box>
       {showInfo && (

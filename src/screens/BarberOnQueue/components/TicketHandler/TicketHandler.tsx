@@ -1,7 +1,7 @@
 import {ITicket} from '@/app/models';
 import React from 'react';
-import {ToApprove} from '../ToApprove/ToApprove';
-import {TicketOnQueue} from '../TicketOnQueue/TicketOnQueue';
+import {ItemToApprove} from '../ItemToApprove/ItemToApprove';
+import {ItemTicketOnQueue} from '../ItemOnQueue/ItemOnQueue';
 
 interface TicketHandlerProps extends ITicket {
   scrollViewWidth: number;
@@ -13,9 +13,9 @@ const TicketHandler: React.FC<TicketHandlerProps> = ({
 }) => {
   return (
     <>
-      {ticket.status === 'pending' && <ToApprove {...ticket} />}
+      {ticket.status === 'pending' && <ItemToApprove {...ticket} />}
       {ticket.status === 'queue' && (
-        <TicketOnQueue scrollViewWidth={scrollViewWidth} {...ticket} />
+        <ItemTicketOnQueue scrollViewWidth={scrollViewWidth} {...ticket} />
       )}
     </>
   );

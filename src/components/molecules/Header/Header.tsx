@@ -7,7 +7,6 @@ import {TColorsType} from '@/theme/colors';
 import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Platform, ViewStyle} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {
   BackContainerStyle,

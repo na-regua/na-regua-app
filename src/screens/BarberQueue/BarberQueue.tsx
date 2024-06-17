@@ -18,11 +18,13 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {QueueContainerStyled, QueueScrollContentStyled} from './styles';
 import {Metrics} from '@/theme';
+import {useIsFocused} from '@react-navigation/native';
 
 const BarberQueue: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/barber/queue'>
 > = ({navigation}) => {
   const insets = useSafeAreaInsets();
+  const isScreenFocused = useIsFocused();
   const insetsStyles = {
     paddingTop: insets.top,
     paddingBottom: insets.bottom,
@@ -88,7 +90,7 @@ const BarberQueue: React.FC<
   useEffect(() => {
     dispatch(QueueThunks.fetchBarberTodayQueue());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isScreenFocused]);
 
   return (
     <QueueContainerStyled style={insetsStyles}>
@@ -122,7 +124,7 @@ const BarberQueue: React.FC<
       <Modal
         ref={joinQueueModalRef}
         title="modals.joinQueue.title"
-        height={194 + Metrics.unitX3}>
+        height={194 + Metrics.platformPaddingBottom}>
         <WorkerJoinQueueModal
           dismiss={joinQueueModalRef.current?.dismiss}
           navigate={route => {

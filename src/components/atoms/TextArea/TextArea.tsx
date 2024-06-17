@@ -10,6 +10,7 @@ interface TextAreaProps {
   placeholder?: string;
   width?: ViewStyle['width'];
   height?: ViewStyle['height'];
+  maxLength?: number;
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
@@ -18,6 +19,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   placeholder,
   height = 82,
   width = '100%',
+  maxLength,
 }) => {
   const {t} = useTranslation();
 
@@ -39,11 +41,13 @@ const TextArea: React.FC<TextAreaProps> = ({
     <TextAreaStyled
       as={TextInput}
       ref={ref}
+      maxLength={maxLength}
       placeholder={placeholder ? t(placeholder) : ''}
       placeholderTextColor={Colors.placeholder}
       onChangeText={text => onChange(text)}
       style={TextAreaStyle}
       multiline
+      value={value}
       numberOfLines={4}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}

@@ -1,22 +1,10 @@
-import {ITicket, ITicketViewState} from '@/app/models';
+import {IQueue, ITicket, ITicketViewState} from '@/app/models';
 import {GenericAction} from '@/store/Store';
 import {
   ActionCreatorWithPayload,
   SliceCaseReducers,
-  createAsyncThunk,
   createSlice,
 } from '@reduxjs/toolkit';
-
-// export const fetchTicketData = createAsyncThunk(
-//   'TicketView/fetchTicketData',
-//   async (barberId: string, {rejectWithValue}) => {
-//     try {
-//       return [];
-//     } catch (error) {
-//       return rejectWithValue(error);
-//     }
-//   },
-// );
 
 const TicketViewSlicer = createSlice<
   ITicketViewState,
@@ -27,19 +15,23 @@ const TicketViewSlicer = createSlice<
   initialState: {
     ticket: null,
     loading: false,
+    queue: null,
   },
   reducers: {
-    setTicketView: (state, action: GenericAction<ITicket>) => {
+    setTicket: (state, action: GenericAction<ITicket>) => {
       state.ticket = action.payload;
     },
+    setQueue: (state, action: GenericAction<IQueue>) => {
+      state.queue = action.payload;
+    },
   },
-  extraReducers: builder => {},
 });
 
 const {reducer: TicketViewReducer} = TicketViewSlicer;
 
 export const TicketViewActions = TicketViewSlicer.actions as {
-  setTicketView: ActionCreatorWithPayload<ITicket | null>;
+  setTicket: ActionCreatorWithPayload<ITicket | null>;
+  setQueue: ActionCreatorWithPayload<IQueue | null>;
 };
 
 export {TicketViewReducer, TicketViewSlicer};

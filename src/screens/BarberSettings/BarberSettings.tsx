@@ -188,7 +188,10 @@ const BarberSettings: React.FC<
     [user?.role],
   );
 
-  const avatarUrl = useMemo(() => user?.avatar.url, [user]);
+  const avatarUrl = useMemo(
+    () => (barber?.avatar ? barber?.avatar.url : user?.avatar.url),
+    [user, barber],
+  );
 
   if (!barber || !user) {
     return null;

@@ -60,7 +60,9 @@ const Button: React.FC<IButtonProps> = ({
   );
 
   const customStyles: StyleProp<ViewStyle> = useMemo(
-    () => ({...(fillSpace ? {flex: 1} : {})}),
+    () => ({
+      ...(fillSpace ? {flex: 1} : {}),
+    }),
     [fillSpace],
   );
 

@@ -21,10 +21,12 @@ interface ILoaderProps {
   strokeWidth?: number;
 }
 
+export const DEFAULT_LOADER_SIZE = '100';
+
 const Loader: React.FC<ILoaderProps> = ({
   color,
   wrapperStyle,
-  size = '128',
+  size = DEFAULT_LOADER_SIZE,
   strokeWidth = 3,
 }) => {
   const r = useMemo(() => +size / (2 * Math.PI), [size]);

@@ -13,7 +13,7 @@ export const PageCardContainer = styled(AnimatedView)`
   padding-top: ${Metrics.unitX3}px;
 
   flex: 1;
-  gap: ${Metrics.unitX3}px;
+  gap: ${Metrics.unitX2}px;
 `;
 
 export const PageCardContentStyled = styled(AnimatedView)`

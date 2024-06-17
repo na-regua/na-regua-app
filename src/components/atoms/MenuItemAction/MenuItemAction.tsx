@@ -1,6 +1,6 @@
 import React, {PropsWithChildren} from 'react';
+import {FadeInRight} from 'react-native-reanimated';
 import {MenuItemActionStyled} from './styles';
-import {SlideInRight} from 'react-native-reanimated';
 
 export type IMenuItemActionTheme = 'primary' | 'danger';
 
@@ -16,7 +16,7 @@ const MenuItemAction: React.FC<IMenuItemActionProps> = ({
 }) => {
   return (
     <MenuItemActionStyled
-      entering={SlideInRight}
+      entering={FadeInRight.delay(100)}
       colorScheme={theme}
       activeOpacity={0.8}
       onPress={onPress}>

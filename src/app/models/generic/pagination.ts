@@ -8,7 +8,9 @@ export interface PaginatedResponse<T> {
 }
 
 export interface PaginatedFilter {
-  page?: number;
-  limit?: number;
-  offset?: number;
+  limit: number;
+  offset: number;
+  search?: string;
+  total?: number;
+  next?: boolean;
 }

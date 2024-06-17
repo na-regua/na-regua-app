@@ -1,5 +1,5 @@
 import {QueueService} from '@/app/api';
-import {OnTicketGeneralProps, SocketUrls} from '@/app/models';
+import {IQueue, OnTicketGeneralProps, SocketUrls} from '@/app/models';
 import {
   BarberInfoCard,
   Box,
@@ -12,7 +12,7 @@ import {AppDispatch, RootState} from '@/store/Store';
 import {CutThunks, createNotification} from '@/store/slicers';
 import {AxiosError} from 'axios';
 import {format} from 'date-fns';
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   LineStyled,
@@ -27,8 +27,9 @@ import {
 } from '../../styles';
 import {OnTicketServiceInfo} from '../OnTicketServiceInfo/OnTicketServiceInfo';
 
-const OnTicketQueue: React.FC<OnTicketGeneralProps> = ({
+const OnTicketQueue: React.FC<OnTicketGeneralProps & {queue: IQueue}> = ({
   ticket,
+  queue,
   totalPrice,
 }) => {
   const [leaving, setLeaving] = useState(false);
@@ -71,6 +72,17 @@ const OnTicketQueue: React.FC<OnTicketGeneralProps> = ({
     }
   };
 
+  const ticketPosition = useMemo(() => {
+    const ticketPositionValue = ticket.queue?.position || 0;
+    const queuePositionValue = queue?.current_position || 0;
+
+    if (queuePositionValue > ticketPositionValue) {
+      return ticketPositionValue;
+    }
+
+    return ticketPositionValue + 1 - queuePositionValue;
+  }, [ticket, queue]);
+
   return (
     <Box gap={18}>
       {/* Ticket title */}
@@ -80,7 +92,7 @@ const OnTicketQueue: React.FC<OnTicketGeneralProps> = ({
           variant="caption"
           color="placeholder"
           translateProps={{
-            time: format(new Date(ticket.updatedAt), 'dd/MM/yyyy HH:mm'),
+            time: format(new Date(queue.updatedAt), 'dd/MM/yyyy HH:mm'),
           }}>
           {'customer.onTicket.subtitles.lastUpdate'}
         </Typography>
@@ -111,7 +123,7 @@ const OnTicketQueue: React.FC<OnTicketGeneralProps> = ({
                       </OnTicketIconWrapperStyled>
                       <Box gap={3}>
                         <Typography variant="body1">
-                          {ticket.queue?.position}º
+                          {ticketPosition}º
                         </Typography>
                         <Typography variant="caption" color="placeholder">
                           {'customer.onTicket.info.position'}
