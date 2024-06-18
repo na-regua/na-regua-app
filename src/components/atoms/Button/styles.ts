@@ -3,7 +3,7 @@ import {ViewStyle} from 'react-native';
 import styled, {css} from 'styled-components/native';
 import {RuleSet} from 'styled-components/native/dist/types';
 import {TButtonColorScheme, TButtonSizes, TButtonVariants} from './Button';
-import {hexPercentage} from '@/theme/colors';
+import {hexPercentage} from '@/theme/';
 
 export const ButtonThemeColor: Record<TButtonColorScheme, string> = {
   main: Colors.main,

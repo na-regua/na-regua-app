@@ -25,12 +25,12 @@ import {
   OnTicketLineStrokeStyled,
   OnTicketLineStyled,
 } from '../../styles';
+import {OnTicketPrice} from '../OnTicketPrice/OnTicketPrice';
 import {OnTicketServiceInfo} from '../OnTicketServiceInfo/OnTicketServiceInfo';
 
 const OnTicketQueue: React.FC<OnTicketGeneralProps & {queue: IQueue}> = ({
   ticket,
   queue,
-  totalPrice,
 }) => {
   const [leaving, setLeaving] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -160,68 +160,10 @@ const OnTicketQueue: React.FC<OnTicketGeneralProps & {queue: IQueue}> = ({
           <OnTicketLineCornerStyled right />
         </OnTicketLineStyled>
         {/* Price session */}
-        <Box paddings={{top: 12, bottom: 18, left: 18, right: 18}} gap={12}>
-          <Box gap={6} alignSelf="stretch">
-            <Box
-              gap={6}
-              direction="row"
-              justifyContent="space-between"
-              alignSelf="stretch">
-              <Typography color="placeholder" variant="body2">
-                {ticket.service.name}
-              </Typography>
-              <Box direction="row" gap={6}>
-                <Typography variant="body1" translate={false}>
-                  +
-                </Typography>
-                <Typography
-                  variant="body1"
-                  translateProps={{value: ticket.service.price}}>
-                  {'currency.format'}
-                </Typography>
-              </Box>
-            </Box>
-            <>
-              {ticket.additional_services &&
-                ticket.additional_services?.length > 0 &&
-                ticket.additional_services?.map((addService, index) => (
-                  <Box
-                    key={index}
-                    gap={6}
-                    direction="row"
-                    justifyContent="space-between"
-                    alignSelf="stretch">
-                    <Typography color="placeholder" variant="body2">
-                      {addService.name}
-                    </Typography>
-                    <Box direction="row" gap={6}>
-                      <Typography variant="body1" translate={false}>
-                        +
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        translateProps={{value: addService.price}}>
-                        {'currency.format'}
-                      </Typography>
-                    </Box>
-                  </Box>
-                ))}
-            </>
-          </Box>
-          <LineStyled />
-          <Box
-            gap={6}
-            direction="row"
-            justifyContent="space-between"
-            alignSelf="stretch">
-            <Typography color="placeholder" variant="body2">
-              {'customer.onTicket.info.total'}
-            </Typography>
-            <Typography variant="body1" translateProps={{value: totalPrice}}>
-              {'currency.format'}
-            </Typography>
-          </Box>
-        </Box>
+        <OnTicketPrice
+          service={ticket.service}
+          additionalServices={ticket.additional_services}
+        />
       </OnTicketCardStyled>
       {/* Actions */}
       <OnTicketActionsStyled>

@@ -363,6 +363,7 @@ const ptBr = {
         queue: 'Na fila',
         schedule: 'Agendamento',
         finished: 'Finalizado',
+        missed: 'Ops...',
       },
       subtitles: {
         pending:
@@ -371,6 +372,9 @@ const ptBr = {
         attendanceInfo: 'Informações do atendimento',
         additionalServices: '+Serviços adicionais',
         rate: 'Sua avaliação.',
+        missedAt: 'Removido em: {{-time}}',
+        missedQueue:
+          'Seu atendimento foi cancelado, você foi removido da fila.',
       },
       info: {
         position: 'Posição',
@@ -722,6 +726,8 @@ const ptBr = {
       '{{-worker.user.name}} rejeitou seu ticket de atendimento na barbearia {{-worker.barber.name}}.',
     WORKER_SERVED_TICKET:
       '{{-worker.user.name}} finalizou seu ticket de atendimento na barbearia {{-worker.barber.name}}.',
+    WORKER_MISSED_TICKET:
+      '{{-worker.user.name}} removeu seu ticket de atendimento na barbearia {{-worker.barber.name}}.',
     TICKET_SERVED: 'O cliente {{-customer.name}} foi atendido.',
     TICKET_MISSED: 'O cliente {{-customer.name}} perdeu o atendimento.',
     TICKET_REMOVED:

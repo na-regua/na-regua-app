@@ -18,10 +18,12 @@ export interface ITicket {
   billed: boolean;
   approved: boolean;
   servedBy?: IWorker;
+
   servedAt?: string;
   missedAt?: string;
   createdAt: string;
   updatedAt: string;
+
   rate?: ITicketRate;
 }
 
@@ -49,7 +51,6 @@ export interface ITicketViewState {
 export interface OnTicketGeneralProps {
   ticket: ITicket;
   hasAdditionalServices?: boolean;
-  totalPrice: number;
 }
 
 export interface IGetTodayTickets {

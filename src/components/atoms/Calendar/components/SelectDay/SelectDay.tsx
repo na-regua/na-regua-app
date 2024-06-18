@@ -9,7 +9,7 @@ import {
   compareDays,
   generateCalendar,
 } from '../../utils';
-import {TColorsType} from '@/theme/colors';
+import {TColorsType} from '@/theme';
 
 const SelectDay: React.FC = () => {
   const {

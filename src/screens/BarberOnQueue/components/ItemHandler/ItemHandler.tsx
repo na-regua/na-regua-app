@@ -1,13 +1,13 @@
 import {ITicket} from '@/app/models';
 import React from 'react';
-import {ItemToApprove} from '../ItemToApprove/ItemToApprove';
 import {ItemTicketOnQueue} from '../ItemOnQueue/ItemOnQueue';
+import {ItemToApprove} from '../ItemToApprove/ItemToApprove';
 
-interface TicketHandlerProps extends ITicket {
+interface ItemHandlerProps extends ITicket {
   scrollViewWidth: number;
 }
 
-const TicketHandler: React.FC<TicketHandlerProps> = ({
+const ItemHandler: React.FC<ItemHandlerProps> = ({
   scrollViewWidth,
   ...ticket
 }) => {
@@ -21,4 +21,4 @@ const TicketHandler: React.FC<TicketHandlerProps> = ({
   );
 };
 
-export {TicketHandler};
+export {ItemHandler};

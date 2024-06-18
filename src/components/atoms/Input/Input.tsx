@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {InputLabelStyle, InputStyle, InputWrapperStyle, styles} from './styles';
 import {useTranslation} from 'react-i18next';
+import { Box } from '../Box/Box';
 
 interface IInputProps extends TextInputProps {
   label: string;
@@ -88,7 +89,8 @@ const Input: React.FC<IInputProps> = ({
       />
 
       {suffix && (
-        <View
+        <Box
+          zIndex={2}
           onLayout={({
             nativeEvent: {
               layout: {width},
@@ -96,7 +98,7 @@ const Input: React.FC<IInputProps> = ({
           }) => setSuffixWidth(Math.ceil(width))}
           style={styles.suffixWrapper}>
           {suffix}
-        </View>
+        </Box>
       )}
     </InputWrapperStyle>
   );

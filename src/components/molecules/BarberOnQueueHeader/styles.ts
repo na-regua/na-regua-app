@@ -1,6 +1,6 @@
 import {Typography} from '@/components/atoms';
 import {Colors, Metrics} from '@/theme';
-import {TColorsType} from '@/theme/colors';
+import {TColorsType} from '@/theme';
 import {Animated, View} from 'react-native';
 import styled from 'styled-components/native';
 

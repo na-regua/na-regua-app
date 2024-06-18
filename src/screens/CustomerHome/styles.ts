@@ -1,5 +1,5 @@
 import {Colors, Metrics} from '@/theme';
-import {TColorsType} from '@/theme/colors';
+import {TColorsType} from '@/theme';
 import {TouchableHighlight, View} from 'react-native';
 import Animated from 'react-native-reanimated';
 import styled, {css} from 'styled-components/native';

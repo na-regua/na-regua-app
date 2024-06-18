@@ -1,3 +1,3 @@
 export * from './ItemToApprove/ItemToApprove';
-export * from './TicketHandler/TicketHandler';
+export * from './ItemHandler/ItemHandler';
 export * from './ItemOnQueue/ItemOnQueue';

@@ -6,10 +6,15 @@ import {AppDispatch, RootState} from '@/store/Store';
 import {CutThunks, TicketViewActions} from '@/store/slicers';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
-import {OnTicketFinished, OnTicketQueue, OnTicketWaiting} from './components';
+import {
+  OnTicketFinished,
+  OnTicketMissed,
+  OnTicketQueue,
+  OnTicketWaiting,
+} from './components';
 import {OnTicketContainerStyled, OnTicketContentStyled} from './styles';
 
 export const OnTicketNotifyNotificationKey = 'onTicketNotify';
@@ -32,22 +37,6 @@ const CustomerOnTicket: React.FC<
   const dispatch = useDispatch<AppDispatch>();
 
   const shouldNotifyModalRef = useRef<BottomSheetModal>(null);
-
-  const totalPrice = useMemo(() => {
-    if (!ticket) {
-      return 0;
-    }
-
-    let total = ticket.service.price;
-
-    if (ticket.additional_services) {
-      ticket.additional_services.forEach(addService => {
-        total += addService.price;
-      });
-    }
-
-    return total;
-  }, [ticket]);
 
   const goBack = () => {
     if (ticket?.status === 'served') {
@@ -127,19 +116,12 @@ const CustomerOnTicket: React.FC<
         />
       </Header.Container>
       <OnTicketContentStyled>
-        {ticket.status === 'pending' && (
-          <OnTicketWaiting ticket={ticket} totalPrice={totalPrice} />
-        )}
+        {ticket.status === 'pending' && <OnTicketWaiting ticket={ticket} />}
         {ticket.status === 'queue' && queue && (
-          <OnTicketQueue
-            ticket={ticket}
-            queue={queue}
-            totalPrice={totalPrice}
-          />
+          <OnTicketQueue ticket={ticket} queue={queue} />
         )}
-        {ticket.status === 'served' && (
-          <OnTicketFinished ticket={ticket} totalPrice={totalPrice} />
-        )}
+        {ticket.status === 'served' && <OnTicketFinished ticket={ticket} />}
+        {ticket.status === 'missed' && <OnTicketMissed ticket={ticket} />}
         {/* {ticket.status === 'scheduled' && <OnTicketSchedule ticket={ticket} />} */}
       </OnTicketContentStyled>
       {/* Mute modal */}

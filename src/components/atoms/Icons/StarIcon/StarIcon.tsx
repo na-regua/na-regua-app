@@ -15,7 +15,7 @@ const StarIcon: React.FC<IStarIconProps> = ({
   strokeWidth = 1.5,
   color = 'warning',
   customColor,
-  disabled,
+  disabled = true,
   onPress,
   filled = true,
 }) => {

@@ -1,6 +1,6 @@
 import {IBarber} from '@/app/models';
 import {Colors, Fonts} from '@/theme';
-import {hexPercentage} from '@/theme/colors';
+import {hexPercentage} from '@/theme';
 import {generateAddress} from '@/utils';
 import React, {useMemo} from 'react';
 import {ViewStyle} from 'react-native';
@@ -80,7 +80,10 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
           </Typography>
           {customSubtitle || (
             <Box gap={6} direction="row" alignItems="center">
-              <Icons.StarIcon color={isOpen ? 'warning' : 'placeholder'} />
+              <Icons.StarIcon
+                disabled
+                color={isOpen ? 'warning' : 'placeholder'}
+              />
               <Typography variant="caption" color="black3" translate={false}>
                 {barber.rating || 0}
               </Typography>

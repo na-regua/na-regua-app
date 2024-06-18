@@ -1,5 +1,5 @@
 import {useKeyboardVisible} from '@/hooks';
-import {TColorsType} from '@/theme/colors';
+import {TColorsType} from '@/theme';
 import React from 'react';
 import {TouchableWithoutFeedbackProps, ViewProps} from 'react-native';
 import {AvoidKeyboardStyle} from './styles';

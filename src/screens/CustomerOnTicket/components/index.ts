@@ -1,4 +1,5 @@
 export * from './OnTicketFinished/OnTicketFinished';
+export * from './OnTicketMissed/OnTicketMissed';
 export * from './OnTicketPrice/OnTicketPrice';
 export * from './OnTicketQueue/OnTicketQueue';
 export * from './OnTicketSchedule/OnTicketSchedule';

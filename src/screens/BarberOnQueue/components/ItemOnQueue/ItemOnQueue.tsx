@@ -1,3 +1,4 @@
+import {QueueService} from '@/app/api';
 import {ITicket} from '@/app/models';
 import {
   Box,
@@ -6,10 +7,12 @@ import {
   MenuItemAction,
   Typography,
 } from '@/components/atoms';
-import {RootState} from '@/store/Store';
+import {AppDispatch, RootState} from '@/store/Store';
+import {createNotification} from '@/store/slicers';
+import {AxiosError} from 'axios';
 import React, {useMemo, useState} from 'react';
 import {FadeInRight} from 'react-native-reanimated';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 const ItemTicketOnQueue: React.FC<
   ITicket & {
@@ -27,6 +30,9 @@ const ItemTicketOnQueue: React.FC<
   const [actionsWidth, setActionsWidth] = useState<number>(42);
   const [actionsHeight, setActionsHeight] = useState<number>(58);
   const {todayQueue} = useSelector((state: RootState) => state.queue);
+  const [missing, setMissing] = useState(false);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const services = useMemo(
     () =>
@@ -54,6 +60,31 @@ const ItemTicketOnQueue: React.FC<
       </Typography>
     </Box>
   );
+
+  const missTicket = async () => {
+    try {
+      setMissing(true);
+
+      await QueueService.missTicket(_id);
+
+      setMissing(false);
+    } catch (error) {
+      setMissing(false);
+      if (error instanceof AxiosError) {
+        const {message} = error.response?.data;
+
+        if (message) {
+          dispatch(
+            createNotification({
+              id: 'missing_ticket',
+              message: `errors.${message}`,
+              type: 'error',
+            }),
+          );
+        }
+      }
+    }
+  };
 
   return (
     <Box
@@ -84,7 +115,7 @@ const ItemTicketOnQueue: React.FC<
           }}
           height={actionsHeight}
           entering={FadeInRight}>
-          <MenuItemAction theme="danger">
+          <MenuItemAction theme="danger" loading={missing} onPress={missTicket}>
             <Icons.DeleteIcon color="white3" />
           </MenuItemAction>
         </Box>

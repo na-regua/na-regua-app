@@ -1,4 +1,4 @@
-import {TColorsType} from '@/theme/colors';
+import {TColorsType} from '@/theme';
 import React, {useEffect, useState} from 'react';
 import {Box} from '../Box/Box';
 import StarIcon from '../Icons/StarIcon/StarIcon';
@@ -19,7 +19,7 @@ interface StarRateProps {
 const StarRate: React.FC<StarRateProps> = ({
   initialRate,
   onPress,
-  disabled,
+  disabled = false,
   length = 5,
   gap = 18,
   starSize = 24,

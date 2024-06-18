@@ -20,7 +20,7 @@ import {AxiosError} from 'axios';
 import {SlideOutUp} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
-import {TicketHandler} from './components';
+import {ItemHandler} from './components';
 import {
   OnQueueActionsRowStyled,
   OnQueueActionsStyled,
@@ -160,7 +160,7 @@ const BarberOnQueue: React.FC<
           }}>
           {!loadingTodayQueue &&
             todayQueue.tickets.map((ticket, index) => (
-              <TicketHandler
+              <ItemHandler
                 scrollViewWidth={scrollViewWidth}
                 key={index}
                 {...ticket}

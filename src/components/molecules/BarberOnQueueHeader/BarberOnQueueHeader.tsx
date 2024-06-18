@@ -2,7 +2,7 @@ import {TOnQueueViewModes} from '@/app/models';
 import {Icons, Typography} from '@/components/atoms';
 import {AppDispatch, RootState} from '@/store/Store';
 import {QueueActions, QueueThunks} from '@/store/slicers';
-import {TColorsType} from '@/theme/colors';
+import {TColorsType} from '@/theme';
 import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import Animated, {

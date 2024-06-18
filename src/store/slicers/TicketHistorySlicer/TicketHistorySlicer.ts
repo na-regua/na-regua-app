@@ -69,15 +69,14 @@ const TicketHistorySlicer = createSlice<
       },
     );
 
-    builder.addCase(
-      TicketHistoryThunks.fetchTicketHistory.rejected,
-      (state, action) => {
-        console.log('TicketHistorySlicer', action.error);
-        state.tickets = [];
-        state.filters = initialState.filters;
-        state.loading = false;
-      },
-    );
+    builder.addCase(TicketHistoryThunks.fetchTicketHistory.rejected, state => {
+      state.tickets = [];
+      state.filters = initialState.filters;
+      state.loading = false;
+      if (state.refreshing) {
+        state.refreshing = false;
+      }
+    });
   },
 });
 

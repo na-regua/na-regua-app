@@ -10,7 +10,6 @@ import {
 import {CustomerRateTicketModal} from '@/components/modals';
 import {Colors, Metrics} from '@/theme';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {format} from 'date-fns';
 import React, {useRef} from 'react';
 import {
   LineStyled,
@@ -21,12 +20,10 @@ import {
   OnTicketLineStrokeStyled,
   OnTicketLineStyled,
 } from '../../styles';
+import {OnTicketPrice} from '../OnTicketPrice/OnTicketPrice';
 import {OnTicketServiceInfo} from '../OnTicketServiceInfo/OnTicketServiceInfo';
 
-const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({
-  ticket,
-  totalPrice,
-}) => {
+const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({ticket}) => {
   const rateModalRef = useRef<BottomSheetModal>(null);
 
   const showRateModal = () => {
@@ -92,79 +89,10 @@ const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({
           <OnTicketLineCornerStyled right />
         </OnTicketLineStyled>
         {/* Price session */}
-        <Box paddings={{top: 12, bottom: 18, left: 18, right: 18}} gap={12}>
-          <Box gap={6} alignSelf="stretch">
-            <Box
-              gap={6}
-              direction="row"
-              justifyContent="space-between"
-              alignSelf="stretch">
-              <Typography color="placeholder" variant="body2">
-                {ticket.service.name}
-              </Typography>
-              <Box direction="row" gap={6}>
-                <Typography variant="body1" translate={false}>
-                  +
-                </Typography>
-                <Typography
-                  variant="body1"
-                  translateProps={{value: ticket.service.price}}>
-                  {'currency.format'}
-                </Typography>
-              </Box>
-            </Box>
-            <>
-              {ticket.additional_services &&
-                ticket.additional_services?.length > 0 &&
-                ticket.additional_services?.map((addService, index) => (
-                  <Box
-                    key={index}
-                    gap={6}
-                    direction="row"
-                    justifyContent="space-between"
-                    alignSelf="stretch">
-                    <Typography color="placeholder" variant="body2">
-                      {addService.name}
-                    </Typography>
-                    <Box direction="row" gap={6}>
-                      <Typography variant="body1" translate={false}>
-                        +
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        translateProps={{value: addService.price}}>
-                        {'currency.format'}
-                      </Typography>
-                    </Box>
-                  </Box>
-                ))}
-            </>
-          </Box>
-          <LineStyled />
-
-          <Box
-            gap={6}
-            direction="row"
-            justifyContent="space-between"
-            alignSelf="stretch">
-            <Typography color="placeholder" variant="body2">
-              {'customer.onTicket.info.total'}
-            </Typography>
-            <Typography variant="body1" translateProps={{value: totalPrice}}>
-              {'currency.format'}
-            </Typography>
-          </Box>
-          {ticket.servedAt && (
-            <Box
-              alignSelf="stretch"
-              alignItems="center"
-              justifyContent="center">
-              <Typography variant="body1" color="black1" translate={false}>
-                {format(new Date(ticket.servedAt), 'dd/MM/yyyy HH:mm')}
-              </Typography>
-            </Box>
-          )}
-        </Box>
+        <OnTicketPrice
+          service={ticket.service}
+          additionalServices={ticket.additional_services}
+        />
       </OnTicketCardStyled>
       {/* Actions */}
       <OnTicketActionsStyled>

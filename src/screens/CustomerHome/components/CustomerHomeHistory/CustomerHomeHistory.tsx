@@ -1,4 +1,4 @@
-import {ITicket} from '@/app/models';
+import {ITicket, ModalSizes} from '@/app/models';
 import {
   Box,
   Button,
@@ -37,9 +37,12 @@ const CustomerHomeHistory: React.FC<ICustomerHomeHistoryProps> = ({
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useAppNavigation();
 
-  const {tickets, loading, refreshing} = useSelector(
-    (state: RootState) => state.ticketHistory,
-  );
+  const {
+    tickets,
+    loading,
+    refreshing,
+    filters: {next: hasMoreHistory},
+  } = useSelector((state: RootState) => state.ticketHistory);
 
   const [selectedItemId, setSelectedItemId] = useState<string | undefined>();
   const selectedItem = useMemo(
@@ -120,10 +123,6 @@ const CustomerHomeHistory: React.FC<ICustomerHomeHistoryProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isScreenFocused]);
 
-  useEffect(() => {
-    console.log('tickets', tickets);
-  }, [tickets]);
-
   return (
     <CHHScrollViewStyled
       as={Animated.ScrollView}
@@ -160,7 +159,7 @@ const CustomerHomeHistory: React.FC<ICustomerHomeHistoryProps> = ({
         ))}
       </Animated.View>
 
-      {reachedEnd && (
+      {reachedEnd && hasMoreHistory && (
         <Box
           alignSelf="stretch"
           entering={FadeInDown}
@@ -180,7 +179,10 @@ const CustomerHomeHistory: React.FC<ICustomerHomeHistoryProps> = ({
           <Box
             alignSelf="stretch"
             position="absolute"
-            positions={{bottom: insets.bottom + 18, left: 18}}
+            positions={{
+              bottom: Metrics.platformPaddingBottom + Metrics.unitX3,
+              left: Metrics.unitX3,
+            }}
             width={Metrics.smWidth}
             entering={FadeInDown}>
             <Button
@@ -195,7 +197,7 @@ const CustomerHomeHistory: React.FC<ICustomerHomeHistoryProps> = ({
 
       <Modal
         ref={rateModalRef}
-        height={415 + Metrics.unitX3}
+        height={ModalSizes.Rate + Metrics.platformPaddingBottom}
         backdropBackgroundColor={Colors.main}
         onClose={onRefresh}>
         {selectedItem && (

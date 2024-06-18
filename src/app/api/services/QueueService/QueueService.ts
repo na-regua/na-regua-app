@@ -1,8 +1,8 @@
 import {IQueue, ITicket} from '@/app/models';
+import {mapPathVariables} from '@/utils';
 import {AxiosResponse} from 'axios';
 import api, {errToAxiosError} from '../../api';
 import ENDPOINTS from '../../endpoints';
-import {mapPathVariables} from '@/utils';
 
 const getTodayQueue = async (): Promise<AxiosResponse<{queue: IQueue}>> => {
   try {
@@ -136,6 +136,20 @@ const goNextTicket = async (): Promise<AxiosResponse<null>> => {
   }
 };
 
+const missTicket = async (ticketId: string): Promise<AxiosResponse<null>> => {
+  try {
+    const url = mapPathVariables(ENDPOINTS.QUEUE_WORKER_MISS_TICKET, {
+      ticketId,
+    });
+
+    const response = await api.put(url, {}, {withCredentials: true});
+
+    return response;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
 export default {
   getTodayQueue,
   startQueue,
@@ -146,4 +160,5 @@ export default {
   rejectTicket,
   userLeave,
   goNextTicket,
+  missTicket,
 };

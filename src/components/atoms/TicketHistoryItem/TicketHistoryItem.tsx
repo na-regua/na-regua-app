@@ -5,7 +5,7 @@ import {
 } from '@/screens/CustomerOnTicket/components';
 import {LineStyled} from '@/screens/CustomerOnTicket/styles';
 import {Colors} from '@/theme';
-import {TColorsType} from '@/theme/colors';
+import {TColorsType} from '@/theme';
 import {format} from 'date-fns';
 import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';

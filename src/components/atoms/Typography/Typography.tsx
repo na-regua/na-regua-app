@@ -1,6 +1,6 @@
 import {Colors, Fonts, Metrics} from '@/theme';
-import {TColorsType} from '@/theme/colors';
-import {FontsType} from '@/theme/fonts';
+import {TColorsType} from '@/theme';
+import {FontsType} from '@/theme';
 import React, {PropsWithChildren, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, TextStyle} from 'react-native';

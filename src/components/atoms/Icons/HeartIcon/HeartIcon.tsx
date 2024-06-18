@@ -1,5 +1,5 @@
 import {Colors} from '@/theme';
-import {TColorsType} from '@/theme/colors';
+import {TColorsType} from '@/theme';
 import React, {useMemo} from 'react';
 import {Path, Svg} from 'react-native-svg';
 import {IIconProps} from '../Icons';

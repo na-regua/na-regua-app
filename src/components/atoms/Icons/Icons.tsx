@@ -1,4 +1,4 @@
-import {TColorsType} from '@/theme/colors';
+import {TColorsType} from '@/theme';
 import {ViewStyle} from 'react-native';
 import Animated from 'react-native-reanimated';
 import {Path} from 'react-native-svg';

@@ -1,5 +1,5 @@
 import {Colors} from '@/theme';
-import {TColorsType} from '@/theme/colors';
+import {TColorsType} from '@/theme';
 import styled from 'styled-components/native';
 
 export const AvoidKeyboardStyle = styled.View<{
