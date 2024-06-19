@@ -1,4 +1,5 @@
 import {Colors, Metrics} from '@/theme';
+import {CachedImage} from '@georstat/react-native-image-cache';
 import styled from 'styled-components/native';
 
 export const CardGroupStyle = styled.View`
@@ -36,7 +37,7 @@ export const PreviewWrapperStyle = styled.TouchableOpacity`
   border-style: solid;
 `;
 
-export const ImagePreview = styled.Image.attrs({
+export const ImagePreview = styled(CachedImage).attrs({
   resizeMode: 'cover',
 })<{width: number; height: number}>`
   width: ${({width}) => `${width}px`};

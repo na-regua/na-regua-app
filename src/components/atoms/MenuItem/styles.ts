@@ -1,6 +1,7 @@
 import {Colors} from '@/theme';
 import styled from 'styled-components/native';
 import {AnimatedTouchableOpacity} from '../AnimatedComponents';
+import {CachedImage} from '@georstat/react-native-image-cache';
 
 export const ContainerStyle = styled(AnimatedTouchableOpacity)`
   padding: 8px;
@@ -27,8 +28,9 @@ export const IconWrapperStyle = styled.View`
   justify-content: center;
 `;
 
-export const AvatarStyled = styled.Image`
-  width: 42px;
-  height: 42px;
-  border-radius: ${Math.round(42 / 2)}px;
+export const AvatarStyled = styled(CachedImage).attrs({
+  resizeMode: 'cover',
+})<{size: number}>`
+  width: ${({size}) => size}px;
+  height: ${({size}) => size}px;
 `;

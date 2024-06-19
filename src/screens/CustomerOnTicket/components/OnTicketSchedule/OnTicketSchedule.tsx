@@ -24,7 +24,8 @@ const OnTicketSchedule: React.FC<OnTicketGeneralProps> = ({ticket}) => {
         <Box gap={18}>
           <OnTicketBarberInfoStyled>
             <OnTicketBarberImageStyled
-              source={{uri: ticket.barber.avatar.url}}
+              source={ticket.barber.avatar.url}
+              onError={() => {}}
             />
             <Typography variant="body1">{ticket.barber.name}</Typography>
           </OnTicketBarberInfoStyled>

@@ -1,7 +1,6 @@
 import {Button, Icons, Typography} from '@/components/atoms';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {ImageSourcePropType} from 'react-native';
 import {
   ImagePreviewStyle,
   ModalContainerActionsStyle,
@@ -35,22 +34,23 @@ const EditPictureModal: React.FC<IEditPictureModalProps> = ({
 }) => {
   const {t} = useTranslation();
 
-  const getPreviewSource = (image: string): ImageSourcePropType => {
+  const getPreviewSource = (image: string): string => {
     if (!image) {
-      return {uri: ''};
+      return '';
     }
 
     if (image && image.includes('http')) {
-      return {uri: image};
+      return image;
     }
 
-    return {uri: `data:image/jpeg;base64,${image}`};
+    return `data:image/jpeg;base64,${image}`;
   };
 
   return (
     <ModalContainerStyle>
       <ModalContainerTitleStyle>
         <ImagePreviewStyle
+          onError={() => {}}
           width={width}
           height={height}
           source={getPreviewSource(picture)}

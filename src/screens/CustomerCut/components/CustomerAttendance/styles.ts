@@ -1,5 +1,6 @@
 import {Colors} from '@/theme';
 import {hexPercentage} from '@/theme/colors';
+import {CachedImage} from '@georstat/react-native-image-cache';
 import {View, ViewStyle} from 'react-native';
 import Animated from 'react-native-reanimated';
 import styled from 'styled-components/native';
@@ -32,12 +33,14 @@ export const AttendanceBarberItemTitleStyled = styled.View`
   gap: 2px;
 `;
 
-export const AttendanceBarberItemImageStyled = styled.Image.attrs({
+export const AttendanceBarberItemImageStyled = styled(CachedImage).attrs({
   resizeMode: 'cover',
+  imageStyle: {
+    borderRadius: 6,
+  },
 })`
   width: 48px;
   height: 48px;
-  border-radius: 6px;
   margin: 6px 0;
 `;
 

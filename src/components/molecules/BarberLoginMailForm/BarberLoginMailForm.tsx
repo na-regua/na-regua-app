@@ -17,6 +17,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {TextInput, TouchableOpacity} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {ContentStyle, LogoContainerStyle} from './styles';
+import {CacheManager} from '@georstat/react-native-image-cache';
 
 export interface IBarberLoginMailFormProps {}
 
@@ -59,6 +60,14 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
         await dispatch(setPersistedToken(access_token));
 
         if (data.barber) {
+          if (data.user.avatar.url) {
+            CacheManager.prefetch(data.user.avatar.url);
+          }
+
+          if (data.barber.avatar.url) {
+            CacheManager.prefetch(data.barber.avatar.url);
+          }
+
           dispatch(setUser(data.user));
           dispatch(setBarber(data.barber));
           setIsSending(false);

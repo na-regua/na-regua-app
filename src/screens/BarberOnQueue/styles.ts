@@ -1,6 +1,7 @@
 import {Button} from '@/components/atoms';
 import {BOTTOM_NAV_HEIGHT} from '@/navigation/BottomNav/styles';
 import {Colors, Metrics} from '@/theme';
+import {CachedImage} from '@georstat/react-native-image-cache';
 import {EdgeInsets} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 
@@ -59,8 +60,12 @@ export const OnQueueLoaderWrapperStyled = styled.View`
   justify-content: center;
 `;
 
-export const RoundedAvatarStyled = styled.Image.attrs({resizeMode: 'cover'})`
+export const RoundedAvatarStyled = styled(CachedImage).attrs({
+  resizeMode: 'cover',
+  imageStyle: {
+    borderRadius: 21,
+  },
+})`
   width: 42px;
   height: 42px;
-  border-radius: 21px;
 `;

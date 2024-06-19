@@ -11,6 +11,7 @@ import com.facebook.soloader.SoLoader;
 import java.util.List;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.zoontek.rnpermissions.RNPermissionsPackage;
+import com.alpha0010.fs.FileAccessPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 

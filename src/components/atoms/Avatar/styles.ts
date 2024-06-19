@@ -1,4 +1,5 @@
 import {Colors} from '@/theme';
+import {CachedImage} from '@georstat/react-native-image-cache';
 import styled from 'styled-components/native';
 
 export const LoaderWrapperStyle = styled.View`
@@ -24,9 +25,9 @@ export const AvatarContentStyle = styled.TouchableOpacity<{
   `}
 `;
 
-export const AvatarPreviewStyle = styled.Image<{size: number}>`
-  border-radius: ${({size}) => size / 2}px;
-  object-fit: cover;
+export const AvatarPreviewStyle = styled(CachedImage).attrs({
+  resizeMode: 'cover',
+})<{size: number}>`
   min-width: ${({size}) => size}px;
   min-height: ${({size}) => size}px;
 `;

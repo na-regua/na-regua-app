@@ -1,6 +1,5 @@
 import {IBarber} from '@/app/models';
-import {Colors, Fonts} from '@/theme';
-import {hexPercentage} from '@/theme';
+import {Colors, Fonts, hexPercentage} from '@/theme';
 import {generateAddress} from '@/utils';
 import React, {useMemo} from 'react';
 import {ViewStyle} from 'react-native';
@@ -50,17 +49,19 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
 
   const ImageTSX = isOpen ? (
     <BarberInfoCardImageStyled
-      radius={avatarRadius}
-      source={{
-        uri: barber.avatar.url,
+      source={barber.avatar.url}
+      onError={() => {}}
+      imageStyle={{
+        borderRadius: avatarRadius,
       }}
     />
   ) : (
     <Grayscale>
       <BarberInfoCardImageStyled
-        radius={avatarRadius}
-        source={{
-          uri: barber.avatar.url,
+        source={barber.avatar.url}
+        onError={() => {}}
+        imageStyle={{
+          borderRadius: avatarRadius,
         }}
       />
     </Grayscale>

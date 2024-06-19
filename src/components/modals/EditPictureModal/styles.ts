@@ -1,4 +1,5 @@
 import {Metrics} from '@/theme';
+import {CachedImage} from '@georstat/react-native-image-cache';
 import styled from 'styled-components/native';
 
 export const ModalContainerStyle = styled.View`
@@ -16,11 +17,15 @@ export const ModalContainerActionsStyle = styled.View`
   gap: ${Metrics.unitX2}px;
 `;
 
-export const ImagePreviewStyle = styled.Image.attrs({resizeMode: 'cover'})<{
+export const ImagePreviewStyle = styled(CachedImage).attrs({
+  resizeMode: 'cover',
+  imageStyle: {
+    borderRadius: 12,
+  },
+})<{
   width: number;
   height: number;
 }>`
   width: ${({width}) => `${width}px`};
   height: ${({height}) => `${height}px`};
-  border-radius: 6px;
 `;

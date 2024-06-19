@@ -13,6 +13,7 @@ import {
 } from '@/store/slicers';
 import {Colors} from '@/theme';
 import {phoneMask, phoneRegex} from '@/utils';
+import {CacheManager} from '@georstat/react-native-image-cache';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AxiosError} from 'axios';
 import {intervalToDuration} from 'date-fns';
@@ -202,6 +203,10 @@ const CustomerLogin: React.FC<
         await dispatch(setPersistedToken(access_token));
 
         if (data.user) {
+          if (data.user.avatar.url) {
+            CacheManager.prefetch(data.user.avatar.url);
+          }
+
           dispatch(setUser(data.user));
 
           navigation.navigate('/customer/home');

@@ -18,6 +18,7 @@ import {
   getCurrentUser,
   logout,
 } from '@/store/slicers';
+import {Colors} from '@/theme';
 import colors from '@/theme/colors';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -43,7 +44,6 @@ import {
   ScrollContentStyle,
   styles,
 } from './styles';
-import {Colors} from '@/theme';
 
 type TSettingsMenuType =
   | 'profile'
@@ -282,6 +282,7 @@ const BarberSettings: React.FC<
             onAvatarChange={onAvatarChange}
             loading={changingAvatar}
           />
+
           <BarberProfileInfoStyle>
             <Typography variant="h4" color="black3" style={styles.textCenter}>
               {user.name}

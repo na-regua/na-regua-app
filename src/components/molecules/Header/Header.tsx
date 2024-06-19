@@ -46,7 +46,7 @@ const User: React.FC<IGenericHeaderProps> = ({lightContent, pressables}) => {
         onPress={pressables && pressables.user}>
         {user && user.avatar.url && (
           <>
-            <UserImageStyle source={{uri: user.avatar.url}} />
+            <UserImageStyle source={user.avatar.url} onError={() => {}} />
             <Typography variant="body1" color="black2" translate={false}>
               {t('generic.header.hello') + user.name.split(' ')[0]}
             </Typography>

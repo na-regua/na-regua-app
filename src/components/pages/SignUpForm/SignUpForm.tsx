@@ -12,6 +12,7 @@ import {
   setUser,
 } from '@/store/slicers';
 import {assetToBuffer} from '@/utils';
+import {CacheManager} from '@georstat/react-native-image-cache';
 import {AxiosError} from 'axios';
 import React, {useMemo, useState} from 'react';
 import {useForm} from 'react-hook-form';
@@ -128,6 +129,14 @@ const SignUpForm: React.FC = () => {
 
         if (data) {
           await dispatch(setPersistedToken(data.accessToken));
+
+          if (data.user.avatar.url) {
+            CacheManager.prefetch(data.user.avatar.url);
+          }
+
+          if (data.barber.avatar.url) {
+            CacheManager.prefetch(data.barber.avatar.url);
+          }
 
           dispatch(setBarber(data.barber));
           dispatch(setUser(data.user));

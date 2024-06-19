@@ -2,7 +2,6 @@ import {FileUpload, Modal, Typography} from '@/components/atoms';
 import {AppDispatch, RootState} from '@/store/Store';
 import React, {useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {ImageSourcePropType} from 'react-native';
 import {Asset} from 'react-native-image-picker';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -79,16 +78,16 @@ const UpdateBarberThumbs = () => {
     editPictureModalRef.current?.present();
   };
 
-  const getPreviewSource = (image: string): ImageSourcePropType => {
+  const getPreviewSource = (image: string): string => {
     if (!image) {
-      return {uri: ''};
+      return '';
     }
 
     if (image && image.includes('http')) {
-      return {uri: image};
+      return image;
     }
 
-    return {uri: `data:image/jpeg;base64,${image}`};
+    return `data:image/jpeg;base64,${image}`;
   };
 
   const overrideThumb = async (thumbId: string) => {
@@ -177,6 +176,7 @@ const UpdateBarberThumbs = () => {
                   width={68}
                   height={96}
                   source={getPreviewSource(thumb.url)}
+                  onError={() => {}}
                 />
               </PreviewWrapperStyle>
             ))}

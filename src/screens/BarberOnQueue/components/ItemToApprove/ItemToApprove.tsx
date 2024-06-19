@@ -84,7 +84,7 @@ const ItemToApprove: React.FC<ItemToApproveProps> = ({
   return (
     <ToApproveContainerStyled>
       <ToApproveUserStyled>
-        <RoundedAvatarStyled source={{uri: avatar.url}} />
+        <RoundedAvatarStyled source={avatar.url} onError={() => {}} />
         <View>
           <Typography
             variant="body1"

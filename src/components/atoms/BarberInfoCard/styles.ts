@@ -1,16 +1,16 @@
 import {Colors} from '@/theme';
+import {CachedImage} from '@georstat/react-native-image-cache';
 import styled from 'styled-components/native';
 
 export const BarberInfoImageWrapper = styled.View`
   position: relative;
 `;
 
-export const BarberInfoCardImageStyled = styled.Image.attrs({
+export const BarberInfoCardImageStyled = styled(CachedImage).attrs({
   resizeMode: 'cover',
-})<{radius: number}>`
+})`
   width: 48px;
   height: 48px;
-  border-radius: ${({radius}) => radius}px;
 `;
 
 export const DotSeparatorStyled = styled.View`

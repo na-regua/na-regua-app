@@ -1,6 +1,7 @@
 import {AvoidKeyboard, Box, Button, Input} from '@/components/atoms';
 
 import {Colors} from '@/theme';
+import {CachedImage} from '@georstat/react-native-image-cache';
 import {TouchableHighlight, TouchableWithoutFeedback, View} from 'react-native';
 import Animated from 'react-native-reanimated';
 import styled from 'styled-components/native';
@@ -102,10 +103,14 @@ export const BarberItemStyled = styled.TouchableHighlight.attrs({
   min-width: 260px;
 `;
 
-export const BarberImageStyled = styled.Image.attrs({resizeMode: 'cover'})`
+export const BarberImageStyled = styled(CachedImage).attrs({
+  resizeMode: 'cover',
+  imageStyle: {
+    borderRadius: 6,
+  },
+})`
   width: 60px;
   height: 60px;
-  border-radius: 6px;
 `;
 
 export const BarberInfoStyled = styled.View`
@@ -175,10 +180,12 @@ export const DropdownItemContentStyled = styled.View`
 
 export const DropdownItemInfoStyled = styled.View``;
 
-export const DropdownItemImageStyled = styled.Image.attrs({
+export const DropdownItemImageStyled = styled(CachedImage).attrs({
   resizeMode: 'cover',
+  imageStyle: {
+    borderRadius: 6,
+  },
 })`
   width: 42px;
   height: 42px;
-  border-radius: 6px;
 `;

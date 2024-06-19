@@ -16,6 +16,7 @@ import {
   CVHeaderStyled,
   CVNoFeedbackStyled,
 } from './styles';
+import {CacheManager} from '@georstat/react-native-image-cache';
 
 const CustomerSignUpVerify: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/customer/sign-up/verify'>
@@ -48,11 +49,21 @@ const CustomerSignUpVerify: React.FC<
       const {data} = await AuthService.verifyOTPCode(code, phone.toString());
 
       if (data) {
-        const {accessToken} = data;
+        const {access_token} = data;
 
-        await dispatch(setPersistedToken(accessToken));
+        await dispatch(setPersistedToken(access_token));
 
         if (data.user) {
+          await dispatch(setPersistedToken(access_token));
+
+          if (data.user.avatar.url) {
+            CacheManager.prefetch(data.user.avatar.url);
+          }
+
+          if (data.barber.avatar.url) {
+            CacheManager.prefetch(data.barber.avatar.url);
+          }
+
           dispatch(setUser(data.user));
 
           navigation.navigate('/customer/home');

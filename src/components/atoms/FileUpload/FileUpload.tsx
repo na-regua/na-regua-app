@@ -1,9 +1,9 @@
 import React = require('react');
 import {ImagePickerType} from '@/app/models';
 import {EditPictureModal} from '@/components/modals';
+import {Colors} from '@/theme';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useRef, useState} from 'react';
-import {ImageSourcePropType} from 'react-native';
 import {Asset} from 'react-native-image-picker';
 import Icons from '../Icons/Icons';
 import Loader from '../Loader/Loader';
@@ -15,7 +15,6 @@ import {
   PickerWrapperStyle,
   PreviewWrapperStyle,
 } from './styles';
-import {Colors} from '@/theme';
 
 const ImagePicker: ImagePickerType = require('react-native-image-picker');
 
@@ -148,16 +147,16 @@ const FileUpload: React.FC<IFileUploadProps> = ({
     }
   };
 
-  const getPreviewSource = (image: string): ImageSourcePropType => {
+  const getPreviewSource = (image: string): string => {
     if (!image) {
-      return {uri: ''};
+      return '';
     }
 
     if (image && image.includes('http')) {
-      return {uri: image};
+      return image;
     }
 
-    return {uri: `data:image/jpeg;base64,${image}`};
+    return `data:image/jpeg;base64,${image}`;
   };
 
   return (
@@ -172,6 +171,7 @@ const FileUpload: React.FC<IFileUploadProps> = ({
             width={width - 2 * previewBorder}
             height={height - 2 * previewBorder}
             source={getPreviewSource(image)}
+            onError={() => {}}
           />
           {loading && (
             <LoaderWrapperStyle>

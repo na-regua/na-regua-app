@@ -13,6 +13,7 @@ import {
 } from '@/store/slicers';
 import {Colors} from '@/theme';
 import {phoneMask, phoneRegex} from '@/utils';
+import {CacheManager} from '@georstat/react-native-image-cache';
 import {AxiosError} from 'axios';
 import React, {useEffect, useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
@@ -98,9 +99,17 @@ const BarberLoginPhoneForm = () => {
       const {data} = await AuthService.verifyOTPCode(code, currentPhone);
 
       if (data) {
-        const {accessToken} = data;
+        const {access_token} = data;
 
-        await dispatch(setPersistedToken(accessToken));
+        await dispatch(setPersistedToken(access_token));
+
+        if (data.user.avatar.url) {
+          CacheManager.prefetch(data.user.avatar.url);
+        }
+
+        if (data.barber.avatar.url) {
+          CacheManager.prefetch(data.barber.avatar.url);
+        }
 
         if (data.barber) {
           dispatch(setUser(data.user));

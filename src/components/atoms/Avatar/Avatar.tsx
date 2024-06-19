@@ -72,9 +72,11 @@ const Avatar: React.FC<IAvatarProps> = ({
         )}
         {preview && (
           <AvatarPreviewStyle
+            onError={() => {}}
             size={size}
-            source={{
-              uri: preview,
+            source={preview}
+            imageStyle={{
+              borderRadius: size / 2,
             }}
           />
         )}

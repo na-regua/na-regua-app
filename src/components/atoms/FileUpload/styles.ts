@@ -1,5 +1,6 @@
 import {Colors} from '@/theme';
 import {hexPercentage} from '@/theme/colors';
+import {CachedImage} from '@georstat/react-native-image-cache';
 import styled from 'styled-components/native';
 
 export const PickerWrapperStyle = styled.View`
@@ -32,7 +33,7 @@ export const PreviewWrapperStyle = styled.TouchableOpacity`
   border-style: solid;
 `;
 
-export const ImagePreview = styled.Image.attrs({
+export const ImagePreview = styled(CachedImage).attrs({
   resizeMode: 'cover',
 })<{width: number; height: number}>`
   width: ${({width}) => `${width}px`};

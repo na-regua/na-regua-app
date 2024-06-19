@@ -1,5 +1,6 @@
 import {Typography} from '@/components/atoms';
 import {Colors, Metrics} from '@/theme';
+import {CachedImage} from '@georstat/react-native-image-cache';
 import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 
@@ -61,12 +62,14 @@ export const UserClickContainerStyled = styled.TouchableOpacity.attrs({
   justify-content: center;
 `;
 
-export const UserImageStyle = styled.Image.attrs({
+export const UserImageStyle = styled(CachedImage).attrs({
   resizeMode: 'cover',
+  imageStyle: {
+    borderRadius: 21,
+  },
 })`
   width: 42px;
   height: 42px;
-  border-radius: 50px;
 `;
 
 export const WelcomeTextStyle = styled(Typography)``;

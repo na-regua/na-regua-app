@@ -1,5 +1,5 @@
-import {Colors, Metrics} from '@/theme';
-import {TColorsType} from '@/theme';
+import {Colors, Metrics, TColorsType} from '@/theme';
+import {CachedImage} from '@georstat/react-native-image-cache';
 import styled from 'styled-components/native';
 
 export const OnTicketContainerStyled = styled.View`
@@ -41,8 +41,11 @@ export const OnTicketBarberInfoStyled = styled.View`
   gap: 12px;
 `;
 
-export const OnTicketBarberImageStyled = styled.Image.attrs({
+export const OnTicketBarberImageStyled = styled(CachedImage).attrs({
   resizeMode: 'cover',
+  imageStyle: {
+    borderRadius: 12,
+  },
 })`
   width: 48px;
   height: 48px;
