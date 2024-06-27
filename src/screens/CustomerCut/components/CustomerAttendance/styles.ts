@@ -39,8 +39,8 @@ export const AttendanceBarberItemImageStyled = styled(CachedImage).attrs({
     borderRadius: 6,
   },
 })`
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   margin: 6px 0;
 `;
 
@@ -97,7 +97,6 @@ export const PageCardFooterStyled = styled.View`
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  padding-bottom: 18px;
 `;
 
 export const OtherButtonContentStyled = styled.View`

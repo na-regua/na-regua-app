@@ -1,17 +1,16 @@
 import {Colors} from '@/theme';
 import React, {ReactNode, useMemo, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   NativeSyntheticEvent,
   TextInput,
   TextInputFocusEventData,
   TextInputProps,
   TextStyle,
-  View,
   ViewStyle,
 } from 'react-native';
+import {Box} from '../Box/Box';
 import {InputLabelStyle, InputStyle, InputWrapperStyle, styles} from './styles';
-import {useTranslation} from 'react-i18next';
-import { Box } from '../Box/Box';
 
 interface IInputProps extends TextInputProps {
   label: string;

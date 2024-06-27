@@ -1,30 +1,19 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {QueueService} from '@/app/api';
-import {SocketUrls} from '@/app/models';
-import {
-  AppStatusBar,
-  Loader,
-  SwipeButton,
-  SwipeButtonState,
-} from '@/components/atoms';
+import {AppStatusBar, Loader} from '@/components/atoms';
 import {BarberOnQueueHeader, Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {BarberQueueSocketEvents} from '@/socket/events';
 import {AppDispatch, RootState} from '@/store/Store';
-import {QueueThunks, createNotification} from '@/store/slicers';
+import {QueueThunks} from '@/store/slicers';
 import {Colors, Metrics} from '@/theme';
 import {useRoute} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AxiosError} from 'axios';
 import {SlideOutUp} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
-import {ItemHandler} from './components';
+import {ItemHandler, OnQueueActions} from './components';
 import {
-  OnQueueActionsRowStyled,
-  OnQueueActionsStyled,
-  OnQueueButtonStyled,
   OnQueueContainerStyled,
   OnQueueContentStyled,
   OnQueueLoaderWrapperStyled,
@@ -45,7 +34,6 @@ const BarberOnQueue: React.FC<
   const dispatch = useDispatch<AppDispatch>();
   const {viewMode} = useSelector((state: RootState) => state.queue);
 
-  const [swiping, setSwiping] = useState<SwipeButtonState>('wait');
   const [scrollViewWidth, setScrollViewWidth] = useState<number>(
     Metrics.smWidth,
   );
@@ -73,18 +61,6 @@ const BarberOnQueue: React.FC<
     onChangeFs();
   }, [onChangeFs]);
 
-  const pauseQueue = () => {
-    if (socket) {
-      socket.emit(SocketUrls.WorkerPauseQueue);
-    }
-  };
-
-  const resumeQueue = () => {
-    if (socket) {
-      socket.emit(SocketUrls.WorkerResumeQueue);
-    }
-  };
-
   const goBack = () => {
     if (navigation.canGoBack()) {
       navigation.goBack();
@@ -100,42 +76,6 @@ const BarberOnQueue: React.FC<
 
     return null;
   }
-
-  const onNext = async (toggled: boolean) => {
-    if (toggled) {
-      try {
-        setSwiping('on');
-
-        await QueueService.goNextTicket();
-
-        setSwiping('off');
-
-        setTimeout(() => {
-          setSwiping('wait');
-        });
-      } catch (error) {
-        setSwiping('off');
-
-        setTimeout(() => {
-          setSwiping('wait');
-        });
-
-        if (error instanceof AxiosError) {
-          const {message} = error.response?.data;
-
-          if (message) {
-            dispatch(
-              createNotification({
-                id: 'go_next',
-                type: 'error',
-                message: `errors.${message}`,
-              }),
-            );
-          }
-        }
-      }
-    }
-  };
 
   const SocketEvents = <>{socket && <BarberQueueSocketEvents />}</>;
 
@@ -172,37 +112,7 @@ const BarberOnQueue: React.FC<
             </OnQueueLoaderWrapperStyled>
           )}
         </OnQueueScrollStyled>
-        <OnQueueActionsStyled>
-          <OnQueueActionsRowStyled>
-            {todayQueue.status === 'on' && (
-              <OnQueueButtonStyled
-                title="barber.onQueue.buttons.pause"
-                colorScheme="default"
-                variant="outlined"
-                onPress={pauseQueue}
-              />
-            )}
-            {todayQueue.status === 'paused' && (
-              <OnQueueButtonStyled
-                title="barber.onQueue.buttons.resume"
-                colorScheme="success"
-                onPress={resumeQueue}
-              />
-            )}
-            <OnQueueButtonStyled
-              title="barber.onQueue.buttons.finish"
-              colorScheme="danger"
-            />
-          </OnQueueActionsRowStyled>
-          <SwipeButton
-            onToggle={value => {
-              onNext(value);
-            }}
-            resetAfterLoading
-            state={swiping}
-            title="buttons.next"
-          />
-        </OnQueueActionsStyled>
+        <OnQueueActions />
       </OnQueueContentStyled>
     </OnQueueContainerStyled>
   );

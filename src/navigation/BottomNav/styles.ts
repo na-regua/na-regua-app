@@ -3,7 +3,7 @@ import {TextStyle, ViewStyle} from 'react-native';
 import Animated from 'react-native-reanimated';
 import styled from 'styled-components/native';
 
-export const BOTTOM_NAV_HEIGHT = 66;
+export const BOTTOM_NAV_HEIGHT = 60;
 
 export const labelStyle: TextStyle = {
   fontWeight: Fonts.weights.medium,

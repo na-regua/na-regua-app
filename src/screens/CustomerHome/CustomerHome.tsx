@@ -31,7 +31,7 @@ import {
   interpolate,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
+  withTiming,
 } from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -111,13 +111,13 @@ const CustomerHome: React.FC<
     setSelectedTab(tab);
 
     if (tab === TABS.ATTENDANCE) {
-      homeTabSV.value = withSpring(1);
-      historyTabSV.value = withSpring(0);
+      homeTabSV.value = withTiming(1, {duration: 100});
+      historyTabSV.value = withTiming(0, {duration: 100});
     }
 
     if (tab === TABS.HISTORY) {
-      historyTabSV.value = withSpring(1);
-      homeTabSV.value = withSpring(0);
+      historyTabSV.value = withTiming(1, {duration: 100});
+      homeTabSV.value = withTiming(0, {duration: 100});
       dispatch(TicketHistoryActions.clear());
       await dispatch(TicketHistoryThunks.fetchTicketHistory());
     }

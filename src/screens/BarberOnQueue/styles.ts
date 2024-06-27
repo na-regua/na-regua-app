@@ -1,6 +1,5 @@
-import {Button} from '@/components/atoms';
 import {BOTTOM_NAV_HEIGHT} from '@/navigation/BottomNav/styles';
-import {Colors, Metrics} from '@/theme';
+import {Colors} from '@/theme';
 import {CachedImage} from '@georstat/react-native-image-cache';
 import {EdgeInsets} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
@@ -30,19 +29,6 @@ export const OnQueueContentStyled = styled.View<{fs: boolean}>`
     `
     margin-bottom: ${BOTTOM_NAV_HEIGHT}px;
   `}
-`;
-
-export const OnQueueActionsStyled = styled.View`
-  gap: ${Metrics.unitX3}px;
-`;
-
-export const OnQueueButtonStyled = styled(Button)`
-  flex: 1;
-`;
-export const OnQueueActionsRowStyled = styled.View`
-  gap: ${Metrics.unitX3}px;
-  flex-direction: row;
-  align-items: center;
 `;
 
 export const OnQueueScrollStyled = styled.ScrollView.attrs({

@@ -28,7 +28,7 @@ export const InputLabelStyle = styled.Text<{
   position: absolute;
   background-color: ${Colors.bgLight};
   z-index: 2;
-  top: -10px;
+  top: -6px;
   left: 12px;
   padding: 0 2px;
   color: ${({focused}) => (focused ? Colors.main : Colors.placeholder)};

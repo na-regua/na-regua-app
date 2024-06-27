@@ -70,7 +70,7 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
   return (
     <Box gap={12} style={cardStyles} {...wrapperStyles}>
       <Box gap={12} direction="row" alignItems="center">
-        {ImageTSX}
+        {barber.avatar && ImageTSX}
 
         <Box gap={3}>
           <Typography

@@ -1,10 +1,10 @@
 import {AnimatedScrollView} from '@/components/atoms';
-import {Colors} from '@/theme';
+import {Colors, Metrics} from '@/theme';
 import styled from 'styled-components/native';
 
 export const FavoritesScrollStyled = styled(AnimatedScrollView).attrs({
   contentContainerStyle: {
-    gap: 12,
+    gap: Metrics.unitX3,
     width: '100%',
     flexGrow: 1,
   },

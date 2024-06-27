@@ -1,6 +1,11 @@
 import {AxiosError} from 'axios';
 import {store} from '@/store/Store';
-import {ACCESS_TOKEN_KEY, createNotification, logout} from '@/store/slicers';
+import {
+  ACCESS_TOKEN_KEY,
+  SocketActions,
+  createNotification,
+  logout,
+} from '@/store/slicers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {navigationRef} from '@/navigation';
 
@@ -15,6 +20,12 @@ export async function onUnauthorizedResponse(error: any) {
         type: 'error',
       }),
     );
+
+    const isSocketConnected = store.getState().socket.connected;
+
+    if (isSocketConnected) {
+      store.dispatch(SocketActions.disconnectSocket());
+    }
 
     store.dispatch(logout());
 

@@ -54,7 +54,7 @@ const AppNavigator: React.FC = () => {
 
     if (user) {
       if (barber && (user.role === 'admin' || user.role === 'worker')) {
-        routeName = '/barber/settings';
+        routeName = '/barber/queue';
 
         if (barber.profile_status === 'pre') {
           routeName = '/barber/settings/workers';

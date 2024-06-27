@@ -71,6 +71,7 @@ const SocketProvider: React.FC<PropsWithChildren> = ({children}) => {
       onEvent(instance);
 
       instance.on('disconnect', () => {
+        console.log('Disconnected from socket server');
         dispatch(SocketActions.disconnectSocket());
       });
     } catch (error) {

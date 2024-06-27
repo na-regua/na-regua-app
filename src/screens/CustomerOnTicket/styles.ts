@@ -47,8 +47,8 @@ export const OnTicketBarberImageStyled = styled(CachedImage).attrs({
     borderRadius: 12,
   },
 })`
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   border-radius: 12px;
 `;
 

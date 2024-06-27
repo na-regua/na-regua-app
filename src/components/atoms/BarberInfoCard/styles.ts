@@ -9,8 +9,8 @@ export const BarberInfoImageWrapper = styled.View`
 export const BarberInfoCardImageStyled = styled(CachedImage).attrs({
   resizeMode: 'cover',
 })`
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
 `;
 
 export const DotSeparatorStyled = styled.View`

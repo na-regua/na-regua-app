@@ -56,7 +56,7 @@ const CutSlicer = createSlice<ICutState, SliceCaseReducers<ICutState>, string>({
     },
     resetCut: state => {
       state.steps = 'select';
-      state.attendanceType = 'queue';
+      state.attendanceType = undefined;
       state.selectedService = undefined;
       state.selectedBarber = undefined;
       state.selectedAdditionalServices = [];

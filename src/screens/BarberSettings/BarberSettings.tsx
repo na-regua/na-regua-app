@@ -14,6 +14,7 @@ import {StatusBarContext} from '@/providers';
 import {AppDispatch, RootState} from '@/store/Store';
 import {
   ACCESS_TOKEN_KEY,
+  SocketActions,
   createNotification,
   getCurrentUser,
   logout,
@@ -222,6 +223,7 @@ const BarberSettings: React.FC<
     await AsyncStorage.removeItem(ACCESS_TOKEN_KEY.toString());
 
     dispatch(logout());
+    dispatch(SocketActions.disconnectSocket());
 
     if (userType === 'customer') {
       navigation.navigate('/generic/login/customer');

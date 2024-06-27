@@ -3,7 +3,12 @@ import {AppStatusBar, Avatar, Icons, Typography} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {ACCESS_TOKEN_KEY, getCurrentUser, logout} from '@/store/slicers';
+import {
+  ACCESS_TOKEN_KEY,
+  SocketActions,
+  getCurrentUser,
+  logout,
+} from '@/store/slicers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {ReactNode, useMemo, useState} from 'react';
@@ -163,6 +168,7 @@ const CustomerSettings: React.FC<
     await AsyncStorage.removeItem(ACCESS_TOKEN_KEY.toString());
 
     dispatch(logout());
+    dispatch(SocketActions.disconnectSocket());
 
     if (userType === 'customer') {
       navigation.navigate('/generic/login/customer');

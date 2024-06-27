@@ -195,7 +195,7 @@ const CustomerCut: React.FC<
           bounce={false}
           wrapperProps={{
             style: {
-              paddingBottom: Metrics.platformPaddingBottom,
+              paddingBottom: Metrics.platformPadding,
             },
           }}
           footer={

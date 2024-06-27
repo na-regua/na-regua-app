@@ -47,7 +47,6 @@ const CustomerSelectedBarberModal: React.FC<
     );
 
     dispatch(CutActions.setCutStep('attendance'));
-    dispatch(CutActions.setAttendanceType('queue'));
 
     setLoading(false);
     dispatch(CutActions.setShowSelectedModal(false));
@@ -69,7 +68,7 @@ const CustomerSelectedBarberModal: React.FC<
         onPress={event => {
           event.stopPropagation();
         }}
-        paddingBottom={insets.bottom + Metrics.platformPaddingBottom}
+        paddingBottom={insets.bottom + Metrics.platformPadding}
         entering={SlideInDown.delay(100)}
         exiting={SlideOutDown.duration(300)}>
         <Box gap={6}>

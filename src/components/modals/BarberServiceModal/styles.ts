@@ -36,8 +36,8 @@ export const SelectIconWrapperStyle = styled.View`
 `;
 
 export const SelectIconItemStyle = styled.TouchableOpacity<{active?: boolean}>`
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   border-radius: ${48 / 2}px;
 
   justify-content: center;

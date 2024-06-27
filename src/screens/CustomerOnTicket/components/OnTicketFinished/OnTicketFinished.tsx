@@ -22,8 +22,11 @@ import {
 } from '../../styles';
 import {OnTicketPrice} from '../OnTicketPrice/OnTicketPrice';
 import {OnTicketServiceInfo} from '../OnTicketServiceInfo/OnTicketServiceInfo';
+import {format} from 'date-fns';
+import {useTranslation} from 'react-i18next';
 
 const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({ticket}) => {
+  const {t} = useTranslation();
   const rateModalRef = useRef<BottomSheetModal>(null);
 
   const showRateModal = () => {
@@ -37,6 +40,11 @@ const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({ticket}) => {
         <Typography variant="h2">
           {'customer.onTicket.titles.finished'}
         </Typography>
+        {ticket.servedAt && (
+          <Typography variant="caption" color="placeholder">
+            {format(new Date(ticket.servedAt), t('dates.full'))}
+          </Typography>
+        )}
       </Box>
       {/* Card */}
       <OnTicketCardStyled>

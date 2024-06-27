@@ -180,7 +180,7 @@ const CustomerHomeHistory: React.FC<ICustomerHomeHistoryProps> = ({
             alignSelf="stretch"
             position="absolute"
             positions={{
-              bottom: Metrics.platformPaddingBottom + Metrics.unitX3,
+              bottom: Metrics.platformPadding + Metrics.unitX3,
               left: Metrics.unitX3,
             }}
             width={Metrics.smWidth}
@@ -197,7 +197,7 @@ const CustomerHomeHistory: React.FC<ICustomerHomeHistoryProps> = ({
 
       <Modal
         ref={rateModalRef}
-        height={ModalSizes.Rate + Metrics.platformPaddingBottom}
+        height={ModalSizes.Rate + Metrics.platformPadding}
         backdropBackgroundColor={Colors.main}
         onClose={onRefresh}>
         {selectedItem && (

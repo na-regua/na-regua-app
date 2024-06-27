@@ -124,7 +124,7 @@ const BarberQueue: React.FC<
       <Modal
         ref={joinQueueModalRef}
         title="modals.joinQueue.title"
-        height={194 + Metrics.platformPaddingBottom}>
+        height={194 + Metrics.platformPadding}>
         <WorkerJoinQueueModal
           dismiss={joinQueueModalRef.current?.dismiss}
           navigate={route => {

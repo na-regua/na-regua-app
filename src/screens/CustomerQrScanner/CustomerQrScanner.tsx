@@ -116,7 +116,6 @@ const CustomerQrScanner: React.FC<
 
       dispatch(CutActions.setCutSelectedBarber(barber));
       dispatch(CutActions.setCutStep('attendance'));
-      dispatch(CutActions.setAttendanceType('queue'));
 
       navigation.navigate('/customer/cut');
 

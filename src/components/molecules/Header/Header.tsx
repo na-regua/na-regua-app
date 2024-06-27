@@ -145,8 +145,7 @@ const Border: React.FC<IGenericHeaderProps> = () => {
 };
 
 const Container: React.FC<IBoxProps> = ({children, ...rest}) => {
-  const androidStyles: ViewStyle =
-    Platform.OS === 'android' ? {paddingTop: 18} : {};
+  const androidStyles: ViewStyle = {paddingTop: 18};
 
   return (
     <Box
