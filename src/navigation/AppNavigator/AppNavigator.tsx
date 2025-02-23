@@ -32,11 +32,11 @@ import BarberWorkers from '@/screens/BarberWorkers/BarberWorkers';
 import {RootState} from '@/store/Store';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {Host} from 'react-native-portalize';
 import {useSelector} from 'react-redux';
 import BottomNav from '../BottomNav/BottomNav';
 import {LinkingConfig, TRootStackParamList} from '../appRoutes';
 import {navigationRef} from '../useNavigationContainer/useNavigationContainer';
-import {Host} from 'react-native-portalize';
 
 const Stack = createNativeStackNavigator<TRootStackParamList>();
 
@@ -142,6 +142,7 @@ const AppNavigator: React.FC = () => {
               <Stack.Screen
                 name={'/user/permissions'}
                 component={PermissionsScreen}
+                initialParams={{hideBottomNav: true}}
               />
             </>
           )}

@@ -80,6 +80,7 @@ const CustomerOnTicket: React.FC<
     if (connected && !!socket) {
       socket.off(SocketUrls.GetTicket);
       socket.off(SocketUrls.GetQueue);
+      socket.emit(SocketUrls.UserLeaveTicketChannels, {ticketId: ticket?._id});
     }
   };
 
@@ -120,8 +121,18 @@ const CustomerOnTicket: React.FC<
         {ticket.status === 'queue' && queue && (
           <OnTicketQueue ticket={ticket} queue={queue} />
         )}
-        {ticket.status === 'served' && <OnTicketFinished ticket={ticket} />}
-        {ticket.status === 'missed' && <OnTicketMissed ticket={ticket} />}
+        {ticket.status === 'served' && (
+          <OnTicketFinished
+            ticket={ticket}
+            cleanSocketEvents={cleaningSocketEvents}
+          />
+        )}
+        {ticket.status === 'missed' && (
+          <OnTicketMissed
+            ticket={ticket}
+            cleanSocketEvents={cleaningSocketEvents}
+          />
+        )}
         {/* {ticket.status === 'scheduled' && <OnTicketSchedule ticket={ticket} />} */}
       </OnTicketContentStyled>
       {/* Mute modal */}

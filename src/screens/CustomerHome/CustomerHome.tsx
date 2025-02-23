@@ -251,14 +251,15 @@ const CustomerHome: React.FC<
             )}
           </Box>
         </CHContentStyled>
-        {todayTickets?.queue && showJoinQueueModal && (
-          <CustomerJoinTodayQueue
-            onBack={() => setShowJoinQueueModal(false)}
-            onContinue={() => setShowJoinQueueModal(false)}
-            ticket={todayTickets?.queue}
-          />
-        )}
       </Host>
+      {/* This should be under any host */}
+      {todayTickets?.queue && showJoinQueueModal && (
+        <CustomerJoinTodayQueue
+          onBack={() => setShowJoinQueueModal(false)}
+          onContinue={() => setShowJoinQueueModal(false)}
+          ticket={todayTickets?.queue}
+        />
+      )}
     </CHContainerStyled>
   );
 };

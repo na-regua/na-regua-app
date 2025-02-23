@@ -61,6 +61,8 @@ enum ENDPOINTS {
   AUTH_SEND_CODE = 'auth/send/code',
   AUTH_LOGIN_EMAIL = 'auth/login/email',
   AUTH_GET_CURRENT_USER = 'auth/me',
+  AUTH_SEND_MAIL_CODE = 'auth/send/mail-code',
+  AUTH_VERIFY_MAIL_CODE = 'auth/verify/mail-code',
   /**
    * Queue
    * */

@@ -9,6 +9,7 @@ export interface IBarberService {
   barberId: string;
   createdAt: string;
   updatedAt: string;
+  additional: boolean;
 }
 
 export interface IGetBarberServicesParams {
@@ -22,4 +23,5 @@ export interface IBarberServiceForm {
   duration_in_minutes: string;
   price: string;
   icon: IBarberServiceIcon;
+  additional: boolean;
 }

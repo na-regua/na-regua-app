@@ -62,7 +62,7 @@ export interface IBarberUpdate {
 export interface SignUpResponse {
   barber: IBarber;
   user: IUser;
-  accessToken: string;
+  access_token: string;
 }
 
 export interface IBarberServiceGeneralConfig {

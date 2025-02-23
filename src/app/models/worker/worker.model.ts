@@ -11,3 +11,10 @@ export interface IWorker {
 export interface IGetWorkerParams {
   barberId: string;
 }
+
+export interface IWorkerForm {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+}

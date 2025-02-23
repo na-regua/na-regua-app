@@ -1,5 +1,4 @@
-import {IBuffer, IGetWorkerParams, IWorker} from '@/app/models';
-import {IWorkerForm} from '@/components/molecules';
+import {IBuffer, IGetWorkerParams, IWorker, IWorkerForm} from '@/app/models';
 import {queryBuilder} from '@/utils/queryBuilder';
 import {AxiosResponse} from 'axios';
 import api, {errToAxiosError} from '../../api';

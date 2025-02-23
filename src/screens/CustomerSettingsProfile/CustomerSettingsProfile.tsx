@@ -1,11 +1,15 @@
+import {emitErrorNotification, UserService} from '@/app/api';
 import {ICreateCustomerUser} from '@/app/models';
 import {AppStatusBar, Box, Button, Input, Typography} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
+import {createNotification, getCurrentUser} from '@/store/slicers';
 import {AppDispatch, RootState} from '@/store/Store';
 import {phoneMask} from '@/utils';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useMemo, useState} from 'react';
+import {AxiosError} from 'axios';
+import React, {useMemo} from 'react';
+import {Controller, useForm} from 'react-hook-form';
 import {ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -21,22 +25,24 @@ const CustomerSettingsProfile: React.FC<
     paddingLeft: insets.left,
     paddingRight: insets.right,
   };
-
   const {user} = useSelector((state: RootState) => state.auth);
 
-  const [profileData, setProfileData] = useState<Partial<ICreateCustomerUser>>({
-    name: user?.name,
-    phone: user?.phone ? phoneMask(user?.phone.toString()) : '',
+  const {control, formState, watch} = useForm<
+    Omit<ICreateCustomerUser, 'phone' | 'email'>
+  >({
+    defaultValues: {
+      name: user?.name,
+    },
   });
+
+  const formValues = watch();
 
   const dispatch = useDispatch<AppDispatch>();
 
   const hasChangedData = useMemo(() => {
-    const maskedPhone = user?.phone ? phoneMask(user?.phone.toString()) : '';
-
-    return profileData.name !== user?.name || profileData.phone !== maskedPhone;
+    return formValues.name !== user?.name;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profileData.name, profileData.phone]);
+  }, [formValues]);
 
   if (!user) {
     return null;
@@ -56,6 +62,28 @@ const CustomerSettingsProfile: React.FC<
     width: '100%',
   };
 
+  const saveProfile = async () => {
+    try {
+      const {name} = formValues;
+
+      await UserService.updateUser({name}, user._id);
+
+      await dispatch(getCurrentUser());
+
+      dispatch(
+        createNotification({
+          id: 'update-profile',
+          type: 'success',
+          message: 'notifications.success.updateProfile',
+        }),
+      );
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        emitErrorNotification(error);
+      }
+    }
+  };
+
   return (
     <ContainerStyle style={insetsStyles}>
       <AppStatusBar />
@@ -73,24 +101,42 @@ const CustomerSettingsProfile: React.FC<
           </Typography>
         </Box>
         <Box gap={18} width={'100%'} flex={1}>
+          <Controller
+            name="name"
+            control={control}
+            rules={{required: true}}
+            render={({field: {onChange, value}}) => (
+              <Input
+                label="Nome"
+                value={value}
+                onChangeText={text => {
+                  onChange(text);
+                }}
+                wrapperStyle={fillStyle}
+              />
+            )}
+          />
+
           <Input
-            label="Nome"
-            value={profileData.name}
-            onChangeText={text => {
-              setProfileData({...profileData, name: text});
-            }}
+            label="E-mail"
+            value={user?.email}
+            editable={false}
             wrapperStyle={fillStyle}
           />
+
           <Input
             label="Telefone"
-            value={profileData.phone}
-            onChangeText={text => {
-              setProfileData({...profileData, phone: phoneMask(text)});
-            }}
+            value={phoneMask(user?.phone.toString() || '')}
+            editable={false}
             wrapperStyle={fillStyle}
           />
         </Box>
-        <Button title="buttons.save" fillSpace disabled={!hasChangedData} />
+        <Button
+          title="buttons.save"
+          fillSpace
+          disabled={!hasChangedData || !formState.isValid}
+          onPress={saveProfile}
+        />
       </ScrollContentStyle>
     </ContainerStyle>
   );

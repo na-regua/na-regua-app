@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {StyleProp, TouchableOpacityProps, ViewStyle} from 'react-native';
 
-import {Colors} from '@/theme';
+import {Colors, TColorsType} from '@/theme';
 import {useTranslation} from 'react-i18next';
 import Loader from '../Loader/Loader';
 import {TypographyStyles} from '../Typography/Typography';
@@ -28,6 +28,7 @@ export type TButtonSizes = 'small' | 'medium' | 'large';
 
 export interface IButtonProps extends TouchableOpacityProps {
   colorScheme?: TButtonColorScheme;
+  textColor?: TColorsType;
   title?: string;
   disabled?: boolean;
   loading?: boolean;
@@ -47,9 +48,10 @@ const Button: React.FC<IButtonProps> = ({
   variant = 'filled',
   suffix,
   translate = true,
-  customContent,
+  customContent = false,
   fillSpace,
   size = 'medium',
+  textColor,
   ...buttonProps
 }) => {
   const {t} = useTranslation();
@@ -67,17 +69,26 @@ const Button: React.FC<IButtonProps> = ({
   );
 
   const loaderColor: string = useMemo(() => {
+    if (textColor) {
+      return Colors[textColor];
+    }
+
     if (colorScheme === 'white' && variant === 'filled') {
       return Colors.main;
     }
 
     return variant === 'filled' ? Colors.white3 : ButtonThemeColor[colorScheme];
-  }, [variant, colorScheme]);
+  }, [variant, colorScheme, textColor]);
 
   const buttonText: string = useMemo(
     () => (title ? (translate ? t(title) : title) : ''),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [title, translate],
+  );
+
+  const textColorStyle = useMemo(
+    () => (textColor ? {color: Colors[textColor]} : {}),
+    [textColor],
   );
 
   return (
@@ -98,10 +109,11 @@ const Button: React.FC<IButtonProps> = ({
             disabled={disabled}
             colorScheme={colorScheme}
             variant={variant}
-            style={TypographyStyles.button}>
+            style={[TypographyStyles.button, textColorStyle]}>
             {buttonText}
           </LabelStyle>
-          {suffix && <SuffixStyle>{suffix}</SuffixStyle>}
+
+          {!!suffix && <SuffixStyle>{suffix}</SuffixStyle>}
         </>
       )}
       {loading && <Loader size="64" color={loaderColor} strokeWidth={2.5} />}

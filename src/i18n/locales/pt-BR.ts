@@ -61,6 +61,7 @@ const ptBr = {
       title: 'Serviços',
       subtitle: 'Gerenciar serviços prestados.',
       goBack: 'Voltar',
+      additional: '(Adicional)',
       buttons: {
         add: '+ Serviço',
         ok: 'Salvar',
@@ -194,6 +195,25 @@ const ptBr = {
           title2: 'negócio crescer',
           subtitle: 'Dinheiro? Cartão ? Pix? A gente anota pra você',
         },
+      },
+      preview: {
+        title: 'Fila do dia',
+        buttons: {
+          finish: 'Encerrar',
+          open: 'Abrir',
+          join: 'Entrar',
+        },
+        labels: {
+          workers: 'Funcionários',
+          customers: 'Clientes',
+          total: 'Total: {{-total}}',
+          served: 'Atendidos: {{-total}}',
+        },
+      },
+      status: {
+        on: 'Aberta',
+        paused: 'Pausada',
+        off: 'Encerrada',
       },
     },
     schedule: {
@@ -433,15 +453,16 @@ const ptBr = {
         again: 'Enviar novamente',
       },
       customer: {
-        phoneSubtitle: 'Insira seu telefone para continuar.',
-        verifySubtitle: 'Digite o código recebido via SMS para enviar.',
+        mailSubtitle: 'Insira seu e-mail para continuar.',
+        verifySubtitle: 'Digite o código recebido via E-mail para entrar.',
         fields: {
           phone: 'Telefone',
+          mail: 'E-mail',
         },
         buttons: {
           send: 'Enviar',
           enter: 'Entrar',
-          anotherPhone: 'Entrar com outro número',
+          anotherEmail: 'Entrar com outro E-mail',
           sendAgain: 'Enviar novamente',
         },
         link: 'Fazer cadastro rápido!',
@@ -522,7 +543,7 @@ const ptBr = {
       fields: {
         name: 'Nome',
         email: 'E-mail',
-        phone: 'Whatsapp',
+        phone: 'Telefone',
         admin: 'Administrador ?!',
       },
       buttons: {
@@ -541,6 +562,7 @@ const ptBr = {
         price: 'Preço',
         durationInMinutes: 'Tempo médio',
         selectIcon: 'Selecione um ícone',
+        additional: 'Serviço adicional ?',
       },
       buttons: {
         cancel: 'Cancelar',
@@ -810,6 +832,11 @@ const ptBr = {
     USER_ALREADY_IN_QUEUE: 'Ops! Você já está nessa fila.',
     USER_ALREADY_IN_OTHER_QUEUE: 'Ops! Você está em outra fila.',
     TICKET_NOT_FOUND: 'Ticket não encontrado.',
+  },
+  notifications: {
+    success: {
+      updateProfile: 'Perfil atualizado com sucesso.',
+    },
   },
   currency: {symbol: 'R$', format: 'R$ {{-value}}'},
   dates: {

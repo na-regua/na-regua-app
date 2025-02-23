@@ -1,5 +1,5 @@
 import {WorkersService} from '@/app/api';
-import {IBuffer} from '@/app/models';
+import {IBuffer, IWorkerForm} from '@/app/models';
 import {Avatar, Icons, Input} from '@/components/atoms';
 import {AppDispatch} from '@/store/Store';
 import {createNotification} from '@/store/slicers';
@@ -24,13 +24,6 @@ import {
   ScrollViewStyle,
   styles,
 } from './styles';
-
-export interface IWorkerForm {
-  name: string;
-  email: string;
-  phone: string;
-  password: string;
-}
 
 interface IWorkerModalProps {
   modalRef: React.RefObject<BottomSheetModal | null>;

@@ -1,5 +1,5 @@
 import {WorkersService} from '@/app/api';
-import {IWorker} from '@/app/models';
+import {IWorker, ModalSizes} from '@/app/models';
 import {
   AppStatusBar,
   Box,
@@ -34,6 +34,7 @@ import {
   MenuItemsWrapperStyle,
   styles,
 } from './styles';
+import metrics from '@/theme/metrics';
 
 const BarberWorkers: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/barber/settings/workers'>
@@ -233,8 +234,8 @@ const BarberWorkers: React.FC<
         </ContentActionsStyle>
         <Modal
           ref={addWorkerModalRef}
-          title={t('modals.worker.titles.add')}
-          snapPoints={[508, '100%']}>
+          height={ModalSizes.BarberWorker + metrics.platformPadding}
+          title={t('modals.worker.titles.add')}>
           <WorkerModal
             mode="add"
             modalRef={addWorkerModalRef}
@@ -247,8 +248,8 @@ const BarberWorkers: React.FC<
         </Modal>
         <Modal
           ref={editWorkerModalRef}
-          snapPoints={[508, '100%']}
           title={t('modals.worker.titles.edit')}
+          height={ModalSizes.BarberWorker + metrics.platformPadding}
           onClose={() => {
             if (selectedToEdit) {
               removeFromShowSet(selectedToEdit._id);

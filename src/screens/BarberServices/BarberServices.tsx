@@ -1,5 +1,5 @@
 import {BarbersService, ServicesService} from '@/app/api';
-import {IBarberService, IBarberServiceIcon} from '@/app/models';
+import {IBarberService, IBarberServiceIcon, ModalSizes} from '@/app/models';
 import {
   AppStatusBar,
   Box,
@@ -185,8 +185,23 @@ const BarberServices: React.FC<
               services.map(service => (
                 <MenuItemRowStyle key={service._id}>
                   <MenuItem
-                    title={service.name}
-                    description={`${t('units.money')} ${service.price}`}
+                    customInfo={
+                      <Box direction="column">
+                        <Typography variant="body1" color="black3">
+                          {service.name}{' '}
+                          <Typography>
+                            {service.additional && (
+                              <Typography variant="tip" color="black1">
+                                {t('barber.services.additional')}
+                              </Typography>
+                            )}
+                          </Typography>
+                        </Typography>
+                        <Typography variant="caption" color="black1">
+                          {`${t('units.money')} ${service.price}`}
+                        </Typography>
+                      </Box>
+                    }
                     icon={getIcon[service.icon]}
                     clickable
                     onPress={() => handleShowSet(service._id.toString())}
@@ -240,7 +255,7 @@ const BarberServices: React.FC<
         <Modal
           ref={addServiceModalRef}
           title={t('modals.barberService.titles.add')}
-          height={448}>
+          height={ModalSizes.BarberService + Metrics.platformPadding}>
           <BarberServiceModal
             modalRef={addServiceModalRef}
             mode="add"
@@ -250,7 +265,7 @@ const BarberServices: React.FC<
         <Modal
           ref={editServiceModalRef}
           title={t('modals.barberService.titles.edit')}
-          height={448}
+          height={ModalSizes.BarberService + Metrics.platformPadding}
           onClose={() => {
             if (selectedToEdit) {
               handleShowSet(selectedToEdit._id);
@@ -267,6 +282,7 @@ const BarberServices: React.FC<
                 duration_in_minutes:
                   selectedToEdit.duration_in_minutes.toString(),
                 price: selectedToEdit.price.toString(),
+                additional: selectedToEdit.additional,
               }}
               serviceID={selectedToEdit._id}
               onClose={reloadData => reloadData && getServices()}
@@ -276,7 +292,7 @@ const BarberServices: React.FC<
         <Modal
           ref={deleteServiceModalRef}
           title={t('modals.deleteService.title')}
-          height={200}
+          height={ModalSizes.DeleteBarberService + Metrics.platformPadding}
           onClose={() => {
             if (selectedToDelete) {
               handleShowSet(selectedToDelete._id);

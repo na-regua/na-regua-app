@@ -34,7 +34,7 @@ const ShareQRModal: React.FC<IShareQRModalProps> = ({modalRef}) => {
   const {barber} = useSelector((state: RootState) => state.auth);
 
   const [sharing, setSharing] = useState(false);
-  const [qrWrapperDimensions, setQrWrapperDimensions] = useState({
+  const [_qrWrapperDimensions, setQrWrapperDimensions] = useState({
     width: 0,
     height: 0,
   });
@@ -79,12 +79,7 @@ const ShareQRModal: React.FC<IShareQRModalProps> = ({modalRef}) => {
       <ViewShot style={styles.viewShot} ref={ref}>
         <QRContentStyle>
           <InnerQRContentStyle onLayout={getQRWrapperHeight}>
-            <Icons.QRSquadIcon
-              width={qrWrapperDimensions.width}
-              height={qrWrapperDimensions.height}
-              wrapperStyle={styles.qrSquare}
-            />
-
+            <Icons.LogoWritingIcon color="bgLight" width={180} />
             <QRCode
               style={styles.qrWrapper}
               padding={12}

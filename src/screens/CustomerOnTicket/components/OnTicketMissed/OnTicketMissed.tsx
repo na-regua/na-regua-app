@@ -1,11 +1,19 @@
 import {OnTicketGeneralProps} from '@/app/models';
 import {BarberInfoCard, Box, Typography} from '@/components/atoms';
 import {format} from 'date-fns';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {LineStyled, OnTicketCardStyled} from '../../styles';
 import {OnTicketServiceInfo} from '../OnTicketServiceInfo/OnTicketServiceInfo';
 
-const OnTicketMissed: React.FC<OnTicketGeneralProps> = ({ticket}) => {
+const OnTicketMissed: React.FC<OnTicketGeneralProps> = ({
+  ticket,
+  cleanSocketEvents,
+}) => {
+  useEffect(() => {
+    cleanSocketEvents && cleanSocketEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Box gap={18}>
       {/* Ticket title */}

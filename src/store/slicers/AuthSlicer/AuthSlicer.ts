@@ -40,6 +40,10 @@ const getCurrentUser = createAsyncThunk(
     try {
       const token = await AsyncStorage.getItem(ACCESS_TOKEN_KEY.toString());
 
+      if (!token) {
+        return rejectWithValue(new AxiosError());
+      }
+
       if (token) {
         const {data} = await AuthService.getCurrentUser(token);
 
@@ -72,6 +76,7 @@ const AuthSlicer = createSlice<
     },
     setUser: (state, action: GenericAction<IUser>) => {
       state.user = action.payload;
+      state.isAuthenticated = true;
     },
     logout: state => {
       state.isAuthenticated = false;

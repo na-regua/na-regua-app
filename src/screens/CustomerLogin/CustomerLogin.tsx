@@ -1,5 +1,5 @@
 import {AuthService} from '@/app/api';
-import {ILoginPhone} from '@/app/models';
+import {ILoginEmail} from '@/app/models';
 import {Button, CodeInput, Icons, Input, Typography} from '@/components/atoms';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
@@ -12,7 +12,6 @@ import {
   setUser,
 } from '@/store/slicers';
 import {Colors} from '@/theme';
-import {phoneMask, phoneRegex} from '@/utils';
 import {CacheManager} from '@georstat/react-native-image-cache';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AxiosError} from 'axios';
@@ -67,7 +66,7 @@ const CustomerLogin: React.FC<
     formState: {isValid},
     getValues,
     reset: resetForm,
-  } = useForm<ILoginPhone>({mode: 'all'});
+  } = useForm<ILoginEmail>({mode: 'all'});
 
   const fieldsRef = {
     phone: useRef<TextInput>(null),
@@ -93,7 +92,7 @@ const CustomerLogin: React.FC<
   };
 
   const reset = () => {
-    dispatch(setCustomerMethod('phone'));
+    dispatch(setCustomerMethod('e-mail'));
     setCode('');
     clearTimer();
     resetForm();
@@ -139,9 +138,9 @@ const CustomerLogin: React.FC<
     try {
       setIsSending(true);
 
-      const {phone} = getValues();
+      const {email} = getValues();
 
-      const {data} = await AuthService.sendOTPCode(phone);
+      const {data} = await AuthService.sendEmailCode(email);
 
       if (data.goToVerify) {
         setIsSending(false);
@@ -170,9 +169,9 @@ const CustomerLogin: React.FC<
 
   const sendAgain = async () => {
     try {
-      const {phone} = getValues();
+      const {email} = getValues();
 
-      await AuthService.sendOTPCode(phone);
+      await AuthService.sendEmailCode(email);
 
       initTimer();
     } catch (error) {
@@ -194,8 +193,8 @@ const CustomerLogin: React.FC<
   const verifyCode = async () => {
     try {
       setIsVerifying(true);
-      const {phone} = getValues();
-      const {data} = await AuthService.verifyOTPCode(code, phone);
+      const {email} = getValues();
+      const {data} = await AuthService.verifyEmailCode(code, email);
 
       if (data) {
         const {access_token} = data;
@@ -235,7 +234,7 @@ const CustomerLogin: React.FC<
   };
 
   const useAnotherPhone = () => {
-    dispatch(setCustomerMethod('phone'));
+    dispatch(setCustomerMethod('e-mail'));
   };
 
   return (
@@ -254,16 +253,39 @@ const CustomerLogin: React.FC<
               <Icons.LogoWritingIcon width={220} height={50} />
             </LogoContainerStyle>
 
-            {customerMethod === 'phone' && (
+            {customerMethod === 'e-mail' && (
               <>
                 <Typography
                   variant="body1"
                   color="black1"
-                  children="generic.login.customer.phoneSubtitle"
+                  children="generic.login.customer.mailSubtitle"
                   textAlign="justify"
                 />
 
                 <Controller
+                  name="email"
+                  rules={{required: true}}
+                  control={control}
+                  render={({field: {onChange, value}}) => (
+                    <Input
+                      label="generic.login.customer.fields.mail"
+                      autoCapitalize="none"
+                      onChangeText={text => {
+                        onChange(text);
+                      }}
+                      value={value}
+                      inputRef={fieldsRef.phone}
+                      returnKeyType={(isValid && 'done') || 'none'}
+                      onSubmitEditing={() => {}}
+                      blurOnSubmit={true}
+                      keyboardType="email-address"
+                      textContentType="emailAddress"
+                      textStyle={{borderColor: Colors.primary}}
+                    />
+                  )}
+                />
+
+                {/* <Controller
                   name="phone"
                   rules={{required: true, pattern: phoneRegex}}
                   control={control}
@@ -285,7 +307,7 @@ const CustomerLogin: React.FC<
                       textStyle={{borderColor: Colors.primary}}
                     />
                   )}
-                />
+                /> */}
                 <Button
                   title="generic.login.customer.buttons.send"
                   disabled={!isValid}
@@ -326,7 +348,7 @@ const CustomerLogin: React.FC<
                 />
 
                 <Button
-                  title="generic.login.customer.buttons.anotherPhone"
+                  title="generic.login.customer.buttons.anotherEmail"
                   variant="ghost"
                   colorScheme="primary"
                   onPress={useAnotherPhone}

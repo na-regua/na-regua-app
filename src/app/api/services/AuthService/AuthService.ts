@@ -37,6 +37,36 @@ const verifyOTPCode = async (
   }
 };
 
+const sendEmailCode = async (
+  email: string,
+): Promise<AxiosResponse<{goToVerify: boolean}>> => {
+  try {
+    const data = await api.post(ENDPOINTS.AUTH_SEND_MAIL_CODE, {
+      email,
+    });
+
+    return data;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
+const verifyEmailCode = async (
+  code: string,
+  email: string,
+): Promise<AxiosResponse<ILoginResponse>> => {
+  try {
+    const data = await api.post(ENDPOINTS.AUTH_VERIFY_MAIL_CODE, {
+      code,
+      email,
+    });
+
+    return data;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
 const loginWithEmail = async (
   loginData: ILoginEmail,
 ): Promise<AxiosResponse<ILoginResponse>> => {
@@ -53,8 +83,6 @@ const getCurrentUser = async (
   token: string,
 ): Promise<AxiosResponse<IGetUserResponse>> => {
   try {
-    console.log('token', token);
-
     const data = await api.get(ENDPOINTS.AUTH_GET_CURRENT_USER, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -72,4 +100,6 @@ export default {
   sendOTPCode,
   loginWithEmail,
   getCurrentUser,
+  sendEmailCode,
+  verifyEmailCode,
 };

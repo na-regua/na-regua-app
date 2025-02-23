@@ -1,3 +1,4 @@
+import {emitErrorNotification} from '@/app/api';
 import {BarbersService} from '@/app/api/services';
 import {IAdressFormData, ICreateBarber, ICreateUser} from '@/app/models';
 import {AvoidKeyboard, Button, Stepper, Typography} from '@/components/atoms';
@@ -5,12 +6,7 @@ import {AvatarStep, PicturesStep, ProfileStep} from '@/components/molecules';
 import AddressStep from '@/components/molecules/AddressStep/AddressStep';
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch} from '@/store/Store';
-import {
-  createNotification,
-  setBarber,
-  setPersistedToken,
-  setUser,
-} from '@/store/slicers';
+import {getCurrentUser, setPersistedToken} from '@/store/slicers';
 import {assetToBuffer} from '@/utils';
 import {CacheManager} from '@georstat/react-native-image-cache';
 import {AxiosError} from 'axios';
@@ -128,7 +124,9 @@ const SignUpForm: React.FC = () => {
         const {data} = await BarbersService.signUpBarber(createBarber);
 
         if (data) {
-          await dispatch(setPersistedToken(data.accessToken));
+          await dispatch(setPersistedToken(data.access_token));
+
+          await dispatch(getCurrentUser());
 
           if (data.user.avatar.url) {
             CacheManager.prefetch(data.user.avatar.url);
@@ -137,9 +135,6 @@ const SignUpForm: React.FC = () => {
           if (data.barber.avatar.url) {
             CacheManager.prefetch(data.barber.avatar.url);
           }
-
-          dispatch(setBarber(data.barber));
-          dispatch(setUser(data.user));
 
           setTimeout(() => {
             setLoading(false);
@@ -157,17 +152,7 @@ const SignUpForm: React.FC = () => {
         setLoading(false);
 
         if (error instanceof AxiosError) {
-          const {message} = error.response?.data;
-
-          if (message) {
-            dispatch(
-              createNotification({
-                id: 'sign-up-barber',
-                type: 'error',
-                message: `errors.${message}`,
-              }),
-            );
-          }
+          emitErrorNotification(error);
         }
       }
     }
@@ -176,7 +161,7 @@ const SignUpForm: React.FC = () => {
   return (
     <ContainerStyle>
       <AvoidKeyboard>
-        <ScrollContent>
+        <ScrollContent showsVerticalScrollIndicator={false}>
           <ContentHeaderStyle>
             <Typography variant="h2" color="black3">
               {t('barber.signUp.title')}

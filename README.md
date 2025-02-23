@@ -11,42 +11,7 @@ To run use `yarn start` or `npm start`
 ### Camera
 
 ```
-npm install react-native-camera --save
-```
-
-- **android/app/src/main/AndroidManifest.xml**
-
-```
-/* Required */‍
-‍<uses-permission android:name="android.permission.CAMERA"></uses-permission>
-/* Include this only if you are planning to use the microphone for video recording */
-‍
-‍<uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
-/* Include this only if you are planning to use the camera roll */
-‍
-‍<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-```
-
-- **android/app/build.gradle**
-
-```
-android {
- ...
- defaultConfig {
-  ...
-  missingDimensionStrategy 'react-native-camera', 'general' /* insert this line */
- }
-}
-```
-
-- **ios/NaRegua/Info.plist**
-
-```
-‍<key>NSCameraUsageDescription</key><string>Your message to user when the camera is accessed for the first time</string>
-‍<key>NSPhotoLibraryAddUsageDescription</key><string>Your message to user when the photo library is accessed for the first time</string>
-‍<key>NSPhotoLibraryUsageDescription</key><string>Your message to user when the photo library is accessed for the first time</string>
-‍<key>NSMicrophoneUsageDescription</key><string>Your message to user when the microphone is accessed for the first time</string>
+npm install react-native-vision-camera --save
 ```
 
 ### Deprecated PropTypes Error

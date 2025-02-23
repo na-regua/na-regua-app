@@ -11,7 +11,6 @@ import {OnTicketServiceInfo} from '@/screens/CustomerOnTicket/components';
 import {OnTicketIconWrapperStyled} from '@/screens/CustomerOnTicket/styles';
 import {AppDispatch} from '@/store/Store';
 import {TicketViewActions} from '@/store/slicers';
-import {Metrics} from '@/theme';
 import React, {useMemo, useState} from 'react';
 import {
   FadeIn,
@@ -84,7 +83,7 @@ const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
         onPress={event => {
           event.stopPropagation();
         }}
-        paddingBottom={insets.bottom + Metrics.platformPadding}
+        paddingBottom={insets.bottom}
         entering={SlideInDown.delay(100)}
         exiting={SlideOutDown.duration(300)}>
         <Box gap={6}>

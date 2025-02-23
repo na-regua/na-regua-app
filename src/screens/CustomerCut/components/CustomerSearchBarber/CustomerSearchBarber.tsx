@@ -1,8 +1,8 @@
-import {BarbersService} from '@/app/api';
+import {BarbersService, emitErrorNotification} from '@/app/api';
 import {IBarber, PaginatedFilter} from '@/app/models';
 import {BarberInfoCard, Box, Button, Icons, Loader} from '@/components/atoms';
 import {AppDispatch} from '@/store/Store';
-import {CutActions, createNotification} from '@/store/slicers';
+import {CutActions} from '@/store/slicers';
 import {Colors} from '@/theme';
 import {AxiosError} from 'axios';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
@@ -12,7 +12,6 @@ import {
   Keyboard,
   ListRenderItemInfo,
   TextInput,
-  TouchableWithoutFeedback,
   ViewStyle,
 } from 'react-native';
 import {Portal} from 'react-native-portalize';
@@ -21,7 +20,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch} from 'react-redux';
 import {CodeInputStyled} from '../../styles';
 import {FavoriteItemStyled} from '../CustomerSelectBarber/styles';
-import {FlatListStyled} from './styles';
+import {CSBStyles, FlatListStyled, TouchableWFStyled} from './styles';
 
 interface CustomerSearchBarberProps {
   dismiss: () => void;
@@ -45,7 +44,7 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
   // infinite scroll
   const [totalItems, setTotalItems] = useState(0);
   const [pagination, setPagination] = useState<PaginatedFilter>({
-    limit: 1,
+    limit: 10,
     offset: 0,
   });
 
@@ -78,12 +77,17 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
         pagination,
       );
 
+      console.log('data', data.total);
+
       const {content, total} = data;
 
       setTotalItems(total);
+      setPagination(curr => ({
+        ...curr,
+      }));
 
       if (content.length > 0) {
-        setBarbers(curr => [...curr, ...content]);
+        setBarbers(content);
       }
 
       if (content.length === 0) {
@@ -95,17 +99,7 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
       setLoading(false);
 
       if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'list_barbers',
-              message: `errors.${message}`,
-              type: 'error',
-            }),
-          );
-        }
+        emitErrorNotification(error);
       }
     }
   };
@@ -114,8 +108,10 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
     if (hasNext) {
       setPagination(curr => ({
         ...curr,
-        offset: curr.offset + curr.limit,
+        limit: curr.limit + curr.limit,
       }));
+
+      fetchBarbers();
     }
   };
 
@@ -152,13 +148,12 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
 
   return (
     <Portal>
-      <TouchableWithoutFeedback
+      <TouchableWFStyled
         onPress={() => {
           if (Keyboard.isVisible()) {
             Keyboard.dismiss();
           }
-        }}
-        style={{flex: 1, zIndex: 5}}>
+        }}>
         <Box
           style={insetsStyle}
           alignSelf="stretch"
@@ -201,19 +196,16 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
               }
               variant="ghost"
               colorScheme="danger"
-              style={{
-                width: 44,
-                height: 44,
-              }}
+              style={CSBStyles.dismiss}
             />
           </Box>
 
           <FlatListStyled
             as={FlatList<IBarber>}
             data={barbers}
+            showsVerticalScrollIndicator={false}
             renderItem={renderFavorite}
             onEndReached={fetchNextList}
-            onEndReachedThreshold={0.8}
             ListFooterComponent={
               <Box alignItems="center">
                 {loading && <Loader size="100" color={Colors.main} />}
@@ -221,7 +213,7 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
             }
           />
         </Box>
-      </TouchableWithoutFeedback>
+      </TouchableWFStyled>
     </Portal>
   );
 };

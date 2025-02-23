@@ -26,6 +26,7 @@ export interface ICreateUser {
 
 export interface ICreateCustomerUser {
   name: string;
+  email: string;
   phone: string;
 }
 

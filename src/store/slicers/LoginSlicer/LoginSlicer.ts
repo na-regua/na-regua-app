@@ -26,7 +26,7 @@ const LoginSlicer = createSlice<
   initialState: {
     steps: 'welcome',
     barberMethod: 'e-mail',
-    customerMethod: 'phone',
+    customerMethod: 'e-mail',
   },
   reducers: {
     setLoginStep: (state, action: GenericAction<TLoginSteps>) => {

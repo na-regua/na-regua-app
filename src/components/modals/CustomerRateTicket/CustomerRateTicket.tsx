@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@/components/atoms';
 import {AppDispatch} from '@/store/Store';
-import {createNotification} from '@/store/slicers';
+import {createNotification, TicketViewActions} from '@/store/slicers';
 import {AxiosError} from 'axios';
 import {format} from 'date-fns';
 import React, {useMemo, useState} from 'react';
@@ -51,7 +51,13 @@ const CustomerRateTicketModal: React.FC<CustomerRateTicketModalProps> = ({
     try {
       setIsSendingRate(true);
 
-      await TicketsService.rateById(ticket._id, ticketRating, true);
+      const {data} = await TicketsService.rateById(
+        ticket._id,
+        ticketRating,
+        true,
+      );
+
+      dispatch(TicketViewActions.setTicket(data.ticket));
 
       setIsSendingRate(false);
 

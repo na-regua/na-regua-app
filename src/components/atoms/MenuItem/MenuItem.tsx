@@ -22,6 +22,7 @@ interface IMenuItemProps {
   collapsed?: boolean;
   actionsWidth?: number;
   width?: number;
+  customInfo?: React.ReactNode;
 
   suffix?: React.ReactNode;
 }
@@ -39,6 +40,7 @@ const MenuItem: React.FC<IMenuItemProps> = ({
   actionsWidth,
   width = Metrics.smPadding,
   suffix,
+  customInfo,
 }) => {
   const originalWidth = width;
   const gap = 12;
@@ -96,7 +98,7 @@ const MenuItem: React.FC<IMenuItemProps> = ({
 
         {icon && <IconWrapperStyle>{icon}</IconWrapperStyle>}
 
-        {(title || description) && (
+        {!customInfo && (title || description) && (
           <View>
             {title && (
               <Typography variant="body1" color="black3">
@@ -110,6 +112,8 @@ const MenuItem: React.FC<IMenuItemProps> = ({
             )}
           </View>
         )}
+
+        {!!customInfo && customInfo}
       </Box>
 
       <>{!!suffix && suffix}</>

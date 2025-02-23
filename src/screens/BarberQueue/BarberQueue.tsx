@@ -1,7 +1,7 @@
 import {QueueService} from '@/app/api';
-import {AppStatusBar, Button, Carousel, Modal} from '@/components/atoms';
-import {WorkerJoinQueueModal} from '@/components/modals';
+import {AppStatusBar, Button, Carousel, Typography} from '@/components/atoms';
 import {
+  BarberQueuePreview,
   Header,
   QueueCarouselBillingItem,
   QueueCarouselNotificationsItem,
@@ -11,14 +11,13 @@ import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
 import {QueueActions, QueueThunks, createNotification} from '@/store/slicers';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useIsFocused} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AxiosError} from 'axios';
 import React, {useEffect, useRef} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {QueueContainerStyled, QueueScrollContentStyled} from './styles';
-import {Metrics} from '@/theme';
-import {useIsFocused} from '@react-navigation/native';
 
 const BarberQueue: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/barber/queue'>
@@ -101,27 +100,39 @@ const BarberQueue: React.FC<
         <Header.Border />
       </Header.Container>
       <QueueScrollContentStyled>
-        <Carousel
-          items={[
-            {
-              element: <QueueCarouselQRItem />,
-            },
-            {
-              element: <QueueCarouselNotificationsItem />,
-            },
-            {
-              element: <QueueCarouselBillingItem />,
-            },
-          ]}
-        />
+        {!todayQueue && (
+          <>
+            <Carousel
+              items={[
+                {
+                  element: <QueueCarouselQRItem />,
+                },
+                {
+                  element: <QueueCarouselNotificationsItem />,
+                },
+                {
+                  element: <QueueCarouselBillingItem />,
+                },
+              ]}
+            />
 
-        <Button
-          title="barber.queue.buttons.start"
-          loading={loadingTodayQueue}
-          onPress={handleStartQueue}
-        />
+            <Button
+              title="barber.queue.buttons.start"
+              loading={loadingTodayQueue}
+              onPress={handleStartQueue}
+            />
+          </>
+        )}
+        {!!todayQueue && (
+          <>
+            <Typography variant="h4" color="black2">
+              {'barber.queue.preview.title'}
+            </Typography>
+            <BarberQueuePreview queue={todayQueue} />
+          </>
+        )}
       </QueueScrollContentStyled>
-      <Modal
+      {/* <Modal
         ref={joinQueueModalRef}
         title="modals.joinQueue.title"
         height={194 + Metrics.platformPadding}>
@@ -131,7 +142,7 @@ const BarberQueue: React.FC<
             navigation.navigate(route as any);
           }}
         />
-      </Modal>
+      </Modal> */}
     </QueueContainerStyled>
   );
 };

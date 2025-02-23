@@ -20,14 +20,14 @@ import {
   CustomBottomSheetStyled,
 } from './styles';
 
-interface ICustomerJoinTodayQueueProps {
+interface ICustomerSelectedBarberProps {
   onBack: () => void;
   onContinue?: () => void;
   loading?: boolean;
   barber: IBarber;
 }
 
-const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
+const CustomerSelectedBarber: React.FC<ICustomerSelectedBarberProps> = ({
   onBack,
   onContinue,
   barber,
@@ -85,4 +85,4 @@ const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
   );
 };
 
-export default CustomerJoinTodayQueue;
+export default CustomerSelectedBarber;

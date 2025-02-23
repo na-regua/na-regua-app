@@ -50,6 +50,7 @@ import StarIcon from './StarIcon/StarIcon';
 import HeartIcon from './HeartIcon/HeartIcon';
 import MicIcon from './MicIcon/MicIcon';
 import CloseIcon from './CloseIcon/CloseIcon';
+import DotsHorizontalIcon from './DotsHorizontalIcon/DotsHorizontalIcon';
 
 export interface IIconProps {
   width?: number;
@@ -114,4 +115,5 @@ export default {
   HeartIcon,
   MicIcon,
   CloseIcon,
+  DotsHorizontalIcon,
 };

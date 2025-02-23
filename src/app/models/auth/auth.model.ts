@@ -10,8 +10,17 @@ export interface ILoginPhone {
   phone: string;
 }
 
+export interface ILoginEmailCode {
+  email: string;
+}
+
 export interface IVerifyCode {
   phone: string;
+  code: string;
+}
+
+export interface IVerifyEmailCode {
+  email: string;
   code: string;
 }
 

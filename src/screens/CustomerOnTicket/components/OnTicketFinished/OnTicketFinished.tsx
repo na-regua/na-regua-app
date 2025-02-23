@@ -10,7 +10,7 @@ import {
 import {CustomerRateTicketModal} from '@/components/modals';
 import {Colors, Metrics} from '@/theme';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   LineStyled,
   OnTicketActionsStyled,
@@ -25,13 +25,21 @@ import {OnTicketServiceInfo} from '../OnTicketServiceInfo/OnTicketServiceInfo';
 import {format} from 'date-fns';
 import {useTranslation} from 'react-i18next';
 
-const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({ticket}) => {
+const OnTicketFinished: React.FC<OnTicketGeneralProps> = ({
+  ticket,
+  cleanSocketEvents,
+}) => {
   const {t} = useTranslation();
   const rateModalRef = useRef<BottomSheetModal>(null);
 
   const showRateModal = () => {
     rateModalRef.current?.present();
   };
+
+  useEffect(() => {
+    cleanSocketEvents && cleanSocketEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box gap={18}>

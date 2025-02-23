@@ -51,6 +51,8 @@ export interface ITicketViewState {
 export interface OnTicketGeneralProps {
   ticket: ITicket;
   hasAdditionalServices?: boolean;
+
+  cleanSocketEvents?: () => void;
 }
 
 export interface IGetTodayTickets {

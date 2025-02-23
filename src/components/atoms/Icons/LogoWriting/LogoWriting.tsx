@@ -8,10 +8,14 @@ interface ILogoWritingProps extends IIconProps {}
 
 const LogoWritingIcon: React.FC<ILogoWritingProps> = ({
   width = 260,
-  height = 60,
   color = 'primary',
   customColor,
 }) => {
+  const aspectRatio = 260 / 60;
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const height = useMemo(() => width / aspectRatio, [width]);
+
   const getColor = useMemo(
     () => (customColor ? customColor : Colors[color]),
     [color, customColor],

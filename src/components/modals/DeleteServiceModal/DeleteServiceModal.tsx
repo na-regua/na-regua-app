@@ -84,16 +84,18 @@ const DeleteServiceModal: React.FC<IDeleteServiceModalProps> = ({
         <Button
           colorScheme="default"
           variant="outlined"
-          title={t('modals.deleteService.buttons.no')}
-          style={styles.flex}
+          title="modals.deleteService.buttons.no"
+          style={[styles.flex]}
           onPress={cancel}
+          size="small"
         />
         <Button
           colorScheme="danger"
-          title={t('modals.deleteService.buttons.yes')}
+          title="modals.deleteService.buttons.yes"
           loading={loading}
           onPress={deleteWorker}
           style={styles.flex}
+          size="small"
         />
       </ModalActionsStyle>
     </ModalContainerStyle>

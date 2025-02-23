@@ -1,4 +1,4 @@
-import {TOnQueueViewModes} from '@/app/models';
+import {IQueue, TOnQueueViewModes} from '@/app/models';
 import {Icons, Typography} from '@/components/atoms';
 import {AppDispatch, RootState} from '@/store/Store';
 import {QueueActions, QueueThunks} from '@/store/slicers';
@@ -22,6 +22,12 @@ import {
   OnQueueTitleGroupStyled,
   OnQueueTitleStyled,
 } from './styles';
+
+export const QUEUE_STATUS_COLOR: Record<IQueue['status'], TColorsType> = {
+  on: 'success',
+  paused: 'default',
+  off: 'danger',
+};
 
 const BarberOnQueueHeader = () => {
   const {t} = useTranslation();

@@ -25,7 +25,8 @@ export function queryBuilder(
     if (
       params.hasOwnProperty(key) &&
       params[key] !== undefined &&
-      params[key] !== null
+      params[key] !== null &&
+      params[key] !== ''
     ) {
       query.push(`${key}=${params[key]}`);
     }

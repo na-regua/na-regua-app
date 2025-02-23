@@ -1,6 +1,6 @@
-import {ServicesService} from '@/app/api';
+import {emitErrorNotification, ServicesService} from '@/app/api';
 import {IBarberServiceForm} from '@/app/models';
-import {Icons, Input, Typography} from '@/components/atoms';
+import {Checkbox, Icons, Input, Typography} from '@/components/atoms';
 import {AppDispatch} from '@/store/Store';
 import {createNotification} from '@/store/slicers';
 import {numberMask} from '@/utils';
@@ -74,19 +74,8 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
       }
     } catch (error) {
       setLoading(false);
-
       if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'add-service',
-              type: 'error',
-              message: `errors.${message}`,
-            }),
-          );
-        }
+        emitErrorNotification(error);
       }
     }
   };
@@ -134,7 +123,8 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
       formValues.name !== initialValues?.name ||
       formValues.duration_in_minutes !== initialValues?.duration_in_minutes ||
       formValues.price !== initialValues?.price ||
-      formValues.icon !== initialValues?.icon,
+      formValues.icon !== initialValues?.icon ||
+      formValues.additional !== initialValues?.additional,
     [formValues, initialValues],
   );
 
@@ -217,6 +207,18 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
               onSubmitEditing={() =>
                 fieldsRef.durationInMinutes.current?.blur()
               }
+            />
+          )}
+        />
+
+        <Controller
+          name="additional"
+          control={control}
+          render={({field: {onChange, value}}) => (
+            <Checkbox
+              label="modals.barberService.fields.additional"
+              onChange={v => onChange(v)}
+              value={value}
             />
           )}
         />

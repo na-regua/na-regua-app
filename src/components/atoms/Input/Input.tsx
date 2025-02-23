@@ -30,6 +30,7 @@ const Input: React.FC<IInputProps> = ({
   onChangeText,
   value,
   inputRef,
+  editable = true,
   ...inputProps
 }) => {
   const {t} = useTranslation();
@@ -62,7 +63,7 @@ const Input: React.FC<IInputProps> = ({
   return (
     <InputWrapperStyle style={wrapperStyle}>
       {active && (
-        <InputLabelStyle focused={isFocused}>
+        <InputLabelStyle editable={editable} focused={isFocused}>
           {label && t(label)}
         </InputLabelStyle>
       )}
@@ -73,6 +74,7 @@ const Input: React.FC<IInputProps> = ({
         borderColor={textStyle?.borderColor}
         autoCorrect={false}
         spellCheck={false}
+        editable={editable}
         onFocus={handleFocus}
         placeholder={
           (placeholder && t(placeholder)) || (isFocused ? '' : t(label))

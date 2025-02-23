@@ -5,7 +5,7 @@ import {
   QRCode,
   Typography,
 } from '@/components/atoms';
-import {ShareQRModal} from '@/components/molecules';
+import {ShareQRModal} from '@/components/modals';
 import {useAppNavigation} from '@/navigation';
 import {RootState} from '@/store/Store';
 import colors from '@/theme/colors';

@@ -1,9 +1,8 @@
-import {Colors} from '@/theme';
+import {Colors, hexPercentage} from '@/theme';
 import {ViewStyle} from 'react-native';
 import styled, {css} from 'styled-components/native';
 import {RuleSet} from 'styled-components/native/dist/types';
 import {TButtonColorScheme, TButtonSizes, TButtonVariants} from './Button';
-import {hexPercentage} from '@/theme/';
 
 export const ButtonThemeColor: Record<TButtonColorScheme, string> = {
   main: Colors.main,
@@ -75,14 +74,17 @@ const VariantsButton: Record<TButtonVariants, RuleSet<any>> = {
 const SizesButton: Record<TButtonSizes, RuleSet<any>> = {
   small: css`
     max-height: 38px;
-    padding: 8px;
+    height: 38px;
+    padding: 10px;
   `,
   medium: css`
     max-height: 44px;
+    height: 44px;
     padding: 12px 16px;
   `,
   large: css`
     max-height: 56px;
+    height: 56px;
     padding: 16px 20px;
   `,
 };

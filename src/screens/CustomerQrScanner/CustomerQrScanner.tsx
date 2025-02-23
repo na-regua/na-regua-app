@@ -96,6 +96,8 @@ const CustomerQrScanner: React.FC<
     const {value} = code;
 
     if (value) {
+      console.log(code);
+
       const replaced = value.replace(LinkingPrefixes.Default, '').split('/')[1];
 
       const {data} = await BarbersService.getBarbers(replaced);

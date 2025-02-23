@@ -1,6 +1,7 @@
 import {
   IGetTicketsHistory,
   IGetTodayTickets,
+  ITicket,
   ITicketRate,
   PaginatedFilter,
 } from '@/app/models';
@@ -25,7 +26,7 @@ const rateById = async (
   ticketId: string,
   rate: ITicketRate,
   on_queue: boolean = false,
-): Promise<AxiosResponse<null>> => {
+): Promise<AxiosResponse<{ticket: ITicket}>> => {
   try {
     const url = mapPathVariables(ENDPOINTS.TICKETS_RATE, {ticketId});
 

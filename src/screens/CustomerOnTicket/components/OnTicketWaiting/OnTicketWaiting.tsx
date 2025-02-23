@@ -5,7 +5,6 @@ import React from 'react';
 import {
   LineStyled,
   OnTicketActionsStyled,
-  OnTicketCardGroupStyled,
   OnTicketCardStyled,
 } from '../../styles';
 import {OnTicketServiceInfo} from '../OnTicketServiceInfo/OnTicketServiceInfo';
@@ -30,13 +29,16 @@ const OnTicketWaiting: React.FC<OnTicketGeneralProps> = ({ticket}) => {
         </Typography>
       </Box>
       <OnTicketCardStyled>
-        <OnTicketCardGroupStyled>
-          <Box gap={18}>
-            <BarberInfoCard barber={ticket.barber} />
-            <LineStyled />
+        <Box gap={18} padding={18}>
+          <BarberInfoCard barber={ticket.barber} />
+          <LineStyled />
+          <Box gap={12}>
+            <Typography variant="body1" color="black2">
+              {'customer.onTicket.subtitles.attendanceInfo'}
+            </Typography>
             <OnTicketServiceInfo service={ticket.service} />
           </Box>
-        </OnTicketCardGroupStyled>
+        </Box>
       </OnTicketCardStyled>
       <OnTicketActionsStyled>
         <Button title="buttons.leave" fillSpace colorScheme="danger" />

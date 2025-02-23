@@ -24,6 +24,7 @@ export const InputWrapperStyle = styled.View`
 
 export const InputLabelStyle = styled.Text<{
   focused?: boolean;
+  editable?: boolean;
 }>`
   position: absolute;
   background-color: ${Colors.bgLight};
@@ -35,6 +36,13 @@ export const InputLabelStyle = styled.Text<{
   font-size: 12px;
   font-family: ${Fonts.types.medium};
   font-weight: ${Fonts.weights.medium};
+
+  ${({editable}) =>
+    !editable &&
+    `
+    color: ${Colors.black2};
+    background-color: transparent;
+  `}
 `;
 
 export const InputStyle = styled.TextInput<{
@@ -67,5 +75,13 @@ export const InputStyle = styled.TextInput<{
     focused &&
     `
     border-color: ${Colors.main};
+  `}
+
+  ${({editable}) =>
+    !editable &&
+    `
+  background: ${Colors.disabled};
+  border-color: transparent;
+  color: ${Colors.black2};
   `}
 `;

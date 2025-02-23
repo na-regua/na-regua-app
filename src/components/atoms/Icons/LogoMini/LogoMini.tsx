@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {IIconProps} from '../Icons';
 import {IconTouchableViewStyle} from '../styles';
 import {ClipPath, Defs, G, Path, Rect, Svg} from 'react-native-svg';
@@ -12,13 +12,15 @@ const LogoMiniIcon: React.FC<ILogoMiniProps> = ({
   disabled,
   wrapperStyle,
 }) => {
+  const size = useMemo(() => width || height, [width, height]);
+
   return (
     <IconTouchableViewStyle
       activeOpacity={0.6}
       onPress={onPress}
       disabled={disabled}
       style={{width, height, ...wrapperStyle}}>
-      <Svg width={width} height={height} viewBox="0 0 512 512" fill="none">
+      <Svg width={size} height={size} viewBox="0 0 512 512" fill="none">
         <G clip-path="url(#clip0_1201_1569)">
           <Path
             d="M453.438 0H58.5622C26.2192 0 0 26.9683 0 60.2353V451.765C0 485.032 26.2192 512 58.5622 512H453.438C485.781 512 512 485.032 512 451.765V60.2353C512 26.9683 485.781 0 453.438 0Z"
