@@ -3,12 +3,7 @@ import {AppStatusBar, Avatar, Icons, Typography} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {
-  ACCESS_TOKEN_KEY,
-  SocketActions,
-  getCurrentUser,
-  logout,
-} from '@/store/slicers';
+import {AuthThunks, SocketActions, logout} from '@/store/slicers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {ReactNode, useMemo, useState} from 'react';
@@ -27,6 +22,7 @@ import {
   ScrollContentStyle,
   styles,
 } from './styles';
+import {ACCESS_TOKEN_KEY} from '@/app/models';
 
 type TCustomerSettingsMenuType =
   | 'profile'
@@ -156,7 +152,7 @@ const CustomerSettings: React.FC<
     try {
       await FilesService.updateUserAvatarFile(user.avatar._id, _file);
 
-      await dispatch(getCurrentUser());
+      await dispatch(AuthThunks.getCurrentUser());
 
       setChangingAvatar(false);
     } catch (error) {

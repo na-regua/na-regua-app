@@ -6,11 +6,10 @@ import {Asset} from 'react-native-image-picker';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {FilesService} from '@/app/api';
-import {IFile} from '@/app/models';
+import {IFile, ModalSizes} from '@/app/models';
 import {EditPictureModal} from '@/components/modals';
-import {createNotification, getCurrentUser} from '@/store/slicers';
+import {AuthThunks} from '@/store/slicers';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {AxiosError} from 'axios';
 import {
   CardGroupStyle,
   CardStyle,
@@ -48,27 +47,12 @@ const UpdateBarberThumbs = () => {
       const res = await FilesService.uploadBarberThumbs(files);
 
       if (res) {
-        await dispatch(getCurrentUser());
+        await dispatch(AuthThunks.getCurrentUser());
       }
 
       setIsUploading(false);
     } catch (error) {
       setIsUploading(false);
-
-      if (error instanceof AxiosError) {
-        if (error.response?.data && error.response?.data.message) {
-          const {message} = error.response?.data;
-          if (message) {
-            dispatch(
-              createNotification({
-                id: 'send-whatsapp-code-error',
-                type: 'error',
-                message: `errors.${message}`,
-              }),
-            );
-          }
-        }
-      }
     }
   };
 
@@ -107,7 +91,7 @@ const UpdateBarberThumbs = () => {
         const res = await FilesService.updateBarberThumbFile(thumbId, newFile);
 
         if (res) {
-          await dispatch(getCurrentUser());
+          await dispatch(AuthThunks.getCurrentUser());
 
           editPictureModalRef.current?.dismiss();
         }
@@ -116,21 +100,6 @@ const UpdateBarberThumbs = () => {
       }
     } catch (error) {
       setIsOverriding(false);
-
-      if (error instanceof AxiosError) {
-        if (error.response?.data && error.response?.data.message) {
-          const {message} = error.response?.data;
-          if (message) {
-            dispatch(
-              createNotification({
-                id: 'send-whatsapp-code-error',
-                type: 'error',
-                message: `errors.${message}`,
-              }),
-            );
-          }
-        }
-      }
     }
   };
 
@@ -141,7 +110,7 @@ const UpdateBarberThumbs = () => {
       const res = await FilesService.deleteBarberThumb(thumbId);
 
       if (res) {
-        await dispatch(getCurrentUser());
+        await dispatch(AuthThunks.getCurrentUser());
 
         if (editPictureModalRef.current) {
           editPictureModalRef.current.dismiss();
@@ -191,7 +160,7 @@ const UpdateBarberThumbs = () => {
         </FileUploadRowStyle>
       </CardStyle>
 
-      <Modal ref={editPictureModalRef} height={292}>
+      <Modal ref={editPictureModalRef} height={ModalSizes.EditProfilePicture}>
         {selectedToEdit && (
           <EditPictureModal
             picture={selectedToEdit.url}

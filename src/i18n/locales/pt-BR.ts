@@ -336,6 +336,7 @@ const ptBr = {
           title: 'Recentes',
         },
         favorites: 'Suas favoritas!',
+        noFavorites: 'Ops... Nenhuma barbearia favorita. Busque e adicione!',
       },
       attendance: {
         title: 'Atendimento',
@@ -384,6 +385,8 @@ const ptBr = {
         schedule: 'Agendamento',
         finished: 'Finalizado',
         missed: 'Ops...',
+        yourTime: 'Chegou sua vez!',
+        paused: 'Ops... a fila foi pausada.',
       },
       subtitles: {
         pending:
@@ -630,6 +633,15 @@ const ptBr = {
         rate: 'Enviar',
       },
     },
+    muteNotifications: {
+      title: 'Notificações',
+      subtitle:
+        'Ao clicar em ”Quero Sim!” você irá receber notificações durante o atendimento, caso deseja desativar, clique em ”Quero Não!”.',
+      buttons: {
+        yes: 'Quero Sim!',
+        no: 'Quero Não!',
+      },
+    },
   },
   units: {
     minutes: 'minutos',
@@ -832,6 +844,8 @@ const ptBr = {
     USER_ALREADY_IN_QUEUE: 'Ops! Você já está nessa fila.',
     USER_ALREADY_IN_OTHER_QUEUE: 'Ops! Você está em outra fila.',
     TICKET_NOT_FOUND: 'Ticket não encontrado.',
+
+    INVALID_USER: 'Usuário inválido.',
   },
   notifications: {
     success: {

@@ -1,4 +1,3 @@
-export * from './AuthSlicer/AuthSlicer';
 export * from './ConfigSlicer/ConfigSlicer';
 export * from './CutSlicer/';
 export * from './LoginSlicer/LoginSlicer';
@@ -7,3 +6,4 @@ export * from './SocketSlicer/SocketSlicer';
 export * from './TicketViewSlicer/TicketViewSlicer';
 export * from './QueueSlicer';
 export * from './TicketHistorySlicer';
+export * from './AuthSlicer';

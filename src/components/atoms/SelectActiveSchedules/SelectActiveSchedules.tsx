@@ -1,4 +1,4 @@
-import {IBarberCreateSchedule, TWorkTime} from '@/app/models';
+import {IBarberCreateSchedule, ModalSizes, TWorkTime} from '@/app/models';
 import {
   generateRecommendedTime,
   sortSchedulesByTime,
@@ -174,7 +174,7 @@ const SelectActiveSchedules: React.FC<ISelectActiveSchedulesProps> = ({
       <Modal
         ref={addScheduleModalRef}
         title={t('modals.addScheduleTime.title')}
-        height={190}>
+        height={ModalSizes.AddScheduleTime}>
         <Input
           label={t('modals.addScheduleTime.fields.time')}
           onChangeText={text => {

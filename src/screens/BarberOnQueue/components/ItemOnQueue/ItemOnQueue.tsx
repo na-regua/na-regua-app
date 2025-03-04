@@ -7,12 +7,10 @@ import {
   MenuItemAction,
   Typography,
 } from '@/components/atoms';
-import {AppDispatch, RootState} from '@/store/Store';
-import {createNotification} from '@/store/slicers';
-import {AxiosError} from 'axios';
+import {RootState} from '@/store/Store';
 import React, {useMemo, useState} from 'react';
 import {FadeInRight} from 'react-native-reanimated';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 const ItemTicketOnQueue: React.FC<
   ITicket & {
@@ -31,8 +29,6 @@ const ItemTicketOnQueue: React.FC<
   const [actionsHeight, setActionsHeight] = useState<number>(58);
   const {todayQueue} = useSelector((state: RootState) => state.queue);
   const [missing, setMissing] = useState(false);
-
-  const dispatch = useDispatch<AppDispatch>();
 
   const services = useMemo(
     () =>
@@ -70,19 +66,6 @@ const ItemTicketOnQueue: React.FC<
       setMissing(false);
     } catch (error) {
       setMissing(false);
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'missing_ticket',
-              message: `errors.${message}`,
-              type: 'error',
-            }),
-          );
-        }
-      }
     }
   };
 

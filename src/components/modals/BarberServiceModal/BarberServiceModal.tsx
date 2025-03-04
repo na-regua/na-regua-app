@@ -2,7 +2,6 @@ import {emitErrorNotification, ServicesService} from '@/app/api';
 import {IBarberServiceForm} from '@/app/models';
 import {Checkbox, Icons, Input, Typography} from '@/components/atoms';
 import {AppDispatch} from '@/store/Store';
-import {createNotification} from '@/store/slicers';
 import {numberMask} from '@/utils';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {AxiosError} from 'axios';
@@ -99,20 +98,6 @@ const BarberServiceModal: React.FC<IWorkerModalProps> = ({
           }
         }
       } catch (error) {
-        if (error instanceof AxiosError) {
-          const {message} = error.response?.data;
-
-          if (message) {
-            dispatch(
-              createNotification({
-                id: 'update-service',
-                type: 'error',
-                message: `errors.${message}`,
-              }),
-            );
-          }
-        }
-
         setLoading(false);
       }
     }

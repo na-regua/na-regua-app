@@ -21,6 +21,7 @@ import {useDispatch} from 'react-redux';
 import {CodeInputStyled} from '../../styles';
 import {FavoriteItemStyled} from '../CustomerSelectBarber/styles';
 import {CSBStyles, FlatListStyled, TouchableWFStyled} from './styles';
+import {CacheManager} from '@georstat/react-native-image-cache';
 
 interface CustomerSearchBarberProps {
   dismiss: () => void;
@@ -77,8 +78,6 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
         pagination,
       );
 
-      console.log('data', data.total);
-
       const {content, total} = data;
 
       setTotalItems(total);
@@ -87,6 +86,13 @@ const CustomerSearchBarber: React.FC<CustomerSearchBarberProps> = ({
       }));
 
       if (content.length > 0) {
+        content.forEach((item: IBarber) => {
+          if (item.avatar.url) {
+            CacheManager.prefetch(item.avatar.url);
+          }
+          return item;
+        });
+
         setBarbers(content);
       }
 

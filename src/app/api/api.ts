@@ -1,12 +1,13 @@
-import {ACCESS_TOKEN_KEY} from '@/store/slicers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, {AxiosError} from 'axios';
 import {onUnauthorizedResponse} from './interceptors';
+import {ACCESS_TOKEN_KEY} from '../models';
+import {emitErrorNotification} from './emitErrorNotification';
 
 export let API_ORIGIN = 'https://na-regua-api.onrender.com/';
 API_ORIGIN = 'http://localhost:8080/';
-// API_ORIGIN = 'http://192.168.0.3:8080/';
-API_ORIGIN = 'http://192.168.1.23:8080/';
+API_ORIGIN = 'http://192.168.0.5:8080/';
+// API_ORIGIN = 'http://192.168.1.23:8080/';
 
 export function errToAxiosError(err: any): AxiosError {
   const {message, code, config, request, response} = err;
@@ -31,5 +32,10 @@ api.interceptors.request.use(async config => {
 });
 
 api.interceptors.response.use(undefined, onUnauthorizedResponse);
+api.interceptors.response.use(undefined, error => {
+  if (error instanceof AxiosError) {
+    emitErrorNotification(error);
+  }
+});
 
 export default api;

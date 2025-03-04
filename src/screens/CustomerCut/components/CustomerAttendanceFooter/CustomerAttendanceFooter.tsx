@@ -2,19 +2,13 @@ import {QueueService} from '@/app/api';
 import {Button, Icons, Typography} from '@/components/atoms';
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {
-  CutActions,
-  CutThunks,
-  TicketViewActions,
-  createNotification,
-} from '@/store/slicers';
+import {CutActions, CutThunks, TicketViewActions} from '@/store/slicers';
 import React, {useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   OtherButtonContentStyled,
   PageCardFooterStyled,
 } from '../CustomerAttendance/styles';
-import {AxiosError} from 'axios';
 
 const CustomerAttendanceFooter = () => {
   const {
@@ -68,20 +62,6 @@ const CustomerAttendanceFooter = () => {
         }
       } catch (error) {
         setJoining(false);
-
-        if (error instanceof AxiosError) {
-          const {message} = error.response?.data;
-
-          if (message) {
-            dispatch(
-              createNotification({
-                id: 'join_queue',
-                type: 'error',
-                message: `errors.${message}`,
-              }),
-            );
-          }
-        }
       }
     }
   };

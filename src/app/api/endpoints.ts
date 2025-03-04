@@ -31,6 +31,7 @@ enum ENDPOINTS {
   USERS_VERIFY_WHATSAPP_CODE = '/users/verify/whatsapp',
   USERS_DELETE = '/users/:id',
   USERS_FAVORITE_BARBER = '/users/favorite/:barberId',
+  USERS_MUTE_NOTIFICATIONS = '/users/mute-notifications',
 
   /**
    * Files

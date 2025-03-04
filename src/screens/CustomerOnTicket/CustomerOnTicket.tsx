@@ -1,12 +1,15 @@
-import {SocketUrls} from '@/app/models';
-import {Box, Button, Icons, Modal, Typography} from '@/components/atoms';
+import {NotificationService} from '@/app/api';
+import {ISocketEvent, ModalSizes, SocketUrls} from '@/app/models';
+import {Icons, Modal} from '@/components/atoms';
+import {MuteNotificationsModal} from '@/components/modals';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {CutThunks, TicketViewActions} from '@/store/slicers';
+import {CutThunks, SocketActions, TicketViewActions} from '@/store/slicers';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -22,6 +25,7 @@ export const OnTicketNotifyNotificationKey = 'onTicketNotify';
 const CustomerOnTicket: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/customer/on-ticket'>
 > = ({navigation}) => {
+  const {t} = useTranslation();
   const insets = useSafeAreaInsets();
 
   const insetsStyles = {
@@ -31,25 +35,22 @@ const CustomerOnTicket: React.FC<
     paddingRight: insets.right,
   };
 
+  const {user} = useSelector((state: RootState) => state.auth);
   const {ticket, queue} = useSelector((state: RootState) => state.ticketView);
-  const {socket, connected} = useSelector((state: RootState) => state.socket);
+  const {socket, connected, subs} = useSelector(
+    (state: RootState) => state.socket,
+  );
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const shouldNotifyModalRef = useRef<BottomSheetModal>(null);
+  const muteNotificationsModalRef = useRef<BottomSheetModal>(null);
 
   const goBack = () => {
     if (ticket?.status === 'served') {
       navigation.navigate('/customer/home');
     }
 
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    }
-
-    if (!navigation.canGoBack()) {
-      navigation.navigate('/customer/home');
-    }
+    navigation.navigate('/customer/home');
 
     if (connected && !!socket && ticket) {
       socket.emit(SocketUrls.UserLeaveTicketChannels, {ticketId: ticket._id});
@@ -60,19 +61,43 @@ const CustomerOnTicket: React.FC<
     if (connected && !!socket && ticket) {
       socket.emit(SocketUrls.UserJoinTicketChannels, {ticketId: ticket._id});
 
-      socket.on(SocketUrls.GetTicket, data => {
-        if (data.ticket) {
-          dispatch(TicketViewActions.setTicket(data.ticket));
-          dispatch(TicketViewActions.setQueue(data.ticket.queue.queue_dto));
-          dispatch(CutThunks.fetchTodayTickets());
-        }
-      });
+      if (!subs.includes(SocketUrls.GetTicket)) {
+        socket.on(SocketUrls.GetTicket, data => {
+          if (data.ticket) {
+            dispatch(TicketViewActions.setTicket(data.ticket));
+            dispatch(TicketViewActions.setQueue(data.ticket.queue.queue_dto));
+            dispatch(CutThunks.fetchTodayTickets());
+          }
+        });
+        dispatch(SocketActions.addSub(SocketUrls.GetTicket));
+      }
 
-      socket.on(SocketUrls.GetQueue, data => {
-        if (data.queue) {
-          dispatch(TicketViewActions.setQueue(data.queue));
-        }
-      });
+      if (!subs.includes(SocketUrls.GetQueue)) {
+        socket.on(SocketUrls.GetQueue, data => {
+          if (data.queue) {
+            dispatch(TicketViewActions.setQueue(data.queue));
+          }
+        });
+        dispatch(SocketActions.addSub(SocketUrls.GetQueue));
+      }
+    }
+  };
+
+  const subscribeToQueueEvents = () => {
+    if (connected && !!socket) {
+      if (!subs.includes(SocketUrls.QueueEvent)) {
+        socket.on(SocketUrls.QueueEvent, (socketEvent: ISocketEvent) => {
+          const {event, data} = socketEvent;
+
+          const translatedMessage = t(`socketEvent.${event}`, data).toString();
+
+          NotificationService.pushNotification({
+            message: translatedMessage,
+          });
+        });
+
+        dispatch(SocketActions.addSub(SocketUrls.QueueEvent));
+      }
     }
   };
 
@@ -80,9 +105,31 @@ const CustomerOnTicket: React.FC<
     if (connected && !!socket) {
       socket.off(SocketUrls.GetTicket);
       socket.off(SocketUrls.GetQueue);
+      socket.off(SocketUrls.QueueEvent);
       socket.emit(SocketUrls.UserLeaveTicketChannels, {ticketId: ticket?._id});
+      dispatch(SocketActions.clearSubs());
     }
   };
+
+  const showMuteNotificationsModal = () => {
+    muteNotificationsModalRef.current?.present();
+  };
+
+  const onChangeMuted = useCallback(() => {
+    if (user?.muted) {
+      socket?.off(SocketUrls.QueueEvent);
+      dispatch(SocketActions.removeSub(SocketUrls.QueueEvent));
+    }
+
+    if (!user?.muted) {
+      subscribeToQueueEvents();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  useEffect(() => {
+    onChangeMuted();
+  }, [onChangeMuted]);
 
   useEffect(() => {
     if (connected) {
@@ -108,12 +155,15 @@ const CustomerOnTicket: React.FC<
         direction="row"
         alignItems="center">
         <Header.GoBack pressables={{back: goBack}} iconColor="black2" />
+
         <Icons.BellIcon
           width={24}
           height={24}
-          color="black2"
+          color={'secondary'}
           strokeWidth={2}
           disabled={false}
+          onPress={showMuteNotificationsModal}
+          fill={!user?.muted}
         />
       </Header.Container>
       <OnTicketContentStyled>
@@ -136,19 +186,14 @@ const CustomerOnTicket: React.FC<
         {/* {ticket.status === 'scheduled' && <OnTicketSchedule ticket={ticket} />} */}
       </OnTicketContentStyled>
       {/* Mute modal */}
-      <Modal ref={shouldNotifyModalRef} height={120}>
-        <Box gap={18}>
-          <Typography variant="body2" color="black2">
-            {'asd'}
-          </Typography>
-          <Box
-            direction="row"
-            gap={18}
-            alignItems="center"
-            justifyContent="space-between">
-            <Button title="asd" />
-          </Box>
-        </Box>
+      <Modal
+        ref={muteNotificationsModalRef}
+        title={t('modals.muteNotifications.title')}
+        height={ModalSizes.MuteNotifications}>
+        <MuteNotificationsModal
+          modalRef={muteNotificationsModalRef}
+          onChangeMuted={onChangeMuted}
+        />
       </Modal>
     </OnTicketContainerStyled>
   );

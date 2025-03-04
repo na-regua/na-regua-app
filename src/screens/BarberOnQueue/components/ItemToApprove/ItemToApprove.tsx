@@ -2,12 +2,8 @@ import React = require('react');
 import {QueueService} from '@/app/api';
 import {ITicket} from '@/app/models';
 import {Button, Typography} from '@/components/atoms';
-import {AppDispatch} from '@/store/Store';
-import {createNotification} from '@/store/slicers';
-import {AxiosError} from 'axios';
 import {useState} from 'react';
 import {View} from 'react-native';
-import {useDispatch} from 'react-redux';
 import {RoundedAvatarStyled} from '../../styles';
 import {
   ToApproveActionStyled,
@@ -25,8 +21,6 @@ const ItemToApprove: React.FC<ItemToApproveProps> = ({
   const [approving, setApproving] = useState(false);
   const [rejecting, setRejecting] = useState(false);
 
-  const dispatch = useDispatch<AppDispatch>();
-
   const {name, avatar} = customer;
 
   const onApprove = async () => {
@@ -38,20 +32,6 @@ const ItemToApprove: React.FC<ItemToApproveProps> = ({
       setApproving(false);
     } catch (error) {
       setApproving(false);
-
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'approve_ticket',
-              message: `errors.${message}`,
-              type: 'error',
-            }),
-          );
-        }
-      }
     }
   };
 
@@ -64,20 +44,6 @@ const ItemToApprove: React.FC<ItemToApproveProps> = ({
       setRejecting(false);
     } catch (error) {
       setRejecting(false);
-
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'reject_ticket',
-              message: `errors.${message}`,
-              type: 'error',
-            }),
-          );
-        }
-      }
     }
   };
 

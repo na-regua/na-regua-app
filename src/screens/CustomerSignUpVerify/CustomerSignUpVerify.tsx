@@ -2,9 +2,9 @@ import {AuthService} from '@/app/api';
 import {AvoidKeyboard, Button, CodeInput, Typography} from '@/components/atoms';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch} from '@/store/Store';
-import {createNotification, setPersistedToken, setUser} from '@/store/slicers';
+import {AuthThunks, setUser} from '@/store/slicers';
+import {CacheManager} from '@georstat/react-native-image-cache';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AxiosError} from 'axios';
 import React, {useMemo, useState} from 'react';
 import {Keyboard} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -16,7 +16,6 @@ import {
   CVHeaderStyled,
   CVNoFeedbackStyled,
 } from './styles';
-import {CacheManager} from '@georstat/react-native-image-cache';
 
 const CustomerSignUpVerify: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/customer/sign-up/verify'>
@@ -51,10 +50,10 @@ const CustomerSignUpVerify: React.FC<
       if (data) {
         const {access_token} = data;
 
-        await dispatch(setPersistedToken(access_token));
+        await dispatch(AuthThunks.setPersistedToken(access_token));
 
         if (data.user) {
-          await dispatch(setPersistedToken(access_token));
+          await dispatch(AuthThunks.setPersistedToken(access_token));
 
           if (data.user.avatar.url) {
             CacheManager.prefetch(data.user.avatar.url);
@@ -73,19 +72,6 @@ const CustomerSignUpVerify: React.FC<
       setIsVerifying(false);
     } catch (error) {
       setIsVerifying(false);
-
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'customer-verify',
-              message: `erro.${message}`,
-              type: 'error',
-            }),
-          );
-        }
-      }
     }
   };
 

@@ -32,7 +32,7 @@ interface ICustomerJoinTodayQueueProps {
   ticket: ITicket;
 }
 
-const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
+const CustomerJoinTodayQueueModal: React.FC<ICustomerJoinTodayQueueProps> = ({
   onBack,
   onContinue,
   ticket,
@@ -140,4 +140,4 @@ const CustomerJoinTodayQueue: React.FC<ICustomerJoinTodayQueueProps> = ({
   );
 };
 
-export default CustomerJoinTodayQueue;
+export default CustomerJoinTodayQueueModal;

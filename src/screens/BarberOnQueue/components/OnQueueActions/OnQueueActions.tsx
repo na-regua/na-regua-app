@@ -2,12 +2,10 @@ import {QueueService} from '@/app/api';
 import {ModalSizes, SocketUrls} from '@/app/models';
 import {Modal, SwipeButton, SwipeButtonState} from '@/components/atoms';
 import {WorkerFinishQueueModal} from '@/components/modals';
-import {AppDispatch, RootState} from '@/store/Store';
-import {createNotification} from '@/store/slicers';
+import {RootState} from '@/store/Store';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {AxiosError} from 'axios';
 import React, {useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {
   OnQueueActionsRowStyled,
   OnQueueActionsStyled,
@@ -19,8 +17,6 @@ type Props = {};
 const OnQueueActions: React.FC<Props> = () => {
   const {todayQueue} = useSelector((state: RootState) => state.queue);
   const {socket} = useSelector((state: RootState) => state.socket);
-
-  const dispatch = useDispatch<AppDispatch>();
 
   const [swiping, setSwiping] = useState<SwipeButtonState>('wait');
 
@@ -58,26 +54,12 @@ const OnQueueActions: React.FC<Props> = () => {
         setTimeout(() => {
           setSwiping('wait');
         });
-      } catch (error) {
+      } catch {
         setSwiping('off');
 
         setTimeout(() => {
           setSwiping('wait');
         });
-
-        if (error instanceof AxiosError) {
-          const {message} = error.response?.data;
-
-          if (message) {
-            dispatch(
-              createNotification({
-                id: 'go_next',
-                type: 'error',
-                message: `errors.${message}`,
-              }),
-            );
-          }
-        }
       }
     }
   };

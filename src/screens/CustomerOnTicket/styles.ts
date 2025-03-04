@@ -16,7 +16,7 @@ export const OnTicketContentStyled = styled.ScrollView.attrs({
 })`
   flex: 1;
 `;
-export const OnTicketCardStyled = styled.View`
+export const OnTicketCardStyled = styled.View<{paused?: boolean}>`
   background: ${Colors.bgLight};
   border-radius: 24px;
   align-self: stretch;

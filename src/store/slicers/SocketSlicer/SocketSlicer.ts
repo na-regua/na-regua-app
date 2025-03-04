@@ -1,6 +1,7 @@
 import {SocketUrls} from '@/app/models';
 import {
   ActionCreatorWithPayload,
+  ActionCreatorWithoutPayload,
   SliceCaseReducers,
   createSlice,
 } from '@reduxjs/toolkit';
@@ -31,6 +32,18 @@ const SocketSlicer = createSlice<
         state.subs.push(action.payload);
       }
     },
+    removeSub: (state, action) => {
+      state.subs = state.subs.filter(sub => sub !== action.payload);
+    },
+    clearSubs: state => {
+      state.subs.forEach(sub => {
+        if (state.socket) {
+          state.socket.off(sub);
+        }
+      });
+
+      state.subs = [];
+    },
     connectSocket: (state, action) => {
       state.socket = action.payload;
       state.connected = true;
@@ -38,12 +51,15 @@ const SocketSlicer = createSlice<
     disconnectSocket: state => {
       state.socket = null;
       state.connected = false;
+      state.subs = [];
     },
   },
 });
 
 export const SocketActions = SocketSlicer.actions as {
   addSub: ActionCreatorWithPayload<SocketUrls>;
+  removeSub: ActionCreatorWithPayload<SocketUrls>;
+  clearSubs: ActionCreatorWithoutPayload;
   connectSocket: ActionCreatorWithPayload<Socket>;
   disconnectSocket: ActionCreatorWithPayload<void>;
 };

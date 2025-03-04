@@ -1,10 +1,4 @@
-import {IFile} from '@/app/models';
-import {
-  ActionCreatorWithPayload,
-  ActionCreatorWithoutPayload,
-  SliceCaseReducers,
-  createSlice,
-} from '@reduxjs/toolkit';
+import {SliceCaseReducers, createSlice} from '@reduxjs/toolkit';
 
 interface IConfigState {}
 
@@ -20,10 +14,6 @@ const ConfigSlicer = createSlice<
 
 const {reducer: ConfigReducer} = ConfigSlicer;
 
-export const {} = ConfigSlicer.actions as {
-  clearConfig: ActionCreatorWithoutPayload;
-  setLoadingFiles: ActionCreatorWithPayload<boolean>;
-  setAvatar: ActionCreatorWithPayload<IFile>;
-};
+export const {} = ConfigSlicer.actions as {};
 
 export {ConfigReducer, ConfigSlicer};

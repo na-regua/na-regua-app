@@ -1,15 +1,11 @@
 import {ServicesService} from '@/app/api';
 import {IBarberService} from '@/app/models';
 import {Button, Typography} from '@/components/atoms';
-import {AppDispatch} from '@/store/Store';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet} from 'react-native';
-import {useDispatch} from 'react-redux';
 import {ModalActionsStyle, ModalContainerStyle} from './styles';
-import {AxiosError} from 'axios';
-import {createNotification} from '@/store/slicers';
 
 interface IDeleteServiceModalProps {
   service?: IBarberService;
@@ -24,7 +20,6 @@ const DeleteServiceModal: React.FC<IDeleteServiceModalProps> = ({
 }) => {
   const {t} = useTranslation();
   const [loading, setLoading] = React.useState<boolean>(false);
-  const dispatch = useDispatch<AppDispatch>();
 
   if (!service) {
     if (modalRef.current) {
@@ -48,23 +43,9 @@ const DeleteServiceModal: React.FC<IDeleteServiceModalProps> = ({
           onClose && onClose(true);
         }
       }
-    } catch (error) {
+    } catch {
       setLoading(false);
       modalRef.current?.dismiss();
-
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'delete-service',
-              type: 'error',
-              message: `errors.${message}`,
-            }),
-          );
-        }
-      }
     }
   };
 

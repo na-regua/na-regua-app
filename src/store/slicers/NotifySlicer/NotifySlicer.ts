@@ -102,12 +102,12 @@ const {reducer} = NotifySlicer;
 export const {
   createNotification,
   removeNotification,
-  changeGetNofiticationFilters,
+  changeGetNotificationFilters,
   setIsLoadingNotifications,
 } = NotifySlicer.actions as {
   createNotification: ActionCreatorWithPayload<INotify>;
   removeNotification: ActionCreatorWithPayload<string>;
-  changeGetNofiticationFilters: ActionCreatorWithPayload<IGetNotificationFilters>;
+  changeGetNotificationFilters: ActionCreatorWithPayload<IGetNotificationFilters>;
   setIsLoadingNotifications: ActionCreatorWithPayload<boolean>;
 };
 

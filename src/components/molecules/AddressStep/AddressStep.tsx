@@ -76,17 +76,13 @@ const AddressStep: React.FC<IAdressStepProps> = ({
         trigger();
       } catch (error) {
         if (error instanceof AxiosError) {
-          const {message} = error;
-
-          if (message) {
-            dispatch(
-              createNotification({
-                id: 'search-cep',
-                type: 'error',
-                message: `errors.${message}`,
-              }),
-            );
-          }
+          dispatch(
+            createNotification({
+              id: 'search-cep',
+              type: 'error',
+              message: 'errors.INVALID_CEP',
+            }),
+          );
         }
       }
     }

@@ -1,8 +1,5 @@
 import {Button} from '@/components/atoms';
-import {
-  BarberLoginMailForm,
-  BarberLoginPhoneForm,
-} from '@/components/molecules';
+import {BarberLoginMailForm} from '@/components/molecules';
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
 import {TUserType, setLoginUserType} from '@/store/slicers';
@@ -59,9 +56,9 @@ const BarberLogin = () => {
         ]}>
         <ContentStyle>
           {barberMethod === 'e-mail' && <BarberLoginMailForm />}
-          {(barberMethod === 'phone' || barberMethod === 'verify-code') && (
+          {/* {(barberMethod === 'phone' || barberMethod === 'verify-code') && (
             <BarberLoginPhoneForm />
-          )}
+          )} */}
           <FooterContainerStyle>
             <SwitchButton>
               <SwitchButtonStyle

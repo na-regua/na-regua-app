@@ -1,7 +1,7 @@
 import {IBarberService, SocketUrls, TAttendanceType} from '@/app/models';
 import {BarberInfoCard, Box, Icons, Typography} from '@/components/atoms';
 import {AppDispatch, RootState} from '@/store/Store';
-import {CutActions, CutThunks} from '@/store/slicers';
+import {CutActions, CutThunks, SocketActions} from '@/store/slicers';
 import React, {useCallback, useEffect, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FadeInLeft} from 'react-native-reanimated';
@@ -34,7 +34,9 @@ const CustomerAttendance: React.FC<ICustomerAttendanceProps> = ({isOpen}) => {
     services,
     additionalServices,
   } = useSelector((state: RootState) => state.cut);
-  const {socket, connected} = useSelector((state: RootState) => state.socket);
+  const {socket, connected, subs} = useSelector(
+    (state: RootState) => state.socket,
+  );
   const dispatch = useDispatch<AppDispatch>();
 
   const isCustomer = useMemo(
@@ -51,17 +53,21 @@ const CustomerAttendance: React.FC<ICustomerAttendanceProps> = ({isOpen}) => {
         '{{barberId}}',
         selectedBarber._id.toString(),
       );
-      socket.on(url, data => {
-        if (data.barber) {
-          dispatch(CutActions.setCutSelectedBarber(data.barber));
+      if (!subs.includes(url as SocketUrls)) {
+        socket.on(url, data => {
+          if (data.barber) {
+            dispatch(CutActions.setCutSelectedBarber(data.barber));
 
-          if (data.queue) {
-            dispatch(
-              CutThunks.fetchBarberTodayQueueByBarberId(data.barber._id),
-            );
+            if (data.queue) {
+              dispatch(
+                CutThunks.fetchBarberTodayQueueByBarberId(data.barber._id),
+              );
+            }
           }
-        }
-      });
+        });
+
+        dispatch(SocketActions.addSub(url as SocketUrls));
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedBarber]);

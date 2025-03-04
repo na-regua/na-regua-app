@@ -3,10 +3,9 @@ import {AppStatusBar, Box, Icons, PageCard, Splashs} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {createNotification, getCurrentUser} from '@/store/slicers';
+import {AuthThunks} from '@/store/slicers';
 import {Colors, Metrics} from '@/theme';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AxiosError} from 'axios';
 import React, {useEffect, useMemo, useRef} from 'react';
 import {Platform, ScrollView} from 'react-native';
 import {
@@ -129,23 +128,9 @@ const CustomerCut: React.FC<
       if (selectedBarber) {
         await UserService.favoriteBarber(selectedBarber._id);
 
-        await dispatch(getCurrentUser());
+        await dispatch(AuthThunks.getCurrentUser());
       }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'favorite_barber',
-              message: `errors.${message}`,
-              type: 'error',
-            }),
-          );
-        }
-      }
-    }
+    } catch {}
   };
 
   return (

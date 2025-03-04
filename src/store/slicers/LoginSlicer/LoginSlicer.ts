@@ -5,7 +5,7 @@ import {
   SliceCaseReducers,
   createSlice,
 } from '@reduxjs/toolkit';
-import {getCurrentUser} from '../AuthSlicer/AuthSlicer';
+import {AuthThunks} from '../AuthSlicer';
 
 export type TUserType = 'worker' | 'customer';
 
@@ -47,7 +47,7 @@ const LoginSlicer = createSlice<
   },
   extraReducers: builder => {
     // Add extra reducers here
-    builder.addCase(getCurrentUser.fulfilled, (state, action) => {
+    builder.addCase(AuthThunks.getCurrentUser.fulfilled, (state, action) => {
       if (action.payload) {
         if (action.payload.user && action.payload.user.role === 'customer') {
           state.userType = 'customer';

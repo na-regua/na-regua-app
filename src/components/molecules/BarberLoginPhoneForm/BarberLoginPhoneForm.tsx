@@ -4,17 +4,16 @@ import {Button, CodeInput, Icons, Input, Typography} from '@/components/atoms';
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
 import {
+  AuthThunks,
   createNotification,
   setBarber,
   setBarberMethod,
   setCurrentPhone,
-  setPersistedToken,
   setUser,
 } from '@/store/slicers';
 import {Colors} from '@/theme';
 import {phoneMask, phoneRegex} from '@/utils';
 import {CacheManager} from '@georstat/react-native-image-cache';
-import {AxiosError} from 'axios';
 import React, {useEffect, useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {TextInput} from 'react-native';
@@ -62,19 +61,6 @@ const BarberLoginPhoneForm = () => {
       }
     } catch (error) {
       setIsSending(false);
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'send-whatsapp-code-error',
-              type: 'error',
-              message: `errors.${message}`,
-            }),
-          );
-        }
-      }
     }
   };
 
@@ -101,7 +87,7 @@ const BarberLoginPhoneForm = () => {
       if (data) {
         const {access_token} = data;
 
-        await dispatch(setPersistedToken(access_token));
+        await dispatch(AuthThunks.setPersistedToken(access_token));
 
         if (data.user.avatar.url) {
           CacheManager.prefetch(data.user.avatar.url);
@@ -122,21 +108,6 @@ const BarberLoginPhoneForm = () => {
       }
     } catch (error) {
       setIsVerifying(false);
-
-      if (error instanceof AxiosError) {
-        if (error.response?.data && error.response?.data.message) {
-          const {message} = error.response?.data;
-          if (message) {
-            dispatch(
-              createNotification({
-                id: 'send-whatsapp-code-error',
-                type: 'error',
-                message: `errors.${message}`,
-              }),
-            );
-          }
-        }
-      }
     }
   };
 

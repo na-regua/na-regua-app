@@ -1,13 +1,9 @@
-import {AxiosError} from 'axios';
-import {store} from '@/store/Store';
-import {
-  ACCESS_TOKEN_KEY,
-  SocketActions,
-  createNotification,
-  logout,
-} from '@/store/slicers';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ACCESS_TOKEN_KEY} from '@/app/models';
 import {navigationRef} from '@/navigation';
+import {store} from '@/store/Store';
+import {SocketActions, createNotification, logout} from '@/store/slicers';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AxiosError} from 'axios';
 
 export async function onUnauthorizedResponse(error: any) {
   if (error instanceof AxiosError && error.response?.status === 401) {

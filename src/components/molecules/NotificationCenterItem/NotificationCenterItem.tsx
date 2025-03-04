@@ -1,14 +1,13 @@
+import {NotificationService} from '@/app/api';
 import {INotification} from '@/app/models';
 import {Avatar, Typography} from '@/components/atoms';
+import {AppDispatch} from '@/store/Store';
+import {fetchUserNotifications} from '@/store/slicers';
+import {format} from 'date-fns';
 import React, {useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {NotificationInfoStyled, NotificationItemStyled} from './styles';
-import {format} from 'date-fns';
-import {AxiosError} from 'axios';
-import {NotificationService} from '@/app/api';
 import {useDispatch} from 'react-redux';
-import {AppDispatch} from '@/store/Store';
-import {createNotification, fetchUserNotifications} from '@/store/slicers';
+import {NotificationInfoStyled, NotificationItemStyled} from './styles';
 
 interface NotificationCenterItemProps extends INotification {}
 
@@ -58,19 +57,6 @@ const NotificationCenterItem: React.FC<NotificationCenterItemProps> = ({
       setReading(false);
     } catch (error) {
       setReading(false);
-
-      if (error instanceof AxiosError) {
-        const {message: errorMessage} = error.response?.data;
-        if (errorMessage) {
-          dispatch(
-            createNotification({
-              id: 'mark-as-read',
-              type: 'error',
-              message: `error.${errorMessage}`,
-            }),
-          );
-        }
-      }
     }
   };
 

@@ -6,7 +6,7 @@ import {
   Splashs,
   Typography,
 } from '@/components/atoms';
-import {CustomerJoinTodayQueue} from '@/components/modals';
+import {CustomerJoinTodayQueueModal} from '@/components/modals';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
@@ -254,7 +254,7 @@ const CustomerHome: React.FC<
       </Host>
       {/* This should be under any host */}
       {todayTickets?.queue && showJoinQueueModal && (
-        <CustomerJoinTodayQueue
+        <CustomerJoinTodayQueueModal
           onBack={() => setShowJoinQueueModal(false)}
           onContinue={() => setShowJoinQueueModal(false)}
           ticket={todayTickets?.queue}

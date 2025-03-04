@@ -1,16 +1,16 @@
-import {AuthService, UserService} from '@/app/api';
+import {UserService} from '@/app/api';
 import {ICreateCustomerUser} from '@/app/models';
 import {Avatar, Button, Input, Typography} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch} from '@/store/Store';
-import {createNotification, setUser} from '@/store/slicers';
-import {numberMask, phoneMask, phoneRegex} from '@/utils';
+import {AuthThunks, setUser} from '@/store/slicers';
+import {phoneMask, phoneRegex} from '@/utils';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AxiosError} from 'axios';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {Keyboard, TextInput} from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {Keyboard, TextInput, TouchableOpacity} from 'react-native';
 import {Asset} from 'react-native-image-picker';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch} from 'react-redux';
@@ -26,11 +26,13 @@ import {
 const CustomerSignUp: React.FC<
   NativeStackScreenProps<TRootStackParamList, '/customer/sign-up'>
 > = ({navigation}) => {
+  const {t} = useTranslation();
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
-  const [avatar, setAvatar] = React.useState<Asset | null>(null);
-  const [preview, setPreview] = React.useState<string>();
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [avatar, setAvatar] = useState<Asset | null>(null);
+  const [preview, setPreview] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
   const {
     control,
     formState: {isValid},
@@ -40,6 +42,8 @@ const CustomerSignUp: React.FC<
   const fieldsRef = {
     name: useRef<TextInput>(null),
     phone: useRef<TextInput>(null),
+    email: useRef<TextInput>(null),
+    password: useRef<TextInput>(null),
   };
 
   const insetsStyles = {
@@ -66,55 +70,37 @@ const CustomerSignUp: React.FC<
     setLoading(true);
 
     try {
-      const {name, phone} = getValues();
+      const {name, phone, email, password} = getValues();
 
       const {data} = await UserService.createCustomerUser(
         {
           name,
           phone,
+          email,
+          password,
         },
         avatar,
       );
 
       if (data) {
-        await AuthService.sendOTPCode(phone);
+        dispatch(setUser(data.user));
+        dispatch(AuthThunks.setPersistedToken(data.access_token));
 
-        const unmaskedPhone = +numberMask(phone);
-
-        dispatch(setUser(data));
-
-        navigation.navigate('/customer/sign-up/verify', {
-          phone: unmaskedPhone,
-        });
+        navigation.navigate('/customer/home');
       }
 
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'customer-signup',
-              type: 'error',
-              message: `errors.${message}`,
-            }),
-          );
-        }
-      }
     }
   };
 
-  const goBack = () => {
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    }
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
-    if (!navigation.canGoBack()) {
-      navigation.navigate('/generic/login/customer');
-    }
+  const goBack = () => {
+    navigation.navigate('/generic/login/customer');
   };
 
   return (
@@ -182,10 +168,66 @@ const CustomerSignUp: React.FC<
                   value={value}
                   inputRef={fieldsRef.phone}
                   returnKeyType="done"
-                  onSubmitEditing={() => {}}
+                  onSubmitEditing={() => {
+                    fieldsRef.email.current?.focus();
+                  }}
                   blurOnSubmit={true}
                   keyboardType="number-pad"
                   textContentType="telephoneNumber"
+                />
+              )}
+            />
+
+            <Controller
+              name="email"
+              rules={{required: true}}
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Input
+                  label={t('modals.worker.fields.email')}
+                  autoCapitalize="none"
+                  value={value}
+                  keyboardType="email-address"
+                  onChangeText={text => {
+                    onChange(text);
+                  }}
+                  inputRef={fieldsRef.email}
+                  returnKeyType="next"
+                  onSubmitEditing={() => {
+                    fieldsRef.password.current?.focus();
+                  }}
+                  blurOnSubmit={false}
+                  textContentType="emailAddress"
+                />
+              )}
+            />
+
+            <Controller
+              name="password"
+              rules={{required: true, minLength: 5}}
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Input
+                  label="generic.login.barber.fields.password"
+                  secureTextEntry={!showPassword}
+                  onChangeText={onChange}
+                  autoCapitalize="none"
+                  value={value}
+                  suffix={
+                    <TouchableOpacity
+                      activeOpacity={0.6}
+                      onPress={handleShowPassword}>
+                      <Typography variant="button" color="primary">
+                        {showPassword
+                          ? 'generic.login.hide'
+                          : 'generic.login.show'}
+                      </Typography>
+                    </TouchableOpacity>
+                  }
+                  inputRef={fieldsRef.password}
+                  returnKeyType="done"
+                  onSubmitEditing={() => isValid && signUpCustomer()}
+                  blurOnSubmit={true}
                 />
               )}
             />

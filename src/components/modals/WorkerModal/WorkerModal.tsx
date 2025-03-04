@@ -1,11 +1,8 @@
 import {WorkersService} from '@/app/api';
 import {IBuffer, IWorkerForm} from '@/app/models';
 import {Avatar, Icons, Input} from '@/components/atoms';
-import {AppDispatch} from '@/store/Store';
-import {createNotification} from '@/store/slicers';
 import {assetToBuffer, phoneMask} from '@/utils';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {AxiosError} from 'axios';
 import React, {useMemo, useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
@@ -16,7 +13,6 @@ import {
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {Asset} from 'react-native-image-picker';
-import {useDispatch} from 'react-redux';
 import {
   ActionsContainerStyle,
   AvatarWrapperStyle,
@@ -58,7 +54,6 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
   const [changedAvatar, setChangedAvatar] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
 
   const formValues = watch();
 
@@ -101,20 +96,6 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
         }
       } catch (error) {
         setLoading(false);
-
-        if (error instanceof AxiosError) {
-          const {message} = error.response?.data;
-
-          if (message) {
-            dispatch(
-              createNotification({
-                id: 'add-service',
-                type: 'error',
-                message: `errors.${message}`,
-              }),
-            );
-          }
-        }
       }
     }
   };
@@ -149,20 +130,6 @@ const WorkerModal: React.FC<IWorkerModalProps> = ({
         }
       } catch (error) {
         setLoading(false);
-
-        if (error instanceof AxiosError) {
-          const {message} = error.response?.data;
-
-          if (message) {
-            dispatch(
-              createNotification({
-                id: 'update-service',
-                type: 'error',
-                message: `errors.${message}`,
-              }),
-            );
-          }
-        }
       }
     }
   };

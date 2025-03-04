@@ -1,4 +1,5 @@
 import {BarbersService, FilesService} from '@/app/api';
+import {ACCESS_TOKEN_KEY} from '@/app/models';
 import {
   AppStatusBar,
   Avatar,
@@ -12,19 +13,12 @@ import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {StatusBarContext} from '@/providers';
 import {AppDispatch, RootState} from '@/store/Store';
-import {
-  ACCESS_TOKEN_KEY,
-  SocketActions,
-  createNotification,
-  getCurrentUser,
-  logout,
-} from '@/store/slicers';
+import {AuthThunks, SocketActions, logout} from '@/store/slicers';
 import {Colors} from '@/theme';
 import colors from '@/theme/colors';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AxiosError} from 'axios';
 import React, {ReactNode, useContext, useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Asset} from 'react-native-image-picker';
@@ -211,7 +205,7 @@ const BarberSettings: React.FC<
     try {
       await FilesService.updateBarberAvatarFile(barber.avatar._id, file);
 
-      await dispatch(getCurrentUser());
+      await dispatch(AuthThunks.getCurrentUser());
 
       setChangingAvatar(false);
     } catch (error) {
@@ -239,25 +233,11 @@ const BarberSettings: React.FC<
       setOpening(true);
 
       await BarbersService.setOpen(!barber.open);
-      await dispatch(getCurrentUser());
+      await dispatch(AuthThunks.getCurrentUser());
 
       setOpening(false);
     } catch (error) {
       setOpening(false);
-
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'set_open',
-              message,
-              type: 'error',
-            }),
-          );
-        }
-      }
     }
   };
 

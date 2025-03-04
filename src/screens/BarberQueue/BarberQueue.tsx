@@ -9,11 +9,10 @@ import {
 } from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {QueueActions, QueueThunks, createNotification} from '@/store/slicers';
+import {QueueActions, QueueThunks} from '@/store/slicers';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useIsFocused} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AxiosError} from 'axios';
 import React, {useEffect, useRef} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -65,20 +64,6 @@ const BarberQueue: React.FC<
       }
     } catch (error) {
       dispatch(QueueActions.setLoadingTodayQueue(false));
-
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'create_queue',
-              message: `errors.${message}`,
-              type: 'error',
-            }),
-          );
-        }
-      }
     }
   };
 

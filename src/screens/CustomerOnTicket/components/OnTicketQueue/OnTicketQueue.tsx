@@ -9,8 +9,7 @@ import {
 } from '@/components/atoms';
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {CutThunks, createNotification} from '@/store/slicers';
-import {AxiosError} from 'axios';
+import {CutThunks} from '@/store/slicers';
 import {format} from 'date-fns';
 import React, {useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -55,20 +54,6 @@ const OnTicketQueue: React.FC<OnTicketGeneralProps & {queue: IQueue}> = ({
       setLeaving(false);
     } catch (error) {
       setLeaving(false);
-
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'user_leave_queue',
-              message: `errors.${message}`,
-              type: 'error',
-            }),
-          );
-        }
-      }
     }
   };
 
@@ -87,7 +72,18 @@ const OnTicketQueue: React.FC<OnTicketGeneralProps & {queue: IQueue}> = ({
     <Box gap={18}>
       {/* Ticket title */}
       <Box gap={6}>
-        <Typography variant="h2">{'customer.onTicket.titles.queue'}</Typography>
+        {queue.status === 'paused' && (
+          <Typography variant="h2" color="default">
+            {'customer.onTicket.titles.paused'}
+          </Typography>
+        )}
+        {queue.status === 'on' && (
+          <Typography variant="h2">
+            {ticketPosition === 1
+              ? 'customer.onTicket.titles.yourTime'
+              : 'customer.onTicket.titles.queue'}
+          </Typography>
+        )}
         <Typography
           variant="caption"
           color="placeholder"

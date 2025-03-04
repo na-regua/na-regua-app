@@ -5,7 +5,7 @@ import {BarberOnQueueHeader, Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {BarberQueueSocketEvents} from '@/socket/events';
 import {AppDispatch, RootState} from '@/store/Store';
-import {QueueThunks} from '@/store/slicers';
+import {QueueThunks, SocketActions} from '@/store/slicers';
 import {Colors, Metrics} from '@/theme';
 import {useRoute} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -62,6 +62,8 @@ const BarberOnQueue: React.FC<
   }, [onChangeFs]);
 
   const goBack = () => {
+    dispatch(SocketActions.clearSubs());
+
     if (navigation.canGoBack()) {
       navigation.goBack();
     }

@@ -1,15 +1,13 @@
-import {AuthService} from '@/app/api';
 import {IBarber, IUser} from '@/app/models';
 import {GenericAction} from '@/store/Store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   ActionCreatorWithPayload,
   ActionCreatorWithoutPayload,
   SliceCaseReducers,
-  createAsyncThunk,
   createSlice,
 } from '@reduxjs/toolkit';
 import {AxiosError} from 'axios';
+import AuthThunks from './AuthThunks';
 
 interface IAuthState {
   isAuthenticated: boolean;
@@ -18,44 +16,6 @@ interface IAuthState {
   barber?: IBarber;
   user?: IUser;
 }
-
-const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
-
-const setPersistedToken = createAsyncThunk(
-  'Auth/setPersistedToken',
-  async (token: string, {rejectWithValue}) => {
-    try {
-      await AsyncStorage.setItem(ACCESS_TOKEN_KEY.toString(), token.toString());
-
-      return token;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  },
-);
-
-const getCurrentUser = createAsyncThunk(
-  'Auth/getCurrentUser',
-  async (_, {rejectWithValue}) => {
-    try {
-      const token = await AsyncStorage.getItem(ACCESS_TOKEN_KEY.toString());
-
-      if (!token) {
-        return rejectWithValue(new AxiosError());
-      }
-
-      if (token) {
-        const {data} = await AuthService.getCurrentUser(token);
-
-        if (data) {
-          return {...data, token};
-        }
-      }
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  },
-);
 
 const AuthSlicer = createSlice<
   IAuthState,
@@ -86,7 +46,7 @@ const AuthSlicer = createSlice<
     },
   },
   extraReducers: builder => {
-    builder.addCase(getCurrentUser.fulfilled, (state, action) => {
+    builder.addCase(AuthThunks.getCurrentUser.fulfilled, (state, action) => {
       if (action.payload) {
         state.isAuthenticated = true;
         state.token = action.payload.token;
@@ -97,7 +57,7 @@ const AuthSlicer = createSlice<
       state.isLoading = false;
     });
 
-    builder.addCase(getCurrentUser.rejected, (state, action) => {
+    builder.addCase(AuthThunks.getCurrentUser.rejected, (state, action) => {
       if (action.payload instanceof AxiosError) {
         state.isAuthenticated = false;
         state.token = '';
@@ -106,7 +66,7 @@ const AuthSlicer = createSlice<
       state.isLoading = false;
     });
 
-    builder.addCase(setPersistedToken.fulfilled, (state, action) => {
+    builder.addCase(AuthThunks.setPersistedToken.fulfilled, (state, action) => {
       state.isLoading = false;
       state.isAuthenticated = true;
       state.token = action.payload;
@@ -122,10 +82,4 @@ export const {logout, setUser, setBarber} = AuthSlicer.actions as {
   setBarber: ActionCreatorWithPayload<IBarber, string>;
 };
 
-export {
-  ACCESS_TOKEN_KEY,
-  reducer as AuthReducer,
-  AuthSlicer,
-  getCurrentUser,
-  setPersistedToken,
-};
+export {reducer as AuthReducer, AuthSlicer};

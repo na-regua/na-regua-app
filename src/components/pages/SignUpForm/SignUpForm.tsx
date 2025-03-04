@@ -6,7 +6,6 @@ import {AvatarStep, PicturesStep, ProfileStep} from '@/components/molecules';
 import AddressStep from '@/components/molecules/AddressStep/AddressStep';
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch} from '@/store/Store';
-import {getCurrentUser, setPersistedToken} from '@/store/slicers';
 import {assetToBuffer} from '@/utils';
 import {CacheManager} from '@georstat/react-native-image-cache';
 import {AxiosError} from 'axios';
@@ -17,6 +16,7 @@ import {Keyboard} from 'react-native';
 import {Asset} from 'react-native-image-picker';
 import {useDispatch} from 'react-redux';
 import {ContainerStyle, ContentHeaderStyle, ScrollContent} from './styles';
+import {AuthThunks} from '@/store/slicers';
 
 const SignUpForm: React.FC = () => {
   const {t} = useTranslation();
@@ -124,9 +124,9 @@ const SignUpForm: React.FC = () => {
         const {data} = await BarbersService.signUpBarber(createBarber);
 
         if (data) {
-          await dispatch(setPersistedToken(data.access_token));
+          await dispatch(AuthThunks.setPersistedToken(data.access_token));
 
-          await dispatch(getCurrentUser());
+          await dispatch(AuthThunks.getCurrentUser());
 
           if (data.user.avatar.url) {
             CacheManager.prefetch(data.user.avatar.url);

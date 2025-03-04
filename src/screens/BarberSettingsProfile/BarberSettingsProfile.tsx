@@ -10,10 +10,9 @@ import {Header, UpdateBarberThumbs} from '@/components/molecules';
 import {useKeyboardVisible} from '@/hooks';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {createNotification, getCurrentUser} from '@/store/slicers';
+import {AuthThunks} from '@/store/slicers';
 import {checkDiff, maskCep, numberMask, phoneMask, ufMask} from '@/utils';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AxiosError} from 'axios';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
@@ -107,20 +106,7 @@ const BarberSettingsProfile: React.FC<
             );
           }
         });
-      } catch (error) {
-        if (error instanceof AxiosError) {
-          const {message} = error;
-          if (message) {
-            dispatch(
-              createNotification({
-                id: 'search-cep',
-                type: 'error',
-                message: `errors.${message}`,
-              }),
-            );
-          }
-        }
-      }
+      } catch (error) {}
     }
   };
 
@@ -281,7 +267,7 @@ const BarberSettingsProfile: React.FC<
       }
 
       if (canUpdate) {
-        await dispatch(getCurrentUser());
+        await dispatch(AuthThunks.getCurrentUser());
       }
 
       setSaving(false);

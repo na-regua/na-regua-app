@@ -34,6 +34,8 @@ const SocketProvider: React.FC<PropsWithChildren> = ({children}) => {
           }
         },
       );
+
+      dispatch(SocketActions.addSub(SocketUrls.NewNotification));
     }
   };
 
@@ -48,6 +50,8 @@ const SocketProvider: React.FC<PropsWithChildren> = ({children}) => {
           message: translatedMessage,
         });
       });
+
+      dispatch(SocketActions.addSub(SocketUrls.Event));
     }
   };
 

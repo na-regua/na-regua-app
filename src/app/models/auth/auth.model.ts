@@ -39,3 +39,5 @@ export interface ICustomerSignUp {
   name: string;
   phone: string;
 }
+
+export const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';

@@ -3,7 +3,7 @@ import {ICreateCustomerUser} from '@/app/models';
 import {AppStatusBar, Box, Button, Input, Typography} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
-import {createNotification, getCurrentUser} from '@/store/slicers';
+import {AuthThunks, createNotification} from '@/store/slicers';
 import {AppDispatch, RootState} from '@/store/Store';
 import {phoneMask} from '@/utils';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -68,7 +68,7 @@ const CustomerSettingsProfile: React.FC<
 
       await UserService.updateUser({name}, user._id);
 
-      await dispatch(getCurrentUser());
+      await dispatch(AuthThunks.getCurrentUser());
 
       dispatch(
         createNotification({

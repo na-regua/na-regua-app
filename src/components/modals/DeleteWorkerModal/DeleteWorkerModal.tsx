@@ -1,14 +1,10 @@
 import {WorkersService} from '@/app/api';
 import {IWorker} from '@/app/models';
 import {Button, Typography} from '@/components/atoms';
-import {AppDispatch} from '@/store/Store';
-import {createNotification} from '@/store/slicers';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {AxiosError} from 'axios';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet} from 'react-native';
-import {useDispatch} from 'react-redux';
 import {ModalActionsStyle, ModalContainerStyle} from './styles';
 
 interface IDeleteWorkerModalProps {
@@ -24,8 +20,6 @@ const DeleteWorkerModal: React.FC<IDeleteWorkerModalProps> = ({
 }) => {
   const {t} = useTranslation();
   const [loading, setLoading] = React.useState<boolean>(false);
-
-  const dispatch = useDispatch<AppDispatch>();
 
   if (!worker) {
     if (modalRef.current) {
@@ -51,20 +45,6 @@ const DeleteWorkerModal: React.FC<IDeleteWorkerModalProps> = ({
       setLoading(false);
 
       modalRef.current?.dismiss();
-
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'delete-worker',
-              type: 'error',
-              message: `errors.${message}`,
-            }),
-          );
-        }
-      }
     }
   };
 

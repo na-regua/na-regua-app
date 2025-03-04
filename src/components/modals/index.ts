@@ -1,5 +1,5 @@
 export {default as BarberServiceModal} from './BarberServiceModal/BarberServiceModal';
-export {default as CustomerJoinTodayQueue} from './CustomerJoinTodayQueue/CustomerJoinTodayQueue';
+export {default as CustomerJoinTodayQueueModal} from './CustomerJoinTodayQueueModal/CustomerJoinTodayQueueModal';
 export {default as CustomerRateTicketModal} from './CustomerRateTicket/CustomerRateTicket';
 export {default as DeleteServiceModal} from './DeleteServiceModal/DeleteServiceModal';
 export {default as DeleteWorkerModal} from './DeleteWorkerModal/DeleteWorkerModal';
@@ -8,3 +8,4 @@ export {default as ShareQRModal} from './ShareQRModal/ShareQRModal';
 export {default as WorkerFinishQueueModal} from './WorkerFinishQueueModal/WorkerFinishQueueModal';
 export {default as WorkerJoinQueueModal} from './WorkerJoinQueueModal/WorkerJoinQueueModal';
 export {default as WorkerModal} from './WorkerModal/WorkerModal';
+export {default as MuteNotificationsModal} from './MuteNotificationsModal/MuteNotificationsModal';

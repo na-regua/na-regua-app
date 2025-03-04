@@ -26,7 +26,7 @@ const updateUser = async (userData: IUpdateUser, id: string) => {
 const createCustomerUser = async (
   userData: ICreateCustomerUser,
   avatar: Asset,
-): Promise<AxiosResponse<IUser>> => {
+): Promise<AxiosResponse<{user: IUser; access_token: string}>> => {
   try {
     if (userData.phone) {
       userData.phone = numberMask(userData.phone);
@@ -75,9 +75,26 @@ const getFavoriteBarbers = async (): Promise<AxiosResponse<IBarber[]>> => {
   }
 };
 
+const muteNotifications = async (shouldMute: boolean) => {
+  try {
+    const url = ENDPOINTS.USERS_MUTE_NOTIFICATIONS;
+
+    const response = await api.put(
+      url,
+      {muted: shouldMute},
+      {withCredentials: true},
+    );
+
+    return response;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
 export default {
   updateUser,
   createCustomerUser,
   favoriteBarber,
   getFavoriteBarbers,
+  muteNotifications,
 };

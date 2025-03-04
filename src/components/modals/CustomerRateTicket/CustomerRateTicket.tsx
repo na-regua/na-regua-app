@@ -10,8 +10,7 @@ import {
   Typography,
 } from '@/components/atoms';
 import {AppDispatch} from '@/store/Store';
-import {createNotification, TicketViewActions} from '@/store/slicers';
-import {AxiosError} from 'axios';
+import {TicketViewActions} from '@/store/slicers';
 import {format} from 'date-fns';
 import React, {useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -64,20 +63,6 @@ const CustomerRateTicketModal: React.FC<CustomerRateTicketModalProps> = ({
       dismiss();
     } catch (error) {
       setIsSendingRate(false);
-
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'rate_ticket',
-              message: `erros.${message}`,
-              type: 'error',
-            }),
-          );
-        }
-      }
     }
   };
 

@@ -8,9 +8,8 @@ import {
   Typography,
 } from '@/components/atoms';
 import {useAppNavigation} from '@/navigation';
-import {CutActions, createNotification} from '@/store/slicers';
+import {CutActions} from '@/store/slicers';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {AxiosError} from 'axios';
 import React, {useEffect, useRef, useState} from 'react';
 import {Keyboard, TouchableWithoutFeedback} from 'react-native';
 import {useDispatch} from 'react-redux';
@@ -59,21 +58,7 @@ const CustomerSelectBarber: React.FC = () => {
       if (data) {
         setFavorites(data);
       }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'get_user_favorites',
-              message: `errors.${message}`,
-              type: 'error',
-            }),
-          );
-        }
-      }
-    }
+    } catch {}
   };
 
   useEffect(() => {
@@ -139,6 +124,11 @@ const CustomerSelectBarber: React.FC = () => {
                 />
               </FavoriteItemStyled>
             ))}
+            {favorites.length === 0 && (
+              <Typography variant="body2" color="default">
+                {'customer.cut.select.noFavorites'}
+              </Typography>
+            )}
           </FavoritesScrollStyled>
         </PageCardGroupStyled>
       </>

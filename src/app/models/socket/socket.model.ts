@@ -18,6 +18,7 @@ export enum SocketUrls {
 
   GetQueue = 'queue/get',
   GetTicket = 'ticket/get',
+  QueueEvent = 'queue/event',
 
   BarberInfo = 'barber/{{barberId}}',
 

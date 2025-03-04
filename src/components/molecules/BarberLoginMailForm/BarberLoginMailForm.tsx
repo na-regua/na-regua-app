@@ -1,23 +1,21 @@
 import {AuthService} from '@/app/api';
-import {ILoginEmail} from '@/app/models';
+import {ILoginEmail, SystemErrors, UserRoles} from '@/app/models';
 import {Button, Icons, Input, Typography} from '@/components/atoms';
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch} from '@/store/Store';
 import {
+  AuthThunks,
   createNotification,
   setBarber,
-  setBarberMethod,
-  setPersistedToken,
   setUser,
 } from '@/store/slicers';
 import {Colors} from '@/theme';
-import {AxiosError} from 'axios';
+import {CacheManager} from '@georstat/react-native-image-cache';
 import React, {useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {TextInput, TouchableOpacity} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {ContentStyle, LogoContainerStyle} from './styles';
-import {CacheManager} from '@georstat/react-native-image-cache';
 
 export interface IBarberLoginMailFormProps {}
 
@@ -43,10 +41,6 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
     setShowPassword(curr => !curr);
   };
 
-  const setPhoneLoginMethod = () => {
-    dispatch(setBarberMethod('phone'));
-  };
-
   const doLogin = async () => {
     try {
       setIsSending(true);
@@ -54,31 +48,44 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
 
       const {data} = await AuthService.loginWithEmail({email, password});
 
-      if (data) {
-        const {access_token} = data;
+      const {user, barber, access_token} = data;
 
-        await dispatch(setPersistedToken(access_token));
+      if (user) {
+        if (user.role === UserRoles.Customer) {
+          setIsSending(false);
+          dispatch(
+            createNotification({
+              id: 'login-email',
+              type: 'error',
+              message: `errors.${SystemErrors.INVALID_USER}`,
+            }),
+          );
 
-        if (data.barber) {
-          if (data.user.avatar.url) {
-            CacheManager.prefetch(data.user.avatar.url);
+          return;
+        }
+
+        await dispatch(AuthThunks.setPersistedToken(access_token));
+
+        if (barber) {
+          if (user.avatar.url) {
+            CacheManager.prefetch(user.avatar.url);
           }
 
-          if (data.barber.avatar.url) {
-            CacheManager.prefetch(data.barber.avatar.url);
+          if (barber.avatar.url) {
+            CacheManager.prefetch(barber.avatar.url);
           }
 
-          dispatch(setUser(data.user));
-          dispatch(setBarber(data.barber));
+          dispatch(setUser(user));
+          dispatch(setBarber(barber));
           setIsSending(false);
 
-          if (data.barber.profile_status === 'pre') {
+          if (barber.profile_status === 'pre') {
             navigator.navigate('/barber/settings/workers', {
               showContinue: true,
             });
           }
 
-          if (data.barber.profile_status === 'completed') {
+          if (barber.profile_status === 'completed') {
             navigator.navigate('/barber/queue');
           }
 
@@ -87,20 +94,6 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
       }
     } catch (error) {
       setIsSending(false);
-
-      if (error instanceof AxiosError) {
-        const {message} = error.response?.data;
-
-        if (message) {
-          dispatch(
-            createNotification({
-              id: 'login-email',
-              type: 'error',
-              message: `errors.${message}`,
-            }),
-          );
-        }
-      }
     }
   };
 
@@ -173,13 +166,14 @@ const BarberLoginMailForm: React.FC<IBarberLoginMailFormProps> = () => {
         onPress={doLogin}
         loading={isSending}
       />
-      <Icons.LinesIcon />
-      <Button
+      {/* Changing to only email and password */}
+      {/* <Icons.LinesIcon /> */}
+      {/* <Button
         variant="ghost"
         colorScheme="primary"
         title="generic.login.barber.buttons.phoneLogin"
         onPress={setPhoneLoginMethod}
-      />
+      /> */}
     </ContentStyle>
   );
 };

@@ -9,7 +9,7 @@ export const emitErrorNotification = (error: AxiosError<any>) => {
     if (message) {
       store.dispatch(
         createNotification({
-          id: 'add-service',
+          id: `error.${message}`,
           type: 'error',
           message: `errors.${message}`,
         }),

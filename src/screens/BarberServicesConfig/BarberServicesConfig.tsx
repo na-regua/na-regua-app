@@ -6,9 +6,8 @@ import {AppStatusBar, Button, Typography} from '@/components/atoms';
 import {Header, ServiceGeneralConfigCard} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {createNotification, getCurrentUser} from '@/store/slicers';
+import {AuthThunks} from '@/store/slicers';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {AxiosError} from 'axios';
 import {useTranslation} from 'react-i18next';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
@@ -78,26 +77,12 @@ const BarberServicesConfig: React.FC<
           servicesConfig: payload,
         });
 
-        await dispatch(getCurrentUser());
+        await dispatch(AuthThunks.getCurrentUser());
 
         setNewGeneralConfig(null);
         setUpdating(false);
       } catch (error) {
         setUpdating(false);
-
-        if (error instanceof AxiosError) {
-          const {message} = error.response?.data;
-
-          if (message) {
-            dispatch(
-              createNotification({
-                id: 'service-update',
-                type: 'error',
-                message: `errors.${message}`,
-              }),
-            );
-          }
-        }
       }
     }
   };

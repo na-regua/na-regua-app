@@ -1,7 +1,12 @@
-import {OnTicketGeneralProps} from '@/app/models';
+import {QueueService} from '@/app/api';
+import {OnTicketGeneralProps, SocketUrls} from '@/app/models';
 import {BarberInfoCard, Box, Button, Typography} from '@/components/atoms';
+import {useAppNavigation} from '@/navigation';
+import {CutThunks} from '@/store/slicers';
+import {AppDispatch, RootState} from '@/store/Store';
 import {format} from 'date-fns';
-import React from 'react';
+import React, {useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   LineStyled,
   OnTicketActionsStyled,
@@ -10,6 +15,33 @@ import {
 import {OnTicketServiceInfo} from '../OnTicketServiceInfo/OnTicketServiceInfo';
 
 const OnTicketWaiting: React.FC<OnTicketGeneralProps> = ({ticket}) => {
+  const {socket, connected} = useSelector((state: RootState) => state.socket);
+  const [leaving, setLeaving] = useState(false);
+  const navigation = useAppNavigation();
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const leaveQueue = async () => {
+    try {
+      setLeaving(true);
+
+      // quit from queue
+      await QueueService.userLeave(ticket._id);
+      // quit from queue/ticket channels
+      if (connected && !!socket) {
+        socket.emit(SocketUrls.UserLeaveTicketChannels, {ticketId: ticket._id});
+      }
+      // update user today user tickets
+      await dispatch(CutThunks.fetchTodayTickets());
+
+      navigation.navigate('/customer/home');
+
+      setLeaving(false);
+    } catch (error) {
+      setLeaving(false);
+    }
+  };
+
   return (
     <Box gap={18}>
       <Box gap={6}>
@@ -41,7 +73,13 @@ const OnTicketWaiting: React.FC<OnTicketGeneralProps> = ({ticket}) => {
         </Box>
       </OnTicketCardStyled>
       <OnTicketActionsStyled>
-        <Button title="buttons.leave" fillSpace colorScheme="danger" />
+        <Button
+          title="buttons.leave"
+          fillSpace
+          colorScheme="danger"
+          onPress={leaveQueue}
+          loading={leaving}
+        />
       </OnTicketActionsStyled>
     </Box>
   );
