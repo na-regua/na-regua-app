@@ -11,6 +11,7 @@ import {
   OnQueueActionsStyled,
   OnQueueButtonStyled,
 } from './styles';
+import {useAppNavigation} from '@/navigation';
 
 type Props = {};
 
@@ -19,6 +20,7 @@ const OnQueueActions: React.FC<Props> = () => {
   const {socket} = useSelector((state: RootState) => state.socket);
 
   const [swiping, setSwiping] = useState<SwipeButtonState>('wait');
+  const navigation = useAppNavigation();
 
   const finishModalRef = useRef<BottomSheetModal>(null);
 
@@ -64,6 +66,10 @@ const OnQueueActions: React.FC<Props> = () => {
     }
   };
 
+  const afterFinish = () => {
+    navigation.navigate('/barber/queue');
+  };
+
   return (
     <OnQueueActionsStyled>
       <OnQueueActionsRowStyled>
@@ -88,16 +94,24 @@ const OnQueueActions: React.FC<Props> = () => {
           onPress={openWorkerFinishModal}
         />
       </OnQueueActionsRowStyled>
-      <SwipeButton
-        onToggle={value => {
-          onNext(value);
-        }}
-        resetAfterLoading
-        state={swiping}
-        title="buttons.next"
-      />
-      <Modal ref={finishModalRef} height={ModalSizes.WorkerFinishQueue}>
-        <WorkerFinishQueueModal />
+      {todayQueue.status === 'on' && (
+        <SwipeButton
+          onToggle={value => {
+            onNext(value);
+          }}
+          resetAfterLoading
+          state={swiping}
+          title="buttons.next"
+        />
+      )}
+      <Modal
+        ref={finishModalRef}
+        title="modals.finishQueue.title"
+        height={ModalSizes.WorkerFinishQueue}>
+        <WorkerFinishQueueModal
+          modalRef={finishModalRef}
+          afterFinish={afterFinish}
+        />
       </Modal>
     </OnQueueActionsStyled>
   );

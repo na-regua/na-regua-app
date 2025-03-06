@@ -58,21 +58,21 @@ const QueueSlicer = createSlice<
       (state, action) => {
         state.loadingTodayQueue = false;
 
-        if (!action.payload.data.queue) {
-          return;
-        }
         state.todayQueue = action.payload.data.queue;
 
-        state.workerOnQueue = action.payload.data.queue.workers.some(
-          worker =>
-            worker.user._id ===
-            (action.payload.user && action.payload.user?._id),
-        );
+        if (action.payload.data.queue) {
+          state.workerOnQueue = action.payload.data.queue.workers.some(
+            worker =>
+              worker.user._id ===
+              (action.payload.user && action.payload.user?._id),
+          );
+        }
       },
     );
 
     builder.addCase(QueueThunks.fetchBarberTodayQueue.rejected, state => {
       state.loadingTodayQueue = false;
+      state.todayQueue = undefined;
     });
   },
 });
@@ -80,7 +80,7 @@ const QueueSlicer = createSlice<
 export const QueueActions = QueueSlicer.actions as {
   setLoadingTodayQueue: ActionCreatorWithPayload<boolean>;
   setFilters: ActionCreatorWithPayload<QueueSlicerState['filters']>;
-  updateQueueData: ActionCreatorWithPayload<IQueue>;
+  updateQueueData: ActionCreatorWithPayload<IQueue | undefined>;
 };
 
 const QueueReducer = QueueSlicer.reducer;

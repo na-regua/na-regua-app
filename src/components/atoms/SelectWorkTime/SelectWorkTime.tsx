@@ -1,6 +1,6 @@
 import {TWorkTime} from '@/app/models';
 import {Colors} from '@/theme';
-import React, {useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {ScrollView} from 'react-native-gesture-handler';
 import {DAY_TIMES} from '../Calendar';
@@ -114,7 +114,8 @@ const SelectWorkTime: React.FC<ISelectWorkTimeProps> = ({
                 }>
                 <Typography
                   variant="button"
-                  color={isOnTimeRange(time) ? 'white3' : 'default'}>
+                  color={isOnTimeRange(time) ? 'white3' : 'default'}
+                  translate={false}>
                   {time}
                 </Typography>
               </SelectTimeButton>

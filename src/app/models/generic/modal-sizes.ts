@@ -3,7 +3,7 @@ export enum ModalSizes {
   BarberService = 448,
   DeleteBarberService = 172,
   BarberWorker = 480,
-  WorkerFinishQueue = 0,
+  WorkerFinishQueue = 218,
   MuteNotifications = 212,
   AddScheduleTime = 190,
   EditProfilePicture = 292,

@@ -34,8 +34,8 @@ export interface IBarber extends IBarberServiceConfig {
 }
 
 export interface IBarberServiceConfig {
-  workdays: string[];
-  worktime: TWorkTime;
+  work_days: string[];
+  work_time: TWorkTime;
   open_barber_auto: boolean;
   open_queue_auto: boolean;
   schedule_limit_days: number;
@@ -70,4 +70,10 @@ export interface IBarberServiceGeneralConfig {
   schedule_limit_days: number;
   open_barber_auto: boolean;
   open_queue_auto: boolean;
+}
+
+export interface IBarberServiceDaysConfig {
+  work_time: TWorkTime;
+  schedules_by_day: number;
+  schedule_times: string[];
 }

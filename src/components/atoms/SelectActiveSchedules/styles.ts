@@ -5,6 +5,7 @@ import React from 'react';
 import Icons, {IIconProps} from '../Icons/Icons';
 
 export const ContainerStyle = styled.View`
+  width: 100%;
   gap: 8px;
 `;
 

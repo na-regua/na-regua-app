@@ -1,10 +1,6 @@
 import React, {useEffect, useMemo, useState} from 'react';
 
-import {
-  IBarberCreateSchedule,
-  IBarberServiceDayConfig,
-  TWorkTime,
-} from '@/app/models';
+import {IBarberServiceDaysConfig, TWorkTime} from '@/app/models';
 import {
   Collapse,
   SelectActiveSchedules,
@@ -13,25 +9,22 @@ import {
 } from '@/components/atoms';
 
 interface IServiceConfigDaysCardProps {
-  title?: string;
-  subtitle?: string;
-  config: IBarberServiceDayConfig;
-  onChange: (config: IBarberServiceDayConfig, changed: boolean) => void;
+  config: IBarberServiceDaysConfig;
+  onChange: (
+    config: Partial<IBarberServiceDaysConfig>,
+    changed: boolean,
+  ) => void;
 }
 
 const ServiceConfigDaysCard: React.FC<IServiceConfigDaysCardProps> = ({
   config,
-  title,
-  subtitle,
   onChange,
 }) => {
-  const [workTime, setWorkTime] = useState<TWorkTime>(config.workTime);
+  const [workTime, setWorkTime] = useState<TWorkTime>(config.work_time);
   const [schedulesByDay, setSchedulesByDay] = useState<number>(
-    config.schedulesByDay,
+    config.schedules_by_day,
   );
-  const [schedules, setSchedules] = useState<IBarberCreateSchedule[]>(
-    config.schedules,
-  );
+  const [schedules, setSchedules] = useState<string[]>(config.schedule_times);
 
   const handleOnChangeWorkTime = (newWorkTime: TWorkTime) => {
     setWorkTime(newWorkTime);
@@ -41,21 +34,21 @@ const ServiceConfigDaysCard: React.FC<IServiceConfigDaysCardProps> = ({
     setSchedulesByDay(newSchedulesByDay);
   };
 
-  const handleOnSchedulesChange = (newSchedules: IBarberCreateSchedule[]) => {
+  const handleOnSchedulesChange = (newSchedules: string[]) => {
     setSchedules(newSchedules);
   };
 
   const hasChanges = useMemo(() => {
     const changedWorkTime =
-      workTime.end !== config.workTime.end ||
-      workTime.start !== config.workTime.start;
+      workTime.end !== config.work_time.end ||
+      workTime.start !== config.work_time.start;
 
-    const changedSchedulesByDay = schedulesByDay !== config.schedulesByDay;
+    const changedSchedulesByDay = schedulesByDay !== config.schedules_by_day;
 
     const [bigger, smaller] =
-      schedules.length > config.schedules.length
-        ? [schedules, config.schedules]
-        : [config.schedules, schedules];
+      schedules.length > config.schedule_times.length
+        ? [schedules, config.schedule_times]
+        : [config.schedule_times, schedules];
 
     const changedActiveSchedules = bigger
       .map(day => smaller.includes(day))
@@ -66,12 +59,21 @@ const ServiceConfigDaysCard: React.FC<IServiceConfigDaysCardProps> = ({
   }, [workTime, schedulesByDay, schedules]);
 
   useEffect(() => {
-    onChange({...config, workTime, schedulesByDay, schedules}, hasChanges);
+    onChange(
+      {
+        work_time: workTime,
+        schedules_by_day: schedulesByDay,
+        schedule_times: schedules,
+      },
+      hasChanges,
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workTime, schedulesByDay, schedules]);
 
   return (
-    <Collapse title={title} subtitle={subtitle}>
+    <Collapse
+      title="barber.servicesConfig.sections.schedule.title"
+      subtitle="barber.servicesConfig.sections.schedule.subtitle">
       <SelectWorkTime workTime={workTime} onChange={handleOnChangeWorkTime} />
       <SelectSchedulesByDay
         schedulesLength={schedules.length}

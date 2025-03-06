@@ -79,7 +79,7 @@ enum ENDPOINTS {
   QUEUE_WORKER_REJECT_TICKET = '/queues/worker/reject/:ticketId',
   QUEUE_WORKER_GO_NEXT = '/queues/worker/go-next',
   QUEUE_WORKER_MISS_TICKET = '/queues/worker/miss/:ticketId',
-  QUEUE_WORKER_FINISH_QUEUE = '/queues/worker/finish',
+  QUEUE_WORKER_FINISH_QUEUE = '/queues/worker/finish/:queueId',
 
   /**
    * Tickets

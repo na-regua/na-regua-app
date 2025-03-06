@@ -119,7 +119,9 @@ const CustomerHomeHistory: React.FC<ICustomerHomeHistoryProps> = ({
   };
 
   useEffect(() => {
-    fetchHistory();
+    if (isScreenFocused) {
+      fetchHistory();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isScreenFocused]);
 

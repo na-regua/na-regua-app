@@ -1,13 +1,12 @@
-import {IBarberCreateSchedule, ModalSizes, TWorkTime} from '@/app/models';
+import {ModalSizes, TWorkTime} from '@/app/models';
 import {
-  generateRecommendedTime,
   sortSchedulesByTime,
   timeMask,
   timePattern,
   timeToNumber,
 } from '@/utils';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
@@ -25,8 +24,8 @@ import {
 interface ISelectActiveSchedulesProps {
   schedulesByDay: number;
   workTime: TWorkTime;
-  schedules: IBarberCreateSchedule[];
-  onChange: (workTime: IBarberCreateSchedule[]) => void;
+  schedules: string[];
+  onChange: (schedules: string[]) => void;
 }
 
 const SelectActiveSchedules: React.FC<ISelectActiveSchedulesProps> = ({
@@ -37,7 +36,7 @@ const SelectActiveSchedules: React.FC<ISelectActiveSchedulesProps> = ({
 }) => {
   const {t} = useTranslation();
 
-  const [allSchedules, setAllSchedules] = useState<IBarberCreateSchedule[]>([]);
+  const [allSchedules, setAllSchedules] = useState<string[]>(schedules);
 
   const [deleteSchedulesSet, setDeleteSchedulesSet] = useState<string[]>([]);
   const [addScheduleText, setAddScheduleText] = useState<string>('');
@@ -49,14 +48,20 @@ const SelectActiveSchedules: React.FC<ISelectActiveSchedulesProps> = ({
     const startNumber = timeToNumber(workTime.start);
     const endNumber = timeToNumber(workTime.end);
 
-    if (addScheduleNumber <= startNumber || addScheduleNumber >= endNumber) {
+    if (addScheduleNumber < startNumber || addScheduleNumber > endNumber) {
       return false;
     }
 
     const isValid = timePattern.test(addScheduleText);
+    const itsNotInSchedules = !allSchedules.includes(addScheduleText);
 
-    return isValid;
-  }, [addScheduleText, workTime]);
+    return isValid && itsNotInSchedules;
+  }, [addScheduleText, workTime, allSchedules]);
+
+  const canAddMoreSchedules = useMemo(
+    () => allSchedules.length < schedulesByDay,
+    [allSchedules, schedulesByDay],
+  );
 
   const openAddScheduleModal = () => {
     if (addScheduleModalRef.current) {
@@ -64,78 +69,28 @@ const SelectActiveSchedules: React.FC<ISelectActiveSchedulesProps> = ({
     }
   };
 
-  const addSchedule = () => {
-    const newSchedules = sortSchedulesByTime([
-      ...schedules,
-      {
-        time: addScheduleText,
-        active: true,
-        recommended: false,
-      },
-    ]);
+  const onAddSchedule = () => {
+    addScheduleModalRef.current?.dismiss();
 
-    onChange(newSchedules);
+    const newSchedules = [...allSchedules, addScheduleText];
+    const sortedSchedules = sortSchedulesByTime(newSchedules);
 
-    if (addScheduleModalRef.current) {
-      addScheduleModalRef.current.dismiss();
-      setAddScheduleText('');
-    }
+    setAllSchedules(sortedSchedules);
+    onChange(sortedSchedules);
+    setAddScheduleText('');
   };
 
-  const addToDeleteSet = (schedule: IBarberCreateSchedule) => {
-    setDeleteSchedulesSet(prev => [...prev, schedule.time]);
-  };
+  const setScheduleToDelete = (schedule: string) => {
+    if (deleteSchedulesSet.includes(schedule)) {
+      setDeleteSchedulesSet(deleteSchedulesSet.filter(s => s !== schedule));
+      const filteredSchedules = allSchedules.filter(s => s !== schedule);
+      setAllSchedules(filteredSchedules);
 
-  const selectSchedule = (schedule: IBarberCreateSchedule) => {
-    const newSchedules: IBarberCreateSchedule[] = sortSchedulesByTime([
-      ...schedules,
-      {
-        time: schedule.time,
-        active: true,
-        recommended: false,
-      },
-    ]);
-
-    onChange(newSchedules);
-  };
-
-  const deleteSchedule = (schedule: IBarberCreateSchedule) => {
-    const newSchedules = sortSchedulesByTime(
-      schedules.filter(item => item.time !== schedule.time),
-    );
-
-    setDeleteSchedulesSet(prev => prev.filter(item => item !== schedule.time));
-
-    onChange(newSchedules);
-  };
-
-  const handleSelectSchedule = (schedule: IBarberCreateSchedule) => {
-    if (deleteSchedulesSet.includes(schedule.time)) {
-      deleteSchedule(schedule);
-
-      return;
-    }
-
-    if (schedule.active) {
-      addToDeleteSet(schedule);
+      onChange(filteredSchedules);
     } else {
-      selectSchedule(schedule);
+      setDeleteSchedulesSet([...deleteSchedulesSet, schedule]);
     }
   };
-
-  const generateRecommendedSchedules = useCallback(() => {
-    const newSchedules = generateRecommendedTime(
-      schedules,
-      schedulesByDay,
-      workTime,
-    );
-
-    setAllSchedules(newSchedules);
-  }, [schedules, schedulesByDay, workTime]);
-
-  useEffect(() => {
-    generateRecommendedSchedules();
-  }, [generateRecommendedSchedules]);
 
   return (
     <ContainerStyle>
@@ -145,27 +100,31 @@ const SelectActiveSchedules: React.FC<ISelectActiveSchedulesProps> = ({
         </Typography>
         <PlusIconStyle
           onPress={openAddScheduleModal}
-          disabled={false}
+          disabled={!canAddMoreSchedules}
           width={22}
           height={22}
-          color="primary"
+          color={canAddMoreSchedules ? 'primary' : 'disabled'}
         />
       </HeaderStyle>
 
       <ContentWrapperStyle>
+        {allSchedules.length === 0 && (
+          <Typography variant="caption" color="black2">
+            {'barber.servicesConfig.messages.noSchedules'}
+          </Typography>
+        )}
         {allSchedules.map((schedule, index) => (
           <SelectScheduleTimeStyle
+            active
             key={index}
-            active={schedule.active}
-            recommended={schedule.recommended}
             activeOpacity={0.6}
-            onPress={() => handleSelectSchedule(schedule)}
-            isOnDelete={deleteSchedulesSet.includes(schedule.time)}>
+            isOnDelete={deleteSchedulesSet.includes(schedule)}
+            onPress={() => setScheduleToDelete(schedule)}>
             <SelectScheduleTimeLabelStyle
+              active
               variant="button"
-              active={schedule.active}
-              recommended={schedule.recommended}>
-              {schedule.time}
+              translate={false}>
+              {schedule}
             </SelectScheduleTimeLabelStyle>
           </SelectScheduleTimeStyle>
         ))}
@@ -184,13 +143,13 @@ const SelectActiveSchedules: React.FC<ISelectActiveSchedulesProps> = ({
           keyboardType="number-pad"
           value={addScheduleText}
           returnKeyType="done"
-          onSubmitEditing={addSchedule}
+          onSubmitEditing={onAddSchedule}
         />
         <Button
           colorScheme="primary"
           title={t('modals.addScheduleTime.buttons.add')}
           disabled={!isValidAddScheduleTime}
-          onPress={addSchedule}
+          onPress={onAddSchedule}
         />
       </Modal>
     </ContainerStyle>

@@ -11,48 +11,39 @@ const SocketProvider: React.FC<PropsWithChildren> = ({children}) => {
   const {token, isAuthenticated} = useSelector(
     (state: RootState) => state.auth,
   );
-  const {subs} = useSelector((state: RootState) => state.socket);
   const dispatch = useDispatch<AppDispatch>();
 
   const {t} = useTranslation();
 
   const onNotification = (instance: Socket) => {
-    if (!subs.some(sub => sub === SocketUrls.NewNotification)) {
-      instance.on(
-        SocketUrls.NewNotification,
-        ({notification}: {notification: INotification}) => {
-          if (notification) {
-            const {message, data} = notification;
+    instance.on(
+      SocketUrls.NewNotification,
+      ({notification}: {notification: INotification}) => {
+        if (notification) {
+          const {message, data} = notification;
 
-            const translatedMessage = t(`notification.${message}`, {
-              data,
-            }).toString();
+          const translatedMessage = t(`notification.${message}`, {
+            data,
+          }).toString();
 
-            NotificationService.pushNotification({
-              message: translatedMessage,
-            });
-          }
-        },
-      );
-
-      dispatch(SocketActions.addSub(SocketUrls.NewNotification));
-    }
+          NotificationService.pushNotification({
+            message: translatedMessage,
+          });
+        }
+      },
+    );
   };
 
   const onEvent = (instance: Socket) => {
-    if (!subs.some(sub => sub === SocketUrls.Event)) {
-      instance.on(SocketUrls.Event, (socketEvent: ISocketEvent) => {
-        const {event, data} = socketEvent;
+    instance.on(SocketUrls.Event, (socketEvent: ISocketEvent) => {
+      const {event, data} = socketEvent;
 
-        const translatedMessage = t(`socketEvent.${event}`, data).toString();
+      const translatedMessage = t(`socketEvent.${event}`, data).toString();
 
-        NotificationService.pushNotification({
-          message: translatedMessage,
-        });
+      NotificationService.pushNotification({
+        message: translatedMessage,
       });
-
-      dispatch(SocketActions.addSub(SocketUrls.Event));
-    }
+    });
   };
 
   const connect = useCallback(async () => {

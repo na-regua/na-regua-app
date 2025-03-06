@@ -1,10 +1,12 @@
 import {Colors} from '@/theme';
 import React, {useMemo} from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
 import {Path, Svg} from 'react-native-svg';
 import {IIconProps} from '../Icons';
 
-interface IPlusIconProps extends IIconProps {}
+interface IPlusIconProps extends IIconProps {
+  style?: ViewStyle;
+}
 
 const PlusIcon: React.FC<IPlusIconProps> = ({
   width = 20,
@@ -14,7 +16,7 @@ const PlusIcon: React.FC<IPlusIconProps> = ({
   customColor,
   onPress,
   disabled,
-  wrapperStyle,
+  style
 }) => {
   const getColor = useMemo(
     () => Colors[color] || customColor,
@@ -24,7 +26,7 @@ const PlusIcon: React.FC<IPlusIconProps> = ({
   return (
     <TouchableOpacity
       activeOpacity={0.6}
-      style={[styles.iconWrapper, wrapperStyle]}
+      style={[styles.iconWrapper, style]}
       onPress={onPress}
       disabled={disabled}>
       <Svg width={width} height={height} viewBox="0 0 20 20" fill="none">

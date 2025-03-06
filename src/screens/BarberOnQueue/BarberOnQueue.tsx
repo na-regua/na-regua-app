@@ -73,11 +73,11 @@ const BarberOnQueue: React.FC<
     }
   };
 
-  if (!todayQueue) {
-    goBack();
+  // if (!todayQueue) {
+  //   goBack();
 
-    return null;
-  }
+  //   return null;
+  // }
 
   const SocketEvents = <>{socket && <BarberQueueSocketEvents />}</>;
 
@@ -101,6 +101,7 @@ const BarberOnQueue: React.FC<
             setScrollViewWidth(e.nativeEvent.layout.width);
           }}>
           {!loadingTodayQueue &&
+            todayQueue &&
             todayQueue.tickets.map((ticket, index) => (
               <ItemHandler
                 scrollViewWidth={scrollViewWidth}

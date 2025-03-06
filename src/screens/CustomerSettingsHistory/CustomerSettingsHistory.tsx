@@ -174,7 +174,9 @@ const CustomerSettingsHistory: React.FC<
   };
 
   useEffect(() => {
-    fetchHistory();
+    if (isScreenFocused) {
+      fetchHistory();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isScreenFocused]);
 

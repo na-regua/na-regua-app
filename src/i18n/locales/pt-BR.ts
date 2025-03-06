@@ -119,19 +119,17 @@ const ptBr = {
       title: 'Atendimento',
       subtitle: 'Ajustes de agendamento e fila.',
       goBack: 'Voltar',
-
+      messages: {
+        noSchedules: 'Nenhum horário de agendamento cadastrado.',
+      },
       sections: {
         general: {
           title: 'Geral',
           subtitle: 'Ajustes gerais de atendimento.',
         },
-        businessDays: {
-          title: 'Dias úteis',
-          subtitle: 'Ajustes de atendimento.',
-        },
-        holidays: {
-          title: 'Fim de semana ou feriados',
-          subtitle: 'Ajustes de atendimento.',
+        schedule: {
+          title: 'Agendamentos',
+          subtitle: 'Ajustes de agendamentos.',
         },
       },
       fields: {
@@ -641,6 +639,12 @@ const ptBr = {
         yes: 'Quero Sim!',
         no: 'Quero Não!',
       },
+    },
+    finishQueue: {
+      title: 'Encerrar fila',
+      subtitle:
+        'Deseja realmente encerrar a fila? Ao finalizar os tickets restantes serão marcados como perdidos.',
+      finish: 'Encerrar',
     },
   },
   units: {

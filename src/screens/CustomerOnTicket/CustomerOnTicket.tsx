@@ -103,9 +103,6 @@ const CustomerOnTicket: React.FC<
 
   const cleaningSocketEvents = () => {
     if (connected && !!socket) {
-      socket.off(SocketUrls.GetTicket);
-      socket.off(SocketUrls.GetQueue);
-      socket.off(SocketUrls.QueueEvent);
       socket.emit(SocketUrls.UserLeaveTicketChannels, {ticketId: ticket?._id});
       dispatch(SocketActions.clearSubs());
     }

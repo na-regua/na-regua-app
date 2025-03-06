@@ -38,6 +38,10 @@ const BarberQueueSocketEvents: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onQueueUpdate]);
 
+  useEffect(() => {
+    return () => {};
+  }, []);
+
   return <></>;
 };
 

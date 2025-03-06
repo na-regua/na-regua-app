@@ -4,7 +4,6 @@ import {AuthThunks} from '@/store/slicers';
 import {AppDispatch} from '@/store/Store';
 import {Metrics} from '@/theme';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {AxiosError} from 'axios';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
@@ -27,11 +26,7 @@ const MuteNotificationsModal: React.FC<Props> = ({modalRef, onChangeMuted}) => {
       modalRef.current?.dismiss();
 
       onChangeMuted && onChangeMuted();
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        console.log(error.message);
-      }
-    }
+    } catch (error) {}
   };
 
   return (

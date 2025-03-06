@@ -54,7 +54,9 @@ const Collapse: React.FC<PropsWithChildren<ICollapseProps>> = ({
         </Box>
       </HeaderStyle>
       {expand ? (
-        <Box entering={FadeInUp.duration(300)}>{children}</Box>
+        <Box entering={FadeInUp.duration(300)} gap={12}>
+          {children}
+        </Box>
       ) : subtitle ? (
         <Typography variant="caption" color="placeholder">
           {t(subtitle)}

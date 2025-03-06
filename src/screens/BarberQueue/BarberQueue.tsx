@@ -72,7 +72,9 @@ const BarberQueue: React.FC<
   };
 
   useEffect(() => {
-    dispatch(QueueThunks.fetchBarberTodayQueue());
+    if (isScreenFocused) {
+      dispatch(QueueThunks.fetchBarberTodayQueue());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isScreenFocused]);
 

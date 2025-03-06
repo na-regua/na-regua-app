@@ -8,9 +8,12 @@ export const WorkTimeContainerStyle = styled.View`
 export const SelectTimeContainerStyle = styled.View`
   gap: 16px;
   flex-direction: row;
+  width: 100%;
 `;
 
-export const SelectTimeScrollStyle = styled.ScrollView``;
+export const SelectTimeScrollStyle = styled.ScrollView`
+  flex: 1;
+`;
 
 export const SelectTimeWrapperStyle = styled.View`
   flex-direction: row;

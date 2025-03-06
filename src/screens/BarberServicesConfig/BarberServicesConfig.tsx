@@ -1,9 +1,17 @@
 import React, {useMemo, useState} from 'react';
 
 import {BarbersService} from '@/app/api';
-import {IBarberServiceConfig, IBarberServiceGeneralConfig} from '@/app/models';
+import {
+  IBarberServiceConfig,
+  IBarberServiceDaysConfig,
+  IBarberServiceGeneralConfig,
+} from '@/app/models';
 import {AppStatusBar, Button, Typography} from '@/components/atoms';
-import {Header, ServiceGeneralConfigCard} from '@/components/molecules';
+import {
+  Header,
+  ServiceConfigDaysCard,
+  ServiceGeneralConfigCard,
+} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
 import {AuthThunks} from '@/store/slicers';
@@ -39,15 +47,32 @@ const BarberServicesConfig: React.FC<
   const [updating, setUpdating] = useState(false);
   const [newGeneralConfig, setNewGeneralConfig] =
     useState<Partial<IBarberServiceGeneralConfig> | null>(null);
+  const [newDaysConfig, setNewDaysConfig] =
+    useState<Partial<IBarberServiceDaysConfig> | null>(null);
 
   const hasChanges = useMemo(() => {
-    return Object.keys(newGeneralConfig || {}).length > 0;
-  }, [newGeneralConfig]);
+    return (
+      Object.keys(newGeneralConfig || {}).length > 0 ||
+      Object.keys(newDaysConfig || {}).length > 0
+    );
+  }, [newGeneralConfig, newDaysConfig]);
 
   const handleGeneralChange = (
     config: Partial<IBarberServiceGeneralConfig>,
   ) => {
     setNewGeneralConfig(config);
+    console.log('config', config);
+  };
+
+  const handleDaysConfigChange = (
+    config: Partial<IBarberServiceDaysConfig>,
+    changed?: boolean,
+  ) => {
+    if (changed) {
+      setNewDaysConfig(config);
+    } else {
+      setNewDaysConfig(null);
+    }
   };
 
   const goBack = () => {
@@ -71,6 +96,7 @@ const BarberServicesConfig: React.FC<
       try {
         const payload: Partial<IBarberServiceConfig> = {
           ...newGeneralConfig,
+          ...newDaysConfig,
         };
 
         await BarbersService.update({
@@ -80,6 +106,7 @@ const BarberServicesConfig: React.FC<
         await dispatch(AuthThunks.getCurrentUser());
 
         setNewGeneralConfig(null);
+        setNewDaysConfig(null);
         setUpdating(false);
       } catch (error) {
         setUpdating(false);
@@ -107,12 +134,20 @@ const BarberServicesConfig: React.FC<
           contentContainerStyle={styles.scrollContentContainer}>
           <ServiceGeneralConfigCard
             config={{
-              workdays: barber.config.workdays,
+              workdays: barber.config.work_days,
               schedule_limit_days: barber.config.schedule_limit_days,
               open_barber_auto: barber.config.open_barber_auto,
               open_queue_auto: barber.config.open_queue_auto,
             }}
             onChange={handleGeneralChange}
+          />
+          <ServiceConfigDaysCard
+            config={{
+              schedule_times: barber.config.schedule_times,
+              schedules_by_day: barber.config.schedules_by_day,
+              work_time: barber.config.work_time,
+            }}
+            onChange={handleDaysConfigChange}
           />
         </ScrollContentStyle>
         <Button

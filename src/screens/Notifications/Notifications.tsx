@@ -55,7 +55,10 @@ const Notifications: React.FC<
   }, [dispatch]);
 
   useEffect(() => {
-    getUserNotifications();
+    if (isScreenFocused) {
+      console.log('Notifications: useEffect: isScreenFocused');
+      getUserNotifications();
+    }
   }, [getUserNotifications, isScreenFocused]);
 
   const goBack = () => {

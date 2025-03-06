@@ -150,6 +150,19 @@ const missTicket = async (ticketId: string): Promise<AxiosResponse<null>> => {
   }
 };
 
+const finishQueue = async (queueId: string): Promise<AxiosResponse<null>> => {
+  try {
+    const url = mapPathVariables(ENDPOINTS.QUEUE_WORKER_FINISH_QUEUE, {
+      queueId,
+    });
+    const response = await api.post(url, {}, {withCredentials: true});
+
+    return response;
+  } catch (error) {
+    throw errToAxiosError(error);
+  }
+};
+
 export default {
   getTodayQueue,
   startQueue,
@@ -161,4 +174,5 @@ export default {
   userLeave,
   goNextTicket,
   missTicket,
+  finishQueue,
 };

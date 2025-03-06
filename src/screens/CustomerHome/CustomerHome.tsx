@@ -124,7 +124,9 @@ const CustomerHome: React.FC<
   };
 
   useEffect(() => {
-    getTodayTicketsData();
+    if (isScreenFocused) {
+      getTodayTicketsData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isScreenFocused]);
 
