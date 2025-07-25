@@ -1,8 +1,13 @@
-import {QueueService} from '@/app/api';
+import {QueueService, ScheduleService} from '@/app/api';
 import {Button, Icons, Typography} from '@/components/atoms';
 import {useAppNavigation} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {CutActions, CutThunks, TicketViewActions} from '@/store/slicers';
+import {
+  createNotification,
+  CutActions,
+  CutThunks,
+  TicketViewActions,
+} from '@/store/slicers';
 import React, {useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -10,26 +15,32 @@ import {
   PageCardFooterStyled,
 } from '../CustomerAttendance/styles';
 
-const CustomerAttendanceFooter = () => {
+const CustomerAttendanceFooter: React.FC = () => {
   const {
     attendanceType,
     selectedBarber,
     selectedService,
     selectedAdditionalServices,
+    scheduleConfig,
   } = useSelector((state: RootState) => state.cut);
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useAppNavigation();
 
   const [joining, setJoining] = useState(false);
+  const [scheduling, setScheduling] = useState(false);
 
   const selectOtherBarber = () => {
-    dispatch(CutActions.setCutStep('select'));
-    dispatch(CutActions.setCutSelectedBarber(null));
+    dispatch(CutActions.resetCut());
   };
 
   const canJoinQueue = useMemo(
     () => !!selectedBarber && !!selectedService,
     [selectedBarber, selectedService],
+  );
+
+  const canSchedule = useMemo(
+    () => canJoinQueue && !!scheduleConfig,
+    [scheduleConfig, canJoinQueue],
   );
 
   const joinQueue = async () => {
@@ -66,6 +77,41 @@ const CustomerAttendanceFooter = () => {
     }
   };
 
+  const createSchedule = async () => {
+    try {
+      if (!selectedBarber || !scheduleConfig || !selectedService) {
+        return;
+      }
+
+      setScheduling(true);
+
+      await ScheduleService.createSchedule({
+        barberId: selectedBarber?._id,
+        serviceId: selectedService?._id,
+        date: scheduleConfig.date,
+        time: scheduleConfig.time,
+      });
+
+      setScheduling(false);
+
+      // navigation.navigate('/customer/schedules');
+
+      dispatch(CutActions.resetCut());
+
+      await dispatch(CutThunks.fetchTodayTickets());
+
+      dispatch(
+        createNotification({
+          id: 'created_schedule',
+          type: 'success',
+          message: 'customer.cut.notifications.scheduleCreated',
+        }),
+      );
+    } catch (error) {
+      setScheduling(false);
+    }
+  };
+
   return (
     <PageCardFooterStyled>
       <Button
@@ -97,6 +143,9 @@ const CustomerAttendanceFooter = () => {
           fillSpace
           colorScheme="main"
           title="customer.cut.buttons.schedule"
+          disabled={!canSchedule}
+          loading={scheduling}
+          onPress={createSchedule}
         />
       )}
     </PageCardFooterStyled>

@@ -55,6 +55,7 @@ export type TRootStackParamList = {
   '/customer/on-ticket'?: {
     hideBottomNav?: boolean;
   };
+  '/customer/schedules'?: {};
 };
 
 export type TRouteName = keyof TRootStackParamList;

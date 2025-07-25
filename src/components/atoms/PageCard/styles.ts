@@ -35,7 +35,7 @@ export const PageCardScrollStyled = styled(AnimatedScrollView).attrs({
 `;
 
 export const PageFooterStyled = styled(AnimatedView)`
-  padding: ${Metrics.unitX3}px;
+  padding: ${Metrics.unitX1}px ${Metrics.unitX3}px;
   padding-bottom: 0;
   background: ${Colors.bgLight};
 `;

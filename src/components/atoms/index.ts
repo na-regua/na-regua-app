@@ -39,3 +39,4 @@ export {default as Typography} from './Typography/Typography';
 export * from './TextArea/TextArea';
 export * from './TicketHistoryItem/TicketHistoryItem';
 export {default as CacheImage} from './CacheImage/CacheImage';
+export {default as ScheduleTicketItem} from './ScheduleTicketItem/ScheduleTicketItem';

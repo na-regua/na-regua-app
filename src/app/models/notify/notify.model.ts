@@ -1,5 +1,6 @@
 import {IFile} from '../file/file.model';
 import {IBarberService} from '../service/service.model';
+import {ITicket} from '../ticket/ticket.model';
 import {IUser} from '../user/user.model';
 
 export type TNotifyTypes = 'error' | 'success' | 'default';
@@ -17,6 +18,9 @@ export interface INotificationData {
   service?: IBarberService;
   customer?: IUser;
   date?: string;
+  ticket?: ITicket;
+  day?: string;
+  time?: string;
 }
 export interface INotification {
   _id: string;

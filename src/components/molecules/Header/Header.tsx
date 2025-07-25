@@ -5,7 +5,7 @@ import {RootState} from '@/store/Store';
 import {Metrics, TColorsType} from '@/theme';
 import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Platform, ViewStyle} from 'react-native';
+import {ViewStyle} from 'react-native';
 import {useSelector} from 'react-redux';
 import {
   BackContainerStyle,

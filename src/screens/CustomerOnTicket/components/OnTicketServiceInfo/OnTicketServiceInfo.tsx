@@ -1,8 +1,11 @@
 import {IBarberService} from '@/app/models';
 import {Box, Icons, Typography} from '@/components/atoms';
 import React from 'react';
-import {OnTicketIconWrapperStyled, OnTicketInfoStyled} from '../../styles';
-import {AdditionalServiceBadgeStyled} from './styles';
+import {
+  AdditionalServiceBadgeStyled,
+  OnTicketIconWrapperStyled,
+  OnTicketInfoStyled,
+} from './styles';
 
 interface OnTicketServiceInfoProps {
   service: IBarberService;

@@ -19,8 +19,9 @@ import {Colors, Fonts} from '@/theme';
 import {strongShadowStyle} from '@/utils';
 import {useIsFocused} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {format} from 'date-fns';
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {Host} from 'react-native-portalize';
 import {
   FadeInDown,
@@ -41,10 +42,13 @@ import {
   CHActionStyled,
   CHContainerStyled,
   CHContentStyled,
+  CHLeftContent,
+  CHRightContent,
   CHTabsContentStyled,
   CHTabsStyled,
   ShareQrButtonContentStyled,
   SplashViewStyled,
+  TodayScheduleBarberAvatar,
 } from './styles';
 
 const TABS = {
@@ -103,6 +107,10 @@ const CustomerHome: React.FC<
     navigation.navigate('/customer/qr-scanner');
   };
 
+  const goToSchedules = () => {
+    navigation.navigate('/customer/schedules');
+  };
+
   const getTodayTicketsData = async () => {
     await dispatch(CutThunks.fetchTodayTickets());
   };
@@ -139,11 +147,9 @@ const CustomerHome: React.FC<
       </Header.Container>
       <Host style={{flex: 1}}>
         <CHContentStyled>
-          <View>
-            <Typography variant="h4" weight="medium" color="black3">
-              {'Menu'}
-            </Typography>
-          </View>
+          <Typography variant="h4" weight="medium" color="black3">
+            {'Menu'}
+          </Typography>
           <BigActionStyled
             direction="row"
             onPress={goToCut}
@@ -205,42 +211,103 @@ const CustomerHome: React.FC<
               <CHTabsContentStyled
                 entering={SlideInLeft}
                 exiting={SlideOutLeft}>
-                {todayTickets?.queue && (
-                  <CHActionStyled
-                    underlayColor={Colors.accentBlueHover}
-                    color="accentBlue"
-                    height={100}
-                    onPress={() => setShowJoinQueueModal(true)}
-                    entering={FadeInDown}
-                    style={[strongShadowStyle]}>
-                    <>
-                      <Typography variant="body1" weight="semiBold">
-                        {'customer.home.actions.queue.title'}
-                      </Typography>
-                      <SplashViewStyled right={-12} bottom={-12}>
-                        <Splashs.ClockSplash size={80} />
-                      </SplashViewStyled>
-                    </>
-                  </CHActionStyled>
-                )}
+                <>
+                  {(todayTickets?.schedule || todayTickets?.queue) && (
+                    <CHLeftContent>
+                      {todayTickets?.queue && (
+                        <CHActionStyled
+                          underlayColor={Colors.accentBlueHover}
+                          color="accentBlue"
+                          height={100}
+                          onPress={() => setShowJoinQueueModal(true)}
+                          entering={FadeInDown}
+                          style={[strongShadowStyle]}>
+                          <>
+                            <Typography variant="body1" weight="semiBold">
+                              {'customer.home.actions.queue.title'}
+                            </Typography>
+                            <SplashViewStyled right={-12} bottom={-12}>
+                              <Splashs.ClockSplash size={80} />
+                            </SplashViewStyled>
+                          </>
+                        </CHActionStyled>
+                      )}
 
-                {/* {todayTickets?.schedules && todayTickets?.schedules.length > 0 && ( */}
-                <CHActionStyled
-                  underlayColor={Colors.sandHover}
-                  color="sand"
-                  height={160}
-                  onPress={() => {}}
-                  entering={FadeInDown}>
-                  <>
-                    <Typography variant="body1" weight="semiBold">
-                      {'customer.home.actions.mySchedule.title'}
-                    </Typography>
-                    <SplashViewStyled right={0} bottom={0}>
-                      <Splashs.ScheduleSplash />
-                    </SplashViewStyled>
-                  </>
-                </CHActionStyled>
-                {/* )} */}
+                      {todayTickets?.schedule &&
+                        todayTickets.schedule.schedule?.date && (
+                          <CHActionStyled
+                            color="default"
+                            height={120}
+                            underlayColor={Colors.defaultHover}
+                            entering={FadeInDown}
+                            style={[strongShadowStyle]}>
+                            <Box
+                              width="100%"
+                              direction="column"
+                              justifyContent="flex-end"
+                              alignItems="flex-end"
+                              position="relative">
+                              <Typography
+                                variant="body1"
+                                color="white3"
+                                textAlign="right"
+                                weight="semiBold">
+                                {'customer.home.actions.mySchedule.today'}
+                              </Typography>
+                              <Typography
+                                variant="caption"
+                                textAlign="right"
+                                weight="semiBold"
+                                color="primary">
+                                {todayTickets.schedule.barber.name}
+                              </Typography>
+                              <Typography
+                                variant="caption"
+                                textAlign="right"
+                                translate={false}>
+                                {format(
+                                  new Date(todayTickets.schedule.schedule.date),
+                                  'dd/MM',
+                                )}
+                              </Typography>
+                              <Typography
+                                variant="caption"
+                                textAlign="right"
+                                translate={false}>
+                                {todayTickets.schedule.schedule?.time}
+                              </Typography>
+                              <SplashViewStyled left={-10} bottom={40}>
+                                <TodayScheduleBarberAvatar
+                                  source={
+                                    todayTickets.schedule.barber.avatar.url
+                                  }
+                                  onError={() => {}}
+                                />
+                              </SplashViewStyled>
+                            </Box>
+                          </CHActionStyled>
+                        )}
+                    </CHLeftContent>
+                  )}
+
+                  <CHRightContent>
+                    <CHActionStyled
+                      underlayColor={Colors.sandHover}
+                      color="sand"
+                      height={160}
+                      onPress={goToSchedules}
+                      entering={FadeInDown}>
+                      <>
+                        <Typography variant="body1" weight="semiBold">
+                          {'customer.home.actions.mySchedule.title'}
+                        </Typography>
+                        <SplashViewStyled right={0} bottom={0}>
+                          <Splashs.ScheduleSplash />
+                        </SplashViewStyled>
+                      </>
+                    </CHActionStyled>
+                  </CHRightContent>
+                </>
               </CHTabsContentStyled>
             )}
 

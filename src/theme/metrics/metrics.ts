@@ -33,6 +33,7 @@ const metrics = {
   lineHeight: baseLineHeight,
   // Android padding bottom fix
   platformPadding: Platform.OS === 'android' ? 18 : 12,
+  unit: (factor: number) => basePadding * factor,
 };
 
 export function gtDeviceHeight(compareHeight: number) {

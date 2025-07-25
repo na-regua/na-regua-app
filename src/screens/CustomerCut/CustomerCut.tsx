@@ -3,7 +3,7 @@ import {AppStatusBar, Box, Icons, PageCard, Splashs} from '@/components/atoms';
 import {Header} from '@/components/molecules';
 import {TRootStackParamList} from '@/navigation';
 import {AppDispatch, RootState} from '@/store/Store';
-import {AuthThunks} from '@/store/slicers';
+import {AuthThunks, CutActions} from '@/store/slicers';
 import {Colors, Metrics} from '@/theme';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useMemo, useRef} from 'react';
@@ -90,6 +90,11 @@ const CustomerCut: React.FC<
   });
 
   const goBack = () => {
+    if (steps === 'attendance') {
+      dispatch(CutActions.resetCut());
+      return;
+    }
+
     if (navigation.canGoBack()) {
       navigation.goBack();
     }

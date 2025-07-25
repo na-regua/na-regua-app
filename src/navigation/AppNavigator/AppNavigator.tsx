@@ -17,6 +17,7 @@ import {
   CustomerLoginScreen,
   CustomerOnTicketScreen,
   CustomerQrScannerScreen,
+  CustomerSchedulesScreen,
   CustomerSettingsFavoritesScreen,
   CustomerSettingsHistoryScreen,
   CustomerSettingsProfileScreen,
@@ -182,6 +183,10 @@ const AppNavigator: React.FC = () => {
                 name={'/customer/on-ticket'}
                 component={CustomerOnTicketScreen}
                 initialParams={{hideBottomNav: true}}
+              />
+              <Stack.Screen
+                name={'/customer/schedules'}
+                component={CustomerSchedulesScreen}
               />
             </>
           )}

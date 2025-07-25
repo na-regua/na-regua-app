@@ -1,21 +1,13 @@
 import {ACCESS_TOKEN_KEY} from '@/app/models';
 import {navigationRef} from '@/navigation';
 import {store} from '@/store/Store';
-import {SocketActions, createNotification, logout} from '@/store/slicers';
+import {SocketActions, logout} from '@/store/slicers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AxiosError} from 'axios';
 
 export async function onUnauthorizedResponse(error: any) {
   if (error instanceof AxiosError && error.response?.status === 401) {
     await AsyncStorage.removeItem(ACCESS_TOKEN_KEY.toString());
-
-    store.dispatch(
-      createNotification({
-        id: 'unauthorized',
-        message: 'errors.UNAUTHORIZED',
-        type: 'error',
-      }),
-    );
 
     const isSocketConnected = store.getState().socket.connected;
 

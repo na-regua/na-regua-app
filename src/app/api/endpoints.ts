@@ -88,6 +88,14 @@ enum ENDPOINTS {
   TICKETS_BY_USER = '/tickets/user',
   TICKETS_RATE = '/tickets/:ticketId/rate',
   TICKETS_HISTORY = '/tickets/history',
+
+  /**
+   * Schedules
+   * */
+  SCHEDULES_LIST_AVAILABLE = '/schedules/available/',
+  SCHEDULES_CREATE = '/schedules/',
+  SCHEDULED_LIST_APPOINTMENTS = '/schedules/appointments',
+  SCHEDULES_BY_USER = '/schedules/user',
 }
 
 export type TEndpoints = typeof ENDPOINTS;

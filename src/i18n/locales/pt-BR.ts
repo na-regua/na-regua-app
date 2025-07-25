@@ -303,10 +303,11 @@ const ptBr = {
           description: 'Procure a barbearia ideal para você.',
         },
         queue: {
-          title: 'Na\nFila',
+          title: 'Na Fila',
         },
         mySchedule: {
           title: 'Agenda',
+          today: 'Agendamento',
         },
       },
       buttons: {
@@ -346,14 +347,15 @@ const ptBr = {
           schedule: 'Agendamento',
           scheduleDesc: '+{{-total}} horário(s) livre(s).',
           noSchedules: 'Nenhum horário disponível no momento.',
+          day: 'Dia',
         },
         select: {
           type: 'Selecione o atendimento',
           service: 'Selecione o serviço',
           additionalServices: 'Serviços adicionais',
           optional: '(opcional)',
-          day: 'Dia',
-          time: '',
+          day: 'Selecione um Dia',
+          time: 'Selecione o Horário',
         },
       },
       buttons: {
@@ -364,6 +366,9 @@ const ptBr = {
         joinWait: 'Ficar em espera ...',
       },
       isRequired: '(Obrigatório)',
+      notifications: {
+        scheduleCreated: 'Agendamento criado com sucesso.',
+      },
     },
     qrScan: {
       title: 'Ler QR Code',
@@ -407,7 +412,12 @@ const ptBr = {
         total: 'Total',
         noComment: 'Sem comentários.',
       },
+
       buttons: {beLate: 'Vou atrasar!', rate: 'Avaliar'},
+    },
+    appointments: {
+      title: 'Minha agenda',
+      subtitle: 'Ver agendamentos.',
     },
   },
   generic: {

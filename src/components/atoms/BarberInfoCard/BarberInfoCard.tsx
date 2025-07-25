@@ -105,9 +105,9 @@ const BarberInfoCard: React.FC<IBarberInfoCardProps> = ({
               color={isOpen ? 'main' : 'black2'}
             />
             <Typography variant="caption" color="black2" translate={false}>
-              {barber.config.worktime.start +
+              {barber.config.work_time.start +
                 ' - ' +
-                barber.config.worktime.end}
+                barber.config.work_time.end}
             </Typography>
           </Box>
           <Box gap={6} direction="row" alignItems="flex-start">

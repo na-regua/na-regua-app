@@ -7,6 +7,7 @@ export * from './file/file.model';
 export * from './generic';
 export * from './notify/notify.model';
 export * from './queue/queue.model';
+export * from './schedule/schedule.model';
 export * from './service/service.model';
 export * from './socket/socket.model';
 export * from './ticket/ticket.model';

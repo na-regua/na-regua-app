@@ -24,15 +24,17 @@ const NotificationCenterItem: React.FC<NotificationCenterItemProps> = ({
 
   const [reading, setReading] = useState(read);
 
-  const messageStr = useMemo(() => {
-    if (message === 'GENERATED_STATEMENT' && data?.date) {
-      return t(`notification.${message}`, {
-        day: format(new Date(data.date), 'dd/MM/yy'),
-      });
+  const translateParams = useMemo(() => {
+    let day = '';
+    let time = '';
+    if (data?.ticket?.schedule) {
+      const date = new Date(data.ticket.schedule.date);
+      day = format(date, 'dd/MM/yyyy');
+      time = data.ticket.schedule.time;
     }
 
-    return t(`notification.${message}`, {data});
-  }, [data, message, t]);
+    return {data, day, time};
+  }, [data]);
 
   const formattedCreatedAt = useMemo(() => {
     const today = new Date();
@@ -73,7 +75,9 @@ const NotificationCenterItem: React.FC<NotificationCenterItemProps> = ({
         size={42}
       />
       <NotificationInfoStyled>
-        <Typography variant="body2">{messageStr}</Typography>
+        <Typography variant="body2" translateProps={translateParams}>
+          {'notification.' + message}
+        </Typography>
         {data?.service && (
           <Typography variant="caption" color="primary" weight="medium">
             {data.service.name}

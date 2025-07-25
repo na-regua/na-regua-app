@@ -28,3 +28,4 @@ export {default as CustomerSettingsFavoritesScreen} from './CustomerSettingsFavo
 export {default as PermissionsScreen} from './Permissions/Permissions';
 
 export * from './CustomerOnTicket/components';
+export {default as CustomerSchedulesScreen} from './CustomerSchedules/CustomerSchedules';

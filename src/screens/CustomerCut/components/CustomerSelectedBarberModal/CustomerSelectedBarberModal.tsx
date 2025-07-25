@@ -45,6 +45,7 @@ const CustomerSelectedBarberModal: React.FC<
     await dispatch(
       CutThunks.fetchBarberTodayQueueByBarberId(selectedBarber._id),
     );
+    await dispatch(CutThunks.fetchAvailableSchedules(selectedBarber._id));
 
     dispatch(CutActions.setCutStep('attendance'));
 

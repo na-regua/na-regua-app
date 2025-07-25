@@ -1,5 +1,6 @@
-import {Colors, Metrics} from '@/theme';
-import {TColorsType} from '@/theme';
+import {Colors, Metrics, TColorsType} from '@/theme';
+import colors from '@/theme/colors';
+import {CachedImage} from '@georstat/react-native-image-cache';
 import {TouchableHighlight, View} from 'react-native';
 import Animated from 'react-native-reanimated';
 import styled, {css} from 'styled-components/native';
@@ -80,30 +81,58 @@ export const CHTabsStyled = styled.View`
 export const CHTabsContentStyled = styled(AnimatedView)`
   flex: 1;
   flex-direction: row;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+`;
+
+export const CHLeftContent = styled.View`
+  flex-direction: column;
   gap: 18px;
+  width: 49%;
+`;
+export const CHRightContent = styled.View`
+  flex-direction: column;
+  gap: 18px;
+  width: 49%;
 `;
 
 export const CHActionStyled = styled(AnimatedTouchableHighlight)<{
   color?: TColorsType;
   height?: number;
 }>`
-  padding: 18px;
+  padding: 12px;
   border-radius: 18px;
   background: ${({color}) => Colors[color || 'white1']};
   position: relative;
   ${({height}) => height && `height: ${height}px;`}
   max-width:${Metrics.smWidth / 2 - 12}px;
-  width: 100%;
-  flex: 1;
   overflow: hidden;
+  width: 100%;
+  gap: 4px;
+  flex-wrap: wrap;
 `;
 
 export const SplashViewStyled = styled(AnimatedView)<{
-  bottom: number;
-  right: number;
+  bottom?: number;
+  right?: number;
+  left?: number;
+  top?: number;
 }>`
   position: absolute;
-  bottom: ${({bottom}) => bottom}px;
-  right: ${({right}) => right}px;
+
+  ${({top}) => !!top && `top: ${top}px;`}
+  ${({bottom}) => !!bottom && `bottom: ${bottom}px;`}
+  ${({left}) => !!left && `left: ${left}px;`}
+  ${({right}) => !!right && `right: ${right}px;`}
 `;
+
+export const TodayScheduleBarberAvatar = styled(CachedImage).attrs({
+  imageStyle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    borderWidth: 3,
+    borderColor: colors.white3,
+  },
+})``;

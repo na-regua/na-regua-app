@@ -9,8 +9,9 @@ export const THITouchableContainer = styled(AnimatedTouchableOpacity)<{
   backgroundHoverColor?: TColorsType;
   selected?: boolean;
   _zIndex?: number;
+  height?: number;
 }>`
-  min-height: ${TICKET_HISTORY_ITEM_HEIGHT}px;
+  min-height: ${({height}) => height || TICKET_HISTORY_ITEM_HEIGHT}px;
   padding: 12px;
   border-radius: 18px;
   background-color: ${({backgroundColor}) =>
@@ -19,7 +20,7 @@ export const THITouchableContainer = styled(AnimatedTouchableOpacity)<{
   gap: 6px;
   width: 100%;
   position: relative;
-  z-index: ${({_zIndex}) => _zIndex};
+  z-index: ${({_zIndex}) => _zIndex || 0};
 
   ${({selected}) =>
     !selected &&

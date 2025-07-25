@@ -101,18 +101,3 @@ export const OnTicketLineCornerStyled = styled.View<{
     border-bottom-left-radius: 12px;
   `}
 `;
-
-export const OnTicketInfoStyled = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
-`;
-
-export const OnTicketIconWrapperStyled = styled.View`
-  align-items: center;
-  justify-content: center;
-  background: ${Colors.secondary};
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-`;

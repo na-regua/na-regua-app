@@ -57,7 +57,7 @@ export interface OnTicketGeneralProps {
 
 export interface IGetTodayTickets {
   queue: ITicket;
-  schedules: ITicket[];
+  schedule: ITicket;
 }
 
 export interface IGetTicketsHistory {

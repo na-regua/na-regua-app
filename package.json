@@ -44,6 +44,7 @@
     "react-native-screens": "^3.25.0",
     "react-native-share": "^9.4.1",
     "react-native-svg": "^13.14.0",
+    "react-native-ui-datepicker": "^3.0.5",
     "react-native-view-shot": "^3.8.0",
     "react-native-vision-camera": "^4.0.4",
     "react-redux": "^8.1.2",

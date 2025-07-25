@@ -1,4 +1,6 @@
 import {
+  IAppointment,
+  IAvailableScheduleDate,
   IBarber,
   IBarberService,
   ICutState,
@@ -20,7 +22,6 @@ const CutSlicer = createSlice<ICutState, SliceCaseReducers<ICutState>, string>({
   name: 'Login',
   initialState: {
     steps: 'select',
-    selectedAdditionalServices: [],
   },
   reducers: {
     setCutStep: (state, action: GenericAction<TCutSteps>) => {
@@ -43,6 +44,9 @@ const CutSlicer = createSlice<ICutState, SliceCaseReducers<ICutState>, string>({
         state.selectedAdditionalServices.push(action.payload);
       }
     },
+    setScheduleConfig: (state, action: GenericAction<IAppointment>) => {
+      state.scheduleConfig = action.payload;
+    },
     removeCutSelectedAdditionalService: (
       state,
       action: GenericAction<IBarberService>,
@@ -59,7 +63,12 @@ const CutSlicer = createSlice<ICutState, SliceCaseReducers<ICutState>, string>({
       state.attendanceType = undefined;
       state.selectedService = undefined;
       state.selectedBarber = undefined;
+
+      state.services = [];
+      state.additionalServices = [];
       state.selectedAdditionalServices = [];
+      state.scheduleConfig = undefined;
+      state.availableSchedules = [];
     },
     setShowSelectedModal: (state, action: GenericAction<boolean>) => {
       state.showSelectedModal = action.payload;
@@ -88,6 +97,13 @@ const CutSlicer = createSlice<ICutState, SliceCaseReducers<ICutState>, string>({
         state.barberTodayQueue = action.payload.data.queue;
       },
     );
+
+    builder.addCase(
+      CutThunks.fetchAvailableSchedules.fulfilled,
+      (state, action) => {
+        state.availableSchedules = action.payload.data;
+      },
+    );
   },
 });
 
@@ -98,10 +114,12 @@ export const CutActions = CutSlicer.actions as {
   setAttendanceType: ActionCreatorWithPayload<TAttendanceType>;
   setCutSelectedService: ActionCreatorWithPayload<IBarberService | null>;
   setCutSelectedBarber: ActionCreatorWithPayload<IBarber | null>;
-  resetCut: ActionCreatorWithoutPayload;
   addCutSelectedAdditionalService: ActionCreatorWithPayload<IBarberService>;
   removeCutSelectedAdditionalService: ActionCreatorWithPayload<IBarberService>;
   setShowSelectedModal: ActionCreatorWithPayload<boolean>;
+  resetCut: ActionCreatorWithoutPayload;
+  setScheduleConfig: ActionCreatorWithPayload<IAppointment>;
+  setAvailableSchedules: ActionCreatorWithPayload<IAvailableScheduleDate[]>;
 };
 
 export {CutReducer, CutSlicer};

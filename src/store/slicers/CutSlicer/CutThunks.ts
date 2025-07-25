@@ -1,4 +1,9 @@
-import {QueueService, ServicesService, TicketsService} from '@/app/api';
+import {
+  QueueService,
+  ScheduleService,
+  ServicesService,
+  TicketsService,
+} from '@/app/api';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
 const fetchBarberServicesByBarberId = createAsyncThunk(
@@ -48,8 +53,22 @@ const fetchTodayTickets = createAsyncThunk(
   },
 );
 
+const fetchAvailableSchedules = createAsyncThunk(
+  'Cut/fetchSelectedBarberAvailableSchedules',
+  async (barberId: string, {rejectWithValue}) => {
+    try {
+      const response = await ScheduleService.getAvailableSchedules({barberId});
+
+      return response;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+);
+
 export default {
   fetchBarberServicesByBarberId,
   fetchBarberTodayQueueByBarberId,
   fetchTodayTickets,
+  fetchAvailableSchedules,
 };

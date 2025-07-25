@@ -7,6 +7,7 @@ import {useTranslation} from 'react-i18next';
 import {FadeInLeft} from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';
 import {LineStyled} from '../../styles';
+import {CustomerAttendanceSchedule} from '../CustomerAttendanceSchedule/CustomerAttendanceSchedule';
 import {
   AttendanceBarberItemTitleStyled,
   AttendanceContentStyled,
@@ -33,12 +34,22 @@ const CustomerAttendance: React.FC<ICustomerAttendanceProps> = ({isOpen}) => {
     selectedAdditionalServices,
     services,
     additionalServices,
+    availableSchedules,
   } = useSelector((state: RootState) => state.cut);
   const {socket, connected, subs} = useSelector(
     (state: RootState) => state.socket,
   );
-  const dispatch = useDispatch<AppDispatch>();
-
+  const availableScheduleTimes = useMemo(
+    () =>
+      availableSchedules
+        ? availableSchedules
+            .map(a => a.schedules)
+            .reduce((acc, prev) => {
+              return [...acc, ...prev];
+            }, []).length
+        : 0,
+    [availableSchedules],
+  );
   const isCustomer = useMemo(
     () =>
       selectedBarber &&
@@ -47,6 +58,8 @@ const CustomerAttendance: React.FC<ICustomerAttendanceProps> = ({isOpen}) => {
     [selectedBarber],
   );
 
+  const dispatch = useDispatch<AppDispatch>();
+
   const getBarberLiveUpdates = useCallback(() => {
     if (!!socket && connected && selectedBarber) {
       const url = SocketUrls.BarberInfo.replace(
@@ -54,15 +67,17 @@ const CustomerAttendance: React.FC<ICustomerAttendanceProps> = ({isOpen}) => {
         selectedBarber._id.toString(),
       );
       if (!subs.includes(url as SocketUrls)) {
-        socket.on(url, data => {
+        socket.on(url, async data => {
           if (data.barber) {
             dispatch(CutActions.setCutSelectedBarber(data.barber));
 
             if (data.queue) {
-              dispatch(
+              await dispatch(
                 CutThunks.fetchBarberTodayQueueByBarberId(data.barber._id),
               );
             }
+
+            await dispatch(CutThunks.fetchAvailableSchedules(data.barber._id));
           }
         });
 
@@ -198,7 +213,7 @@ const CustomerAttendance: React.FC<ICustomerAttendanceProps> = ({isOpen}) => {
                 </Typography>
                 <Typography
                   variant="tip"
-                  translateProps={{total: '2'}}
+                  translateProps={{total: availableScheduleTimes}}
                   weight="medium"
                   color={attendanceType === 'schedule' ? 'main' : 'black1'}>
                   {'customer.cut.attendance.types.scheduleDesc'}
@@ -339,6 +354,7 @@ const CustomerAttendance: React.FC<ICustomerAttendanceProps> = ({isOpen}) => {
             );
           })}
       </AttendanceSectionStyled>
+      {attendanceType === 'schedule' && <CustomerAttendanceSchedule />}
     </AttendanceContentStyled>
   );
 };
