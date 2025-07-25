@@ -1,8 +1,8 @@
 import {Colors} from '@/theme';
 import React, {useMemo} from 'react';
-import {StyleSheet, View} from 'react-native';
 import {Path, Svg} from 'react-native-svg';
 import {IIconProps} from '../Icons';
+import {IconTouchableViewStyle} from '../styles';
 
 interface IBellIconProps extends IIconProps {
   fill?: boolean;
@@ -12,9 +12,11 @@ const BellIcon: React.FC<IBellIconProps> = ({
   width = 20,
   height = 20,
   color = 'default',
-  strokeWidth = 1.5,
+  strokeWidth = 2,
   customColor,
   fill,
+  disabled,
+  onPress,
 }) => {
   const getColor = useMemo(
     () => Colors[color] || customColor,
@@ -22,7 +24,10 @@ const BellIcon: React.FC<IBellIconProps> = ({
   );
 
   return (
-    <View style={styles.iconWrapper}>
+    <IconTouchableViewStyle
+      activeOpacity={0.6}
+      disabled={disabled}
+      onPress={onPress}>
       <Svg
         width={width}
         height={height}
@@ -43,15 +48,8 @@ const BellIcon: React.FC<IBellIconProps> = ({
           strokeLinejoin="round"
         />
       </Svg>
-    </View>
+    </IconTouchableViewStyle>
   );
 };
-
-const styles = StyleSheet.create({
-  iconWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default BellIcon;

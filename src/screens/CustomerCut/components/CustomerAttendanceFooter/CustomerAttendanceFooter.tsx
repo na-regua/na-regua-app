@@ -1,0 +1,155 @@
+import {QueueService, ScheduleService} from '@/app/api';
+import {Button, Icons, Typography} from '@/components/atoms';
+import {useAppNavigation} from '@/navigation';
+import {AppDispatch, RootState} from '@/store/Store';
+import {
+  createNotification,
+  CutActions,
+  CutThunks,
+  TicketViewActions,
+} from '@/store/slicers';
+import React, {useMemo, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  OtherButtonContentStyled,
+  PageCardFooterStyled,
+} from '../CustomerAttendance/styles';
+
+const CustomerAttendanceFooter: React.FC = () => {
+  const {
+    attendanceType,
+    selectedBarber,
+    selectedService,
+    selectedAdditionalServices,
+    scheduleConfig,
+  } = useSelector((state: RootState) => state.cut);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigation = useAppNavigation();
+
+  const [joining, setJoining] = useState(false);
+  const [scheduling, setScheduling] = useState(false);
+
+  const selectOtherBarber = () => {
+    dispatch(CutActions.resetCut());
+  };
+
+  const canJoinQueue = useMemo(
+    () => !!selectedBarber && !!selectedService,
+    [selectedBarber, selectedService],
+  );
+
+  const canSchedule = useMemo(
+    () => canJoinQueue && !!scheduleConfig,
+    [scheduleConfig, canJoinQueue],
+  );
+
+  const joinQueue = async () => {
+    if (selectedBarber && selectedService) {
+      setJoining(true);
+
+      try {
+        const additionalServicesId =
+          selectedAdditionalServices?.map(s => s._id) || [];
+
+        const {data} = await QueueService.userJoin(
+          selectedBarber.code,
+          selectedService._id,
+          additionalServicesId,
+        );
+
+        if (data.ticket) {
+          dispatch(TicketViewActions.setTicket(data.ticket));
+          if (data.ticket.queue) {
+            dispatch(TicketViewActions.setQueue(data.ticket.queue.queue_dto));
+          }
+
+          setJoining(false);
+
+          navigation.navigate('/customer/on-ticket');
+
+          dispatch(CutActions.resetCut());
+
+          await dispatch(CutThunks.fetchTodayTickets());
+        }
+      } catch (error) {
+        setJoining(false);
+      }
+    }
+  };
+
+  const createSchedule = async () => {
+    try {
+      if (!selectedBarber || !scheduleConfig || !selectedService) {
+        return;
+      }
+
+      setScheduling(true);
+
+      await ScheduleService.createSchedule({
+        barberId: selectedBarber?._id,
+        serviceId: selectedService?._id,
+        date: scheduleConfig.date,
+        time: scheduleConfig.time,
+      });
+
+      setScheduling(false);
+
+      // navigation.navigate('/customer/schedules');
+
+      dispatch(CutActions.resetCut());
+
+      await dispatch(CutThunks.fetchTodayTickets());
+
+      dispatch(
+        createNotification({
+          id: 'created_schedule',
+          type: 'success',
+          message: 'customer.cut.notifications.scheduleCreated',
+        }),
+      );
+    } catch (error) {
+      setScheduling(false);
+    }
+  };
+
+  return (
+    <PageCardFooterStyled>
+      <Button
+        variant="ghost"
+        colorScheme="primary"
+        customContent={
+          <OtherButtonContentStyled>
+            <Icons.ArrowLeftIcon color="primary" disabled />
+            <Typography variant="button" color="primary">
+              {'customer.cut.buttons.other'}
+            </Typography>
+          </OtherButtonContentStyled>
+        }
+        onPress={selectOtherBarber}
+      />
+
+      {attendanceType === 'queue' && (
+        <Button
+          fillSpace
+          colorScheme="main"
+          title="customer.cut.buttons.join"
+          disabled={!canJoinQueue}
+          onPress={joinQueue}
+          loading={joining}
+        />
+      )}
+      {attendanceType === 'schedule' && (
+        <Button
+          fillSpace
+          colorScheme="main"
+          title="customer.cut.buttons.schedule"
+          disabled={!canSchedule}
+          loading={scheduling}
+          onPress={createSchedule}
+        />
+      )}
+    </PageCardFooterStyled>
+  );
+};
+
+export {CustomerAttendanceFooter};

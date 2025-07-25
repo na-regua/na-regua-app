@@ -1,0 +1,237 @@
+import {FilesService} from '@/app/api';
+import {AppStatusBar, Avatar, Icons, Typography} from '@/components/atoms';
+import {Header} from '@/components/molecules';
+import {TRootStackParamList} from '@/navigation';
+import {AppDispatch, RootState} from '@/store/Store';
+import {AuthThunks, SocketActions, logout} from '@/store/slicers';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, {ReactNode, useMemo, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Asset} from 'react-native-image-picker';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  ContainerStyle,
+  CustomerProfileStyled,
+  LogoutLinkStyle,
+  MenuItemIconStyle,
+  MenuItemInfoStyle,
+  MenuItemStyle,
+  MenuWrapperStyle,
+  ScrollContentStyle,
+  styles,
+} from './styles';
+import {ACCESS_TOKEN_KEY} from '@/app/models';
+
+type TCustomerSettingsMenuType =
+  | 'profile'
+  | 'history'
+  | 'notifications'
+  | 'permissions'
+  | 'favorites';
+
+interface ICustomerSettingsMenuItem {
+  icon: ReactNode;
+  type: TCustomerSettingsMenuType;
+  title: string;
+  subtitle: string;
+  onPress: () => void;
+}
+
+const CustomerSettings: React.FC<
+  NativeStackScreenProps<TRootStackParamList, '/customer/settings'>
+> = ({navigation}) => {
+  const {t} = useTranslation();
+  const insets = useSafeAreaInsets();
+  const insetsStyles = {
+    paddingTop: insets.top,
+    paddingBottom: insets.bottom,
+    paddingLeft: insets.left,
+    paddingRight: insets.right,
+  };
+
+  const {user} = useSelector((state: RootState) => state.auth);
+  const {userType} = useSelector((state: RootState) => state.login);
+
+  const [changingAvatar, setChangingAvatar] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const menus: ICustomerSettingsMenuItem[] = [
+    {
+      type: 'profile',
+      icon: (
+        <Icons.UserIcon
+          color="default"
+          width={24}
+          height={24}
+          strokeWidth={2.3}
+        />
+      ),
+      title: 'customer.settings.menus.profile.title',
+      subtitle: 'customer.settings.menus.profile.subtitle',
+      onPress: () => {
+        navigation.navigate('/customer/settings/profile');
+      },
+    },
+    {
+      type: 'favorites',
+      icon: (
+        <Icons.HeartIcon
+          color="default"
+          width={24}
+          height={24}
+          strokeWidth={1.2}
+        />
+      ),
+      title: 'customer.settings.menus.favorites.title',
+      subtitle: 'customer.settings.menus.favorites.subtitle',
+      onPress: () => {
+        navigation.navigate('/customer/settings/favorites');
+      },
+    },
+    {
+      type: 'history',
+      icon: (
+        <Icons.TimeIcon
+          color="default"
+          width={24}
+          height={24}
+          strokeWidth={1.5}
+        />
+      ),
+      title: 'customer.settings.menus.history.title',
+      subtitle: 'customer.settings.menus.history.subtitle',
+      onPress: () => {
+        navigation.navigate('/customer/settings/history');
+      },
+    },
+    {
+      type: 'notifications',
+      icon: (
+        <Icons.BellIcon
+          color="default"
+          width={24}
+          height={24}
+          strokeWidth={1.5}
+        />
+      ),
+      title: 'customer.settings.menus.notifications.title',
+      subtitle: 'customer.settings.menus.notifications.subtitle',
+      onPress: () => {
+        navigation.navigate('/user/notifications');
+      },
+    },
+    {
+      type: 'permissions',
+      icon: (
+        <Icons.SettingsIcon
+          color="default"
+          width={24}
+          height={24}
+          strokeWidth={1.3}
+        />
+      ),
+      title: 'customer.settings.menus.permissions.title',
+      subtitle: 'customer.settings.menus.permissions.subtitle',
+      onPress: () => {
+        navigation.navigate('/user/permissions');
+      },
+    },
+  ];
+
+  const avatarUrl = useMemo(() => user?.avatar.url, [user]);
+
+  if (!user) {
+    return null;
+  }
+
+  const onAvatarChange = async (_file: Asset) => {
+    setChangingAvatar(true);
+
+    try {
+      await FilesService.updateUserAvatarFile(user.avatar._id, _file);
+
+      await dispatch(AuthThunks.getCurrentUser());
+
+      setChangingAvatar(false);
+    } catch (error) {
+      setChangingAvatar(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem(ACCESS_TOKEN_KEY.toString());
+
+    dispatch(logout());
+    dispatch(SocketActions.disconnectSocket());
+
+    if (userType === 'customer') {
+      navigation.navigate('/generic/login/customer');
+    }
+
+    if (userType === 'worker') {
+      navigation.navigate('/generic/login/barber');
+    }
+  };
+
+  const goBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+
+    if (!navigation.canGoBack()) {
+      navigation.navigate('/customer/home');
+    }
+  };
+
+  return (
+    <ContainerStyle style={insetsStyles}>
+      <AppStatusBar />
+      <Header.Container>
+        <Header.GoBack pressables={{back: goBack}} />
+        <Header.Border />
+      </Header.Container>
+      <ScrollContentStyle
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[styles.scrollContainer]}>
+        <CustomerProfileStyled>
+          <Avatar
+            preview={avatarUrl}
+            size={88}
+            onAvatarChange={onAvatarChange}
+            loading={changingAvatar}
+          />
+          <Typography variant="h4" color="black3" style={styles.textCenter}>
+            {user.name}
+          </Typography>
+        </CustomerProfileStyled>
+        <MenuWrapperStyle>
+          {menus.map((item, index) => (
+            <MenuItemStyle
+              key={index}
+              onPress={item.onPress}
+              activeOpacity={0.6}>
+              <MenuItemIconStyle>{item.icon}</MenuItemIconStyle>
+              <MenuItemInfoStyle>
+                <Typography variant="body1" color="black2">
+                  {t(item.title)}
+                </Typography>
+                <Typography variant="caption" color="black1">
+                  {t(item.subtitle)}
+                </Typography>
+              </MenuItemInfoStyle>
+            </MenuItemStyle>
+          ))}
+          <LogoutLinkStyle onPress={handleLogout} activeOpacity={0.6}>
+            <Typography variant="button" color="danger">
+              {t('barber.settings.logout')}
+            </Typography>
+          </LogoutLinkStyle>
+        </MenuWrapperStyle>
+      </ScrollContentStyle>
+    </ContainerStyle>
+  );
+};
+
+export default CustomerSettings;

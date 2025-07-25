@@ -1,34 +1,42 @@
-import {Colors, Fonts} from '@/theme';
+import {Colors} from '@/theme';
 import React, {ReactNode, useMemo, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   NativeSyntheticEvent,
-  StyleSheet,
-  Text,
   TextInput,
   TextInputFocusEventData,
   TextInputProps,
-  View,
+  TextStyle,
   ViewStyle,
 } from 'react-native';
+import {Box} from '../Box/Box';
+import {InputLabelStyle, InputStyle, InputWrapperStyle, styles} from './styles';
 
 interface IInputProps extends TextInputProps {
   label: string;
   suffix?: ReactNode;
+  textStyle?: TextStyle;
   wrapperStyle?: ViewStyle;
+  inputRef?: React.RefObject<TextInput>;
 }
 
 const Input: React.FC<IInputProps> = ({
   label,
-  style,
+  textStyle,
   placeholder,
   suffix,
   wrapperStyle,
   onBlur,
   onChangeText,
   value,
+  inputRef,
+  editable = true,
   ...inputProps
 }) => {
+  const {t} = useTranslation();
   const [isFocused, setIsFocused] = useState(false);
+  const [suffixWidth, setSuffixWidth] = useState(0);
+  const [fieldValue, setFieldValue] = useState(value);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -37,82 +45,64 @@ const Input: React.FC<IInputProps> = ({
   const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setIsFocused(false);
 
-    onBlur?.(e);
+    if (onBlur) {
+      onBlur(e);
+    }
   };
 
-  const textInputStyle = useMemo(() => {
-    if (isFocused || value) {
-      return [style, styles.input, styles.inputFocused];
-    }
-
-    return [style, styles.input];
-  }, [isFocused, style, value]);
+  const active: boolean = useMemo(
+    () => isFocused || !!value || !!fieldValue,
+    [isFocused, value, fieldValue],
+  );
 
   const handleOnChangeText = (text: string) => {
+    setFieldValue(text);
     onChangeText?.(text);
   };
 
   return (
-    <View style={[styles.inputWrapper, wrapperStyle]}>
-      {(isFocused || value) && <Text style={styles.inputLabel}>{label}</Text>}
-      <TextInput
-        style={textInputStyle}
+    <InputWrapperStyle style={wrapperStyle}>
+      {active && (
+        <InputLabelStyle editable={editable} focused={isFocused}>
+          {label && t(label)}
+        </InputLabelStyle>
+      )}
+
+      <InputStyle
+        style={[{paddingRight: suffixWidth + 16}, inputProps.style]}
+        active={active}
+        borderColor={textStyle?.borderColor}
         autoCorrect={false}
         spellCheck={false}
+        editable={editable}
         onFocus={handleFocus}
-        placeholder={placeholder || (isFocused ? '' : label)}
+        placeholder={
+          (placeholder && t(placeholder)) || (isFocused ? '' : t(label))
+        }
         placeholderTextColor={isFocused ? Colors.main : Colors.placeholder}
+        focused={isFocused}
         {...inputProps}
         value={value}
         onChangeText={handleOnChangeText}
         onBlur={e => handleBlur(e)}
+        as={TextInput}
+        ref={inputRef}
       />
-      {suffix && <View style={styles.suffixWrapper}>{suffix}</View>}
-    </View>
+
+      {suffix && (
+        <Box
+          zIndex={2}
+          onLayout={({
+            nativeEvent: {
+              layout: {width},
+            },
+          }) => setSuffixWidth(Math.ceil(width))}
+          style={styles.suffixWrapper}>
+          {suffix}
+        </Box>
+      )}
+    </InputWrapperStyle>
   );
 };
-
-const styles = StyleSheet.create({
-  inputWrapper: {
-    position: 'relative',
-  },
-  inputLabel: {
-    position: 'absolute',
-    backgroundColor: Colors.bgLight,
-    zIndex: 2,
-    top: -8,
-    left: 12,
-    paddingHorizontal: 2,
-    color: Colors.main,
-    fontSize: 12,
-    fontFamily: Fonts.types.medium,
-    fontWeight: Fonts.weights.medium,
-  },
-  input: {
-    height: 40,
-    fontWeight: Fonts.weights.semiBold,
-    fontFamily: Fonts.types.semiBold,
-    borderWidth: 2,
-    borderColor: Colors.border,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    color: Colors.black3,
-    fontSize: 14,
-  },
-  inputFocused: {
-    fontFamily: Fonts.types.semiBold,
-    fontWeight: Fonts.weights.semiBold,
-    borderColor: Colors.main,
-  },
-  suffixWrapper: {
-    position: 'absolute',
-    right: 12,
-    top: 0,
-    bottom: 0,
-    marginVertical: 'auto',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default Input;

@@ -1,90 +1,162 @@
-import {Icons, Typography} from '@/components/atoms';
-import {Colors, Fonts} from '@/theme';
-import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {PartialRecord} from '@/app/models';
+import {Box, IBoxProps, Icons, Typography} from '@/components/atoms';
+import {useAppNavigation} from '@/navigation';
+import {RootState} from '@/store/Store';
+import {Metrics, TColorsType} from '@/theme';
+import React, {useMemo} from 'react';
+import {useTranslation} from 'react-i18next';
+import {ViewStyle} from 'react-native';
+import {useSelector} from 'react-redux';
+import {
+  BackContainerStyle,
+  BorderContainerStyle,
+  LogoContainerStyle,
+  LogoIconStyle,
+  TitleContainerStyle,
+  UserClickContainerStyled,
+  UserImageStyle,
+  WelcomeTextStyle,
+} from './styles';
 
-interface IHeaderProps {
-  authenticated?: boolean;
-  showTitle?: boolean;
-  title?: string;
-  subtitle?: string;
-  onIconPress?: () => void;
+type THeaderClicables = 'user' | 'logo' | 'back';
+
+interface IGenericHeaderProps {
+  lightContent?: boolean;
+  pressables?: PartialRecord<THeaderClicables, () => void>;
 }
 
-const Header: React.FC<IHeaderProps> = ({
-  authenticated = false,
-  showTitle = true,
-  title = 'Title',
-  subtitle = 'Subtitle',
-  onIconPress,
-}) => {
+const User: React.FC<IGenericHeaderProps> = ({lightContent, pressables}) => {
+  const {t} = useTranslation();
+  const {user} = useSelector((state: RootState) => state.auth);
+  const navigator = useAppNavigation();
+
+  const mainColor = useMemo(
+    () => (lightContent ? 'white3' : 'main'),
+    [lightContent],
+  );
+
+  const navigateToNotifications = () => {
+    navigator.navigate('/user/notifications');
+  };
+
   return (
-    <View style={styles.headerContainer}>
-      <View style={styles.headerContainerInfo}>
-        <TouchableOpacity
-          style={styles.headerContainerInfoGroup}
-          onPress={onIconPress}
-          activeOpacity={0.8}>
-          <View style={styles.headerContainerInfoIcon} />
-          <Typography variant="body2" color="black1">
-            Na Régua
-          </Typography>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Icons.BellIcon width={24} height={24} color="main" />
-        </TouchableOpacity>
-      </View>
-      {authenticated && (
-        <View>
-          <Typography variant="h2" color="black3">
-            <Typography
-              variant="h2"
-              color="black3"
-              customStyles={{fontWeight: Fonts.weights.regular}}>
-              Olá,
-            </Typography>{' '}
-            Alex
-          </Typography>
-        </View>
-      )}
-      {!authenticated && showTitle && (
-        <View style={styles.headerTitle}>
-          <Typography variant="h2">{title}</Typography>
-          <Typography variant="body2" color="black1">
-            {subtitle}
-          </Typography>
-        </View>
-      )}
-    </View>
+    <LogoContainerStyle>
+      <UserClickContainerStyled
+        disabled={!pressables?.user}
+        onPress={pressables && pressables.user}>
+        {user && user.avatar.url && (
+          <>
+            <UserImageStyle source={user.avatar.url} onError={() => {}} />
+            <Typography variant="body1" color="black2" translate={false}>
+              {t('generic.header.hello') + user.name.split(' ')[0]}
+            </Typography>
+          </>
+        )}
+      </UserClickContainerStyled>
+      <Icons.BellIcon
+        width={24}
+        height={24}
+        strokeWidth={2}
+        color={mainColor}
+        onPress={navigateToNotifications}
+      />
+    </LogoContainerStyle>
   );
 };
 
-const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: 'column',
-    gap: 12,
-  },
-  headerContainerInfo: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  headerContainerInfoGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  headerContainerInfoIcon: {
-    borderRadius: 8,
-    width: 32,
-    height: 32,
-    backgroundColor: Colors.main,
-  },
-  headerContainerMessage: {},
-  headerTitle: {
-    flexDirection: 'column',
-    gap: 4,
-  },
-});
+const Actions: React.FC<IGenericHeaderProps> = ({lightContent, pressables}) => {
+  const navigator = useAppNavigation();
 
-export default Header;
+  const mainColor = useMemo(
+    () => (lightContent ? 'white3' : 'main'),
+    [lightContent],
+  );
+
+  const navigateToNotifications = () => {
+    navigator.navigate('/user/notifications');
+  };
+
+  return (
+    <LogoContainerStyle>
+      <LogoIconStyle
+        onPress={pressables?.logo}
+        activeOpacity={0.6}
+        disabled={!pressables?.logo}>
+        <Icons.LogoMiniIcon disabled width={32} height={32} />
+      </LogoIconStyle>
+
+      <Icons.BellIcon
+        width={24}
+        height={24}
+        color={mainColor}
+        strokeWidth={2}
+        onPress={navigateToNotifications}
+      />
+    </LogoContainerStyle>
+  );
+};
+
+const Welcome: React.FC<IGenericHeaderProps> = ({lightContent}) => {
+  const {t} = useTranslation();
+  const {user, isAuthenticated} = useSelector((state: RootState) => state.auth);
+
+  const color = useMemo(
+    () => (lightContent ? 'white' : 'black'),
+    [lightContent],
+  );
+
+  if (!user || !isAuthenticated) {
+    return null;
+  }
+
+  return (
+    <TitleContainerStyle>
+      <WelcomeTextStyle
+        variant="h3"
+        color={`${color}3` as any}
+        weight="regular">
+        {t('generic.header.hello')}
+      </WelcomeTextStyle>
+      <WelcomeTextStyle variant="h3" weight="medium" color={`${color}3` as any}>
+        {user.name.split(' ')[0]}
+      </WelcomeTextStyle>
+    </TitleContainerStyle>
+  );
+};
+
+const GoBack: React.FC<
+  {backText?: string; iconColor?: TColorsType} & IGenericHeaderProps
+> = ({pressables, backText = 'nav.back', iconColor}) => {
+  const {t} = useTranslation();
+
+  return (
+    <BackContainerStyle activeOpacity={0.6} onPress={pressables?.back}>
+      <Icons.ChevronLeftIcon
+        width={24}
+        height={24}
+        color={iconColor || 'primary'}
+      />
+    </BackContainerStyle>
+  );
+};
+
+const Border: React.FC<IGenericHeaderProps> = () => {
+  return <BorderContainerStyle />;
+};
+
+const Container: React.FC<IBoxProps> = ({children, ...rest}) => {
+  const androidStyles: ViewStyle = {paddingTop: 18};
+
+  return (
+    <Box
+      position="relative"
+      paddings={{vertical: 12, horizontal: 18}}
+      width={Metrics.screenWidth}
+      {...rest}
+      style={[rest.style, androidStyles]}>
+      {children}
+    </Box>
+  );
+};
+
+export default {Actions, Border, Container, GoBack, User, Welcome};

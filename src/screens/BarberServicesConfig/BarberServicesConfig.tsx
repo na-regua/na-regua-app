@@ -1,0 +1,165 @@
+import React, {useMemo, useState} from 'react';
+
+import {BarbersService} from '@/app/api';
+import {
+  IBarberServiceConfig,
+  IBarberServiceDaysConfig,
+  IBarberServiceGeneralConfig,
+} from '@/app/models';
+import {AppStatusBar, Button, Typography} from '@/components/atoms';
+import {
+  Header,
+  ServiceConfigDaysCard,
+  ServiceGeneralConfigCard,
+} from '@/components/molecules';
+import {TRootStackParamList} from '@/navigation';
+import {AppDispatch, RootState} from '@/store/Store';
+import {AuthThunks} from '@/store/slicers';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  ContainerStyles,
+  ContentHeaderStyle,
+  ContentStyle,
+  ScrollContentStyle,
+  styles,
+} from './style';
+
+const BarberServicesConfig: React.FC<
+  NativeStackScreenProps<
+    TRootStackParamList,
+    '/barber/settings/services/config'
+  >
+> = ({navigation}) => {
+  const {t} = useTranslation();
+  const insets = useSafeAreaInsets();
+  const insetsStyles = {
+    paddingTop: insets.top,
+    paddingBottom: insets.bottom,
+    paddingLeft: insets.left,
+    paddingRight: insets.right,
+  };
+  const {barber} = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [updating, setUpdating] = useState(false);
+  const [newGeneralConfig, setNewGeneralConfig] =
+    useState<Partial<IBarberServiceGeneralConfig> | null>(null);
+  const [newDaysConfig, setNewDaysConfig] =
+    useState<Partial<IBarberServiceDaysConfig> | null>(null);
+
+  const hasChanges = useMemo(() => {
+    return (
+      Object.keys(newGeneralConfig || {}).length > 0 ||
+      Object.keys(newDaysConfig || {}).length > 0
+    );
+  }, [newGeneralConfig, newDaysConfig]);
+
+  const handleGeneralChange = (
+    config: Partial<IBarberServiceGeneralConfig>,
+  ) => {
+    setNewGeneralConfig(config);
+    console.log('config', config);
+  };
+
+  const handleDaysConfigChange = (
+    config: Partial<IBarberServiceDaysConfig>,
+    changed?: boolean,
+  ) => {
+    if (changed) {
+      setNewDaysConfig(config);
+    } else {
+      setNewDaysConfig(null);
+    }
+  };
+
+  const goBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+
+    if (!navigation.canGoBack()) {
+      navigation.navigate('/barber/settings');
+    }
+  };
+
+  if (!barber) {
+    return null;
+  }
+
+  const handleSaveChanges = async () => {
+    if (hasChanges) {
+      setUpdating(true);
+
+      try {
+        const payload: Partial<IBarberServiceConfig> = {
+          ...newGeneralConfig,
+          ...newDaysConfig,
+        };
+
+        await BarbersService.update({
+          servicesConfig: payload,
+        });
+
+        await dispatch(AuthThunks.getCurrentUser());
+
+        setNewGeneralConfig(null);
+        setNewDaysConfig(null);
+        setUpdating(false);
+      } catch (error) {
+        setUpdating(false);
+      }
+    }
+  };
+
+  return (
+    <ContainerStyles style={insetsStyles}>
+      <AppStatusBar />
+      <Header.Container>
+        <Header.GoBack pressables={{back: goBack}} />
+        <Header.Border />
+      </Header.Container>
+      <ContentStyle>
+        <ContentHeaderStyle>
+          <Typography variant="h5" color="black3">
+            {t('barber.servicesConfig.title')}
+          </Typography>
+          <Typography variant="body2" color="black1">
+            {t('barber.servicesConfig.subtitle')}
+          </Typography>
+        </ContentHeaderStyle>
+        <ScrollContentStyle
+          contentContainerStyle={styles.scrollContentContainer}>
+          <ServiceGeneralConfigCard
+            config={{
+              workdays: barber.config.work_days,
+              schedule_limit_days: barber.config.schedule_limit_days,
+              open_barber_auto: barber.config.open_barber_auto,
+              open_queue_auto: barber.config.open_queue_auto,
+            }}
+            onChange={handleGeneralChange}
+          />
+          <ServiceConfigDaysCard
+            config={{
+              schedule_times: barber.config.schedule_times,
+              schedules_by_day: barber.config.schedules_by_day,
+              work_time: barber.config.work_time,
+            }}
+            onChange={handleDaysConfigChange}
+          />
+        </ScrollContentStyle>
+        <Button
+          disabled={!hasChanges}
+          colorScheme="primary"
+          title={t('barber.servicesConfig.buttons.save')}
+          onPress={handleSaveChanges}
+          loading={updating}
+        />
+      </ContentStyle>
+    </ContainerStyles>
+  );
+};
+
+export default BarberServicesConfig;

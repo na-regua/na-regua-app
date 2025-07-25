@@ -1,9 +1,15 @@
-import React, {useMemo, useState} from 'react';
-import {Image, TouchableOpacity, View} from 'react-native';
+import React from 'react';
 
+import {Colors} from '@/theme';
 import {Asset} from 'react-native-image-picker';
 import Icons from '../Icons/Icons';
-import {avatarWrapperStyle, styles} from './styles';
+import Loader from '../Loader/Loader';
+import {
+  AvatarContentStyle,
+  AvatarPreviewStyle,
+  LoaderWrapperStyle,
+  OffsetContainerStyle,
+} from './styles';
 
 const ImagePicker = require('react-native-image-picker');
 
@@ -11,33 +17,33 @@ interface IAvatarProps {
   size?: number;
   iconSize?: number;
   onAvatarChange?: (file: Asset) => void;
+  borderOffset?: number;
+  disabled?: boolean;
+  preview?: string;
+  loading?: boolean;
+  showBorder?: boolean;
 }
 
 const Avatar: React.FC<IAvatarProps> = ({
   size = 72,
   iconSize = 32,
+  borderOffset = 12,
   onAvatarChange,
+  disabled,
+  preview,
+  loading,
+  showBorder = true,
 }) => {
-  const [preview, setPreview] = useState<string | null>(null);
-
-  const contentStyle = useMemo(
-    () => [styles.avatarContent, {minWidth: size, minHeight: size}],
-    [size],
-  );
-
   const getFile = async () => {
     const result = await ImagePicker.launchImageLibrary({
       mediaType: 'photo',
       includeBase64: true,
       selectionLimit: 1,
+      quality: 0.8,
     });
 
     if (result && result.assets && result.assets[0]) {
       const newAvatar: Asset = result.assets[0];
-
-      if (newAvatar.base64) {
-        setPreview(newAvatar.base64);
-      }
 
       if (onAvatarChange) {
         onAvatarChange(newAvatar);
@@ -45,17 +51,17 @@ const Avatar: React.FC<IAvatarProps> = ({
     }
   };
 
-  const activeStatus = useMemo(
-    () => (preview ? 'active' : 'default'),
-    [preview],
-  );
-
   return (
-    <View style={avatarWrapperStyle[activeStatus]}>
-      <TouchableOpacity
-        style={contentStyle}
-        activeOpacity={0.8}
-        onPress={getFile}>
+    <OffsetContainerStyle
+      showBorder={showBorder}
+      active={!!preview}
+      size={size + borderOffset}>
+      <AvatarContentStyle
+        size={size}
+        activeOpacity={0.6}
+        onPress={getFile}
+        loading={loading}
+        disabled={disabled || loading}>
         {!preview && (
           <Icons.UserIcon
             width={iconSize}
@@ -65,13 +71,22 @@ const Avatar: React.FC<IAvatarProps> = ({
           />
         )}
         {preview && (
-          <Image
-            source={{uri: `data:image/jpeg;base64,${preview}`}}
-            style={contentStyle}
+          <AvatarPreviewStyle
+            onError={() => {}}
+            size={size}
+            source={preview}
+            imageStyle={{
+              borderRadius: size / 2,
+            }}
           />
         )}
-      </TouchableOpacity>
-    </View>
+      </AvatarContentStyle>
+      {loading && (
+        <LoaderWrapperStyle>
+          <Loader color={Colors.main} size="64" />
+        </LoaderWrapperStyle>
+      )}
+    </OffsetContainerStyle>
   );
 };
 

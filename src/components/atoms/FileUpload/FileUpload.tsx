@@ -1,44 +1,145 @@
 import React = require('react');
+import {ImagePickerType} from '@/app/models';
+import {EditPictureModal} from '@/components/modals';
 import {Colors} from '@/theme';
-import {useState} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useRef, useState} from 'react';
 import {Asset} from 'react-native-image-picker';
 import Icons from '../Icons/Icons';
+import Loader from '../Loader/Loader';
+import Modal from '../Modal/Modal';
+import {
+  ImagePreview,
+  LoaderWrapperStyle,
+  PickerStyle,
+  PickerWrapperStyle,
+  PreviewWrapperStyle,
+} from './styles';
 
-const ImagePicker = require('react-native-image-picker');
+const ImagePicker: ImagePickerType = require('react-native-image-picker');
 
 interface IFileUploadProps {
   limit: number;
-  assets: Asset[];
+  initialMiniatures?: string[];
   onFileUpload?: (files: Asset[]) => void;
+  disabled?: boolean;
+  loading?: boolean;
+  width?: number;
+  height?: number;
+  previewBorder?: number;
 }
 
 const FileUpload: React.FC<IFileUploadProps> = ({
   onFileUpload,
-  assets,
+  initialMiniatures,
   limit,
+  width = 72,
+  height = 100,
+  disabled,
+  loading,
+  previewBorder = 2,
 }) => {
-  const [miniatures, setMiniatures] = useState<string[]>([]);
+  const editPictureModalRef = useRef<BottomSheetModal>(null);
 
-  const getLibraryFiles = async () => {
+  const [selectedToEdit, setSelectedToEdit] = useState<{
+    picture: string;
+    index: number;
+  }>();
+  const [assets, setAssets] = useState<Asset[]>([]);
+  const [miniatures, setMiniatures] = useState<string[]>(
+    initialMiniatures || [],
+  );
+
+  const onEditPicture = (picture: string, index: number) => {
+    setSelectedToEdit({picture, index});
+    editPictureModalRef.current?.present();
+  };
+
+  const overridePicture = async (pictureIndex: number) => {
     const result = await ImagePicker.launchImageLibrary({
       mediaType: 'photo',
       includeBase64: true,
-      selectionLimit: limit - assets.length,
+      selectionLimit: 1,
+      quality: 0.8,
     });
 
     if (result && result.assets) {
       const resultAssets: Asset[] = result.assets;
 
+      const miniatureImages = resultAssets.map(
+        (asset: Asset) => asset.base64 || '',
+      );
+
+      const newFile = miniatureImages[0];
+
+      if (miniatures.length === 0) {
+        setMiniatures([newFile]);
+      }
+
+      if (miniatures.length > 0) {
+        const newFiles = miniatures.map((file, index) =>
+          index === pictureIndex ? newFile : file,
+        );
+
+        setMiniatures(newFiles);
+      }
+
       const newAssets = [...assets, ...resultAssets];
 
-      const miniatureImages = newAssets.map((asset: Asset) =>
+      setAssets(newAssets);
+
+      if (onFileUpload) {
+        onFileUpload(newAssets);
+      }
+    }
+
+    if (editPictureModalRef.current) {
+      editPictureModalRef.current.dismiss();
+    }
+  };
+
+  const removePicture = (pictureToRemove: string) => {
+    const newFiles = miniatures.filter(picture => picture !== pictureToRemove);
+    const newAssets = assets.filter(
+      picture => picture.base64 !== pictureToRemove,
+    );
+
+    setMiniatures(newFiles);
+    setAssets(newAssets);
+
+    if (onFileUpload) {
+      onFileUpload(newAssets);
+    }
+
+    if (editPictureModalRef.current) {
+      editPictureModalRef.current.dismiss();
+    }
+  };
+
+  const getLibraryFiles = async () => {
+    const result = await ImagePicker.launchImageLibrary({
+      mediaType: 'photo',
+      includeBase64: true,
+      selectionLimit: limit - miniatures.length,
+      quality: 0.8,
+    });
+
+    if (result && result.assets) {
+      const resultAssets: Asset[] = result.assets;
+
+      const miniatureImages = resultAssets.map((asset: Asset) =>
         asset.base64 ? asset.base64 : '',
       );
 
+      const files = [...miniatures, ...miniatureImages];
+
       if (miniatureImages.length > 0) {
-        setMiniatures(miniatureImages);
+        setMiniatures(files);
       }
+
+      const newAssets = [...assets, ...resultAssets];
+
+      setAssets(newAssets);
 
       if (onFileUpload) {
         onFileUpload(newAssets);
@@ -46,65 +147,66 @@ const FileUpload: React.FC<IFileUploadProps> = ({
     }
   };
 
+  const getPreviewSource = (image: string): string => {
+    if (!image) {
+      return '';
+    }
+
+    if (image && image.includes('http')) {
+      return image;
+    }
+
+    return `data:image/jpeg;base64,${image}`;
+  };
+
   return (
-    <View style={styles.pickerWrapper}>
+    <PickerWrapperStyle>
       {miniatures.map((image: string, index: number) => (
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={styles.previewWrapper}
-          key={index}>
-          <Image
-            source={{uri: `data:image/jpeg;base64,${image}`}}
-            style={styles.preview}
+        <PreviewWrapperStyle
+          activeOpacity={0.6}
+          key={index}
+          onPress={() => onEditPicture(image, index)}
+          disabled={disabled}>
+          <ImagePreview
+            width={width - 2 * previewBorder}
+            height={height - 2 * previewBorder}
+            source={getPreviewSource(image)}
+            onError={() => {}}
           />
-        </TouchableOpacity>
+          {loading && (
+            <LoaderWrapperStyle>
+              <Loader color={Colors.white3} size="64" strokeWidth={2.5} />
+            </LoaderWrapperStyle>
+          )}
+        </PreviewWrapperStyle>
       ))}
-      {assets.length !== limit && (
-        <TouchableOpacity style={styles.picker} onPress={getLibraryFiles}>
+      {miniatures.length !== limit && (
+        <PickerStyle
+          width={width}
+          height={height}
+          activeOpacity={0.6}
+          onPress={getLibraryFiles}
+          disabled={disabled}>
           <Icons.CameraIcon
             color="default"
             width={24}
             height={24}
             strokeWidth={2}
           />
-        </TouchableOpacity>
+        </PickerStyle>
       )}
-    </View>
+      <Modal ref={editPictureModalRef} height={292}>
+        {selectedToEdit && (
+          <EditPictureModal
+            picture={selectedToEdit.picture}
+            actions={['chooseFromGallery', 'removePicture']}
+            chooseFromGallery={() => overridePicture(selectedToEdit.index)}
+            removePicture={() => removePicture(selectedToEdit.picture)}
+          />
+        )}
+      </Modal>
+    </PickerWrapperStyle>
   );
 };
-
-const styles = StyleSheet.create({
-  pickerWrapper: {
-    flexDirection: 'row',
-    gap: 24,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flex: 1,
-  },
-  picker: {
-    minHeight: 100,
-    maxWidth: 72,
-    flex: 1,
-    paddingHorizontal: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Colors.border,
-    borderWidth: 2,
-    borderStyle: 'dashed',
-    borderColor: Colors.default,
-    borderRadius: 4,
-  },
-  preview: {
-    width: 72,
-    height: 100,
-    resizeMode: 'cover',
-  },
-  previewWrapper: {
-    borderWidth: 2,
-    borderStyle: 'solid',
-    borderColor: Colors.main,
-    borderRadius: 4,
-  },
-});
 
 export default FileUpload;

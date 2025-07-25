@@ -1,5 +1,15 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
-import {barberReducer, signInReducer} from './slicers';
+import {
+  AuthReducer,
+  ConfigReducer,
+  CutReducer,
+  LoginReducer,
+  NotifyReducer,
+  QueueReducer,
+  SocketReducer,
+  TicketViewReducer,
+} from './slicers';
+import {TicketHistoryReducer} from './slicers/TicketHistorySlicer';
 
 export interface GenericAction<T = any> {
   type: string;
@@ -7,12 +17,23 @@ export interface GenericAction<T = any> {
 }
 
 const rootReducer = combineReducers({
-  signIn: signInReducer,
-  barber: barberReducer,
+  auth: AuthReducer,
+  config: ConfigReducer,
+  notify: NotifyReducer,
+  login: LoginReducer,
+  queue: QueueReducer,
+  socket: SocketReducer,
+  cut: CutReducer,
+  ticketView: TicketViewReducer,
+  ticketHistory: TicketHistoryReducer,
 });
 
 export const store = configureStore({
   reducer: rootReducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

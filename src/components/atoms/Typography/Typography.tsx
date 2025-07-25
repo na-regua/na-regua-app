@@ -1,7 +1,10 @@
-import {Colors, Fonts} from '@/theme';
-import {TColorsType} from '@/theme/colors';
+import {Colors, Fonts, Metrics} from '@/theme';
+import {TColorsType} from '@/theme';
+import {FontsType} from '@/theme';
 import React, {PropsWithChildren, useMemo} from 'react';
-import {StyleSheet, Text, TextStyle} from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {StyleSheet, TextStyle} from 'react-native';
+import Animated, {AnimatedStyle} from 'react-native-reanimated';
 
 type ITypographyVariants =
   | 'h1'
@@ -16,88 +19,125 @@ type ITypographyVariants =
   | 'button'
   | 'tip';
 
-interface ITypographyProps extends PropsWithChildren {
-  variant: ITypographyVariants;
+export interface ITypographyProps extends PropsWithChildren {
+  variant?: ITypographyVariants;
   color?: TColorsType;
-  customStyles?: TextStyle;
+  style?: TextStyle;
+  textAlign?: 'auto' | 'left' | 'right' | 'center' | 'justify' | undefined;
+  fonts?: FontsType;
+  weight?: keyof typeof Fonts.weights;
+  translate?: boolean;
+  translateProps?: Record<string, any>;
+  animatedStyles?: AnimatedStyle<TextStyle>;
 }
 
 const Typography: React.FC<ITypographyProps> = ({
   children,
-  variant,
-  color,
-  customStyles,
+  variant = 'body1',
+  color = 'black3',
+  style,
+  textAlign,
+  weight,
+  translate = true,
+  translateProps,
+  animatedStyles,
 }) => {
+  const {t} = useTranslation();
+
   const textColor = useMemo(() => color && Colors[color], [color]);
 
   const stylesByVariant = useMemo(
-    () => styles[variant as keyof typeof styles],
+    () => TypographyStyles[variant as keyof typeof TypographyStyles],
     [variant],
   );
 
   return (
-    <Text style={{...stylesByVariant, color: textColor, ...customStyles}}>
-      {children}
-    </Text>
+    <Animated.Text
+      style={[
+        stylesByVariant,
+        {
+          textAlign,
+          color: textColor,
+          ...(weight ? {fontWeight: Fonts.weights[weight]} : {}),
+          ...(weight ? {fontFamily: Fonts.types[weight]} : {}),
+        },
+        style,
+        animatedStyles,
+      ]}>
+      {typeof children === 'string' && translate
+        ? t(children, translateProps)
+        : children}
+    </Animated.Text>
   );
 };
 
-const styles = StyleSheet.create({
+export const TypographyStyles = StyleSheet.create({
   h1: {
     width: 'auto',
     fontWeight: Fonts.weights.bold,
     fontFamily: Fonts.types.bold,
     fontSize: Fonts.sizes.h1,
+    lineHeight: Fonts.sizes.h1 * Metrics.lineHeight,
   },
   h2: {
     fontWeight: Fonts.weights.semiBold,
     fontFamily: Fonts.types.semiBold,
     fontSize: Fonts.sizes.h2,
+    lineHeight: Fonts.sizes.h2 * Metrics.lineHeight,
   },
   h3: {
     fontWeight: Fonts.weights.bold,
     fontFamily: Fonts.types.bold,
     fontSize: Fonts.sizes.h3,
+    lineHeight: Fonts.sizes.h3 * Metrics.lineHeight,
   },
   h4: {
     fontWeight: Fonts.weights.semiBold,
     fontFamily: Fonts.types.semiBold,
     fontSize: Fonts.sizes.h4,
+    lineHeight: Fonts.sizes.h4 * Metrics.lineHeight,
   },
   h5: {
     fontWeight: Fonts.weights.semiBold,
     fontFamily: Fonts.types.semiBold,
     fontSize: Fonts.sizes.h5,
+    lineHeight: Fonts.sizes.h5 * Metrics.lineHeight,
   },
   h6: {
     fontWeight: Fonts.weights.medium,
     fontFamily: Fonts.types.medium,
     fontSize: Fonts.sizes.h6,
+    lineHeight: Fonts.sizes.h6 * Metrics.lineHeight,
   },
   body1: {
     fontWeight: Fonts.weights.medium,
     fontFamily: Fonts.types.medium,
     fontSize: Fonts.sizes.body1,
+    lineHeight: Fonts.sizes.body1 * Metrics.lineHeight,
   },
   body2: {
     fontWeight: Fonts.weights.regular,
     fontFamily: Fonts.types.regular,
     fontSize: Fonts.sizes.body2,
+    lineHeight: Fonts.sizes.body2 * Metrics.lineHeight,
   },
   button: {
     fontWeight: Fonts.weights.semiBold,
     fontFamily: Fonts.types.semiBold,
     fontSize: Fonts.sizes.button,
+    lineHeight: Fonts.sizes.button * Metrics.lineHeight,
   },
   caption: {
-    fontWeight: Fonts.weights.medium,
-    fontFamily: Fonts.types.medium,
+    fontWeight: Fonts.weights.regular,
+    fontFamily: Fonts.types.regular,
     fontSize: Fonts.sizes.caption,
+    lineHeight: Fonts.sizes.caption * Metrics.lineHeight,
   },
   tip: {
     fontWeight: Fonts.weights.regular,
     fontFamily: Fonts.types.regular,
     fontSize: Fonts.sizes.tip,
+    lineHeight: Fonts.sizes.tip * Metrics.lineHeight,
   },
 });
 

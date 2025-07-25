@@ -1,28 +1,23 @@
-import {Icons, Typography} from '@/components/atoms';
-import {LoginEmail, LoginWelcome} from '@/components/pages';
-import LoginWhatsapp from '@/components/pages/LoginWhatsapp/LoginWhatsapp';
-import {TLoginSteps} from '@/core/models';
-import {Colors, Metrics} from '@/theme';
-import React, {useMemo, useState} from 'react';
+import {AppStatusBar, Icons, Typography} from '@/components/atoms';
+
+import {useAppNavigation} from '@/navigation';
+import {AppDispatch, RootState} from '@/store/Store';
+import {TUserType, setLoginStep, setLoginUserType} from '@/store/slicers';
+import {Fonts} from '@/theme';
+import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StatusBar, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {styles} from './styles';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  Container,
+  SwitchButton,
+  SwitchButtonStyle,
+  WelcomeContent,
+  WelcomeTitle,
+} from './styles';
 
 const Login: React.FC = () => {
-  const {t} = useTranslation();
   const insets = useSafeAreaInsets();
-
-  const [loginMethod, setLoginMethod] = useState<TLoginSteps>('welcome');
-
-  const getSplashHeight = useMemo(
-    () =>
-      loginMethod === 'welcome'
-        ? Metrics.screenHeight * 0.44
-        : Metrics.screenHeight * 0.38,
-    [loginMethod],
-  );
-
   const insetsStyles = {
     paddingTop: insets.top,
     paddingBottom: insets.bottom,
@@ -30,41 +25,81 @@ const Login: React.FC = () => {
     paddingRight: insets.right,
   };
 
-  const handleOnLoginMethod = (method: TLoginSteps) => {
-    setLoginMethod(method);
+  const {t} = useTranslation();
+
+  const {userType, steps} = useSelector((state: RootState) => state.login);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const navigation = useAppNavigation();
+
+  const skipWelcome = () => {
+    if (steps === 'login') {
+      if (userType === 'worker') {
+        navigation.navigate('/generic/login/barber');
+      }
+
+      if (userType === 'customer') {
+        navigation.navigate('/generic/login/customer');
+      }
+    }
+  };
+
+  useEffect(() => {
+    skipWelcome();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSwitchUserType = (type: TUserType) => {
+    dispatch(setLoginUserType(type));
+    dispatch(setLoginStep('login'));
+
+    if (type === 'worker') {
+      navigation.navigate('/generic/login/barber');
+    }
+
+    if (type === 'customer') {
+      navigation.navigate('/generic/login/customer');
+    }
   };
 
   return (
-    <View style={[styles.container, insetsStyles]}>
-      <StatusBar barStyle={'light-content'} backgroundColor={Colors.bgLight} />
-      <View style={[styles.splash, {height: getSplashHeight}]} />
-      {loginMethod === 'welcome' && (
-        <LoginWelcome onLoginMethod={handleOnLoginMethod} />
-      )}
-      {loginMethod !== 'welcome' && (
-        <View style={styles.content}>
-          <View style={styles.logoHeaderWrapper}>
-            <View style={styles.logoHeader} />
-            <Typography variant="body2" color="white3">
-              Na Régua
-            </Typography>
-          </View>
-          <TouchableOpacity
-            style={styles.backLink}
-            activeOpacity={0.8}
-            onPress={() => handleOnLoginMethod('welcome')}>
-            <Icons.ArrowLeftIcon width={18} color="white3" />
-            <Typography variant="button" color="white3">
-              {t('generic.login.backLink')}
-            </Typography>
-          </TouchableOpacity>
-          {loginMethod === 'e-mail' && (
-            <LoginEmail onLoginMethod={handleOnLoginMethod} />
-          )}
-          {loginMethod === 'whatsapp' && <LoginWhatsapp />}
-        </View>
-      )}
-    </View>
+    <Container style={insetsStyles}>
+      <AppStatusBar barStyle="dark-content" />
+      <WelcomeContent>
+        <WelcomeTitle>
+          <Typography
+            variant="h4"
+            style={{
+              fontWeight: Fonts.weights.regular,
+            }}
+            color="black3">
+            {t('generic.login.title')}
+          </Typography>
+          <Icons.LogoWritingIcon />
+          <Typography variant="body1" color="primary">
+            {t('generic.login.subtitle1')}
+            {'\n'}
+            {t('generic.login.subtitle2')}
+          </Typography>
+        </WelcomeTitle>
+        <SwitchButton>
+          <SwitchButtonStyle
+            title={t('generic.login.buttons.barber')}
+            colorScheme="primary"
+            variant={userType === 'worker' ? 'filled' : 'text'}
+            onPress={() => handleSwitchUserType('worker')}
+          />
+          <SwitchButtonStyle
+            title={t('generic.login.buttons.customer')}
+            colorScheme="primary"
+            variant={userType === 'customer' ? 'filled' : 'text'}
+            onPress={() => handleSwitchUserType('customer')}
+          />
+        </SwitchButton>
+        <Icons.LinesIcon />
+      </WelcomeContent>
+    </Container>
   );
 };
 

@@ -1,3 +1,5 @@
+import {IAdress} from '@/app/models';
+
 export function maskCep(value: string): string {
   if (!value) {
     return '';
@@ -46,4 +48,53 @@ export function oneDigitMask(value: string): string {
   }
 
   return value;
+}
+
+export function numberMask(value: string): string {
+  if (!value) {
+    return '';
+  }
+
+  value = value.replace(/\D/g, '');
+
+  return value;
+}
+
+export function ufMask(value: string): string {
+  if (!value) {
+    return '';
+  }
+
+  value = value.replace(/\D/g, '');
+
+  value = value.toUpperCase();
+
+  if (value.length > 2) {
+    value = value.substring(0, 2);
+  }
+
+  return value;
+}
+
+export function timeMask(value: string): string {
+  if (!value) {
+    return '';
+  }
+
+  value = value.replace(/\D/g, '');
+  value = value.replace(/(\d{2})(\d)/, '$1:$2');
+
+  if (value.length > 4) {
+    value = value.substring(0, 5);
+  }
+
+  return value;
+}
+
+export function generateAddress(params: IAdress): string {
+  const {cep, street, number, complement, neighborhood, city, uf} = params;
+
+  return `${street}, ${number},${
+    complement ? ` ${complement},` : ''
+  }${neighborhood}, ${city}, ${uf} - ${cep}`;
 }

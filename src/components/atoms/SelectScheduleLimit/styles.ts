@@ -1,0 +1,34 @@
+import {Colors} from '@/theme';
+import {StyleSheet} from 'react-native';
+import styled from 'styled-components/native';
+
+export const styles = StyleSheet.create({
+  scrollContentContainer: {
+    flexGrow: 1,
+    flexDirection: 'row',
+    gap: 12,
+  },
+});
+
+export const ContainerStyle = styled.View`
+  gap: 8px;
+  width: 100%;
+`;
+
+export const ScrollContentStyle = styled.ScrollView`
+  flex-grow: 1;
+`;
+
+export const SelectScheduleStyle = styled.TouchableOpacity<{
+  active?: boolean;
+}>`
+  padding: 4px 12px;
+  border: 1px solid ${Colors.primary};
+  border-radius: 4px;
+
+  ${({active}) =>
+    active &&
+    `
+    background-color: ${Colors.primary};
+  `}
+`;

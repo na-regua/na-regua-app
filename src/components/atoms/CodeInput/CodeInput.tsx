@@ -1,42 +1,40 @@
 import React = require('react');
-import {oneDigitMask} from '@/utils';
+import {Colors} from '@/theme';
+import {numberMask, oneDigitMask} from '@/utils';
 import {createRef, useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {TextInput, View} from 'react-native';
-import {styles} from './styles';
+import {TextInput} from 'react-native';
+import {CodeInputStyle, CodeWrapperStyle} from './styles';
 
 interface ICodeInputProps {
   onCodeChange: (code: string) => void;
   digits: number;
-}
-
-interface ICodeInputSelection {
-  start: number;
-  end: number;
+  onDone?: () => void;
+  disabled?: boolean;
+  showDoneButton?: boolean;
 }
 
 interface ICodeInputsArr {
   ref: React.RefObject<TextInput>;
   isFocused: boolean;
   setIsFocused: (isFocused: boolean) => void;
-  selection: ICodeInputSelection;
-  setSelection: (selection: ICodeInputSelection) => void;
 }
 
-const CodeInput: React.FC<ICodeInputProps> = ({digits, onCodeChange}) => {
+const CodeInput: React.FC<ICodeInputProps> = ({
+  digits,
+  onCodeChange,
+  onDone,
+  disabled,
+  showDoneButton = false,
+}) => {
   const inputValuesArray: ICodeInputsArr[] = [];
-  const {watch, register, control, setValue} = useForm();
+  const {watch, register, control, setValue, getValues} = useForm();
 
   const formValue = watch();
 
   for (let i = 0; i < digits; i++) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [isFocused, setIsFocused] = useState(false);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [selection, setSelection] = useState({
-      start: 0,
-      end: 0,
-    });
 
     const ref = createRef<TextInput>();
 
@@ -46,8 +44,6 @@ const CodeInput: React.FC<ICodeInputProps> = ({digits, onCodeChange}) => {
       isFocused,
       setIsFocused,
       ref,
-      selection,
-      setSelection,
     });
   }
 
@@ -56,76 +52,99 @@ const CodeInput: React.FC<ICodeInputProps> = ({digits, onCodeChange}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formValue]);
 
+  const findNextRef = (from: number): number => {
+    const mappedNoValues = Object.keys(getValues()).filter((key, index) => {
+      if (index <= from) {
+        return false;
+      }
+
+      const value = watch(key);
+
+      if (value === undefined || value === '') {
+        return index;
+      }
+    });
+
+    if (mappedNoValues.length === 0) {
+      return digits - 1;
+    }
+
+    const nextIndex = +mappedNoValues[0].split('-')[1];
+
+    return nextIndex;
+  };
+
   const handleCodeOnChange = (
     text: string,
     index: number,
     cb: (...event: any) => void,
   ) => {
-    // Check if the input is a number and if the value is higher than one digit
-    // if so, set the value of the next input and focus the next from it
+    if (text.length > 1) {
+      const restantDigits = digits - (index + 1);
 
-    const onlyDecimal = /\D/g.test(text);
-    if (text.length > 1 && !onlyDecimal) {
-      const nextIndex = index + 1;
+      const arrText = text.slice(1, restantDigits + 1).split('');
 
-      if (nextIndex < digits) {
-        setValue(`code-${nextIndex}`, text[1]);
+      arrText.forEach((value, i) => {
+        const nextIndex = index + i + 1;
 
-        if (inputValuesArray[nextIndex + 1]) {
-          inputValuesArray[index + 2].ref.current?.focus();
-        } else {
-          inputValuesArray[index + 1].ref.current?.focus();
+        if (nextIndex < digits) {
+          setValue(`code-${nextIndex}`, value);
         }
-      } else {
-        text = text[1];
-      }
+      });
+    }
 
-      text = oneDigitMask(text);
-    } else {
-      text = oneDigitMask(text);
+    text = oneDigitMask(text);
+    const isTyping = text.length !== 0;
 
-      if (text.length === 1) {
-        if (index < digits - 1) {
-          inputValuesArray[index + 1].ref.current?.focus();
-        }
-      } else if (text.length === 0) {
-        const prevValue = watch(`code-${index - 1}`);
+    if (isTyping) {
+      const hasNext = index + 1 < digits;
 
-        if (index > 0 && !prevValue) {
-          inputValuesArray[index - 1].ref.current?.focus();
+      // moving focus to next available input
+      if (hasNext) {
+        const nextIndex = findNextRef(index);
+
+        if (nextIndex > 0) {
+          inputValuesArray[nextIndex].ref.current?.focus();
         }
       }
     }
+
     cb(text);
   };
 
+  useEffect(() => {
+    if (!disabled) {
+      inputValuesArray[0].ref.current?.focus();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <View style={styles.container}>
+    <CodeWrapperStyle>
       {inputValuesArray.map(({isFocused, setIsFocused, ref}, index) => (
         <Controller
           key={index}
           name={`code-${index}`}
           control={control}
-          render={({field: {onChange, onBlur, value}}) => (
-            <TextInput
+          render={({field: {onChange, value}}) => (
+            <CodeInputStyle
+              as={TextInput}
               ref={ref}
               value={value}
               onFocus={() => {
                 setIsFocused(true);
               }}
               placeholder="0"
+              placeholderTextColor={Colors.placeholder}
               onBlur={() => {
-                onBlur();
                 setIsFocused(false);
               }}
-              onChangeText={text => {
+              editable={!disabled}
+              onChange={({nativeEvent: {text}}) => {
+                text = numberMask(text);
                 handleCodeOnChange(text, index, onChange);
               }}
-              style={
-                isFocused
-                  ? [styles.codeInput, styles.codeInputFocused]
-                  : [styles.codeInput]
-              }
+              isFocused={isFocused}
               key={index}
               onKeyPress={e => {
                 if (e.nativeEvent.key === 'Backspace') {
@@ -134,12 +153,19 @@ const CodeInput: React.FC<ICodeInputProps> = ({digits, onCodeChange}) => {
                   }
                 }
               }}
+              textContentType="oneTimeCode"
               keyboardType="number-pad"
+              returnKeyType={showDoneButton ? 'done' : 'default'}
+              onSubmitEditing={() => {
+                if (onDone) {
+                  onDone();
+                }
+              }}
             />
           )}
         />
       ))}
-    </View>
+    </CodeWrapperStyle>
   );
 };
 

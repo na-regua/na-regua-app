@@ -1,4 +1,4 @@
-import {IBuffer} from '@/core/models';
+import {IBuffer} from '@/app/models';
 import {Platform} from 'react-native';
 import {Asset} from 'react-native-image-picker';
 

@@ -1,0 +1,307 @@
+import {WorkersService} from '@/app/api';
+import {IWorker, ModalSizes} from '@/app/models';
+import {
+  AppStatusBar,
+  Box,
+  Button,
+  Icons,
+  Loader,
+  MenuItem,
+  MenuItemAction,
+  Modal,
+  Typography,
+} from '@/components/atoms';
+import {DeleteWorkerModal, WorkerModal} from '@/components/modals';
+import {Header} from '@/components/molecules';
+import {TRootStackParamList} from '@/navigation';
+import {RootState} from '@/store/Store';
+import {Colors, Metrics} from '@/theme';
+import {phoneMask} from '@/utils';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Platform, RefreshControl} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSelector} from 'react-redux';
+import {
+  ContainerStyle,
+  ContentActionsStyle,
+  ContentHeaderStyle,
+  ContentScrollContentStyle,
+  ContentStyle,
+  MenuItemRowStyle,
+  MenuItemsWrapperStyle,
+  styles,
+} from './styles';
+import metrics from '@/theme/metrics';
+
+const BarberWorkers: React.FC<
+  NativeStackScreenProps<TRootStackParamList, '/barber/settings/workers'>
+> = ({route, navigation}) => {
+  const {showContinue} = route.params;
+
+  const {t} = useTranslation();
+  const insets = useSafeAreaInsets();
+  const barber = useSelector((state: RootState) => state.auth.barber);
+
+  const addWorkerModalRef = useRef<BottomSheetModal>(null);
+  const editWorkerModalRef = useRef<BottomSheetModal>(null);
+  const deleteWorkerModalRef = useRef<BottomSheetModal>(null);
+
+  const [workers, setWorkers] = useState<IWorker[]>([]);
+  const [selectedToDelete, setSelectedToDelete] = useState<IWorker | undefined>(
+    undefined,
+  );
+  const [selectedToEdit, setSelectedToEdit] = useState<IWorker | undefined>(
+    undefined,
+  );
+  const [loadingWorkers, setLoadingWorkers] = useState(true);
+  const [showSet, setShowSet] = useState<string[]>([]);
+
+  const [menuWith, setMenuWidth] = useState<number>(Metrics.smWidth);
+  const [actionsWidth, setActionsWidth] = useState<number>(100);
+
+  const insetsStyles = {
+    paddingTop: insets.top,
+    paddingBottom: insets.bottom,
+    paddingLeft: insets.left,
+    paddingRight: insets.right,
+  };
+
+  // From pre signup flow
+  const goNext = () => {
+    navigation.navigate('/barber/settings/services', {showContinue: true});
+  };
+
+  const goBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+
+    if (!navigation.canGoBack()) {
+      navigation.navigate('/barber/settings');
+    }
+  };
+
+  const openAddWorkerModal = () => {
+    if (addWorkerModalRef.current) {
+      addWorkerModalRef.current.present();
+    }
+  };
+
+  const removeFromShowSet = (id: string) => {
+    if (showSet.includes(id)) {
+      setShowSet(curr => curr.filter(currId => currId !== id));
+    }
+  };
+
+  const handleShowSet = (id: string) => {
+    if (showSet.includes(id)) {
+      setShowSet(curr => curr.filter(currId => currId !== id));
+    } else {
+      setShowSet(curr => [...curr, id]);
+    }
+  };
+
+  const handleDeleteWorker = (worker: IWorker) => {
+    setSelectedToDelete(worker);
+
+    if (deleteWorkerModalRef.current) {
+      deleteWorkerModalRef.current.present();
+    }
+  };
+
+  const handleEditWorker = (worker: IWorker) => {
+    setSelectedToEdit(worker);
+
+    if (editWorkerModalRef.current) {
+      editWorkerModalRef.current.present();
+    }
+  };
+
+  const getWorkers = useCallback(async () => {
+    setLoadingWorkers(true);
+
+    if (barber) {
+      try {
+        const {data} = await WorkersService.getWorkers({barberId: barber._id});
+
+        if (data) {
+          setWorkers(data);
+          setLoadingWorkers(false);
+        }
+      } catch (error) {
+        setLoadingWorkers(false);
+        setWorkers([]);
+      }
+    }
+  }, [barber]);
+
+  useEffect(() => {
+    getWorkers();
+  }, [getWorkers]);
+
+  return (
+    <ContainerStyle style={insetsStyles}>
+      <AppStatusBar />
+      <Header.Container>
+        <Header.GoBack pressables={{back: goBack}} />
+        <Header.Border />
+      </Header.Container>
+      <ContentStyle>
+        <ContentHeaderStyle>
+          <Typography variant="h5" color="black3">
+            {t('barber.workers.title')}
+          </Typography>
+          <Typography variant="body2" color="black1">
+            {t('barber.workers.subtitle')}
+          </Typography>
+        </ContentHeaderStyle>
+        <ContentScrollContentStyle
+          refreshControl={
+            <RefreshControl
+              refreshing={loadingWorkers}
+              size={Platform.OS !== 'android' ? 14 : undefined}
+              onRefresh={() => {
+                getWorkers();
+              }}
+              tintColor="transparent"
+              colors={['transparent']}
+              style={styles.refreshControl}
+              progressBackgroundColor={
+                Platform.OS !== 'android' ? 'transparent' : Colors.bgLight
+              }
+            />
+          }>
+          <MenuItemsWrapperStyle
+            onLayout={event => {
+              setMenuWidth(event.nativeEvent.layout.width);
+            }}>
+            {!loadingWorkers ? (
+              workers.map(worker => (
+                <MenuItemRowStyle key={worker._id}>
+                  <MenuItem
+                    title={worker.user.name}
+                    description={t(`roles.${worker.user.role}`)}
+                    avatar={worker.user.avatar.url}
+                    clickable={worker.user.role === 'worker'}
+                    onPress={() => handleShowSet(worker._id.toString())}
+                    actionsWidth={actionsWidth}
+                    width={menuWith}
+                  />
+                  {showSet.includes(worker._id) &&
+                    worker.user.role === 'worker' && (
+                      <Box
+                        direction="row"
+                        alignItems="center"
+                        onLayout={event => {
+                          setActionsWidth(event.nativeEvent.layout.width);
+                        }}>
+                        <MenuItemAction
+                          theme="primary"
+                          onPress={() => handleEditWorker(worker)}>
+                          <Icons.EditIcon color="white3" />
+                        </MenuItemAction>
+                        <MenuItemAction
+                          theme="danger"
+                          onPress={() => handleDeleteWorker(worker)}>
+                          <Icons.DeleteIcon color="white3" />
+                        </MenuItemAction>
+                      </Box>
+                    )}
+                </MenuItemRowStyle>
+              ))
+            ) : (
+              <Loader color={Colors.primary} />
+            )}
+          </MenuItemsWrapperStyle>
+        </ContentScrollContentStyle>
+        <ContentActionsStyle>
+          <Button
+            colorScheme="primary"
+            variant="ghost"
+            title={t('barber.workers.buttons.add')}
+            onPress={openAddWorkerModal}
+          />
+          {showContinue && (
+            <Button
+              title={t('barber.workers.buttons.ok')}
+              onPress={goNext}
+              disabled={workers.length === 0 || loadingWorkers}
+            />
+          )}
+        </ContentActionsStyle>
+        <Modal
+          ref={addWorkerModalRef}
+          height={ModalSizes.BarberWorker + metrics.platformPadding}
+          title={t('modals.worker.titles.add')}>
+          <WorkerModal
+            mode="add"
+            modalRef={addWorkerModalRef}
+            onClose={reloadData => {
+              if (reloadData) {
+                getWorkers();
+              }
+            }}
+          />
+        </Modal>
+        <Modal
+          ref={editWorkerModalRef}
+          title={t('modals.worker.titles.edit')}
+          height={ModalSizes.BarberWorker + metrics.platformPadding}
+          onClose={() => {
+            if (selectedToEdit) {
+              removeFromShowSet(selectedToEdit._id);
+              setSelectedToEdit(undefined);
+            }
+          }}>
+          {selectedToEdit && (
+            <WorkerModal
+              mode="edit"
+              modalRef={editWorkerModalRef}
+              onClose={reloadData => {
+                if (reloadData) {
+                  getWorkers();
+                }
+              }}
+              initialValues={{
+                name: selectedToEdit.user.name,
+                email: selectedToEdit.user.email,
+                phone: phoneMask(selectedToEdit.user.phone.toString()),
+              }}
+              initialAvatar={selectedToEdit.user.avatar.url}
+              workerID={selectedToEdit._id}
+            />
+          )}
+        </Modal>
+        <Modal
+          ref={deleteWorkerModalRef}
+          title={t('modals.deleteWorker.title')}
+          snapPoints={[220, '100%']}
+          onClose={() => {
+            if (selectedToDelete) {
+              removeFromShowSet(selectedToDelete._id);
+              setSelectedToDelete(undefined);
+            }
+          }}>
+          {selectedToDelete && (
+            <DeleteWorkerModal
+              onClose={reloadData => {
+                removeFromShowSet(selectedToDelete._id);
+                setSelectedToDelete(undefined);
+                if (reloadData) {
+                  getWorkers();
+                }
+              }}
+              worker={selectedToDelete}
+              modalRef={deleteWorkerModalRef}
+            />
+          )}
+        </Modal>
+      </ContentStyle>
+    </ContainerStyle>
+  );
+};
+
+export default BarberWorkers;

@@ -8,7 +8,6 @@ export const defaultStyles = StyleSheet.create({
     gap: 2,
   },
   step: {
-    flex: 1,
     flexDirection: 'row',
     gap: 8,
     paddingVertical: 4,
@@ -65,7 +64,6 @@ export const activeStyles = StyleSheet.create({
   stepContentWrapper: {
     flexDirection: 'row',
     gap: 8,
-    width: '100%',
     marginVertical: 4,
   },
   stepSpacer: {
@@ -109,6 +107,18 @@ export const stepNumberStyle: Record<TStepStatus, TextStyle | TextStyle[]> = {
   default: defaultStyles.stepNumber,
 };
 
+export const stepNumberTextStyle: Record<TStepStatus, TextStyle> = {
+  completed: completedStyles.stepNumberText,
+  active: activeStyles.stepNumberText,
+  default: defaultStyles.stepNumberText,
+};
+
+export const stepTitleStyle: Record<TStepStatus, TextStyle> = {
+  completed: completedStyles.stepTitle,
+  active: activeStyles.stepTitle,
+  default: defaultStyles.stepTitle,
+};
+
 export const stepDescriptionStyle: Record<TStepStatus, TextStyle> = {
   completed: completedStyles.stepDescription,
   active: activeStyles.stepTitle,
@@ -124,16 +134,4 @@ export const stepSpacerStyle: Record<TStepStatus, ViewStyle> = {
   completed: completedStyles.stepSpacer,
   active: activeStyles.stepSpacer,
   default: defaultStyles.stepSpacer,
-};
-
-export const stepTitleStyle: Record<TStepStatus, TextStyle> = {
-  completed: completedStyles.stepTitle,
-  active: activeStyles.stepTitle,
-  default: defaultStyles.stepTitle,
-};
-
-export const stepNumberTextStyle: Record<TStepStatus, TextStyle> = {
-  completed: completedStyles.stepNumberText,
-  active: activeStyles.stepNumberText,
-  default: defaultStyles.stepNumberText,
 };

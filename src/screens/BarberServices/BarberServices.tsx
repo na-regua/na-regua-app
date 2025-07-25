@@ -1,0 +1,315 @@
+import {BarbersService, ServicesService} from '@/app/api';
+import {IBarberService, IBarberServiceIcon, ModalSizes} from '@/app/models';
+import {
+  AppStatusBar,
+  Box,
+  Button,
+  Icons,
+  Loader,
+  MenuItem,
+  MenuItemAction,
+  Modal,
+  Typography,
+} from '@/components/atoms';
+import {BarberServiceModal, DeleteServiceModal} from '@/components/modals';
+import {Header} from '@/components/molecules';
+import {TRootStackParamList} from '@/navigation';
+import {RootState} from '@/store/Store';
+import {Colors, Metrics} from '@/theme';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Platform, RefreshControl} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useSelector} from 'react-redux';
+import {
+  ContainerStyle,
+  ContentActionsStyle,
+  ContentHeaderStyle,
+  ContentScrollContentStyle,
+  ContentStyle,
+  MenuItemRowStyle,
+  MenuItemsWrapperStyle,
+  styles,
+} from './styles';
+
+const BarberServices: React.FC<
+  NativeStackScreenProps<TRootStackParamList, '/barber/settings/services'>
+> = ({route, navigation}) => {
+  const {showContinue} = route.params;
+  const {t} = useTranslation();
+  const insets = useSafeAreaInsets();
+  const barber = useSelector((state: RootState) => state.auth.barber);
+
+  const addServiceModalRef = useRef<BottomSheetModal>(null);
+  const editServiceModalRef = useRef<BottomSheetModal>(null);
+  const deleteServiceModalRef = useRef<BottomSheetModal>(null);
+
+  const [services, setServices] = useState<IBarberService[]>([]);
+  const [selectedToDelete, setSelectedToDelete] = useState<
+    IBarberService | undefined
+  >(undefined);
+  const [selectedToEdit, setSelectedToEdit] = useState<
+    IBarberService | undefined
+  >(undefined);
+  const [loadingServices, setLoadingServices] = useState<boolean>(true);
+  const [savingProfile, setSavingProfile] = useState<boolean>(false);
+  const [showSet, setShowSet] = useState<string[]>([]);
+
+  const [menuWith, setMenuWidth] = useState<number>(Metrics.smWidth);
+  const [actionsWidth, setActionsWidth] = useState<number>(100);
+
+  const insetsStyles = {
+    paddingTop: insets.top,
+    paddingBottom: insets.bottom,
+    paddingLeft: insets.left,
+    paddingRight: insets.right,
+  };
+
+  const saveProfile = async () => {
+    setSavingProfile(true);
+
+    try {
+      await BarbersService.completeProfile();
+
+      setSavingProfile(false);
+      navigation.navigate('/barber/complete-qr');
+    } catch (error) {
+      setSavingProfile(false);
+    }
+  };
+
+  const goBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+
+    if (!navigation.canGoBack()) {
+      navigation.navigate('/barber/settings');
+    }
+  };
+
+  const openAddServiceModal = () => {
+    if (addServiceModalRef.current) {
+      addServiceModalRef.current.present();
+    }
+  };
+
+  const openEditServiceModal = (service: IBarberService) => {
+    if (editServiceModalRef.current) {
+      setSelectedToEdit(service);
+      editServiceModalRef.current.present();
+    }
+  };
+
+  const openDeleteServiceModal = (service: IBarberService) => {
+    if (deleteServiceModalRef.current) {
+      setSelectedToDelete(service);
+      deleteServiceModalRef.current.present();
+    }
+  };
+
+  const handleShowSet = (id: string) => {
+    if (showSet.includes(id)) {
+      setShowSet(curr => curr.filter(currId => currId !== id));
+    } else {
+      setShowSet(curr => [...curr, id]);
+    }
+  };
+
+  const getServices = useCallback(async () => {
+    setLoadingServices(true);
+
+    if (barber) {
+      try {
+        const {data} = await ServicesService.getServices({
+          barberId: barber._id,
+        });
+        if (data) {
+          setLoadingServices(false);
+          setServices(data);
+        }
+      } catch (error) {
+        setLoadingServices(false);
+        setServices([]);
+      }
+    }
+  }, [barber]);
+
+  useEffect(() => {
+    getServices();
+  }, [getServices]);
+
+  const getIcon: Record<IBarberServiceIcon, React.ReactNode> = {
+    maquina: <Icons.MaquinaIcon width={18} height={20} color="white3" />,
+    pente: <Icons.PenteIcon width={20} height={20} color="white3" />,
+    navalha: <Icons.NavalhaIcon width={24} height={15} color="white3" />,
+  };
+
+  return (
+    <ContainerStyle style={insetsStyles}>
+      <AppStatusBar />
+      <Header.Container>
+        <Header.GoBack pressables={{back: goBack}} />
+        <Header.Border />
+      </Header.Container>
+      <ContentStyle>
+        <ContentHeaderStyle>
+          <Typography variant="h5" color="black3">
+            {t('barber.services.title')}
+          </Typography>
+          <Typography variant="body2" color="black1">
+            {t('barber.services.subtitle')}
+          </Typography>
+        </ContentHeaderStyle>
+        <ContentScrollContentStyle
+          refreshControl={
+            <RefreshControl
+              refreshing={loadingServices}
+              onRefresh={() => {
+                getServices();
+              }}
+              size={Platform.OS !== 'android' ? 14 : undefined}
+              tintColor="transparent"
+              colors={['transparent']}
+              style={styles.refreshControl}
+              progressBackgroundColor={
+                Platform.OS !== 'android' ? 'transparent' : Colors.bgLight
+              }
+            />
+          }>
+          <MenuItemsWrapperStyle
+            onLayout={event => setMenuWidth(event.nativeEvent.layout.width)}>
+            {!loadingServices ? (
+              services.map(service => (
+                <MenuItemRowStyle key={service._id}>
+                  <MenuItem
+                    customInfo={
+                      <Box direction="column">
+                        <Typography variant="body1" color="black3">
+                          {service.name}{' '}
+                          <Typography>
+                            {service.additional && (
+                              <Typography variant="tip" color="black1">
+                                {t('barber.services.additional')}
+                              </Typography>
+                            )}
+                          </Typography>
+                        </Typography>
+                        <Typography variant="caption" color="black1">
+                          {`${t('units.money')} ${service.price}`}
+                        </Typography>
+                      </Box>
+                    }
+                    icon={getIcon[service.icon]}
+                    clickable
+                    onPress={() => handleShowSet(service._id.toString())}
+                    collapsed={showSet.includes(service._id)}
+                    actionsWidth={actionsWidth}
+                    width={menuWith}
+                  />
+                  {showSet.includes(service._id) && (
+                    <Box
+                      direction="row"
+                      alignItems="center"
+                      gap={12}
+                      onLayout={event => {
+                        setActionsWidth(event.nativeEvent.layout.width);
+                      }}>
+                      <MenuItemAction
+                        theme="primary"
+                        onPress={() => openEditServiceModal(service)}>
+                        <Icons.EditIcon color="white3" />
+                      </MenuItemAction>
+                      <MenuItemAction
+                        theme="danger"
+                        onPress={() => openDeleteServiceModal(service)}>
+                        <Icons.DeleteIcon color="white3" />
+                      </MenuItemAction>
+                    </Box>
+                  )}
+                </MenuItemRowStyle>
+              ))
+            ) : (
+              <Loader color={Colors.primary} />
+            )}
+          </MenuItemsWrapperStyle>
+        </ContentScrollContentStyle>
+        <ContentActionsStyle>
+          <Button
+            title={t('barber.services.buttons.add')}
+            variant="ghost"
+            colorScheme="primary"
+            onPress={openAddServiceModal}
+          />
+          {showContinue && (
+            <Button
+              title={t('barber.services.buttons.ok')}
+              onPress={saveProfile}
+              loading={savingProfile}
+              disabled={services.length === 0 || loadingServices}
+            />
+          )}
+        </ContentActionsStyle>
+        <Modal
+          ref={addServiceModalRef}
+          title={t('modals.barberService.titles.add')}
+          height={ModalSizes.BarberService + Metrics.platformPadding}>
+          <BarberServiceModal
+            modalRef={addServiceModalRef}
+            mode="add"
+            onClose={reloadData => reloadData && getServices()}
+          />
+        </Modal>
+        <Modal
+          ref={editServiceModalRef}
+          title={t('modals.barberService.titles.edit')}
+          height={ModalSizes.BarberService + Metrics.platformPadding}
+          onClose={() => {
+            if (selectedToEdit) {
+              handleShowSet(selectedToEdit._id);
+              setSelectedToEdit(undefined);
+            }
+          }}>
+          {selectedToEdit && (
+            <BarberServiceModal
+              modalRef={editServiceModalRef}
+              mode="edit"
+              initialValues={{
+                name: selectedToEdit.name,
+                icon: selectedToEdit.icon,
+                duration_in_minutes:
+                  selectedToEdit.duration_in_minutes.toString(),
+                price: selectedToEdit.price.toString(),
+                additional: selectedToEdit.additional,
+              }}
+              serviceID={selectedToEdit._id}
+              onClose={reloadData => reloadData && getServices()}
+            />
+          )}
+        </Modal>
+        <Modal
+          ref={deleteServiceModalRef}
+          title={t('modals.deleteService.title')}
+          height={ModalSizes.DeleteBarberService + Metrics.platformPadding}
+          onClose={() => {
+            if (selectedToDelete) {
+              handleShowSet(selectedToDelete._id);
+              setSelectedToDelete(undefined);
+            }
+          }}>
+          {selectedToDelete && (
+            <DeleteServiceModal
+              modalRef={deleteServiceModalRef}
+              service={selectedToDelete}
+              onClose={reloadData => reloadData && getServices()}
+            />
+          )}
+        </Modal>
+      </ContentStyle>
+    </ContainerStyle>
+  );
+};
+
+export default BarberServices;

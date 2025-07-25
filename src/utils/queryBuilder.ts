@@ -1,0 +1,52 @@
+export function queryBuilder(
+  url: string,
+  params: {[key: string]: any},
+  path?: string,
+): string {
+  if (path) {
+    if (url.includes(':')) {
+      url = url
+        .split('/')
+        .map(part => {
+          if (part.includes(':')) {
+            return path;
+          }
+
+          return part;
+        })
+        .join('/');
+    } else {
+      url = `${url}${url.endsWith('/') ? '' : '/'}${path}`;
+    }
+  }
+
+  const query = [];
+  for (const key in params) {
+    if (
+      params.hasOwnProperty(key) &&
+      params[key] !== undefined &&
+      params[key] !== null &&
+      params[key] !== ''
+    ) {
+      query.push(`${key}=${params[key]}`);
+    }
+  }
+  const queryString = query.join('&');
+
+  if (queryString) {
+    return `${url}?${queryString}`;
+  }
+
+  return url;
+}
+
+export function mapPathVariables(
+  url: string,
+  paths: Record<string, string>,
+): string {
+  Object.keys(paths).forEach(key => {
+    url = url.replace(`:${key}`, paths[key]);
+  });
+
+  return url;
+}

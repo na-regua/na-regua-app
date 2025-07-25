@@ -6,50 +6,15 @@ The most useful barber app.
 
 To run use `yarn start` or `npm start`
 
-### Native dependencies
+## Native dependencies
 
-#### Camera
-
-```
-npm install react-native-camera --save
-```
-
-- **android/app/src/main/AndroidManifest.xml**
+### Camera
 
 ```
-/* Required */‍
-‍<uses-permission android:name="android.permission.CAMERA"></uses-permission>
-/* Include this only if you are planning to use the microphone for video recording */
-‍
-‍<uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
-/* Include this only if you are planning to use the camera roll */
-‍
-‍<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+npm install react-native-vision-camera --save
 ```
 
-- **android/app/build.gradle**
-
-```
-android {
- ...
- defaultConfig {
-  ...
-  missingDimensionStrategy 'react-native-camera', 'general' /* insert this line */
- }
-}
-```
-
-- **ios/NaRegua/Info.plist**
-
-```
-‍<key>NSCameraUsageDescription</key><string>Your message to user when the camera is accessed for the first time</string>
-‍<key>NSPhotoLibraryAddUsageDescription</key><string>Your message to user when the photo library is accessed for the first time</string>
-‍<key>NSPhotoLibraryUsageDescription</key><string>Your message to user when the photo library is accessed for the first time</string>
-‍<key>NSMicrophoneUsageDescription</key><string>Your message to user when the microphone is accessed for the first time</string>
-```
-
-#### Deprecated PropTypes Error
+### Deprecated PropTypes Error
 
 run npm i deprecated-react-native-prop-types
 
@@ -130,3 +95,7 @@ You can add universal styles here like flexDirection: row, centerAll, itemsEnd a
 - metrices- This will hold your device dimensions so you can export and use them for responsive layouts. It will manage all the fonts, margins, and images according to device size.
 
 - colors- All the colors your application using goes here. All the repeating colors, for example, your application has theme colors which are black & red so you can add primary & secondary colors like black & red.
+
+### Use buffer as base64 image:
+
+`data:image/jpeg;base64,${avatar}`

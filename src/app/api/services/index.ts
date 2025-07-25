@@ -1,0 +1,11 @@
+export {default as AuthService} from './AuthService/AuthService';
+export {default as BarbersService} from './BarbersService/BarbersService';
+export {default as FilesService} from './FilesService/FilesService';
+export {default as GeneralService} from './GeneralService/GeneralService';
+export {default as ServicesService} from './ServicesService/ServicesService';
+export {default as UserService} from './UserService/UserService';
+export {default as WorkersService} from './WorkersService/WorkersService';
+export {default as NotificationService} from './NotificationService/NotificationService';
+export {default as QueueService} from './QueueService/QueueService';
+export {default as TicketsService} from './TicketsService/TicketsService';
+export {default as ScheduleService} from './ScheduleService/ScheduleService';

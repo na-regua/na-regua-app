@@ -1,0 +1,290 @@
+import {WorkersService} from '@/app/api';
+import {IBuffer, IWorkerForm} from '@/app/models';
+import {Avatar, Icons, Input} from '@/components/atoms';
+import {assetToBuffer, phoneMask} from '@/utils';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import React, {useMemo, useRef, useState} from 'react';
+import {Controller, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
+import {
+  Keyboard,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import {TextInput} from 'react-native-gesture-handler';
+import {Asset} from 'react-native-image-picker';
+import {
+  ActionsContainerStyle,
+  AvatarWrapperStyle,
+  ButtonStyle,
+  ScrollViewStyle,
+  styles,
+} from './styles';
+
+interface IWorkerModalProps {
+  modalRef: React.RefObject<BottomSheetModal | null>;
+  mode: 'add' | 'edit';
+  initialValues?: Partial<IWorkerForm>;
+  initialAvatar?: string;
+  workerID?: string;
+  onClose?: (reloadData?: boolean) => void;
+}
+
+const WorkerModal: React.FC<IWorkerModalProps> = ({
+  initialAvatar,
+  initialValues,
+  modalRef,
+  mode,
+  workerID,
+  onClose,
+}) => {
+  const {t} = useTranslation();
+  const defaultValues = mode === 'edit' ? initialValues : undefined;
+
+  if (defaultValues?.phone && initialValues?.phone) {
+    defaultValues.phone = phoneMask(initialValues?.phone.toString());
+  }
+
+  const {control, watch, formState} = useForm<IWorkerForm>({
+    mode: 'all',
+    defaultValues,
+  });
+  const [avatarFile, setAvatarFile] = useState<Asset | undefined>();
+  const [avatar, setAvatar] = useState<string | undefined>(initialAvatar);
+  const [changedAvatar, setChangedAvatar] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const formValues = watch();
+
+  const fieldsRef = {
+    name: useRef<TextInput>(null),
+    phone: useRef<TextInput>(null),
+    email: useRef<TextInput>(null),
+    password: useRef<TextInput>(null),
+  };
+
+  const handleOnAvatarChange = (file: Asset) => {
+    setAvatarFile(file);
+    setAvatar(`data:image/jpeg;base64,${file.base64}`);
+
+    setChangedAvatar(true);
+  };
+
+  const handleShowPassword = () => {
+    setShowPassword(curr => !curr);
+  };
+
+  const onAdd = async () => {
+    if (avatarFile) {
+      setLoading(true);
+
+      try {
+        const avatarBuffer = assetToBuffer([avatarFile])[0];
+
+        const response = await WorkersService.createWorker(
+          formValues,
+          avatarBuffer,
+        );
+
+        if (response) {
+          if (modalRef.current) {
+            setLoading(false);
+            modalRef.current.dismiss();
+            onClose && onClose(true);
+          }
+        }
+      } catch (error) {
+        setLoading(false);
+      }
+    }
+  };
+
+  const onUpdate = async () => {
+    if (workerID) {
+      setLoading(true);
+
+      try {
+        const params: Partial<IWorkerForm> = {
+          ...formValues,
+        };
+
+        let avatarBuffer: IBuffer | undefined;
+
+        if (changedAvatar && avatarFile) {
+          avatarBuffer = assetToBuffer([avatarFile])[0];
+        }
+
+        const response = await WorkersService.updateWorker(
+          workerID,
+          params,
+          avatarBuffer,
+        );
+
+        if (response) {
+          if (modalRef.current) {
+            setLoading(false);
+            modalRef.current.dismiss();
+            onClose && onClose(true);
+          }
+        }
+      } catch (error) {
+        setLoading(false);
+      }
+    }
+  };
+
+  const hasDiff = useMemo(
+    () =>
+      formValues.name !== initialValues?.name ||
+      formValues.email !== initialValues?.email ||
+      formValues.phone !== initialValues?.phone ||
+      changedAvatar,
+    [formValues, initialValues, changedAvatar],
+  );
+
+  const isValid = useMemo(() => {
+    if (mode === 'add') {
+      return formState.isValid && avatarFile;
+    } else {
+      return formState.isValid && hasDiff;
+    }
+  }, [mode, formState.isValid, avatarFile, hasDiff]);
+
+  return (
+    <TouchableWithoutFeedback
+      style={styles.flex1}
+      onPress={() => Keyboard.dismiss()}>
+      <ScrollViewStyle
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}>
+        <AvatarWrapperStyle>
+          <Avatar preview={avatar} onAvatarChange={handleOnAvatarChange} />
+        </AvatarWrapperStyle>
+        <Controller
+          name="name"
+          control={control}
+          rules={{required: true}}
+          render={({field: {onChange, value}}) => (
+            <Input
+              label={t('modals.worker.fields.name')}
+              onChangeText={onChange}
+              value={value}
+              inputRef={fieldsRef.name}
+              returnKeyType="next"
+              onSubmitEditing={() => fieldsRef.email.current?.focus()}
+              blurOnSubmit={false}
+              textContentType="name"
+            />
+          )}
+        />
+
+        <Controller
+          name="email"
+          rules={{required: true}}
+          control={control}
+          render={({field: {onChange, value}}) => (
+            <Input
+              label={t('modals.worker.fields.email')}
+              autoCapitalize="none"
+              value={value}
+              keyboardType="email-address"
+              onChangeText={text => {
+                onChange(text);
+              }}
+              inputRef={fieldsRef.email}
+              returnKeyType="next"
+              onSubmitEditing={() => {
+                if (mode === 'add') {
+                  fieldsRef.password.current?.focus();
+                } else {
+                  fieldsRef.phone.current?.focus();
+                }
+              }}
+              blurOnSubmit={false}
+              textContentType="emailAddress"
+            />
+          )}
+        />
+
+        {mode === 'add' && (
+          <Controller
+            name="password"
+            control={control}
+            rules={{required: true, minLength: 6}}
+            render={({field: {onChange}}) => (
+              <Input
+                label={t('barber.signUp.fields.password')}
+                autoCapitalize="none"
+                secureTextEntry={!showPassword}
+                onChangeText={onChange}
+                suffix={
+                  <TouchableOpacity
+                    activeOpacity={0.6}
+                    onPress={handleShowPassword}>
+                    <Icons.EyeIcon
+                      width={20}
+                      height={20}
+                      closed={showPassword}
+                      color="default"
+                    />
+                  </TouchableOpacity>
+                }
+                inputRef={fieldsRef.password}
+                returnKeyType="next"
+                onSubmitEditing={() => fieldsRef.phone.current?.focus()}
+                blurOnSubmit={false}
+                textContentType="password"
+              />
+            )}
+          />
+        )}
+        <Controller
+          name="phone"
+          rules={{required: true}}
+          control={control}
+          render={({field: {onChange, value}}) => (
+            <Input
+              label={t('modals.worker.fields.phone')}
+              autoCapitalize="none"
+              keyboardType="phone-pad"
+              onChangeText={text => {
+                const maskedValue = phoneMask(text);
+                onChange(maskedValue);
+              }}
+              value={value}
+              inputRef={fieldsRef.phone}
+              returnKeyType="done"
+              onSubmitEditing={() => fieldsRef.phone.current?.blur()}
+              textContentType="telephoneNumber"
+            />
+          )}
+        />
+
+        <ActionsContainerStyle>
+          {mode === 'add' && (
+            <ButtonStyle
+              title={t('modals.worker.buttons.add')}
+              colorScheme="primary"
+              loading={loading}
+              disabled={!isValid}
+              onPress={onAdd}
+            />
+          )}
+
+          {mode === 'edit' && (
+            <ButtonStyle
+              title={t('modals.worker.buttons.save')}
+              colorScheme="primary"
+              loading={loading}
+              disabled={!isValid}
+              onPress={onUpdate}
+            />
+          )}
+        </ActionsContainerStyle>
+      </ScrollViewStyle>
+    </TouchableWithoutFeedback>
+  );
+};
+
+export default WorkerModal;
